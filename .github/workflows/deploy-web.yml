@@ -16,7 +16,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - run: npm ci
         working-directory: apps/mobile
@@ -25,17 +24,7 @@ jobs:
         run: npx expo export --platform web
         working-directory: apps/mobile
 
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            rm -rf /var/www/wohnly-web-old
-            mv /var/www/wohnly-web /var/www/wohnly-web-old 2>/dev/null || true
-
-      - name: Upload web build
+      - name: Upload web build to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -44,25 +33,4 @@ jobs:
           source: "apps/mobile/dist/*"
           target: "/var/www/wohnly-web"
           strip_components: 3
-
-  eas-update:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - run: npm ci
-        working-directory: apps/mobile
-
-      - name: EAS Update (OTA)
-        run: eas update --branch production --message "${{ github.event.head_commit.message }}"
-        working-directory: apps/mobile
+          overwrite: true
