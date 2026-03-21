@@ -2,8 +2,9 @@ import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
 import { Decimal } from "@prisma/client/runtime/library";
+import type { AppEnv } from "../types.js";
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 app.use("*", requireAuth);
 
 // GET /api/expenses

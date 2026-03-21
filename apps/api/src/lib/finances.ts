@@ -379,7 +379,7 @@ export async function getSuggestedPaymentAccounts(
   const expenses = await prisma.expense.findMany({
     where: {
       householdId,
-      paidBy: userId,
+      paidById: userId,
       paidFromAccount: { not: null },
     },
     select: { paidFromAccount: true },

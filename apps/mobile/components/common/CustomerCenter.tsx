@@ -26,7 +26,7 @@ export function CustomerCenter() {
   }
 
   return (
-    <RevenueCatUI.CustomerCenter
+    <RevenueCatUI.CustomerCenterView
       onDismiss={() => {
         // Customer center dismissed
       }}
