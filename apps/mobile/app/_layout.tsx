@@ -5,6 +5,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { authClient } from "@/lib/auth/client";
+import { initRevenueCat } from "@/lib/payments/setup";
+import "@/i18n"; // Initialize i18next
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +31,11 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       router.replace("/(auth)/sign-in");
     } else if (session && inAuthGroup) {
       router.replace("/(app)/(dashboard)");
+    }
+
+    // Initialize RevenueCat when user is authenticated
+    if (session?.user?.id) {
+      initRevenueCat(session.user.id);
     }
   }, [session, isPending, segments]);
 
