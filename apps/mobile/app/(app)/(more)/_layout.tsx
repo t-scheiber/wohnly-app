@@ -1,8 +1,21 @@
 import { Stack } from "expo-router";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Colors } from "@/constants/Colors";
 
 export default function MoreLayout() {
+  const colorScheme = useColorScheme() ?? "light";
+  const colors = Colors[colorScheme];
+
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.background },
+        headerTintColor: colors.text,
+        headerShadowVisible: false,
+        headerTitleStyle: { fontWeight: "700" },
+      }}
+    >
+      <Stack.Screen name="index" options={{ title: "More" }} />
       <Stack.Screen name="expenses" options={{ title: "Expenses" }} />
       <Stack.Screen name="subscriptions" options={{ title: "Subscriptions" }} />
       <Stack.Screen name="settings" options={{ title: "Settings" }} />
