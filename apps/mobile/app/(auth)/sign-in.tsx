@@ -39,7 +39,10 @@ export default function SignInScreen() {
 
   const handleGoogleSignIn = async () => {
     try {
-      await authClient.signIn.social({ provider: "google" });
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "https://wohnly.app",
+      });
     } catch (err: unknown) {
       Alert.alert("Error", err instanceof Error ? err.message : "Google sign in failed");
     }
@@ -47,7 +50,10 @@ export default function SignInScreen() {
 
   const handleAppleSignIn = async () => {
     try {
-      await authClient.signIn.social({ provider: "apple" });
+      await authClient.signIn.social({
+        provider: "apple",
+        callbackURL: "https://wohnly.app",
+      });
     } catch (err: unknown) {
       Alert.alert("Error", err instanceof Error ? err.message : "Apple sign in failed");
     }
