@@ -35,6 +35,10 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     if (!householdName.trim()) return;
     setLoading(true);
     try {
+      // TODO: E2EE — before creating household, generate device keypair via
+      // lib/crypto/keys.ts, register device via /api/devices/register, then
+      // generate household key, seal it to the device, and pass deviceId + sealedHK here.
+      // See: lib/crypto/ for the full implementation.
       const res = await apiPost<{ household: { inviteCode: string } }>("/api/households", {
         name: householdName.trim(),
       });

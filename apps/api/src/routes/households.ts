@@ -33,6 +33,9 @@ app.post("/", async (c) => {
       include: { members: true },
     });
 
+    // TODO: E2EE — once device registration is wired up in the mobile app,
+    // make deviceId + sealedHK required again so every household has encryption from the start.
+    // See: apps/mobile/lib/crypto/ for the client-side implementation.
     // Store sealed household key if device is registered (E2EE)
     if (deviceId && sealedHK) {
       const device = await tx.device.findFirst({
