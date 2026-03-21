@@ -16,9 +16,9 @@ export async function createExpense(
   householdId: string,
   amount: number | Decimal,
   category: string,
-  createdBy: string,
+  paidById: string,
+  title: string,
   description?: string,
-  paidBy?: string,
   date?: Date,
   paidFromAccount?: string
 ) {
@@ -27,9 +27,9 @@ export async function createExpense(
       householdId,
       amount: new Decimal(amount),
       category,
+      title,
       description,
-      createdBy,
-      paidBy,
+      paidById,
       date,
       paidFromAccount,
     },
@@ -42,7 +42,7 @@ export async function updateExpense(
     amount?: number | Decimal;
     category?: string;
     description?: string;
-    paidBy?: string;
+    paidById?: string;
     date?: Date;
     paidFromAccount?: string;
   }
