@@ -1,15 +1,13 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Alert, Share } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert, Share, Switch } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { authClient } from "@/lib/auth/client";
 import { useHouseholdMembers } from "@/lib/api/queries";
+import { useTheme } from "@/lib/hooks/useTheme";
+import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 
-function SettingsSection({ title, children }: { title: string; children: React.ReactNode }) {
-  const colorScheme = useColorScheme() ?? "light";
-  const colors = Colors[colorScheme];
+function SettingsSection({ title, children, colors }: { title: string; children: React.ReactNode; colors: (typeof Colors)["light"] }) {
   return (
     <View style={{ marginBottom: 24 }}>
       <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
@@ -22,13 +20,14 @@ function SettingsSection({ title, children }: { title: string; children: React.R
   );
 }
 
-function SettingsRow({ label, value, onPress, destructive, isLast }: { label: string; value?: string; onPress?: () => void; destructive?: boolean; isLast?: boolean }) {
-  const colorScheme = useColorScheme() ?? "light";
-  const colors = Colors[colorScheme];
+function SettingsRow({ label, value, onPress, destructive, isLast, right, colors }: {
+  label: string; value?: string; onPress?: () => void; destructive?: boolean; isLast?: boolean;
+  right?: React.ReactNode; colors: (typeof Colors)["light"];
+}) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      disabled={!onPress}
+      disabled={!onPress && !right}
       activeOpacity={onPress ? 0.6 : 1}
       style={{
         flexDirection: "row",
@@ -40,7 +39,7 @@ function SettingsRow({ label, value, onPress, destructive, isLast }: { label: st
       }}
     >
       <Text style={{ fontSize: 16, color: destructive ? colors.destructive : colors.text }}>{label}</Text>
-      {value && <Text style={{ fontSize: 16, color: colors.textSecondary }}>{value}</Text>}
+      {right ?? (value ? <Text style={{ fontSize: 16, color: colors.textSecondary }}>{value}</Text> : null)}
     </TouchableOpacity>
   );
 }
@@ -50,15 +49,22 @@ const LANGUAGES = [
   { code: "de", label: "Deutsch" },
 ];
 
+const THEME_LABELS: Record<string, Record<string, string>> = {
+  en: { system: "System", light: "Light", dark: "Dark" },
+  de: { system: "System", light: "Hell", dark: "Dunkel" },
+};
+
 export default function SettingsScreen() {
-  const colorScheme = useColorScheme() ?? "light";
+  const { mode, colorScheme, setMode } = useTheme();
   const colors = Colors[colorScheme];
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const { data: session } = authClient.useSession();
   const { data: membersData } = useHouseholdMembers();
+  const notifications = useNotificationSettings();
 
   const currentLang = LANGUAGES.find((l) => l.code === i18n.language) ?? LANGUAGES[0];
+  const themeLabels = THEME_LABELS[i18n.language] ?? THEME_LABELS.en;
 
   const handleLanguageChange = () => {
     const options = LANGUAGES.map((lang) => ({
@@ -66,6 +72,15 @@ export default function SettingsScreen() {
       onPress: () => i18n.changeLanguage(lang.code),
     }));
     Alert.alert(t("settings.language"), "", [...options, { text: t("common.cancel"), style: "cancel" as const }]);
+  };
+
+  const handleThemeChange = () => {
+    const modes = ["system", "light", "dark"] as const;
+    const options = modes.map((m) => ({
+      text: themeLabels[m] + (m === mode ? " ✓" : ""),
+      onPress: () => setMode(m),
+    }));
+    Alert.alert(t("settings.theme"), "", [...options, { text: t("common.cancel"), style: "cancel" as const }]);
   };
 
   const handleShareInvite = async () => {
@@ -90,26 +105,39 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={{ padding: 16 }}>
-      <SettingsSection title={t("settings.household")}>
-        <SettingsRow label={t("household.members")} value={`${membersData?.members?.length ?? 0}`} />
-        <SettingsRow label={t("household.inviteMembers")} onPress={handleShareInvite} isLast />
+      <SettingsSection title={t("settings.household")} colors={colors}>
+        <SettingsRow colors={colors} label={t("household.members")} value={`${membersData?.members?.length ?? 0}`} />
+        <SettingsRow colors={colors} label={t("household.inviteMembers")} onPress={handleShareInvite} isLast />
       </SettingsSection>
 
-      <SettingsSection title={t("settings.preferences")}>
-        <SettingsRow label={t("settings.language")} value={currentLang.label} onPress={handleLanguageChange} />
-        <SettingsRow label={t("settings.theme")} value="System" />
-        <SettingsRow label={t("settings.notifications")} value="On" isLast />
+      <SettingsSection title={t("settings.preferences")} colors={colors}>
+        <SettingsRow colors={colors} label={t("settings.language")} value={currentLang.label} onPress={handleLanguageChange} />
+        <SettingsRow colors={colors} label={t("settings.theme")} value={themeLabels[mode]} onPress={handleThemeChange} />
+        <SettingsRow
+          colors={colors}
+          label={t("settings.notifications")}
+          isLast
+          right={
+            <Switch
+              value={notifications.enabled}
+              onValueChange={notifications.toggle}
+              disabled={notifications.loading}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              thumbColor="#fff"
+            />
+          }
+        />
       </SettingsSection>
 
-      <SettingsSection title={t("settings.account")}>
-        <SettingsRow label={t("auth.email")} value={session?.user?.email ?? ""} />
-        <SettingsRow label={t("auth.name")} value={session?.user?.name ?? ""} />
-        <SettingsRow label={t("settings.subscription")} value="Free" isLast />
+      <SettingsSection title={t("settings.account")} colors={colors}>
+        <SettingsRow colors={colors} label={t("auth.email")} value={session?.user?.email ?? ""} />
+        <SettingsRow colors={colors} label={t("auth.name")} value={session?.user?.name ?? ""} />
+        <SettingsRow colors={colors} label={t("settings.subscription")} value="Free" isLast />
       </SettingsSection>
 
-      <SettingsSection title={t("settings.dangerZone")}>
-        <SettingsRow label={t("household.leaveHousehold")} onPress={() => Alert.alert("TODO")} destructive />
-        <SettingsRow label={t("settings.signOut")} onPress={handleSignOut} destructive isLast />
+      <SettingsSection title={t("settings.dangerZone")} colors={colors}>
+        <SettingsRow colors={colors} label={t("household.leaveHousehold")} onPress={() => Alert.alert("TODO")} destructive />
+        <SettingsRow colors={colors} label={t("settings.signOut")} onPress={handleSignOut} destructive isLast />
       </SettingsSection>
     </ScrollView>
   );
