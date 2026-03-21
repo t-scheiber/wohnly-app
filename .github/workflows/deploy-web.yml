@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: 22
 
-      - run: npm ci
-        working-directory: apps/mobile
+      - name: Install dependencies (root workspace)
+        run: npm ci
 
       - name: Export web build
         run: npx expo export --platform web
