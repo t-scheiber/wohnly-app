@@ -2,8 +2,13 @@ import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from "react-
 import { useState, useCallback } from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
+import { CheckSquare, ShoppingCart, Sparkles, DollarSign } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
 import { useMemberBalances } from "@/lib/api/queries";
+import { useHousehold } from "@/lib/hooks/useHousehold";
+import { HouseholdOnboarding } from "@/components/household/HouseholdOnboarding";
+import { Spinner } from "@/components/ui/Spinner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { formatCurrency } from "@wohnly/shared";
@@ -12,8 +17,10 @@ export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const router = useRouter();
+  const { t } = useTranslation();
   const { data: session } = authClient.useSession();
-  const { data: balances, refetch, isLoading } = useMemberBalances();
+  const { data: household, isLoading: householdLoading } = useHousehold();
+  const { data: balances, refetch } = useMemberBalances();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
@@ -22,11 +29,28 @@ export default function DashboardScreen() {
     setRefreshing(false);
   }, [refetch]);
 
+  const firstName = session?.user?.name?.split(" ")[0];
+
+  // Loading state
+  if (householdLoading) {
+    return <Spinner fullScreen />;
+  }
+
+  // No household — show onboarding
+  if (!household?.hasHousehold) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+        <HouseholdOnboarding userName={firstName} />
+      </SafeAreaView>
+    );
+  }
+
+  // Has household — show dashboard
   const quickActions = [
-    { title: "Todos", route: "/(app)/(lists)/todos" as const, color: "#0d9488" },
-    { title: "Shopping", route: "/(app)/(lists)/shopping" as const, color: "#3b82f6" },
-    { title: "Chores", route: "/(app)/(chores)" as const, color: "#6366f1" },
-    { title: "Expenses", route: "/(app)/(more)/expenses" as const, color: "#10b981" },
+    { title: t("todos.title"), icon: <CheckSquare size={22} color="#fff" />, route: "/(app)/(lists)/todos" as const, color: "#0d9488" },
+    { title: t("shopping.title"), icon: <ShoppingCart size={22} color="#fff" />, route: "/(app)/(lists)/shopping" as const, color: "#3b82f6" },
+    { title: t("chores.title"), icon: <Sparkles size={22} color="#fff" />, route: "/(app)/(chores)" as const, color: "#6366f1" },
+    { title: t("expenses.title"), icon: <DollarSign size={22} color="#fff" />, route: "/(app)/(more)/expenses" as const, color: "#10b981" },
   ];
 
   return (
@@ -39,7 +63,7 @@ export default function DashboardScreen() {
       >
         {/* Welcome */}
         <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text, marginBottom: 4 }}>
-          Welcome{session?.user?.name ? `, ${session.user.name.split(" ")[0]}` : ""}
+          {t("dashboard.welcome")}{firstName ? `, ${firstName}` : ""}
         </Text>
         {balances?.householdName && (
           <Text style={{ fontSize: 16, color: colors.textSecondary, marginBottom: 24 }}>
@@ -53,15 +77,20 @@ export default function DashboardScreen() {
             <TouchableOpacity
               key={action.title}
               onPress={() => router.push(action.route)}
+              activeOpacity={0.8}
               style={{
                 flex: 1,
                 minWidth: "45%",
                 backgroundColor: action.color,
                 borderRadius: 16,
                 padding: 20,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
               }}
             >
-              <Text style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}>{action.title}</Text>
+              {action.icon}
+              <Text style={{ color: "#fff", fontSize: 17, fontWeight: "600" }}>{action.title}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -70,7 +99,7 @@ export default function DashboardScreen() {
         {balances?.members && balances.members.length > 0 && (
           <View>
             <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 12 }}>
-              Balances
+              {t("balances.totalBalance")}
             </Text>
             {balances.members.map((member) => (
               <View
@@ -82,6 +111,9 @@ export default function DashboardScreen() {
                   marginBottom: 8,
                   borderWidth: 1,
                   borderColor: colors.border,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
                 <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
@@ -89,30 +121,16 @@ export default function DashboardScreen() {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: "bold",
-                    color: member.totalBalance >= 0 ? colors.success : colors.destructive,
-                    marginTop: 4,
+                    color: member.totalBalance > 0 ? colors.success : member.totalBalance < 0 ? colors.destructive : colors.textSecondary,
                   }}
                 >
-                  {member.totalBalance >= 0 ? "+" : ""}
+                  {member.totalBalance > 0 ? "+" : ""}
                   {formatCurrency(member.totalBalance)}
                 </Text>
               </View>
             ))}
-          </View>
-        )}
-
-        {/* No household state */}
-        {!isLoading && !balances?.householdName && (
-          <View style={{ alignItems: "center", paddingVertical: 48 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
-              No Household Yet
-            </Text>
-            <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginBottom: 24 }}>
-              Create a new household or join an existing one with an invite code.
-            </Text>
-            {/* TODO: Onboarding flow */}
           </View>
         )}
       </ScrollView>
