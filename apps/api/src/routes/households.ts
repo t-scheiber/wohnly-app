@@ -13,16 +13,8 @@ app.post("/", async (c) => {
   const body = await c.req.json();
 
   const { name, deviceId, sealedHK } = body;
-  if (!name || !deviceId || !sealedHK) {
-    return c.json({ error: "name, deviceId, and sealedHK are required" }, 400);
-  }
-
-  // Verify device belongs to user
-  const device = await prisma.device.findFirst({
-    where: { id: deviceId, userId },
-  });
-  if (!device) {
-    return c.json({ error: "Device not found" }, 400);
+  if (!name) {
+    return c.json({ error: "name is required" }, 400);
   }
 
   const household = await prisma.$transaction(async (tx) => {
@@ -41,14 +33,21 @@ app.post("/", async (c) => {
       include: { members: true },
     });
 
-    // Store sealed household key for this device
-    await tx.householdKeyEnvelope.create({
-      data: {
-        householdId: h.id,
-        deviceId,
-        sealedHK,
-      },
-    });
+    // Store sealed household key if device is registered (E2EE)
+    if (deviceId && sealedHK) {
+      const device = await tx.device.findFirst({
+        where: { id: deviceId, userId },
+      });
+      if (device) {
+        await tx.householdKeyEnvelope.create({
+          data: {
+            householdId: h.id,
+            deviceId,
+            sealedHK,
+          },
+        });
+      }
+    }
 
     return h;
   });
