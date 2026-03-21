@@ -37,8 +37,6 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     try {
       const res = await apiPost<{ household: { inviteCode: string } }>("/api/households", {
         name: householdName.trim(),
-        deviceId: "temp",
-        sealedHK: "temp",
       });
       setCreatedCode(res.household.inviteCode);
       setStep("success");
