@@ -16,13 +16,18 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      redirectURI: process.env.BETTER_AUTH_URL + "/api/auth/callback/google",
     },
     apple: {
       clientId: process.env.APPLE_CLIENT_ID!,
       clientSecret: process.env.APPLE_CLIENT_SECRET!,
       appBundleIdentifier: "app.wohnly",
+      redirectURI: process.env.BETTER_AUTH_URL + "/api/auth/callback/apple",
     },
   },
+
+  // After OAuth callback, redirect back to the web app (not the API root)
+  socialCallbackURL: process.env.APP_URL ?? "https://wohnly.app",
 
   plugins: [
     expo(), // Enables Expo/RN support (deep link redirects, token handling)
