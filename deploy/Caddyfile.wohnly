@@ -1,0 +1,20 @@
+# Wohnly Caddy configuration
+# Add these blocks to the existing /etc/caddy/Caddyfile on the VPS
+
+# Wohnly API - reverse proxy to Hono
+api.wohnly.app {
+    reverse_proxy localhost:3001
+}
+
+# Wohnly Web - serve Expo static build
+wohnly.app, www.wohnly.app {
+    root * /var/www/wohnly-web
+    file_server
+
+    # SPA fallback
+    try_files {path} /index.html
+
+    # Cache static assets
+    @static path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2
+    header @static Cache-Control "public, max-age=31536000, immutable"
+}

@@ -1,0 +1,27 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/api/**'
+      - 'packages/shared/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/wohnly
+            git pull origin main
+            cd apps/api
+            npm ci --omit=dev
+            npx prisma migrate deploy
+            npm run build
+            pm2 restart wohnly-api || pm2 start dist/index.js --name wohnly-api
