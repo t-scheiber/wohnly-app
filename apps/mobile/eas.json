@@ -11,18 +11,5 @@
     "production": {
       "autoIncrement": true
     }
-  },
-  "submit": {
-    "production": {
-      "ios": {
-        "appleId": "",
-        "ascAppId": "",
-        "appleTeamId": ""
-      },
-      "android": {
-        "serviceAccountKeyPath": "./google-service-account.json",
-        "track": "production"
-      }
-    }
   }
 }
