@@ -31,11 +31,9 @@ export function usePremium() {
       .catch(() => setIsLoading(false));
 
     // Listen for changes (purchase, restore, etc.)
-    const listener = Purchases.addCustomerInfoUpdateListener(checkEntitlement);
+    Purchases.addCustomerInfoUpdateListener(checkEntitlement);
 
-    return () => {
-      listener.remove();
-    };
+    // Listener is global — no cleanup needed (RevenueCat manages it)
   }, [checkEntitlement]);
 
   return { isPremium, isLoading, customerInfo };

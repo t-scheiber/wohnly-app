@@ -1,4 +1,5 @@
 import { prisma } from "./prisma.js";
+import { Prisma } from "@prisma/client";
 import { Expo, ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
 
 // Create a new Expo SDK client
@@ -19,21 +20,18 @@ export interface NotificationPayload {
 export async function savePushToken(
   userId: string,
   expoPushToken: string,
-  deviceName?: string
+  platform?: string
 ) {
-  return await prisma.pushSubscription.upsert({
-    where: { endpoint: expoPushToken },
+  return await prisma.pushToken.upsert({
+    where: { token: expoPushToken },
     update: {
       userId,
-      userAgent: deviceName,
+      platform: platform || "unknown",
     },
     create: {
       userId,
-      endpoint: expoPushToken,
-      // Store empty strings for legacy web-push fields that may exist in schema
-      p256dh: "",
-      auth: "",
-      userAgent: deviceName,
+      token: expoPushToken,
+      platform: platform || "unknown",
     },
   });
 }
@@ -42,8 +40,8 @@ export async function savePushToken(
  * Remove an Expo push token
  */
 export async function removePushToken(expoPushToken: string) {
-  return await prisma.pushSubscription.delete({
-    where: { endpoint: expoPushToken },
+  return await prisma.pushToken.delete({
+    where: { token: expoPushToken },
   });
 }
 
@@ -51,7 +49,7 @@ export async function removePushToken(expoPushToken: string) {
  * Get all push tokens for a user
  */
 export async function getUserPushTokens(userId: string) {
-  return await prisma.pushSubscription.findMany({
+  return await prisma.pushToken.findMany({
     where: { userId },
   });
 }
@@ -73,13 +71,13 @@ export async function sendPushNotification(
 
   for (const token of tokens) {
     // Validate that this is an Expo push token
-    if (!Expo.isExpoPushToken(token.endpoint)) {
-      console.warn(`Push token ${token.endpoint} is not a valid Expo push token`);
+    if (!Expo.isExpoPushToken(token.token)) {
+      console.warn(`Push token ${token.token} is not a valid Expo push token`);
       continue;
     }
 
     messages.push({
-      to: token.endpoint,
+      to: token.token,
       title: payload.title,
       body: payload.body,
       data: (payload.data || {}) as Record<string, unknown>,
@@ -115,7 +113,7 @@ export async function sendPushNotification(
               type: payload.channelId || "general",
               title: payload.title,
               body: payload.body,
-              data: payload.data ? JSON.stringify(payload.data) : null,
+              data: payload.data ? (payload.data as Prisma.InputJsonValue) : Prisma.JsonNull,
               delivered: true,
             },
           });
@@ -141,7 +139,7 @@ export async function sendPushNotification(
               type: payload.channelId || "general",
               title: payload.title,
               body: payload.body,
-              data: payload.data ? JSON.stringify(payload.data) : null,
+              data: payload.data ? (payload.data as Prisma.InputJsonValue) : Prisma.JsonNull,
               delivered: false,
             },
           });
@@ -159,7 +157,7 @@ export async function sendPushNotification(
             type: payload.channelId || "general",
             title: payload.title,
             body: payload.body,
-            data: payload.data ? JSON.stringify(payload.data) : null,
+            data: payload.data ? (payload.data as Prisma.InputJsonValue) : Prisma.JsonNull,
             delivered: false,
           },
         });
