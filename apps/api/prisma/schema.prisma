@@ -1,0 +1,573 @@
+// Wohnly Database Schema - PostgreSQL
+// Migrated from haushoit (MySQL + Clerk) to PostgreSQL + Better Auth
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Better Auth Tables ──────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  lang          String    @default("en")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions          Session[]
+  accounts          Account[]
+  devices           Device[]
+  preferences       UserPreferences?
+  subscription      UserSubscription?
+  pushTokens        PushToken[]
+  householdMembers  HouseholdMember[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ── Household ───────────────────────────────────────────────────────
+
+model Household {
+  id            String   @id @default(cuid())
+  name          String
+  createdBy     String
+  inviteCode    String   @unique @default(cuid())
+  trackExpenses Boolean  @default(true)
+  keyEpoch      Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  members           HouseholdMember[]
+  todos             Todo[]
+  chores            Chore[]
+  expenses          Expense[]
+  subscriptions     Subscription[]
+  invitations       HouseholdInvitation[]
+  leaveRequests     LeaveConfirmation[]
+  events            Event[]
+  calendarSyncs     CalendarSync[]
+  keyEnvelopes      HouseholdKeyEnvelope[]
+  encryptedItems    EncryptedItem[]
+  shoppingItems     ShoppingItem[]
+  deletionRequest   HouseholdDeletionRequest?
+
+  @@index([createdBy])
+}
+
+model HouseholdMember {
+  id          String   @id @default(cuid())
+  userId      String
+  householdId String
+  displayName String?
+  email       String?
+  role        String   @default("member")
+  joinedAt    DateTime @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  todoAssignments        TodoAssignment[]
+  choreAssignments       ChoreAssignment[]
+  eventAttendees         EventAttendee[]
+  expenseSplits          ExpenseSplit[]
+  subscriptionSplits     SubscriptionSplit[]
+  nicknamesGiven         MemberNickname[] @relation("NicknameGiver")
+  nicknamesReceived      MemberNickname[] @relation("NicknameTarget")
+  leaveConfirmation      LeaveConfirmation?
+  deletionApprovals      HouseholdDeletionApproval[]
+
+  @@unique([userId, householdId])
+  @@index([userId])
+  @@index([householdId])
+}
+
+model MemberNickname {
+  id        String   @id @default(cuid())
+  giverId   String
+  targetId  String
+  nickname  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  giver  HouseholdMember @relation("NicknameGiver", fields: [giverId], references: [id], onDelete: Cascade)
+  target HouseholdMember @relation("NicknameTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@unique([giverId, targetId])
+}
+
+model HouseholdInvitation {
+  id               String    @id @default(cuid())
+  householdId      String
+  code             String    @unique @default(cuid())
+  sentByUserId     String
+  email            String?
+  createdAt        DateTime  @default(now())
+  expiresAt        DateTime?
+  acceptedAt       DateTime?
+  acceptedByUserId String?
+  revokedAt        DateTime?
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@index([householdId])
+  @@index([code])
+}
+
+// ── Leave & Deletion ────────────────────────────────────────────────
+
+model LeaveConfirmation {
+  id           String    @id @default(cuid())
+  householdId  String
+  memberId     String    @unique
+  email        String
+  confirmToken String    @unique @default(cuid())
+  createdAt    DateTime  @default(now())
+  expiresAt    DateTime
+  confirmedAt  DateTime?
+  cancelledAt  DateTime?
+
+  household Household       @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  member    HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([householdId])
+  @@index([confirmToken])
+}
+
+model HouseholdDeletionRequest {
+  id          String    @id @default(cuid())
+  householdId String    @unique
+  requestedBy String
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  completedAt DateTime?
+  cancelledAt DateTime?
+
+  household Household                   @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  approvals HouseholdDeletionApproval[]
+
+  @@index([householdId])
+}
+
+model HouseholdDeletionApproval {
+  id        String   @id @default(cuid())
+  requestId String
+  memberId  String
+  approved  Boolean
+  createdAt DateTime @default(now())
+
+  request HouseholdDeletionRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  member  HouseholdMember          @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([requestId, memberId])
+  @@index([requestId])
+}
+
+// ── Todos ───────────────────────────────────────────────────────────
+
+model Todo {
+  id          String    @id @default(cuid())
+  householdId String
+  title       String
+  description String?
+  completed   Boolean   @default(false)
+  isPersonal  Boolean   @default(false)
+  creatorId   String
+  dueDate     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  household   Household        @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  assignments TodoAssignment[]
+
+  @@index([householdId, isPersonal, completed])
+  @@index([creatorId])
+}
+
+model TodoAssignment {
+  id        String   @id @default(cuid())
+  todoId    String
+  memberId  String
+  createdAt DateTime @default(now())
+
+  todo   Todo            @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  member HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([todoId, memberId])
+  @@index([todoId])
+  @@index([memberId])
+}
+
+// ── Shopping ────────────────────────────────────────────────────────
+
+model ShoppingItem {
+  id          String   @id @default(cuid())
+  householdId String
+  name        String
+  quantity    String?
+  checked     Boolean  @default(false)
+  addedBy     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@index([householdId, checked])
+}
+
+// ── Chores ──────────────────────────────────────────────────────────
+
+model Chore {
+  id            String    @id @default(cuid())
+  householdId   String
+  title         String
+  description   String?
+  frequency     String    // "daily" | "weekly" | "biweekly" | "monthly"
+  dayOfWeek     Int?      // 0-6 for weekly chores
+  completed     Boolean   @default(false)
+  lastCompleted DateTime?
+  lastDoneBy    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  household   Household          @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  assignments ChoreAssignment[]
+
+  @@index([householdId])
+  @@index([householdId, completed])
+}
+
+model ChoreAssignment {
+  id        String   @id @default(cuid())
+  choreId   String
+  memberId  String
+  createdAt DateTime @default(now())
+
+  chore  Chore           @relation(fields: [choreId], references: [id], onDelete: Cascade)
+  member HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([choreId, memberId])
+  @@index([choreId])
+  @@index([memberId])
+}
+
+// ── Events ──────────────────────────────────────────────────────────
+
+model Event {
+  id             String    @id @default(cuid())
+  householdId    String
+  title          String
+  description    String?
+  location       String?
+  startDate      DateTime
+  endDate        DateTime?
+  allDay         Boolean   @default(false)
+  color          String?
+  isRecurring    Boolean   @default(false)
+  recurrenceRule String?
+  creatorId      String
+  externalId     String?
+  calendarSyncId String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  household    Household       @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  attendees    EventAttendee[]
+  reminders    EventReminder[]
+  calendarSync CalendarSync?   @relation(fields: [calendarSyncId], references: [id], onDelete: SetNull)
+
+  @@index([householdId, startDate, endDate])
+  @@index([calendarSyncId])
+}
+
+model EventAttendee {
+  id       String   @id @default(cuid())
+  eventId  String
+  memberId String
+  status   String   @default("pending") // "pending" | "accepted" | "declined" | "tentative"
+  notified Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event  Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, memberId])
+  @@index([eventId])
+  @@index([memberId])
+}
+
+model EventReminder {
+  id            String    @id @default(cuid())
+  eventId       String
+  minutesBefore Int
+  sentAt        DateTime?
+  createdAt     DateTime  @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+model CalendarSync {
+  id            String    @id @default(cuid())
+  householdId   String
+  userId        String
+  provider      String    // "google" | "apple" | "microsoft" | "caldav"
+  calendarId    String
+  calendarName  String
+  accessToken   String?   // Encrypted (AES-256-GCM)
+  refreshToken  String?   // Encrypted
+  syncEnabled   Boolean   @default(true)
+  lastSyncedAt  DateTime?
+  syncFrequency Int       @default(15) // minutes
+  color         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  events    Event[]
+
+  @@unique([householdId, userId, calendarId])
+  @@index([householdId])
+  @@index([userId])
+}
+
+// ── Finances ────────────────────────────────────────────────────────
+
+model Expense {
+  id              String   @id @default(cuid())
+  householdId     String
+  title           String
+  description     String?
+  amount          Decimal  @db.Decimal(10, 2)
+  currency        String   @default("EUR")
+  category        String
+  paidById        String
+  paidFromAccount String?
+  splitType       String   @default("equal") // "equal" | "percentage" | "fixed"
+  date            DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  household Household      @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  splits    ExpenseSplit[]
+
+  @@index([householdId])
+  @@index([householdId, date])
+  @@index([category])
+}
+
+model ExpenseSplit {
+  id         String   @id @default(cuid())
+  expenseId  String
+  memberId   String
+  amount     Decimal  @db.Decimal(10, 2)
+  percentage Decimal? @db.Decimal(5, 2)
+  isPaid     Boolean  @default(false)
+  paidDate   DateTime?
+  createdAt  DateTime @default(now())
+
+  expense Expense         @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  member  HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([expenseId, memberId])
+  @@index([expenseId])
+  @@index([memberId])
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  householdId String
+  name        String
+  description String?
+  amount      Decimal  @db.Decimal(10, 2)
+  currency    String   @default("EUR")
+  frequency   String   // "weekly" | "biweekly" | "monthly" | "quarterly" | "yearly"
+  billingDate DateTime?
+  category    String
+  createdBy   String
+  active      Boolean  @default(true)
+  splitType   String   @default("equal")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  household Household            @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  splits    SubscriptionSplit[]
+
+  @@index([householdId])
+  @@index([householdId, active])
+  @@index([billingDate, active])
+}
+
+model SubscriptionSplit {
+  id             String   @id @default(cuid())
+  subscriptionId String
+  memberId       String
+  amount         Decimal  @db.Decimal(10, 2)
+  percentage     Decimal? @db.Decimal(5, 2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  subscription Subscription    @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  member       HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriptionId, memberId])
+  @@index([subscriptionId])
+  @@index([memberId])
+}
+
+// ── E2E Encryption ──────────────────────────────────────────────────
+
+model Device {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String?
+  publicKey String   // X25519 public key (base64)
+  createdAt DateTime @default(now())
+
+  user      User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  envelopes HouseholdKeyEnvelope[]
+
+  @@index([userId])
+}
+
+model HouseholdKeyEnvelope {
+  id          String @id @default(cuid())
+  householdId String
+  deviceId    String
+  sealedHK    String // Sealed household key (base64)
+  keyEpoch    Int    @default(1)
+  createdAt   DateTime @default(now())
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  device    Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@unique([householdId, deviceId])
+  @@index([householdId])
+  @@index([deviceId])
+}
+
+model EncryptedItem {
+  id          String   @id @default(cuid())
+  householdId String
+  itemType    String
+  itemId      String
+  cipher      String   // Encrypted payload (base64)
+  nonce       String   // Nonce (base64)
+  metadata    Json?    // Unencrypted metadata for server queries
+  keyEpoch    Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@unique([householdId, itemType, itemId])
+  @@index([householdId, itemType])
+}
+
+// ── Push Notifications ──────────────────────────────────────────────
+
+model PushToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  platform  String   // "ios" | "android" | "web"
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model NotificationLog {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  body      String
+  data      Json?
+  sentAt    DateTime @default(now())
+  delivered Boolean  @default(false)
+
+  @@index([userId])
+  @@index([type])
+  @@index([sentAt])
+}
+
+// ── User Preferences & Subscription ─────────────────────────────────
+
+model UserPreferences {
+  id              String  @id @default(cuid())
+  userId          String  @unique
+  language        String  @default("en")
+  theme           String  @default("system") // "light" | "dark" | "system"
+  pushEnabled     Boolean @default(true)
+  choreReminders  Boolean @default(true)
+  expenseAlerts   Boolean @default(true)
+  onboardingDone  Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSubscription {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  status        String    @default("free") // "free" | "active" | "expired" | "cancelled"
+  plan          String?   // "lifetime"
+  provider      String?   // "revenuecat" | "stripe"
+  providerSubId String?
+  expiresAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
