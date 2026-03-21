@@ -62,6 +62,9 @@ app.route("/api/webhooks", webhooksRouter);
 // Health check
 app.get("/api/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));
 
+// Redirect API root to web app (catches OAuth post-redirect)
+app.get("/", (c) => c.redirect(process.env.APP_URL ?? "https://wohnly.app"));
+
 const port = Number(process.env.PORT) || 3001;
 console.log(`Wohnly API starting on port ${port}`);
 
