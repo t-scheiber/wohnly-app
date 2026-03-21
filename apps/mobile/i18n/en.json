@@ -1,0 +1,137 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "done": "Done",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "confirm": "Confirm",
+    "search": "Search",
+    "noResults": "No results found",
+    "pullToRefresh": "Pull to refresh"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full Name",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "createAccount": "Create Account",
+    "forgotPassword": "Forgot password?"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "title": "Dashboard",
+    "quickActions": "Quick Actions",
+    "balances": "Balances",
+    "noHousehold": "No Household Yet",
+    "noHouseholdDescription": "Create a new household or join an existing one with an invite code.",
+    "recentActivity": "Recent Activity"
+  },
+  "household": {
+    "create": "Create Household",
+    "join": "Join Household",
+    "name": "Household Name",
+    "inviteCode": "Invite Code",
+    "getStarted": "Get Started",
+    "getStartedDescription": "Create a new household or join an existing one",
+    "createNew": "Create New",
+    "createDescription": "Start a new household and invite others to join",
+    "joinExisting": "Join Existing",
+    "joinDescription": "Enter an invite code from someone in your household",
+    "created": "Household Created!",
+    "shareCode": "Share this invite code with your household members:",
+    "continueToDashboard": "Continue to Dashboard",
+    "members": "Members",
+    "inviteMembers": "Invite Members",
+    "leaveHousehold": "Leave Household",
+    "deleteHousehold": "Delete Household"
+  },
+  "todos": {
+    "title": "Todos",
+    "household": "Household",
+    "personal": "Personal",
+    "addTodo": "Add a todo...",
+    "empty": "No todos yet",
+    "deleteTodo": "Delete Todo",
+    "deleteConfirm": "Are you sure?"
+  },
+  "shopping": {
+    "title": "Shopping List",
+    "addItem": "Add item...",
+    "empty": "Shopping list is empty"
+  },
+  "chores": {
+    "title": "Chores",
+    "addChore": "Add Chore",
+    "empty": "No chores yet",
+    "markDone": "Mark Done",
+    "frequency": "Frequency",
+    "assignTo": "Assign to",
+    "lastDone": "Last done",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "biweekly": "Bi-weekly",
+    "monthly": "Monthly"
+  },
+  "events": {
+    "title": "Calendar",
+    "addEvent": "Add Event",
+    "empty": "No events yet",
+    "allDay": "All Day Event",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "location": "Location",
+    "attendees": "Attendees"
+  },
+  "expenses": {
+    "title": "Expenses",
+    "addExpense": "Add Expense",
+    "empty": "No expenses yet",
+    "totalExpenses": "Total Expenses",
+    "amount": "Amount",
+    "category": "Category",
+    "paidBy": "Paid by",
+    "splitType": "Split Type",
+    "equal": "Equal",
+    "percentage": "Percentage",
+    "fixed": "Fixed"
+  },
+  "subscriptions": {
+    "title": "Subscriptions",
+    "addSubscription": "Add Subscription",
+    "empty": "No subscriptions yet",
+    "monthlyCost": "Monthly Cost",
+    "frequency": "Frequency",
+    "inactive": "Inactive"
+  },
+  "settings": {
+    "title": "Settings",
+    "household": "Household",
+    "preferences": "Preferences",
+    "account": "Account",
+    "dangerZone": "Danger Zone",
+    "language": "Language",
+    "theme": "Theme",
+    "notifications": "Notifications",
+    "subscription": "Subscription",
+    "signOut": "Sign Out",
+    "signOutConfirm": "Are you sure you want to sign out?"
+  },
+  "balances": {
+    "owedToYou": "Owed to you",
+    "youOwe": "You owe",
+    "settled": "Settled",
+    "totalBalance": "Total Balance"
+  }
+}

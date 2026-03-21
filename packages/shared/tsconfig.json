@@ -9,12 +9,10 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "declarationMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
     "sourceMap": true
   },
-  "references": [
-    { "path": "apps/mobile" },
-    { "path": "apps/api" },
-    { "path": "packages/shared" }
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
