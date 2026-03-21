@@ -6,12 +6,13 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { authClient } from "@/lib/auth/client";
 import { initRevenueCat } from "@/lib/payments/setup";
-import "@/i18n"; // Initialize i18next
+import { useThemeProvider, ThemeContext } from "@/lib/hooks/useTheme";
+import "@/i18n";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60, // 1 min
+      staleTime: 1000 * 60,
       retry: 2,
     },
   },
@@ -33,7 +34,6 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       router.replace("/(app)/(dashboard)");
     }
 
-    // Initialize RevenueCat when user is authenticated
     if (session?.user?.id) {
       initRevenueCat(session.user.id);
     }
@@ -45,16 +45,22 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 }
 
 export default function RootLayout() {
+  const theme = useThemeProvider();
+
+  if (!theme.loaded) return null;
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <AuthGate>
-            <StatusBar style="auto" />
-            <Slot />
-          </AuthGate>
-        </QueryClientProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ThemeContext.Provider value={{ mode: theme.mode, colorScheme: theme.colorScheme, setMode: theme.setMode }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <QueryClientProvider client={queryClient}>
+            <AuthGate>
+              <StatusBar style={theme.colorScheme === "dark" ? "light" : "dark"} />
+              <Slot />
+            </AuthGate>
+          </QueryClientProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ThemeContext.Provider>
   );
 }
