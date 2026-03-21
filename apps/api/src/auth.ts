@@ -1,0 +1,49 @@
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { expo } from "@better-auth/expo";
+import { prisma } from "./lib/prisma.js";
+
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3001",
+  secret: process.env.BETTER_AUTH_SECRET ?? "dev-secret-change-in-production-32chars",
+
+  emailAndPassword: {
+    enabled: true,
+  },
+
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+    apple: {
+      clientId: process.env.APPLE_CLIENT_ID!,
+      clientSecret: process.env.APPLE_CLIENT_SECRET!,
+      appBundleIdentifier: "app.wohnly",
+    },
+  },
+
+  plugins: [
+    expo(), // Enables Expo/RN support (deep link redirects, token handling)
+  ],
+
+  trustedOrigins: [
+    "wohnly://",
+    "https://wohnly.app",
+    "http://localhost:8081",
+    "http://localhost:19006",
+  ],
+
+  user: {
+    additionalFields: {
+      lang: {
+        type: "string",
+        required: false,
+        defaultValue: "en",
+      },
+    },
+  },
+});
+
+export type Auth = typeof auth;

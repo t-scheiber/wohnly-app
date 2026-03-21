@@ -1,0 +1,137 @@
+{
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "add": "Hinzufügen",
+    "done": "Fertig",
+    "back": "Zurück",
+    "loading": "Laden...",
+    "error": "Etwas ist schiefgelaufen",
+    "retry": "Erneut versuchen",
+    "confirm": "Bestätigen",
+    "search": "Suchen",
+    "noResults": "Keine Ergebnisse gefunden",
+    "pullToRefresh": "Zum Aktualisieren ziehen"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "signOut": "Abmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "name": "Vollständiger Name",
+    "continueWithGoogle": "Weiter mit Google",
+    "continueWithApple": "Weiter mit Apple",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits ein Konto?",
+    "createAccount": "Konto erstellen",
+    "forgotPassword": "Passwort vergessen?"
+  },
+  "dashboard": {
+    "welcome": "Willkommen",
+    "title": "Übersicht",
+    "quickActions": "Schnellzugriff",
+    "balances": "Salden",
+    "noHousehold": "Noch kein Haushalt",
+    "noHouseholdDescription": "Erstelle einen neuen Haushalt oder tritt einem bestehenden mit einem Einladungscode bei.",
+    "recentActivity": "Letzte Aktivitäten"
+  },
+  "household": {
+    "create": "Haushalt erstellen",
+    "join": "Haushalt beitreten",
+    "name": "Haushaltsname",
+    "inviteCode": "Einladungscode",
+    "getStarted": "Los geht's",
+    "getStartedDescription": "Erstelle einen neuen Haushalt oder tritt einem bestehenden bei",
+    "createNew": "Neu erstellen",
+    "createDescription": "Starte einen neuen Haushalt und lade andere ein",
+    "joinExisting": "Bestehendem beitreten",
+    "joinDescription": "Gib den Einladungscode eines Haushaltsmitglieds ein",
+    "created": "Haushalt erstellt!",
+    "shareCode": "Teile diesen Einladungscode mit deinen Haushaltsmitgliedern:",
+    "continueToDashboard": "Weiter zur Übersicht",
+    "members": "Mitglieder",
+    "inviteMembers": "Mitglieder einladen",
+    "leaveHousehold": "Haushalt verlassen",
+    "deleteHousehold": "Haushalt löschen"
+  },
+  "todos": {
+    "title": "Aufgaben",
+    "household": "Haushalt",
+    "personal": "Persönlich",
+    "addTodo": "Aufgabe hinzufügen...",
+    "empty": "Noch keine Aufgaben",
+    "deleteTodo": "Aufgabe löschen",
+    "deleteConfirm": "Bist du sicher?"
+  },
+  "shopping": {
+    "title": "Einkaufsliste",
+    "addItem": "Artikel hinzufügen...",
+    "empty": "Einkaufsliste ist leer"
+  },
+  "chores": {
+    "title": "Aufgabenplan",
+    "addChore": "Aufgabe hinzufügen",
+    "empty": "Noch keine Aufgaben",
+    "markDone": "Erledigt",
+    "frequency": "Häufigkeit",
+    "assignTo": "Zuweisen an",
+    "lastDone": "Zuletzt erledigt",
+    "daily": "Täglich",
+    "weekly": "Wöchentlich",
+    "biweekly": "Alle 2 Wochen",
+    "monthly": "Monatlich"
+  },
+  "events": {
+    "title": "Kalender",
+    "addEvent": "Termin hinzufügen",
+    "empty": "Noch keine Termine",
+    "allDay": "Ganztägig",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "location": "Ort",
+    "attendees": "Teilnehmer"
+  },
+  "expenses": {
+    "title": "Ausgaben",
+    "addExpense": "Ausgabe hinzufügen",
+    "empty": "Noch keine Ausgaben",
+    "totalExpenses": "Gesamtausgaben",
+    "amount": "Betrag",
+    "category": "Kategorie",
+    "paidBy": "Bezahlt von",
+    "splitType": "Aufteilung",
+    "equal": "Gleichmäßig",
+    "percentage": "Prozentual",
+    "fixed": "Festbetrag"
+  },
+  "subscriptions": {
+    "title": "Abonnements",
+    "addSubscription": "Abo hinzufügen",
+    "empty": "Noch keine Abonnements",
+    "monthlyCost": "Monatliche Kosten",
+    "frequency": "Häufigkeit",
+    "inactive": "Inaktiv"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "household": "Haushalt",
+    "preferences": "Einstellungen",
+    "account": "Konto",
+    "dangerZone": "Gefahrenzone",
+    "language": "Sprache",
+    "theme": "Design",
+    "notifications": "Benachrichtigungen",
+    "subscription": "Abonnement",
+    "signOut": "Abmelden",
+    "signOutConfirm": "Möchtest du dich wirklich abmelden?"
+  },
+  "balances": {
+    "owedToYou": "Dir geschuldet",
+    "youOwe": "Du schuldest",
+    "settled": "Ausgeglichen",
+    "totalBalance": "Gesamtsaldo"
+  }
+}
