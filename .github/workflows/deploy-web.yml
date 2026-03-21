@@ -1,11 +1,13 @@
 name: Deploy Web
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
       - 'apps/mobile/**'
       - 'packages/shared/**'
+      - '.github/workflows/deploy-web.yml'
 
 jobs:
   deploy-web:
