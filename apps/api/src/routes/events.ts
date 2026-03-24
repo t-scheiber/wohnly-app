@@ -31,7 +31,19 @@ app.get("/", async (c) => {
     orderBy: { startDate: "asc" },
   });
 
-  return c.json({ events });
+  // Filter by visibility
+  const filtered = events.filter((event) => {
+    if (event.visibility === "personal") {
+      return event.creatorId === userId;
+    }
+    if (event.visibility === "custom") {
+      return event.attendees.some((a) => a.member.userId === userId);
+    }
+    // "household" — visible to all
+    return true;
+  });
+
+  return c.json({ events: filtered });
 });
 
 // GET /api/events/:id
@@ -51,6 +63,15 @@ app.get("/:id", async (c) => {
   });
 
   if (!event) return c.json({ error: "Event not found" }, 404);
+
+  // Check visibility
+  if (event.visibility === "personal" && event.creatorId !== userId) {
+    return c.json({ error: "Event not found" }, 404);
+  }
+  if (event.visibility === "custom" && !event.attendees.some((a) => a.member.userId === userId)) {
+    return c.json({ error: "Event not found" }, 404);
+  }
+
   return c.json({ event });
 });
 
@@ -59,13 +80,31 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, location, startDate, endDate, allDay, color, attendeeIds, reminderMinutes, isRecurring, recurrenceRule } = body;
+  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule } = body;
   if (!title?.trim() || !startDate) {
     return c.json({ error: "Title and startDate are required" }, 400);
   }
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
+
+  const eventVisibility = visibility ?? "household";
+
+  // Build attendees based on visibility
+  let attendeesCreate: { memberId: string; status: string }[] = [];
+  if (eventVisibility === "personal") {
+    attendeesCreate = [{ memberId: member.id, status: "accepted" }];
+  } else if (eventVisibility === "custom" && attendeeIds?.length) {
+    attendeesCreate = [
+      { memberId: member.id, status: "accepted" },
+      ...attendeeIds
+        .filter((id: string) => id !== member.id)
+        .map((id: string) => ({ memberId: id, status: "pending" })),
+    ];
+  } else {
+    // household — add creator; others can see it but aren't explicit attendees
+    attendeesCreate = [{ memberId: member.id, status: "accepted" }];
+  }
 
   const event = await prisma.event.create({
     data: {
@@ -77,17 +116,11 @@ app.post("/", async (c) => {
       endDate: endDate ? new Date(endDate) : null,
       allDay: allDay ?? false,
       color: color || null,
+      visibility: eventVisibility,
       isRecurring: isRecurring ?? false,
       recurrenceRule: recurrenceRule || null,
       creatorId: userId,
-      attendees: {
-        create: [
-          // Creator auto-accepted
-          { memberId: member.id, status: "accepted" },
-          // Other attendees as pending
-          ...(attendeeIds?.filter((id: string) => id !== member.id).map((id: string) => ({ memberId: id, status: "pending" })) ?? []),
-        ],
-      },
+      attendees: { create: attendeesCreate },
       reminders: reminderMinutes?.length
         ? { create: reminderMinutes.map((min: number) => ({ minutesBefore: min })) }
         : undefined,
@@ -115,7 +148,7 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Event not found" }, 404);
 
-  const { title, description, location, startDate, endDate, allDay, color, attendeeIds, reminderMinutes, isRecurring, recurrenceRule } = body;
+  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule } = body;
 
   const event = await prisma.$transaction(async (tx) => {
     if (attendeeIds !== undefined) {
@@ -150,6 +183,7 @@ app.patch("/:id", async (c) => {
         ...(endDate !== undefined && { endDate: endDate ? new Date(endDate) : null }),
         ...(allDay !== undefined && { allDay }),
         ...(color !== undefined && { color }),
+        ...(visibility !== undefined && { visibility }),
         ...(isRecurring !== undefined && { isRecurring }),
         ...(recurrenceRule !== undefined && { recurrenceRule }),
       },

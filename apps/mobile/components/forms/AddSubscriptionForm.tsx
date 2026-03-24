@@ -2,9 +2,11 @@ import { useState } from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import { DatePicker } from "../ui/DatePicker";
 import { useCreateSubscription } from "@/lib/api/queries";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTranslation } from "react-i18next";
 
 const frequencies = [
   { label: "Weekly", value: "weekly" },
@@ -21,11 +23,13 @@ interface AddSubscriptionFormProps {
 export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionFormProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { t } = useTranslation();
 
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [frequency, setFrequency] = useState("monthly");
+  const [billingDate, setBillingDate] = useState<Date | undefined>(undefined);
 
   const createSubscription = useCreateSubscription();
 
@@ -47,6 +51,7 @@ export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionForm
         amount: numAmount,
         frequency,
         category: category.trim(),
+        billingDate: billingDate ? billingDate.toISOString() : undefined,
       });
       onSuccess?.();
     } catch (err: unknown) {
@@ -57,13 +62,13 @@ export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionForm
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
-        Add Subscription
+        {t("subscriptions.addSubscription")}
       </Text>
 
-      <Input label="Name" placeholder="e.g., Netflix" value={name} onChangeText={setName} />
+      <Input label={t("subscriptions.title") || "Name"} placeholder="e.g., Netflix" value={name} onChangeText={setName} />
 
       <Input
-        label="Amount"
+        label={t("expenses.amount")}
         placeholder="0.00"
         value={amount}
         onChangeText={setAmount}
@@ -71,9 +76,9 @@ export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionForm
         style={{ fontSize: 24, fontWeight: "600" }}
       />
 
-      <Input label="Category" placeholder="e.g., Streaming" value={category} onChangeText={setCategory} />
+      <Input label={t("expenses.category")} placeholder="e.g., Streaming" value={category} onChangeText={setCategory} />
 
-      <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>Frequency</Text>
+      <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>{t("subscriptions.frequency")}</Text>
       <View style={{ flexDirection: "row", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
         {frequencies.map((f) => (
           <Button key={f.value} variant={frequency === f.value ? "primary" : "outline"} size="sm" onPress={() => setFrequency(f.value)}>
@@ -82,10 +87,20 @@ export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionForm
         ))}
       </View>
 
+      <DatePicker
+        label={t("subscriptions.billingDateOptional")}
+        value={billingDate}
+        onChange={setBillingDate}
+        mode="date"
+        placeholder={t("expenses.selectDate")}
+        optional
+        onClear={() => setBillingDate(undefined)}
+      />
+
       <View style={{ flexDirection: "row", gap: 12, marginTop: 8 }}>
-        {onCancel && <Button variant="ghost" onPress={onCancel} style={{ flex: 1 }}>Cancel</Button>}
+        {onCancel && <Button variant="ghost" onPress={onCancel} style={{ flex: 1 }}>{t("common.cancel")}</Button>}
         <Button onPress={handleSubmit} loading={createSubscription.isPending} disabled={!name.trim() || !amount || !category.trim()} style={{ flex: 2 }}>
-          Add Subscription
+          {t("subscriptions.addSubscription")}
         </Button>
       </View>
     </ScrollView>

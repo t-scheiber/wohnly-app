@@ -16,6 +16,10 @@ export const Colors = {
     tint: "#6db5a8",
     tabIconDefault: "#9bb5ae",
     tabIconSelected: "#6db5a8",
+    calendarEvent: "#6db5a8",
+    calendarChore: "#f59e0b",
+    calendarSubscription: "#6366f1",
+    calendarDevice: "#8b5cf6",
   },
   dark: {
     primary: "#7bc4b6",
@@ -34,5 +38,9 @@ export const Colors = {
     tint: "#7bc4b6",
     tabIconDefault: "#5a7a73",
     tabIconSelected: "#7bc4b6",
+    calendarEvent: "#7bc4b6",
+    calendarChore: "#fbbf24",
+    calendarSubscription: "#818cf8",
+    calendarDevice: "#a78bfa",
   },
 };

@@ -16,6 +16,7 @@ export default function EventsLayout() {
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="calendar-settings" options={{ title: "Calendar Settings" }} />
     </Stack>
   );
 }

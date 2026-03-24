@@ -11,9 +11,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.wohnly",
+      "usesAppleSignIn": true,
       "infoPlist": {
         "NSCalendarsUsageDescription": "Wohnly needs calendar access to sync your household events.",
-        "NSCalendarsFullAccessUsageDescription": "Wohnly needs calendar access to sync your household events."
+        "NSCalendarsFullAccessUsageDescription": "Wohnly needs calendar access to sync your household events.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -52,7 +54,15 @@
           }
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "@react-native-community/datetimepicker",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy",
+          "iosAppId": "ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -61,7 +71,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "9b2a55c7-f196-44f8-a50d-232f25c5f8b5"
+        "projectId": "1f4ce882-1b70-4606-8b77-48c02e3d523e"
       },
       "apiUrl": "https://api.wohnly.app"
     },

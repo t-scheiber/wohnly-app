@@ -5,9 +5,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { CheckSquare, ShoppingCart, Sparkles, DollarSign } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
-import { useMemberBalances } from "@/lib/api/queries";
+import { useMemberBalances, useHouseholdMembers } from "@/lib/api/queries";
 import { useHousehold } from "@/lib/hooks/useHousehold";
+import { useKeyDistribution } from "@/lib/hooks/useKeyDistribution";
 import { HouseholdOnboarding } from "@/components/household/HouseholdOnboarding";
+import { AdBanner } from "@/components/common/AdBanner";
 import { Spinner } from "@/components/ui/Spinner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -20,14 +22,27 @@ export default function DashboardScreen() {
   const { t } = useTranslation();
   const { data: session } = authClient.useSession();
   const { data: household, isLoading: householdLoading } = useHousehold();
+  useKeyDistribution(); // Auto-distribute E2EE keys to new devices
   const { data: balances, refetch } = useMemberBalances();
+  const { data: membersData, refetch: refetchMembers } = useHouseholdMembers();
   const [refreshing, setRefreshing] = useState(false);
+
+  // Build a map of memberId -> display name (nickname > displayName) + isCurrentUser
+  const memberDisplayMap = new Map<string, { name: string; isYou: boolean }>();
+  if (membersData?.members) {
+    for (const m of membersData.members) {
+      memberDisplayMap.set(m.id, {
+        name: m.nickname || m.displayName || m.email || "Unknown",
+        isYou: m.isCurrentUser,
+      });
+    }
+  }
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await refetch();
+    await Promise.all([refetch(), refetchMembers()]);
     setRefreshing(false);
-  }, [refetch]);
+  }, [refetch, refetchMembers]);
 
   const firstName = session?.user?.name?.split(" ")[0];
 
@@ -50,7 +65,7 @@ export default function DashboardScreen() {
     { title: t("todos.title"), icon: <CheckSquare size={22} color="#fff" />, route: "/(app)/(lists)/todos" as const, color: "#0d9488" },
     { title: t("shopping.title"), icon: <ShoppingCart size={22} color="#fff" />, route: "/(app)/(lists)/shopping" as const, color: "#3b82f6" },
     { title: t("chores.title"), icon: <Sparkles size={22} color="#fff" />, route: "/(app)/(chores)" as const, color: "#6366f1" },
-    { title: t("expenses.title"), icon: <DollarSign size={22} color="#fff" />, route: "/(app)/(more)/expenses" as const, color: "#10b981" },
+    { title: t("expenses.title"), icon: <DollarSign size={22} color="#fff" />, route: "/(app)/(finances)" as const, color: "#10b981" },
   ];
 
   return (
@@ -117,7 +132,8 @@ export default function DashboardScreen() {
                 }}
               >
                 <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
-                  {member.displayName}
+                  {memberDisplayMap.get(member.memberId)?.name ?? member.displayName}
+                  {memberDisplayMap.get(member.memberId)?.isYou ? ` (${t("settings.you")})` : ""}
                 </Text>
                 <Text
                   style={{
@@ -134,6 +150,7 @@ export default function DashboardScreen() {
           </View>
         )}
       </ScrollView>
+      <AdBanner />
     </SafeAreaView>
   );
 }

@@ -1,13 +1,16 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Alert, Share, Switch, Modal, Pressable, Platform } from "react-native";
+import { useState, useMemo } from "react";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, Alert, Share, Switch, Modal, Pressable, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
-import { useHouseholdMembers } from "@/lib/api/queries";
+import { useHouseholdMembers, useSetNickname } from "@/lib/api/queries";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
+import { LANGUAGES as ALL_LANGUAGES } from "@/i18n";
+import { clearDeviceKeys } from "@/lib/crypto/device-storage";
+import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 
 // ── Picker Modal (works on web + native) ──
 
@@ -31,28 +34,30 @@ function PickerModal<T extends string>({
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable onPress={onClose} style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" }}>
-        <Pressable onPress={() => {}} style={{ backgroundColor: colors.card, borderRadius: 16, width: "85%", maxWidth: 360, overflow: "hidden" }}>
+        <Pressable onPress={() => {}} style={{ backgroundColor: colors.card, borderRadius: 16, width: "85%", maxWidth: 360, maxHeight: "70%", overflow: "hidden" }}>
           <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text, padding: 20, paddingBottom: 8 }}>
             {title}
           </Text>
-          {options.map((opt, i) => (
-            <TouchableOpacity
-              key={opt.value}
-              onPress={() => { onSelect(opt.value); onClose(); }}
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: 16,
-                paddingHorizontal: 20,
-                borderTopWidth: 1,
-                borderTopColor: colors.border,
-              }}
-            >
-              <Text style={{ fontSize: 16, color: colors.text }}>{opt.label}</Text>
-              {opt.value === selected && <Check size={20} color={colors.primary} />}
-            </TouchableOpacity>
-          ))}
+          <ScrollView>
+            {options.map((opt, i) => (
+              <TouchableOpacity
+                key={opt.value}
+                onPress={() => { onSelect(opt.value); onClose(); }}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: 16,
+                  paddingHorizontal: 20,
+                  borderTopWidth: 1,
+                  borderTopColor: colors.border,
+                }}
+              >
+                <Text style={{ fontSize: 16, color: colors.text }}>{opt.label}</Text>
+                {opt.value === selected && <Check size={20} color={colors.primary} />}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
           <TouchableOpacity
             onPress={onClose}
             style={{ padding: 16, borderTopWidth: 1, borderTopColor: colors.border, alignItems: "center" }}
@@ -106,10 +111,10 @@ function SettingsRow({ label, value, onPress, destructive, isLast, right, colors
 
 // ── Constants ──
 
-const LANGUAGES = [
-  { value: "en" as const, label: "English" },
-  { value: "de" as const, label: "Deutsch" },
-];
+const LANGUAGES = ALL_LANGUAGES.map((l) => ({
+  value: l.code,
+  label: `${l.nativeName} (${l.name})`,
+}));
 
 const THEME_LABELS: Record<string, Record<string, string>> = {
   en: { system: "System", light: "Light", dark: "Dark" },
@@ -125,10 +130,39 @@ export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const { data: session } = authClient.useSession();
   const { data: membersData } = useHouseholdMembers();
+  const setNickname = useSetNickname();
   const notifications = useNotificationSettings();
 
   const [langPickerOpen, setLangPickerOpen] = useState(false);
   const [themePickerOpen, setThemePickerOpen] = useState(false);
+  const [nameModalOpen, setNameModalOpen] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [savingName, setSavingName] = useState(false);
+  const [nicknameModalOpen, setNicknameModalOpen] = useState(false);
+  const [nicknameMemberId, setNicknameMemberId] = useState("");
+  const [nicknameMemberName, setNicknameMemberName] = useState("");
+  const [nicknameValue, setNicknameValue] = useState("");
+
+  const handleSaveNickname = () => {
+    setNickname.mutate(
+      { memberId: nicknameMemberId, nickname: nicknameValue.trim() },
+      { onSuccess: () => setNicknameModalOpen(false) }
+    );
+  };
+
+  const handleSaveName = async () => {
+    const trimmed = editName.trim();
+    if (!trimmed) return;
+    setSavingName(true);
+    try {
+      await authClient.updateUser({ name: trimmed });
+      setNameModalOpen(false);
+    } catch (err: unknown) {
+      Alert.alert("Error", err instanceof Error ? err.message : "Failed to update name");
+    } finally {
+      setSavingName(false);
+    }
+  };
 
   const currentLang = LANGUAGES.find((l) => l.value === i18n.language) ?? LANGUAGES[0];
   const themeLabels = THEME_LABELS[i18n.language] ?? THEME_LABELS.en;
@@ -148,6 +182,7 @@ export default function SettingsScreen() {
   const handleSignOut = () => {
     if (Platform.OS === "web") {
       if (confirm(t("settings.signOutConfirm"))) {
+        clearHouseholdKeys();
         authClient.signOut().then(() => router.replace("/(auth)/sign-in"));
       }
       return;
@@ -158,6 +193,8 @@ export default function SettingsScreen() {
         text: t("settings.signOut"),
         style: "destructive",
         onPress: async () => {
+          clearHouseholdKeys();
+          try { await clearDeviceKeys(); } catch {}
           await authClient.signOut();
           router.replace("/(auth)/sign-in");
         },
@@ -172,6 +209,57 @@ export default function SettingsScreen() {
           <SettingsRow colors={colors} label={t("household.members")} value={`${membersData?.members?.length ?? 0}`} />
           <SettingsRow colors={colors} label={t("household.inviteMembers")} onPress={handleShareInvite} isLast />
         </SettingsSection>
+
+        {/* Members & Nicknames */}
+        {membersData?.members && membersData.members.length > 0 && (
+          <SettingsSection title={t("settings.members")} colors={colors}>
+            {membersData.members.map((member, i) => {
+              const isLast = i === membersData.members.length - 1;
+              const isYou = member.isCurrentUser;
+              const display = member.nickname || member.displayName || member.email || "Unknown";
+              const subtitle = isYou
+                ? t("settings.you")
+                : member.nickname
+                  ? member.displayName || member.email
+                  : null;
+              return (
+                <TouchableOpacity
+                  key={member.id}
+                  disabled={isYou}
+                  onPress={() => {
+                    setNicknameMemberId(member.id);
+                    setNicknameMemberName(member.displayName || member.email || "");
+                    setNicknameValue(member.nickname || "");
+                    setNicknameModalOpen(true);
+                  }}
+                  activeOpacity={isYou ? 1 : 0.6}
+                  style={{
+                    padding: 16,
+                    borderBottomWidth: isLast ? 0 : 1,
+                    borderBottomColor: colors.border,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 16, color: colors.text, fontWeight: "600" }}>
+                      {display}{isYou ? ` (${t("settings.you")})` : ""}
+                    </Text>
+                    {subtitle && !isYou && (
+                      <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
+                        {subtitle}
+                      </Text>
+                    )}
+                  </View>
+                  {!isYou && (
+                    <Text style={{ fontSize: 13, color: colors.primary }}>{t("settings.setNickname")}</Text>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </SettingsSection>
+        )}
 
         <SettingsSection title={t("settings.preferences")} colors={colors}>
           <SettingsRow colors={colors} label={t("settings.language")} value={currentLang.label} onPress={() => setLangPickerOpen(true)} />
@@ -196,7 +284,15 @@ export default function SettingsScreen() {
 
         <SettingsSection title={t("settings.account")} colors={colors}>
           <SettingsRow colors={colors} label={t("auth.email")} value={session?.user?.email ?? ""} />
-          <SettingsRow colors={colors} label={t("auth.name")} value={session?.user?.name ?? ""} />
+          <SettingsRow
+            colors={colors}
+            label={t("auth.name")}
+            value={session?.user?.name || t("settings.addName")}
+            onPress={() => {
+              setEditName(session?.user?.name ?? "");
+              setNameModalOpen(true);
+            }}
+          />
           <SettingsRow colors={colors} label={t("settings.subscription")} value="Free" isLast />
         </SettingsSection>
 
@@ -225,6 +321,126 @@ export default function SettingsScreen() {
         onSelect={setMode}
         colors={colors}
       />
+
+      {/* Edit Name Modal */}
+      <Modal visible={nameModalOpen} transparent animationType="fade" onRequestClose={() => setNameModalOpen(false)}>
+        <Pressable onPress={() => setNameModalOpen(false)} style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" }}>
+          <Pressable onPress={() => {}} style={{ backgroundColor: colors.card, borderRadius: 16, width: "85%", maxWidth: 360, padding: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text, marginBottom: 16 }}>
+              {t("settings.editName")}
+            </Text>
+            <TextInput
+              value={editName}
+              onChangeText={setEditName}
+              placeholder={t("auth.name")}
+              placeholderTextColor={colors.textSecondary}
+              autoFocus
+              autoCapitalize="words"
+              style={{
+                backgroundColor: colors.background,
+                borderWidth: 1,
+                borderColor: colors.border,
+                borderRadius: 10,
+                padding: 14,
+                fontSize: 16,
+                color: colors.text,
+                marginBottom: 16,
+              }}
+              onSubmitEditing={handleSaveName}
+            />
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              <TouchableOpacity
+                onPress={() => setNameModalOpen(false)}
+                style={{ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.border, alignItems: "center" }}
+              >
+                <Text style={{ color: colors.textSecondary, fontSize: 16, fontWeight: "600" }}>{t("common.cancel")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleSaveName}
+                disabled={savingName || !editName.trim()}
+                style={{
+                  flex: 1,
+                  padding: 14,
+                  borderRadius: 10,
+                  backgroundColor: colors.primary,
+                  alignItems: "center",
+                  opacity: savingName || !editName.trim() ? 0.5 : 1,
+                }}
+              >
+                <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "600" }}>{t("common.save")}</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      {/* Nickname Modal */}
+      <Modal visible={nicknameModalOpen} transparent animationType="fade" onRequestClose={() => setNicknameModalOpen(false)}>
+        <Pressable onPress={() => setNicknameModalOpen(false)} style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" }}>
+          <Pressable onPress={() => {}} style={{ backgroundColor: colors.card, borderRadius: 16, width: "85%", maxWidth: 360, padding: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text, marginBottom: 4 }}>
+              {t("settings.setNickname")}
+            </Text>
+            <Text style={{ fontSize: 14, color: colors.textSecondary, marginBottom: 16 }}>
+              {nicknameMemberName}
+            </Text>
+            <TextInput
+              value={nicknameValue}
+              onChangeText={setNicknameValue}
+              placeholder={t("settings.nicknamePlaceholder")}
+              placeholderTextColor={colors.textSecondary}
+              autoFocus
+              autoCapitalize="words"
+              style={{
+                backgroundColor: colors.background,
+                borderWidth: 1,
+                borderColor: colors.border,
+                borderRadius: 10,
+                padding: 14,
+                fontSize: 16,
+                color: colors.text,
+                marginBottom: 16,
+              }}
+              onSubmitEditing={handleSaveNickname}
+            />
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              {nicknameValue !== "" && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setNickname.mutate(
+                      { memberId: nicknameMemberId, nickname: "" },
+                      { onSuccess: () => setNicknameModalOpen(false) }
+                    );
+                  }}
+                  style={{ padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.destructive, alignItems: "center" }}
+                >
+                  <Text style={{ color: colors.destructive, fontSize: 16, fontWeight: "600" }}>{t("common.delete")}</Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                onPress={() => setNicknameModalOpen(false)}
+                style={{ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.border, alignItems: "center" }}
+              >
+                <Text style={{ color: colors.textSecondary, fontSize: 16, fontWeight: "600" }}>{t("common.cancel")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleSaveNickname}
+                disabled={setNickname.isPending || !nicknameValue.trim()}
+                style={{
+                  flex: 1,
+                  padding: 14,
+                  borderRadius: 10,
+                  backgroundColor: colors.primary,
+                  alignItems: "center",
+                  opacity: setNickname.isPending || !nicknameValue.trim() ? 0.5 : 1,
+                }}
+              >
+                <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "600" }}>{t("common.save")}</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </>
   );
 }
