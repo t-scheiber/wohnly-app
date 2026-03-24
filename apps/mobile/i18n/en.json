@@ -92,7 +92,20 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "location": "Location",
-    "attendees": "Attendees"
+    "attendees": "Attendees",
+    "visibility": "Who can see this?",
+    "personal": "Only Me",
+    "household": "Household",
+    "custom": "Select Members",
+    "noEventsOnDay": "Nothing scheduled",
+    "filterEvents": "Events",
+    "filterChores": "Chores",
+    "filterSubscriptions": "Bills",
+    "filterDevice": "Device",
+    "calendarSettings": "Calendar Settings",
+    "deviceCalendars": "Device Calendars",
+    "noCalendars": "No calendars found",
+    "grantAccess": "Grant calendar access to see your device events"
   },
   "expenses": {
     "title": "Expenses",
@@ -105,7 +118,9 @@
     "splitType": "Split Type",
     "equal": "Equal",
     "percentage": "Percentage",
-    "fixed": "Fixed"
+    "fixed": "Fixed",
+    "date": "Date",
+    "selectDate": "Select Date"
   },
   "subscriptions": {
     "title": "Subscriptions",
@@ -113,7 +128,9 @@
     "empty": "No subscriptions yet",
     "monthlyCost": "Monthly Cost",
     "frequency": "Frequency",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "billingDate": "Billing Date",
+    "billingDateOptional": "Billing Date (optional)"
   },
   "settings": {
     "title": "Settings",
@@ -126,7 +143,13 @@
     "notifications": "Notifications",
     "subscription": "Subscription",
     "signOut": "Sign Out",
-    "signOutConfirm": "Are you sure you want to sign out?"
+    "signOutConfirm": "Are you sure you want to sign out?",
+    "editName": "Edit Name",
+    "addName": "Add name",
+    "members": "Members",
+    "you": "You",
+    "setNickname": "Set Nickname",
+    "nicknamePlaceholder": "e.g. Tommy, Roomie..."
   },
   "balances": {
     "owedToYou": "Owed to you",

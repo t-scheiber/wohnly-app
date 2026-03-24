@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useTodos, usePersonalTodos, useCreateTodo, useToggleTodo, useDeleteTodo } from "@/lib/api/queries";
+import { AdBanner } from "@/components/common/AdBanner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { Todo } from "@wohnly/shared";
@@ -41,7 +42,7 @@ export default function TodosScreen() {
     if (!newTitle.trim()) return;
     await createTodo.mutateAsync({
       title: newTitle.trim(),
-      ...(tab === "personal" ? {} : {}),
+      isPersonal: tab === "personal",
     });
     setNewTitle("");
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -156,6 +157,8 @@ export default function TodosScreen() {
           </View>
         }
       />
+
+      <AdBanner />
 
       {/* Quick add */}
       <View

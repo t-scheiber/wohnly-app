@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { apiPost } from "@/lib/api/client";
+import { ensureDeviceRegistered, fetchAndCacheHouseholdKey } from "@/lib/crypto/e2ee-setup";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
@@ -20,16 +21,27 @@ export default function JoinScreen() {
       return;
     }
 
-    apiPost("/api/invitations/accept", { code })
-      .then(() => {
+    (async () => {
+      try {
+        // Register device for E2EE before joining
+        try { await ensureDeviceRegistered(); } catch {}
+
+        const res = await apiPost<{ member: unknown; household: { id: string; name: string } }>(
+          "/api/invitations/accept",
+          { code }
+        );
+
+        // Fetch household encryption key
+        try { await fetchAndCacheHouseholdKey(res.household.id); } catch {}
+
         setStatus("success");
         setMessage("Welcome to the household!");
         setTimeout(() => router.replace("/(app)/(dashboard)"), 2000);
-      })
-      .catch((err: Error) => {
+      } catch (err: unknown) {
         setStatus("error");
-        setMessage(err.message || "Failed to join household");
-      });
+        setMessage(err instanceof Error ? err.message : "Failed to join household");
+      }
+    })();
   }, [code]);
 
   return (

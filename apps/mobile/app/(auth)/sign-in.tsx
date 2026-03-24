@@ -8,11 +8,15 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
+  Image,
 } from "react-native";
 import { Link } from "expo-router";
+import * as Linking from "expo-linking";
 import { authClient } from "@/lib/auth/client";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+
+const CALLBACK_URL = Platform.OS === "web" ? "https://wohnly.app" : Linking.createURL("/");
 
 export default function SignInScreen() {
   const colorScheme = useColorScheme() ?? "light";
@@ -41,7 +45,7 @@ export default function SignInScreen() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "https://wohnly.app",
+        callbackURL: CALLBACK_URL,
       });
     } catch (err: unknown) {
       Alert.alert("Error", err instanceof Error ? err.message : "Google sign in failed");
@@ -52,7 +56,7 @@ export default function SignInScreen() {
     try {
       await authClient.signIn.social({
         provider: "apple",
-        callbackURL: "https://wohnly.app",
+        callbackURL: CALLBACK_URL,
       });
     } catch (err: unknown) {
       Alert.alert("Error", err instanceof Error ? err.message : "Apple sign in failed");
@@ -65,6 +69,16 @@ export default function SignInScreen() {
       style={{ flex: 1, backgroundColor: colors.background }}
     >
       <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
+        <Image
+          source={require("@/assets/images/icon.png")}
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 20,
+            alignSelf: "center",
+            marginBottom: 16,
+          }}
+        />
         <Text
           style={{
             fontSize: 36,
@@ -187,6 +201,10 @@ export default function SignInScreen() {
             <Text style={{ color: colors.primary, fontWeight: "600" }}>Sign Up</Text>
           </Link>
         </View>
+
+        <Link href="/privacy-policy" style={{ alignSelf: "center", marginTop: 24 }}>
+          <Text style={{ color: colors.textSecondary, fontSize: 13 }}>Privacy Policy</Text>
+        </Link>
       </View>
     </KeyboardAvoidingView>
   );
