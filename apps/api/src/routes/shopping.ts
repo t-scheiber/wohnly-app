@@ -6,15 +6,20 @@ import type { AppEnv } from "../types.js";
 const app = new Hono<AppEnv>();
 app.use("*", requireAuth);
 
-// GET /api/shopping
+// GET /api/shopping?personal=true
 app.get("/", async (c) => {
   const userId = c.get("userId") as string;
+  const isPersonal = c.req.query("personal") === "true";
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
 
   const items = await prisma.shoppingItem.findMany({
-    where: { householdId: member.householdId },
+    where: {
+      householdId: member.householdId,
+      isPersonal,
+      ...(isPersonal ? { addedBy: userId } : {}),
+    },
     orderBy: [{ checked: "asc" }, { createdAt: "desc" }],
   });
 
@@ -24,7 +29,7 @@ app.get("/", async (c) => {
 // POST /api/shopping
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const { name, quantity } = await c.req.json();
+  const { name, quantity, isPersonal } = await c.req.json();
 
   if (!name?.trim()) return c.json({ error: "Item name is required" }, 400);
 
@@ -36,6 +41,7 @@ app.post("/", async (c) => {
       householdId: member.householdId,
       name: name.trim(),
       quantity: quantity?.trim() || null,
+      isPersonal: !!isPersonal,
       addedBy: userId,
     },
   });

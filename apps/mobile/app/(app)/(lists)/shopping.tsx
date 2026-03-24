@@ -8,7 +8,8 @@ import {
   RefreshControl,
 } from "react-native";
 import * as Haptics from "expo-haptics";
-import { useShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem } from "@/lib/api/queries";
+import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem } from "@/lib/api/queries";
+import { AdBanner } from "@/components/common/AdBanner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { ShoppingItem } from "@wohnly/shared";
@@ -17,22 +18,33 @@ export default function ShoppingScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
 
+  const [tab, setTab] = useState<"household" | "personal">("household");
   const [newItem, setNewItem] = useState("");
-  const { data, refetch } = useShoppingList();
+
+  const householdList = useShoppingList();
+  const personalList = usePersonalShoppingList();
   const createItem = useCreateShoppingItem();
   const toggleItem = useToggleShoppingItem();
   const deleteItem = useDeleteShoppingItem();
 
+  const data = tab === "household" ? householdList : personalList;
+  const items = data.data?.items ?? [];
+  const unchecked = items.filter((i) => !i.checked);
+  const checked = items.filter((i) => i.checked);
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await refetch();
+    await data.refetch();
     setRefreshing(false);
-  }, [refetch]);
+  }, [data]);
 
   const handleAdd = async () => {
     if (!newItem.trim()) return;
-    await createItem.mutateAsync({ name: newItem.trim() });
+    await createItem.mutateAsync({
+      name: newItem.trim(),
+      isPersonal: tab === "personal",
+    });
     setNewItem("");
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
@@ -46,10 +58,6 @@ export default function ShoppingScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     deleteItem.mutate(item.id);
   };
-
-  const items = data?.items ?? [];
-  const unchecked = items.filter((i) => !i.checked);
-  const checked = items.filter((i) => i.checked);
 
   const renderItem = ({ item }: { item: ShoppingItem }) => (
     <TouchableOpacity
@@ -99,11 +107,38 @@ export default function ShoppingScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* Tab switcher */}
+      <View style={{ flexDirection: "row", padding: 16, gap: 8 }}>
+        {(["household", "personal"] as const).map((t) => (
+          <TouchableOpacity
+            key={t}
+            onPress={() => setTab(t)}
+            style={{
+              flex: 1,
+              paddingVertical: 10,
+              borderRadius: 8,
+              backgroundColor: tab === t ? colors.primary : colors.muted,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: tab === t ? colors.primaryForeground : colors.text,
+                fontWeight: "600",
+                textTransform: "capitalize",
+              }}
+            >
+              {t}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <FlatList
         data={[...unchecked, ...checked]}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
         }
@@ -112,9 +147,9 @@ export default function ShoppingScreen() {
             <Text style={{ fontSize: 16, color: colors.textSecondary }}>Shopping list is empty</Text>
           </View>
         }
-        ItemSeparatorComponent={() => null}
-        stickyHeaderIndices={unchecked.length > 0 && checked.length > 0 ? [unchecked.length] : undefined}
       />
+
+      <AdBanner />
 
       {/* Quick add */}
       <View

@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { Platform } from "react-native";
-import { Home, ListTodo, Sparkles, Calendar, Menu } from "lucide-react-native";
+import { Home, ListTodo, Sparkles, DollarSign, Menu } from "lucide-react-native";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/Colors";
 
@@ -61,11 +61,17 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
+        name="(finances)"
+        options={{
+          title: "Finances",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <DollarSign size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="(events)"
         options={{
-          title: "Calendar",
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => <Calendar size={size} color={color} />,
+          href: null,
         }}
       />
       <Tabs.Screen

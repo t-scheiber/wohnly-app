@@ -8,6 +8,7 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Card } from "../ui/Card";
 import { apiPost } from "@/lib/api/client";
+import { createHouseholdWithE2EE, ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
@@ -35,13 +36,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     if (!householdName.trim()) return;
     setLoading(true);
     try {
-      // TODO: E2EE — before creating household, generate device keypair via
-      // lib/crypto/keys.ts, register device via /api/devices/register, then
-      // generate household key, seal it to the device, and pass deviceId + sealedHK here.
-      // See: lib/crypto/ for the full implementation.
-      const res = await apiPost<{ household: { inviteCode: string } }>("/api/households", {
-        name: householdName.trim(),
-      });
+      const res = await createHouseholdWithE2EE(householdName.trim());
       setCreatedCode(res.household.inviteCode);
       setStep("success");
     } catch (err: unknown) {
@@ -55,7 +50,20 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     if (!inviteCode.trim()) return;
     setLoading(true);
     try {
-      await apiPost("/api/households/join", { inviteCode: inviteCode.trim() });
+      // Ensure device is registered before joining
+      try { await ensureDeviceRegistered(); } catch {}
+
+      const res = await apiPost<{ member: unknown; household: { id: string; name: string } }>(
+        "/api/households/join",
+        { inviteCode: inviteCode.trim() }
+      );
+
+      // Try to fetch and cache the household encryption key
+      try {
+        const { fetchAndCacheHouseholdKey } = await import("@/lib/crypto/e2ee-setup");
+        await fetchAndCacheHouseholdKey(res.household.id);
+      } catch {}
+
       queryClient.invalidateQueries({ queryKey: ["members"] });
       queryClient.invalidateQueries({ queryKey: ["balances"] });
       queryClient.invalidateQueries({ queryKey: ["household"] });
