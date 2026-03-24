@@ -254,6 +254,7 @@ model ShoppingItem {
   name        String
   quantity    String?
   checked     Boolean  @default(false)
+  isPersonal  Boolean  @default(false)
   addedBy     String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -261,6 +262,7 @@ model ShoppingItem {
   household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
 
   @@index([householdId, checked])
+  @@index([householdId, isPersonal, checked])
 }
 
 // ── Chores ──────────────────────────────────────────────────────────
@@ -311,6 +313,7 @@ model Event {
   endDate        DateTime?
   allDay         Boolean   @default(false)
   color          String?
+  visibility     String    @default("household") // "personal" | "household" | "custom"
   isRecurring    Boolean   @default(false)
   recurrenceRule String?
   creatorId      String

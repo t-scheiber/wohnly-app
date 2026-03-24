@@ -92,7 +92,20 @@
     "startDate": "Startdatum",
     "endDate": "Enddatum",
     "location": "Ort",
-    "attendees": "Teilnehmer"
+    "attendees": "Teilnehmer",
+    "visibility": "Wer kann das sehen?",
+    "personal": "Nur ich",
+    "household": "Haushalt",
+    "custom": "Mitglieder wählen",
+    "noEventsOnDay": "Nichts geplant",
+    "filterEvents": "Termine",
+    "filterChores": "Aufgaben",
+    "filterSubscriptions": "Rechnungen",
+    "filterDevice": "Gerät",
+    "calendarSettings": "Kalender-Einstellungen",
+    "deviceCalendars": "Geräte-Kalender",
+    "noCalendars": "Keine Kalender gefunden",
+    "grantAccess": "Kalenderzugriff gewähren, um Gerätetermine anzuzeigen"
   },
   "expenses": {
     "title": "Ausgaben",
@@ -105,7 +118,9 @@
     "splitType": "Aufteilung",
     "equal": "Gleichmäßig",
     "percentage": "Prozentual",
-    "fixed": "Festbetrag"
+    "fixed": "Festbetrag",
+    "date": "Datum",
+    "selectDate": "Datum wählen"
   },
   "subscriptions": {
     "title": "Abonnements",
@@ -113,7 +128,9 @@
     "empty": "Noch keine Abonnements",
     "monthlyCost": "Monatliche Kosten",
     "frequency": "Häufigkeit",
-    "inactive": "Inaktiv"
+    "inactive": "Inaktiv",
+    "billingDate": "Abrechnungsdatum",
+    "billingDateOptional": "Abrechnungsdatum (optional)"
   },
   "settings": {
     "title": "Einstellungen",
@@ -126,7 +143,13 @@
     "notifications": "Benachrichtigungen",
     "subscription": "Abonnement",
     "signOut": "Abmelden",
-    "signOutConfirm": "Möchtest du dich wirklich abmelden?"
+    "signOutConfirm": "Möchtest du dich wirklich abmelden?",
+    "editName": "Name bearbeiten",
+    "addName": "Name hinzufügen",
+    "members": "Mitglieder",
+    "you": "Du",
+    "setNickname": "Spitzname setzen",
+    "nicknamePlaceholder": "z.B. Tommy, Mitbewohner..."
   },
   "balances": {
     "owedToYou": "Dir geschuldet",

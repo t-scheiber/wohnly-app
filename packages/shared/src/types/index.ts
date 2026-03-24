@@ -87,6 +87,7 @@ export interface Event {
   endDate?: Date | null;
   allDay: boolean;
   color?: string | null;
+  visibility?: "personal" | "household" | "custom";
   isRecurring: boolean;
   recurrenceRule?: string | null;
   creatorId: string;

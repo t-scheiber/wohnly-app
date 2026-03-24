@@ -36,6 +36,17 @@ export function useMemberBalances() {
   });
 }
 
+export function useSetNickname() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { memberId: string; nickname: string }) =>
+      apiPatch("/api/members/nickname", data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["members"] });
+    },
+  });
+}
+
 // ── Todos ──
 
 export function useTodos() {
@@ -77,9 +88,14 @@ export function useToggleTodo() {
 export function useCreateTodo() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { title: string; description?: string; dueDate?: string; assigneeIds?: string[] }) =>
-      apiPost("/api/todos", data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["todos"] }),
+    mutationFn: (data: { title: string; description?: string; dueDate?: string; assigneeIds?: string[]; isPersonal?: boolean }) => {
+      const { isPersonal, ...body } = data;
+      return apiPost(isPersonal ? "/api/personal-todos" : "/api/todos", body);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["todos"] });
+      qc.invalidateQueries({ queryKey: ["personal-todos"] });
+    },
   });
 }
 
@@ -100,6 +116,13 @@ export function useShoppingList() {
   });
 }
 
+export function usePersonalShoppingList() {
+  return useQuery({
+    queryKey: ["personal-shopping"],
+    queryFn: () => api<{ items: ShoppingItem[] }>("/api/shopping?personal=true"),
+  });
+}
+
 export function useToggleShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
@@ -107,26 +130,35 @@ export function useToggleShoppingItem() {
       apiPatch(`/api/shopping/${item.id}`, { checked: !item.checked }),
     onMutate: async (item) => {
       await qc.cancelQueries({ queryKey: ["shopping"] });
+      await qc.cancelQueries({ queryKey: ["personal-shopping"] });
       const prev = qc.getQueryData<{ items: ShoppingItem[] }>(["shopping"]);
-      qc.setQueryData<{ items: ShoppingItem[] }>(["shopping"], (old) =>
-        old
-          ? { ...old, items: old.items.map((i) => (i.id === item.id ? { ...i, checked: !i.checked } : i)) }
-          : old
-      );
-      return { prev };
+      const prevPersonal = qc.getQueryData<{ items: ShoppingItem[] }>(["personal-shopping"]);
+      const updater = (old: { items: ShoppingItem[] } | undefined) =>
+        old ? { ...old, items: old.items.map((i) => (i.id === item.id ? { ...i, checked: !i.checked } : i)) } : old;
+      qc.setQueryData<{ items: ShoppingItem[] }>(["shopping"], updater);
+      qc.setQueryData<{ items: ShoppingItem[] }>(["personal-shopping"], updater);
+      return { prev, prevPersonal };
     },
     onError: (_err, _item, ctx) => {
       if (ctx?.prev) qc.setQueryData(["shopping"], ctx.prev);
+      if (ctx?.prevPersonal) qc.setQueryData(["personal-shopping"], ctx.prevPersonal);
     },
-    onSettled: () => qc.invalidateQueries({ queryKey: ["shopping"] }),
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["shopping"] });
+      qc.invalidateQueries({ queryKey: ["personal-shopping"] });
+    },
   });
 }
 
 export function useCreateShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; quantity?: string }) => apiPost("/api/shopping", data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["shopping"] }),
+    mutationFn: (data: { name: string; quantity?: string; isPersonal?: boolean }) =>
+      apiPost("/api/shopping", data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["shopping"] });
+      qc.invalidateQueries({ queryKey: ["personal-shopping"] });
+    },
   });
 }
 
@@ -134,7 +166,10 @@ export function useDeleteShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => apiDelete(`/api/shopping/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["shopping"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["shopping"] });
+      qc.invalidateQueries({ queryKey: ["personal-shopping"] });
+    },
   });
 }
 

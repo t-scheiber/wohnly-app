@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, Alert } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, RefreshControl, Alert, Modal, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { useChores, useCompleteChore, useDeleteChore } from "@/lib/api/queries";
+import { AddChoreForm } from "@/components/forms/AddChoreForm";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { Chore } from "@wohnly/shared";
@@ -28,6 +29,7 @@ export default function ChoresScreen() {
   const { data, refetch } = useChores();
   const completeChore = useCompleteChore();
   const deleteChore = useDeleteChore();
+  const [showForm, setShowForm] = useState(false);
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
@@ -119,8 +121,19 @@ export default function ChoresScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
-      <View style={{ padding: 16, paddingBottom: 8 }}>
+      <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>Chores</Text>
+        <TouchableOpacity
+          onPress={() => setShowForm(true)}
+          style={{
+            backgroundColor: colors.primary,
+            borderRadius: 10,
+            paddingHorizontal: 16,
+            paddingVertical: 8,
+          }}
+        >
+          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ Add</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={data?.chores ?? []}
@@ -136,6 +149,15 @@ export default function ChoresScreen() {
           </View>
         }
       />
+
+      <Modal visible={showForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowForm(false)}>
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
+          <AddChoreForm
+            onSuccess={() => setShowForm(false)}
+            onCancel={() => setShowForm(false)}
+          />
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

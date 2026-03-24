@@ -1,11 +1,9 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { DollarSign, CreditCard, Settings, ChevronRight } from "lucide-react-native";
-import { useMemberBalances } from "@/lib/api/queries";
+import { Calendar, Settings, ChevronRight } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { formatCurrency } from "@wohnly/shared";
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -45,12 +43,6 @@ export default function MoreScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const router = useRouter();
-  const { data: balances } = useMemberBalances();
-
-  const totalExpenses = balances?.members?.reduce(
-    (sum, m) => sum + m.expenses.paid,
-    0
-  ) ?? 0;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
@@ -60,24 +52,17 @@ export default function MoreScreen() {
           <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>More</Text>
         </View>
 
-        {/* Finance section */}
+        {/* Calendar section */}
         <View style={{ marginBottom: 24 }}>
           <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 20, paddingBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
-            Finances
+            Schedule
           </Text>
           <View style={{ borderTopWidth: 1, borderTopColor: colors.border, borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
             <MenuItem
-              icon={<DollarSign size={20} color={colors.primary} />}
-              label="Expenses"
-              sublabel={totalExpenses > 0 ? `Total: ${formatCurrency(totalExpenses)}` : "Track household spending"}
-              onPress={() => router.push("/(app)/(more)/expenses")}
-              colors={colors}
-            />
-            <MenuItem
-              icon={<CreditCard size={20} color="#6366f1" />}
-              label="Subscriptions"
-              sublabel="Recurring bills & services"
-              onPress={() => router.push("/(app)/(more)/subscriptions")}
+              icon={<Calendar size={20} color={colors.primary} />}
+              label="Calendar"
+              sublabel="Household events & schedules"
+              onPress={() => router.push("/(app)/(events)")}
               colors={colors}
             />
           </View>

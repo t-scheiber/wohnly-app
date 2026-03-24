@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "1f4ce882-1b70-4606-8b77-48c02e3d523e"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "app.wohnly",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
+  }
+}
