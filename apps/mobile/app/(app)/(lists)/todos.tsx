@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   RefreshControl,
   Alert,
 } from "react-native";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import * as Haptics from "expo-haptics";
 import { useTodos, usePersonalTodos, useCreateTodo, useToggleTodo, useDeleteTodo } from "@/lib/api/queries";
 import { AdBanner } from "@/components/common/AdBanner";
@@ -21,6 +22,7 @@ export default function TodosScreen() {
 
   const [tab, setTab] = useState<"household" | "personal">("household");
   const [newTitle, setNewTitle] = useState("");
+  const swipeableRefs = useRef<Map<string, any>>(new Map());
 
   const householdTodos = useTodos();
   const personalTodos = usePersonalTodos();
@@ -55,62 +57,87 @@ export default function TodosScreen() {
 
   const handleDelete = (id: string) => {
     Alert.alert("Delete Todo", "Are you sure?", [
-      { text: "Cancel", style: "cancel" },
+      { text: "Cancel", style: "cancel", onPress: () => swipeableRefs.current.get(id)?.close() },
       {
         text: "Delete",
         style: "destructive",
-        onPress: () => deleteTodo.mutate(id),
+        onPress: () => {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          deleteTodo.mutate(id);
+        },
       },
     ]);
   };
 
-  const renderItem = ({ item }: { item: Todo }) => (
+  const renderRightActions = (id: string) => () => (
     <TouchableOpacity
-      onPress={() => handleToggle(item)}
-      onLongPress={() => handleDelete(item.id)}
+      onPress={() => handleDelete(id)}
       style={{
-        flexDirection: "row",
+        backgroundColor: colors.destructive,
+        justifyContent: "center",
         alignItems: "center",
-        backgroundColor: colors.card,
+        width: 80,
         borderRadius: 12,
-        padding: 16,
         marginBottom: 8,
-        borderWidth: 1,
-        borderColor: colors.border,
+        marginLeft: 8,
       }}
     >
-      <View
+      <Text style={{ color: "#fff", fontWeight: "700", fontSize: 14 }}>Delete</Text>
+    </TouchableOpacity>
+  );
+
+  const renderItem = ({ item }: { item: Todo }) => (
+    <Swipeable
+      ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id, ref); }}
+      renderRightActions={renderRightActions(item.id)}
+      overshootRight={false}
+    >
+      <TouchableOpacity
+        onPress={() => handleToggle(item)}
         style={{
-          width: 24,
-          height: 24,
-          borderRadius: 12,
-          borderWidth: 2,
-          borderColor: item.completed ? colors.success : colors.border,
-          backgroundColor: item.completed ? colors.success : "transparent",
-          marginRight: 12,
+          flexDirection: "row",
           alignItems: "center",
-          justifyContent: "center",
+          backgroundColor: colors.card,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 8,
+          borderWidth: 1,
+          borderColor: colors.border,
         }}
       >
-        {item.completed && <Text style={{ color: "#fff", fontSize: 12 }}>✓</Text>}
-      </View>
-      <View style={{ flex: 1 }}>
-        <Text
+        <View
           style={{
-            fontSize: 16,
-            color: item.completed ? colors.textSecondary : colors.text,
-            textDecorationLine: item.completed ? "line-through" : "none",
+            width: 24,
+            height: 24,
+            borderRadius: 12,
+            borderWidth: 2,
+            borderColor: item.completed ? colors.success : colors.border,
+            backgroundColor: item.completed ? colors.success : "transparent",
+            marginRight: 12,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          {item.title}
-        </Text>
-        {item.dueDate && (
-          <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 2 }}>
-            Due: {new Date(item.dueDate).toLocaleDateString()}
+          {item.completed && <Text style={{ color: "#fff", fontSize: 12 }}>✓</Text>}
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: item.completed ? colors.textSecondary : colors.text,
+              textDecorationLine: item.completed ? "line-through" : "none",
+            }}
+          >
+            {item.title}
           </Text>
-        )}
-      </View>
-    </TouchableOpacity>
+          {item.dueDate && (
+            <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 2 }}>
+              Due: {new Date(item.dueDate).toLocaleDateString()}
+            </Text>
+          )}
+        </View>
+      </TouchableOpacity>
+    </Swipeable>
   );
 
   return (
