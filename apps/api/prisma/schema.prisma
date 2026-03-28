@@ -273,7 +273,10 @@ model Chore {
   title         String
   description   String?
   frequency     String    // "daily" | "weekly" | "biweekly" | "monthly"
-  dayOfWeek     Int?      // 0-6 for weekly chores
+  dayOfWeek     Int?      // 0-6 for weekly/biweekly chores
+  dayOfMonth    Int?      // 1-31 for monthly chores
+  rotate        Boolean   @default(false) // rotate assignees each cycle
+  rotateIndex   Int       @default(0)     // current position in rotation
   completed     Boolean   @default(false)
   lastCompleted DateTime?
   lastDoneBy    String?

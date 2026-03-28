@@ -185,7 +185,7 @@ export function useChores() {
 export function useCreateChore() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { title: string; frequency: string; description?: string; assigneeIds?: string[] }) =>
+    mutationFn: (data: { title: string; frequency: string; description?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) =>
       apiPost("/api/chores", data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["chores"] }),
   });

@@ -26,6 +26,19 @@ const frequencyColors: Record<string, string> = {
   monthly: "#8b5cf6",
 };
 
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function formatSchedule(chore: Chore): string {
+  const base = frequencyLabels[chore.frequency] ?? chore.frequency;
+  if ((chore.frequency === "weekly" || chore.frequency === "biweekly") && chore.dayOfWeek != null) {
+    return `${base} · ${DAY_NAMES[chore.dayOfWeek]}`;
+  }
+  if (chore.frequency === "monthly" && (chore as any).dayOfMonth != null) {
+    return `${base} · Day ${(chore as any).dayOfMonth}`;
+  }
+  return base;
+}
+
 function isDueToday(chore: Chore): boolean {
   const today = startOfDay(new Date());
   const occurrences = getChoreOccurrences(
@@ -144,15 +157,29 @@ export default function ChoresScreen() {
               }}
             >
               <Text style={{ color: "#fff", fontSize: 12, fontWeight: "600" }}>
-                {frequencyLabels[item.frequency] ?? item.frequency}
+                {formatSchedule(item)}
               </Text>
             </View>
           </View>
 
           {item.assignments && item.assignments.length > 0 && (
-            <Text style={{ fontSize: 14, color: colors.textSecondary, marginTop: 8 }}>
-              Assigned to: {item.assignments.map((a) => (a as { member?: { displayName?: string } }).member?.displayName ?? "Member").join(", ")}
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8, flexWrap: "wrap" }}>
+              {(item as any).currentAssignee ? (
+                <>
+                  <Text style={{ fontSize: 14, color: colors.primary, fontWeight: "600" }}>
+                    {(item as any).currentAssignee.displayName ?? "Member"}
+                  </Text>
+                  <Text style={{ fontSize: 14, color: colors.textSecondary }}>'s turn</Text>
+                  <Text style={{ fontSize: 12, color: colors.textSecondary, marginLeft: 6 }}>
+                    (rotating)
+                  </Text>
+                </>
+              ) : (
+                <Text style={{ fontSize: 14, color: colors.textSecondary }}>
+                  Assigned to: {item.assignments.map((a) => (a as { member?: { displayName?: string } }).member?.displayName ?? "Member").join(", ")}
+                </Text>
+              )}
+            </View>
           )}
 
           {!isToday && item.lastDone && (
