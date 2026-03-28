@@ -15,11 +15,23 @@ app.get("/", async (c) => {
 
   const chores = await prisma.chore.findMany({
     where: { householdId: member.householdId },
-    include: { assignments: { include: { member: true } } },
+    include: { assignments: { include: { member: true }, orderBy: { createdAt: "asc" } } },
     orderBy: [{ frequency: "asc" }, { createdAt: "desc" }],
   });
 
-  return c.json({ chores });
+  // For rotating chores, indicate who's currently assigned
+  const enriched = chores.map((chore) => {
+    if (chore.rotate && chore.assignments.length > 0) {
+      const currentIdx = chore.rotateIndex % chore.assignments.length;
+      return {
+        ...chore,
+        currentAssignee: chore.assignments[currentIdx]?.member ?? null,
+      };
+    }
+    return { ...chore, currentAssignee: null };
+  });
+
+  return c.json({ chores: enriched });
 });
 
 // POST /api/chores
@@ -27,7 +39,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, frequency, dayOfWeek, assigneeIds } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, assigneeIds } = body;
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!frequency) return c.json({ error: "Frequency is required" }, 400);
 
@@ -41,6 +53,8 @@ app.post("/", async (c) => {
       description: description?.trim() || null,
       frequency,
       dayOfWeek: dayOfWeek ?? null,
+      dayOfMonth: dayOfMonth ?? null,
+      rotate: !!rotate,
       assignments: assigneeIds?.length
         ? { create: assigneeIds.map((id: string) => ({ memberId: id })) }
         : undefined,
@@ -62,10 +76,11 @@ app.patch("/:id", async (c) => {
 
   const existing = await prisma.chore.findFirst({
     where: { id: choreId, householdId: member.householdId },
+    include: { assignments: true },
   });
   if (!existing) return c.json({ error: "Chore not found" }, 404);
 
-  const { title, description, frequency, dayOfWeek, completed, assigneeIds } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, completed, assigneeIds } = body;
 
   const chore = await prisma.$transaction(async (tx) => {
     if (assigneeIds !== undefined) {
@@ -77,6 +92,11 @@ app.patch("/:id", async (c) => {
       }
     }
 
+    // If marking as completed and rotation is enabled, advance the index
+    const rotateUpdate = completed && existing.rotate && existing.assignments.length > 0
+      ? { rotateIndex: (existing.rotateIndex + 1) % existing.assignments.length }
+      : {};
+
     return tx.chore.update({
       where: { id: choreId },
       data: {
@@ -84,12 +104,15 @@ app.patch("/:id", async (c) => {
         ...(description !== undefined && { description: description?.trim() || null }),
         ...(frequency !== undefined && { frequency }),
         ...(dayOfWeek !== undefined && { dayOfWeek }),
+        ...(dayOfMonth !== undefined && { dayOfMonth }),
+        ...(rotate !== undefined && { rotate }),
         ...(completed !== undefined && {
           lastCompleted: new Date(),
           lastDoneBy: userId,
         }),
+        ...rotateUpdate,
       },
-      include: { assignments: { include: { member: true } } },
+      include: { assignments: { include: { member: true }, orderBy: { createdAt: "asc" } } },
     });
   });
 
