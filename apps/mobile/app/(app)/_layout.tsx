@@ -72,6 +72,7 @@ export default function AppLayout() {
         name="(events)"
         options={{
           href: null,
+          headerShown: false,
         }}
       />
       <Tabs.Screen

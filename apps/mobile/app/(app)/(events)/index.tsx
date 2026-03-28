@@ -34,6 +34,20 @@ export default function CalendarScreen() {
 
   const deviceCal = useDeviceCalendars();
 
+  // Auto-enable device filter when permission granted and calendars selected
+  useEffect(() => {
+    if (deviceCal.hasPermission && deviceCal.selectedIds.length > 0 && !filters.device) {
+      setFilters((prev) => ({ ...prev, device: true }));
+    }
+  }, [deviceCal.hasPermission, deviceCal.selectedIds.length]);
+
+  // Load device calendars on mount if permission exists
+  useEffect(() => {
+    if (deviceCal.hasPermission && deviceCal.calendars.length === 0) {
+      deviceCal.loadCalendars();
+    }
+  }, [deviceCal.hasPermission]);
+
   // Fetch device events when month changes and device filter is on
   useEffect(() => {
     if (filters.device && deviceCal.hasPermission && deviceCal.selectedIds.length > 0) {
