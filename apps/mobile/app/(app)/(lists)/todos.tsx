@@ -63,7 +63,7 @@ export default function TodosScreen() {
         style: "destructive",
         onPress: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          deleteTodo.mutate(id);
+          deleteTodo.mutate({ id, isPersonal: tab === "personal" });
         },
       },
     ]);
