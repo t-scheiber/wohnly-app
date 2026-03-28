@@ -41,6 +41,9 @@ function formatSchedule(chore: Chore): string {
 
 function isDueToday(chore: Chore): boolean {
   const today = startOfDay(new Date());
+  // If already done today, not due
+  if (chore.lastDone && isSameDay(new Date(chore.lastDone), today)) return false;
+
   const occurrences = getChoreOccurrences(
     {
       frequency: chore.frequency,
@@ -52,11 +55,6 @@ function isDueToday(chore: Chore): boolean {
     today
   );
   return occurrences.length > 0;
-}
-
-function isDoneToday(chore: Chore): boolean {
-  if (!chore.lastDone) return false;
-  return isSameDay(new Date(chore.lastDone), new Date());
 }
 
 export default function ChoresScreen() {
@@ -78,7 +76,7 @@ export default function ChoresScreen() {
 
   const sections = useMemo(() => {
     const chores = data?.chores ?? [];
-    const dueToday = chores.filter((c) => isDueToday(c) && !isDoneToday(c));
+    const dueToday = chores.filter((c) => isDueToday(c));
     const allChores = chores;
 
     const result = [];

@@ -102,8 +102,12 @@ export function useCreateTodo() {
 export function useDeleteTodo() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => apiDelete(`/api/todos/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["todos"] }),
+    mutationFn: ({ id, isPersonal }: { id: string; isPersonal?: boolean }) =>
+      apiDelete(isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["todos"] });
+      qc.invalidateQueries({ queryKey: ["personal-todos"] });
+    },
   });
 }
 
