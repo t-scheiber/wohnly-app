@@ -30,14 +30,21 @@ export function useDeviceCalendars() {
   const [deviceEvents, setDeviceEvents] = useState<DeviceEvent[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Load saved selection from storage
+  // Load saved selection and check permission on mount
   useEffect(() => {
+    if (Platform.OS === "web") return;
+
     AsyncStorage.getItem(STORAGE_KEY).then((stored) => {
       if (stored) {
         try {
           setSelectedIds(JSON.parse(stored));
         } catch {}
       }
+    });
+
+    // Check existing permission status
+    Calendar.getCalendarPermissionsAsync().then(({ status }) => {
+      setHasPermission(status === "granted");
     });
   }, []);
 
