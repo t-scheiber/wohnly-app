@@ -132,6 +132,14 @@
     "billingDate": "Fatura Tarihi",
     "billingDateOptional": "Fatura Tarihi (isteğe bağlı)"
   },
+  "more": {
+    "title": "Daha Fazla",
+    "schedule": "Program",
+    "calendar": "Takvim",
+    "calendarSubtitle": "Ev etkinlikleri ve programları",
+    "settings": "Ayarlar",
+    "settingsSubtitle": "Ev, hesap ve tercihler"
+  },
   "settings": {
     "title": "Ayarlar",
     "household": "Ev",
@@ -149,7 +157,19 @@
     "members": "Üyeler",
     "you": "Sen",
     "setNickname": "Takma Ad Belirle",
-    "nicknamePlaceholder": "örn. Memo, Ev Arkadaşı..."
+    "nicknamePlaceholder": "örn. Memo, Ev Arkadaşı...",
+    "deleteAccount": "Hesabı Sil",
+    "premium": "Premium",
+    "upgradeToPremium": "Premium'a Yükselt",
+    "restorePurchases": "Satın Alımları Geri Yükle",
+    "free": "Ücretsiz",
+    "active": "Aktif",
+    "leaveConfirm": "Bu evden ayrılmak istediğine emin misin?",
+    "leaveDescription": "Tüm paylaşılan verilere erişimini kaybedeceksin. E-postana bir onay gönderilecek.",
+    "upgradeDescription": "Reklamları kaldır ve Wohnly'nin gelişimini destekle",
+    "purchaseSuccess": "Wohnly Pro'ya hoş geldin!",
+    "restoreSuccess": "Satın alımlar başarıyla geri yüklendi",
+    "restoreNone": "Önceki satın alım bulunamadı"
   },
   "balances": {
     "owedToYou": "Sana borçlu",

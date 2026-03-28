@@ -132,6 +132,14 @@
     "billingDate": "Reikningsdagur",
     "billingDateOptional": "Reikningsdagur (valfrjálst)"
   },
+  "more": {
+    "title": "Meira",
+    "schedule": "Áætlun",
+    "calendar": "Dagatal",
+    "calendarSubtitle": "Viðburðir og áætlanir heimilis",
+    "settings": "Stillingar",
+    "settingsSubtitle": "Heimili, aðgangur og kjörstillingar"
+  },
   "settings": {
     "title": "Stillingar",
     "household": "Heimili",
@@ -149,7 +157,19 @@
     "members": "Meðlimir",
     "you": "Þú",
     "setNickname": "Setja gælunafn",
-    "nicknamePlaceholder": "t.d. Tommi, Rúmmi..."
+    "nicknamePlaceholder": "t.d. Tommi, Rúmmi...",
+    "deleteAccount": "Eyða aðgangi",
+    "premium": "Premium",
+    "upgradeToPremium": "Uppfæra í Premium",
+    "restorePurchases": "Endurheimta kaup",
+    "free": "Ókeypis",
+    "active": "Virk",
+    "leaveConfirm": "Ertu viss um að þú viljir yfirgefa þetta heimili?",
+    "leaveDescription": "Þú munt missa aðgang að öllum sameiginlegum gögnum. Staðfesting verður send á netfangið þitt.",
+    "upgradeDescription": "Fjarlægðu auglýsingar og styrktu þróun Wohnly",
+    "purchaseSuccess": "Velkomin í Wohnly Pro!",
+    "restoreSuccess": "Kaup endurheimt",
+    "restoreNone": "Engin fyrri kaup fundust"
   },
   "balances": {
     "owedToYou": "Skulda þér",

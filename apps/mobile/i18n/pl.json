@@ -132,6 +132,14 @@
     "billingDate": "Data rozliczenia",
     "billingDateOptional": "Data rozliczenia (opcjonalnie)"
   },
+  "more": {
+    "title": "Więcej",
+    "schedule": "Harmonogram",
+    "calendar": "Kalendarz",
+    "calendarSubtitle": "Wydarzenia i harmonogramy gospodarstwa",
+    "settings": "Ustawienia",
+    "settingsSubtitle": "Gospodarstwo, konto i preferencje"
+  },
   "settings": {
     "title": "Ustawienia",
     "household": "Gospodarstwo",
@@ -149,7 +157,19 @@
     "members": "Członkowie",
     "you": "Ty",
     "setNickname": "Ustaw przezwisko",
-    "nicknamePlaceholder": "np. Tommy, Współ..."
+    "nicknamePlaceholder": "np. Tommy, Współ...",
+    "deleteAccount": "Usuń konto",
+    "premium": "Premium",
+    "upgradeToPremium": "Przejdź na Premium",
+    "restorePurchases": "Przywróć zakupy",
+    "free": "Bezpłatny",
+    "active": "Aktywny",
+    "leaveConfirm": "Na pewno chcesz opuścić to gospodarstwo?",
+    "leaveDescription": "Stracisz dostęp do wszystkich udostępnionych danych. Potwierdzenie zostanie wysłane na twój e-mail.",
+    "upgradeDescription": "Usuń reklamy i wesprzyj rozwój Wohnly",
+    "purchaseSuccess": "Witaj w Wohnly Pro!",
+    "restoreSuccess": "Zakupy przywrócone pomyślnie",
+    "restoreNone": "Nie znaleziono wcześniejszych zakupów"
   },
   "balances": {
     "owedToYou": "Należne tobie",

@@ -25,7 +25,7 @@
     "production": {
       "ios": {
         "ascApiKeyPath": "../../AuthKey_J47C35X5BR.p8",
-        "ascApiKeyIssuerId": "YOUR_ISSUER_ID",
+        "ascApiKeyIssuerId": "5f00ed40-b6d3-4426-8584-9fcd845087cd",
         "ascApiKeyId": "J47C35X5BR"
       },
       "android": {

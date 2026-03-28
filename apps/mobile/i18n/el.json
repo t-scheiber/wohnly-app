@@ -132,6 +132,14 @@
     "billingDate": "Ημερομηνία χρέωσης",
     "billingDateOptional": "Ημερομηνία χρέωσης (προαιρετικό)"
   },
+  "more": {
+    "title": "Περισσότερα",
+    "schedule": "Πρόγραμμα",
+    "calendar": "Ημερολόγιο",
+    "calendarSubtitle": "Γεγονότα και προγράμματα νοικοκυριού",
+    "settings": "Ρυθμίσεις",
+    "settingsSubtitle": "Νοικοκυριό, λογαριασμός και προτιμήσεις"
+  },
   "settings": {
     "title": "Ρυθμίσεις",
     "household": "Νοικοκυριό",
@@ -149,7 +157,19 @@
     "members": "Μέλη",
     "you": "Εσύ",
     "setNickname": "Ορισμός ψευδωνύμου",
-    "nicknamePlaceholder": "π.χ. Γιαννάκης, Συγκάτοικε..."
+    "nicknamePlaceholder": "π.χ. Γιαννάκης, Συγκάτοικε...",
+    "deleteAccount": "Διαγραφή λογαριασμού",
+    "premium": "Premium",
+    "upgradeToPremium": "Αναβάθμιση σε Premium",
+    "restorePurchases": "Επαναφορά αγορών",
+    "free": "Δωρεάν",
+    "active": "Ενεργό",
+    "leaveConfirm": "Σίγουρα θέλεις να αποχωρήσεις από αυτό το νοικοκυριό;",
+    "leaveDescription": "Θα χάσεις πρόσβαση σε όλα τα κοινόχρηστα δεδομένα. Θα σταλεί επιβεβαίωση στο email σου.",
+    "upgradeDescription": "Αφαίρεσε τις διαφημίσεις και στήριξε την ανάπτυξη του Wohnly",
+    "purchaseSuccess": "Καλώς ήρθες στο Wohnly Pro!",
+    "restoreSuccess": "Οι αγορές επαναφέρθηκαν επιτυχώς",
+    "restoreNone": "Δε βρέθηκαν προηγούμενες αγορές"
   },
   "balances": {
     "owedToYou": "Σου χρωστάνε",

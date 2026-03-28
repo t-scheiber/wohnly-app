@@ -1,9 +1,10 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { Calendar, Settings, ChevronRight } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTheme } from "@/lib/hooks/useTheme";
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -40,28 +41,29 @@ function MenuItem({ icon, label, sublabel, onPress, colors }: MenuItemProps) {
 }
 
 export default function MoreScreen() {
-  const colorScheme = useColorScheme() ?? "light";
+  const { colorScheme } = useTheme();
   const colors = Colors[colorScheme];
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView>
         {/* Header */}
         <View style={{ padding: 20, paddingBottom: 12 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>More</Text>
+          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("more.title")}</Text>
         </View>
 
         {/* Calendar section */}
         <View style={{ marginBottom: 24 }}>
           <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 20, paddingBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
-            Schedule
+            {t("more.schedule")}
           </Text>
           <View style={{ borderTopWidth: 1, borderTopColor: colors.border, borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
             <MenuItem
               icon={<Calendar size={20} color={colors.primary} />}
-              label="Calendar"
-              sublabel="Household events & schedules"
+              label={t("more.calendar")}
+              sublabel={t("more.calendarSubtitle")}
               onPress={() => router.push("/(app)/(events)")}
               colors={colors}
             />
@@ -71,13 +73,13 @@ export default function MoreScreen() {
         {/* Settings section */}
         <View style={{ marginBottom: 24 }}>
           <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 20, paddingBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
-            Settings
+            {t("more.settings")}
           </Text>
           <View style={{ borderTopWidth: 1, borderTopColor: colors.border, borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
             <MenuItem
               icon={<Settings size={20} color={colors.textSecondary} />}
-              label="Settings"
-              sublabel="Household, account & preferences"
+              label={t("more.settings")}
+              sublabel={t("more.settingsSubtitle")}
               onPress={() => router.push("/(app)/(more)/settings")}
               colors={colors}
             />

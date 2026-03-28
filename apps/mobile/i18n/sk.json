@@ -132,6 +132,14 @@
     "billingDate": "Dátum platby",
     "billingDateOptional": "Dátum platby (voliteľné)"
   },
+  "more": {
+    "title": "Viac",
+    "schedule": "Rozvrh",
+    "calendar": "Kalendár",
+    "calendarSubtitle": "Udalosti a rozvrhy domácnosti",
+    "settings": "Nastavenia",
+    "settingsSubtitle": "Domácnosť, účet a predvoľby"
+  },
   "settings": {
     "title": "Nastavenia",
     "household": "Domácnosť",
@@ -149,7 +157,19 @@
     "members": "Členovia",
     "you": "Ty",
     "setNickname": "Nastaviť prezývku",
-    "nicknamePlaceholder": "napr. Tomík, Spolubývala..."
+    "nicknamePlaceholder": "napr. Tomík, Spolubývala...",
+    "deleteAccount": "Zmazať účet",
+    "premium": "Premium",
+    "upgradeToPremium": "Upgradovať na Premium",
+    "restorePurchases": "Obnoviť nákupy",
+    "free": "Zadarmo",
+    "active": "Aktívne",
+    "leaveConfirm": "Naozaj chceš opustiť túto domácnosť?",
+    "leaveDescription": "Stratíš prístup ku všetkým zdieľaným dátam. Potvrdenie bude zaslané na tvoj e-mail.",
+    "upgradeDescription": "Odstráň reklamy a podpor vývoj Wohnly",
+    "purchaseSuccess": "Vitaj vo Wohnly Pro!",
+    "restoreSuccess": "Nákupy boli úspešne obnovené",
+    "restoreNone": "Žiadne predchádzajúce nákupy neboli nájdené"
   },
   "balances": {
     "owedToYou": "Dlhujú ti",

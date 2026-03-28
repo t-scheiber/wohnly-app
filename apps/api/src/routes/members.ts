@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
+import { sendLeaveConfirmationEmail } from "../lib/email.js";
 import type { AppEnv } from "../types.js";
 
 const app = new Hono<AppEnv>();
@@ -170,8 +171,18 @@ app.post("/leave", async (c) => {
     },
   });
 
-  // TODO: Send email with confirmation link
-  // sendLeaveConfirmationEmail(email, member.household.name, confirmUrl, cancelUrl, locale)
+  const appUrl = process.env.APP_URL || "http://localhost:3000";
+  const confirmUrl = `${appUrl}/api/members/confirm-leave?token=${confirmation.confirmToken}`;
+  const cancelUrl = `${appUrl}/api/members/cancel-leave?token=${confirmation.confirmToken}`;
+  const locale = (user as { language?: string }).language === "de" ? "de" : "en";
+
+  await sendLeaveConfirmationEmail(
+    email || user.email,
+    member.household.name,
+    confirmUrl,
+    cancelUrl,
+    locale,
+  );
 
   return c.json({ success: true, message: "Confirmation created", token: confirmation.confirmToken }, 201);
 });

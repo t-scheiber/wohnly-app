@@ -132,6 +132,14 @@
     "billingDate": "Faktureringsdato",
     "billingDateOptional": "Faktureringsdato (valgfritt)"
   },
+  "more": {
+    "title": "Mer",
+    "schedule": "Timeplan",
+    "calendar": "Kalender",
+    "calendarSubtitle": "Husstandshendelser og timeplaner",
+    "settings": "Innstillinger",
+    "settingsSubtitle": "Husstand, konto og preferanser"
+  },
   "settings": {
     "title": "Innstillinger",
     "household": "Husstand",
@@ -149,7 +157,19 @@
     "members": "Medlemmer",
     "you": "Deg",
     "setNickname": "Sett kallenavn",
-    "nicknamePlaceholder": "f.eks. Tommy, Romansen..."
+    "nicknamePlaceholder": "f.eks. Tommy, Romansen...",
+    "deleteAccount": "Slett konto",
+    "premium": "Premium",
+    "upgradeToPremium": "Oppgrader til Premium",
+    "restorePurchases": "Gjenopprett kjøp",
+    "free": "Gratis",
+    "active": "Aktiv",
+    "leaveConfirm": "Er du sikker på at du vil forlate denne husstanden?",
+    "leaveDescription": "Du vil miste tilgangen til alle delte data. En bekreftelse sendes til e-posten din.",
+    "upgradeDescription": "Fjern annonser og støtt utviklingen av Wohnly",
+    "purchaseSuccess": "Velkommen til Wohnly Pro!",
+    "restoreSuccess": "Kjøp gjenopprettet",
+    "restoreNone": "Ingen tidligere kjøp funnet"
   },
   "balances": {
     "owedToYou": "Skylder deg",

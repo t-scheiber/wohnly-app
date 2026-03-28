@@ -132,6 +132,14 @@
     "billingDate": "Data di fatturazione",
     "billingDateOptional": "Data di fatturazione (opzionale)"
   },
+  "more": {
+    "title": "Altro",
+    "schedule": "Programma",
+    "calendar": "Calendario",
+    "calendarSubtitle": "Eventi e programmi della casa",
+    "settings": "Impostazioni",
+    "settingsSubtitle": "Casa, account e preferenze"
+  },
   "settings": {
     "title": "Impostazioni",
     "household": "Casa",
@@ -149,7 +157,19 @@
     "members": "Membri",
     "you": "Tu",
     "setNickname": "Imposta soprannome",
-    "nicknamePlaceholder": "es. Tommy, Coinqui..."
+    "nicknamePlaceholder": "es. Tommy, Coinqui...",
+    "deleteAccount": "Elimina account",
+    "premium": "Premium",
+    "upgradeToPremium": "Passa a Premium",
+    "restorePurchases": "Ripristina acquisti",
+    "free": "Gratis",
+    "active": "Attivo",
+    "leaveConfirm": "Sei sicuro di voler lasciare questa casa?",
+    "leaveDescription": "Perderai l'accesso a tutti i dati condivisi. Una conferma verrà inviata alla tua e-mail.",
+    "upgradeDescription": "Rimuovi le pubblicità e sostieni lo sviluppo di Wohnly",
+    "purchaseSuccess": "Benvenuto su Wohnly Pro!",
+    "restoreSuccess": "Acquisti ripristinati con successo",
+    "restoreNone": "Nessun acquisto precedente trovato"
   },
   "balances": {
     "owedToYou": "Ti devono",

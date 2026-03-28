@@ -132,6 +132,14 @@
     "billingDate": "Datum naplate",
     "billingDateOptional": "Datum naplate (opciono)"
   },
+  "more": {
+    "title": "Više",
+    "schedule": "Raspored",
+    "calendar": "Kalendar",
+    "calendarSubtitle": "Događaji i rasporedi domaćinstva",
+    "settings": "Podešavanja",
+    "settingsSubtitle": "Domaćinstvo, nalog i preferencije"
+  },
   "settings": {
     "title": "Podešavanja",
     "household": "Domaćinstvo",
@@ -149,7 +157,19 @@
     "members": "Članovi",
     "you": "Ti",
     "setNickname": "Postavi nadimak",
-    "nicknamePlaceholder": "npr. Toma, Cimer..."
+    "nicknamePlaceholder": "npr. Toma, Cimer...",
+    "deleteAccount": "Obriši nalog",
+    "premium": "Premium",
+    "upgradeToPremium": "Nadogradi na Premium",
+    "restorePurchases": "Obnovi kupovine",
+    "free": "Besplatno",
+    "active": "Aktivno",
+    "leaveConfirm": "Da li si siguran/na da želiš da napustiš ovo domaćinstvo?",
+    "leaveDescription": "Izgubićeš pristup svim deljenim podacima. Potvrda će biti poslata na tvoj email.",
+    "upgradeDescription": "Ukloni reklame i podrži razvoj Wohnly-ja",
+    "purchaseSuccess": "Dobrodošli u Wohnly Pro!",
+    "restoreSuccess": "Kupovine su uspešno obnovljene",
+    "restoreNone": "Prethodne kupovine nisu pronađene"
   },
   "balances": {
     "owedToYou": "Duguju ti",

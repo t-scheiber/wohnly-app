@@ -132,6 +132,14 @@
     "billingDate": "Apmokėjimo data",
     "billingDateOptional": "Apmokėjimo data (neprivaloma)"
   },
+  "more": {
+    "title": "Daugiau",
+    "schedule": "Tvarkaraštis",
+    "calendar": "Kalendorius",
+    "calendarSubtitle": "Namų ūkio įvykiai ir tvarkaraščiai",
+    "settings": "Nustatymai",
+    "settingsSubtitle": "Namų ūkis, paskyra ir nuostatos"
+  },
   "settings": {
     "title": "Nustatymai",
     "household": "Namų ūkis",
@@ -149,7 +157,19 @@
     "members": "Nariai",
     "you": "Tu",
     "setNickname": "Nustatyti slapyvardį",
-    "nicknamePlaceholder": "pvz. Tomas, Kambariokas..."
+    "nicknamePlaceholder": "pvz. Tomas, Kambariokas...",
+    "deleteAccount": "Ištrinti paskyrą",
+    "premium": "Premium",
+    "upgradeToPremium": "Atnaujinti iki Premium",
+    "restorePurchases": "Atkurti pirkinius",
+    "free": "Nemokama",
+    "active": "Aktyvi",
+    "leaveConfirm": "Ar tikrai nori palikti šį namų ūkį?",
+    "leaveDescription": "Prarasite prieigą prie visų bendrų duomenų. Patvirtinimas bus išsiųstas į jūsų el. paštą.",
+    "upgradeDescription": "Pašalink reklamas ir palaikyk Wohnly vystymą",
+    "purchaseSuccess": "Sveiki atvykę į Wohnly Pro!",
+    "restoreSuccess": "Pirkiniai sėkmingai atkurti",
+    "restoreNone": "Ankstesnių pirkinių nerasta"
   },
   "balances": {
     "owedToYou": "Skolingi tau",
