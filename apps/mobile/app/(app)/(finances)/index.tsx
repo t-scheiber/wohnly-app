@@ -7,6 +7,7 @@ import { AddSubscriptionForm } from "@/components/forms/AddSubscriptionForm";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { formatCurrency, formatDate } from "@wohnly/shared";
+import { AdBanner } from "@/components/common/AdBanner";
 import type { Expense, Subscription } from "@wohnly/shared";
 
 const frequencyLabels: Record<string, string> = {
@@ -202,6 +203,8 @@ export default function FinancesScreen() {
           <AddExpenseForm onSuccess={() => setShowExpenseForm(false)} onCancel={() => setShowExpenseForm(false)} />
         </View>
       </Modal>
+
+      <AdBanner />
 
       {/* Add Subscription Modal */}
       <Modal visible={showSubForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowSubForm(false)}>

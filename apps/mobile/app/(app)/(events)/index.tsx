@@ -12,6 +12,7 @@ import { useCalendarData } from "@/lib/hooks/useCalendarData";
 import { useDeviceCalendars } from "@/lib/hooks/useDeviceCalendars";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { AdBanner } from "@/components/common/AdBanner";
 
 type FilterKey = "events" | "chores" | "subscriptions" | "device";
 
@@ -159,6 +160,8 @@ export default function CalendarScreen() {
       </ScrollView>
 
       {/* Add Event Modal */}
+      <AdBanner />
+
       <Modal visible={showForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowForm(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddEventForm
