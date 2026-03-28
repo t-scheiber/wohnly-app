@@ -6,6 +6,7 @@ import { useChores, useCompleteChore, useDeleteChore } from "@/lib/api/queries";
 import { AddChoreForm } from "@/components/forms/AddChoreForm";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { AdBanner } from "@/components/common/AdBanner";
 import type { Chore } from "@wohnly/shared";
 
 const frequencyLabels: Record<string, string> = {
@@ -149,6 +150,7 @@ export default function ChoresScreen() {
           </View>
         }
       />
+      <AdBanner />
 
       <Modal visible={showForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowForm(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
