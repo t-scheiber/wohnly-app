@@ -19,16 +19,16 @@ app.get("/", async (c) => {
     orderBy: [{ frequency: "asc" }, { createdAt: "desc" }],
   });
 
-  // For rotating chores, indicate who's currently assigned
+  // Map DB fields to client-expected names and add rotation info
   const enriched = chores.map((chore) => {
-    if (chore.rotate && chore.assignments.length > 0) {
-      const currentIdx = chore.rotateIndex % chore.assignments.length;
-      return {
-        ...chore,
-        currentAssignee: chore.assignments[currentIdx]?.member ?? null,
-      };
-    }
-    return { ...chore, currentAssignee: null };
+    const currentAssignee = chore.rotate && chore.assignments.length > 0
+      ? chore.assignments[chore.rotateIndex % chore.assignments.length]?.member ?? null
+      : null;
+    return {
+      ...chore,
+      lastDone: chore.lastCompleted,
+      currentAssignee,
+    };
   });
 
   return c.json({ chores: enriched });

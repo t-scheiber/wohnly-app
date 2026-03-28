@@ -362,9 +362,9 @@ export default function SettingsScreen() {
         </SettingsSection>
 
         <SettingsSection title={t("settings.dangerZone")} colors={colors}>
+          <SettingsRow colors={colors} label={t("settings.signOut")} onPress={handleSignOut} destructive />
           <SettingsRow colors={colors} label={t("household.leaveHousehold")} onPress={handleLeaveHousehold} destructive />
-          <SettingsRow colors={colors} label={t("settings.deleteAccount")} onPress={() => router.push("/delete-account" as any)} destructive />
-          <SettingsRow colors={colors} label={t("settings.signOut")} onPress={handleSignOut} destructive isLast />
+          <SettingsRow colors={colors} label={t("settings.deleteAccount")} onPress={() => router.push("/delete-account" as any)} destructive isLast />
         </SettingsSection>
       </ScrollView>
 
