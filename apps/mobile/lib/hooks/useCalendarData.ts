@@ -79,6 +79,9 @@ export function useCalendarData(month: Date, filters: Filters, deviceEvents?: De
           const dateStr = format(occ, "yyyy-MM-dd");
           ensureDay(dateStr);
           marks[dateStr].chores = true;
+          const isDone = chore.lastDone
+            ? isSameDay(new Date(chore.lastDone), occ) || new Date(chore.lastDone) > occ
+            : false;
           items.push({
             date: dateStr,
             item: {
@@ -86,6 +89,7 @@ export function useCalendarData(month: Date, filters: Filters, deviceEvents?: De
               type: "chore",
               title: chore.title,
               subtitle: chore.frequency,
+              done: isDone,
             },
           });
         }
