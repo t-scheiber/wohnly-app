@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 
 const API_KEYS = {
   ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY ?? "appl_RAWeWdPXRbUnvPgaegDJzmpHCwO",
-  android: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY ?? "test_YYfXMtGHBCmuNzOWRFCBCJylmqC",
+  android: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY ?? "goog_drczxITwJXQiqAzjihMOBakvibf",
 };
 
 /**
