@@ -15,6 +15,7 @@ export interface CalendarItem {
   time?: string;
   allDay?: boolean;
   color?: string;
+  done?: boolean;
 }
 
 interface CalendarDayAgendaProps {
@@ -67,21 +68,28 @@ export function CalendarDayAgenda({ date, items }: CalendarDayAgendaProps) {
                 borderWidth: 1,
                 borderColor: colors.border,
                 borderLeftWidth: 4,
-                borderLeftColor: item.color || colorForType(item.type),
+                borderLeftColor: item.done ? colors.success : (item.color || colorForType(item.type)),
+                opacity: item.done ? 0.7 : 1,
               }}
             >
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                <Text style={{ fontSize: 15, fontWeight: "600", color: colors.text, flex: 1 }}>
-                  {item.title}
+                <Text style={{
+                  fontSize: 15,
+                  fontWeight: "600",
+                  color: item.done ? colors.textSecondary : colors.text,
+                  flex: 1,
+                  textDecorationLine: item.done ? "line-through" : "none",
+                }}>
+                  {item.done ? "✓ " : ""}{item.title}
                 </Text>
                 <View style={{
-                  backgroundColor: colorForType(item.type) + "20",
+                  backgroundColor: item.done ? colors.success + "20" : colorForType(item.type) + "20",
                   paddingHorizontal: 8,
                   paddingVertical: 2,
                   borderRadius: 6,
                 }}>
-                  <Text style={{ fontSize: 11, fontWeight: "600", color: colorForType(item.type) }}>
-                    {TYPE_LABELS[item.type][i18n.language as "en" | "de"] ?? TYPE_LABELS[item.type].en}
+                  <Text style={{ fontSize: 11, fontWeight: "600", color: item.done ? colors.success : colorForType(item.type) }}>
+                    {item.done ? (i18n.language === "de" ? "Erledigt" : "Done") : (TYPE_LABELS[item.type][i18n.language as "en" | "de"] ?? TYPE_LABELS[item.type].en)}
                   </Text>
                 </View>
               </View>
