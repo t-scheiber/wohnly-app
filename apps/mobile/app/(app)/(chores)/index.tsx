@@ -1,13 +1,15 @@
-import { useState, useCallback, useRef } from "react";
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, Alert, Modal, Animated } from "react-native";
+import { useState, useCallback, useRef, useMemo } from "react";
+import { View, Text, SectionList, TouchableOpacity, RefreshControl, Alert, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import * as Haptics from "expo-haptics";
+import { startOfDay, isSameDay, isAfter } from "date-fns";
 import { useChores, useCompleteChore, useDeleteChore } from "@/lib/api/queries";
 import { AddChoreForm } from "@/components/forms/AddChoreForm";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AdBanner } from "@/components/common/AdBanner";
+import { getChoreOccurrences } from "@wohnly/shared";
 import type { Chore } from "@wohnly/shared";
 
 const frequencyLabels: Record<string, string> = {
@@ -23,6 +25,26 @@ const frequencyColors: Record<string, string> = {
   biweekly: "#3b82f6",
   monthly: "#8b5cf6",
 };
+
+function isDueToday(chore: Chore): boolean {
+  const today = startOfDay(new Date());
+  const occurrences = getChoreOccurrences(
+    {
+      frequency: chore.frequency,
+      dayOfWeek: chore.dayOfWeek,
+      lastCompleted: chore.lastDone,
+      createdAt: chore.createdAt,
+    },
+    today,
+    today
+  );
+  return occurrences.length > 0;
+}
+
+function isDoneToday(chore: Chore): boolean {
+  if (!chore.lastDone) return false;
+  return isSameDay(new Date(chore.lastDone), new Date());
+}
 
 export default function ChoresScreen() {
   const colorScheme = useColorScheme() ?? "light";
@@ -40,6 +62,19 @@ export default function ChoresScreen() {
     await refetch();
     setRefreshing(false);
   }, [refetch]);
+
+  const sections = useMemo(() => {
+    const chores = data?.chores ?? [];
+    const dueToday = chores.filter((c) => isDueToday(c) && !isDoneToday(c));
+    const allChores = chores;
+
+    const result = [];
+    if (dueToday.length > 0) {
+      result.push({ title: "Due Today", data: dueToday });
+    }
+    result.push({ title: "All Chores", data: allChores });
+    return result;
+  }, [data?.chores]);
 
   const handleComplete = async (id: string) => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -77,67 +112,73 @@ export default function ChoresScreen() {
     </TouchableOpacity>
   );
 
-  const renderItem = ({ item }: { item: Chore }) => (
-    <Swipeable
-      ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id, ref); }}
-      renderRightActions={renderRightActions(item.id)}
-      overshootRight={false}
-    >
-      <View
-        style={{
-          backgroundColor: colors.card,
-          borderRadius: 16,
-          padding: 16,
-          marginBottom: 12,
-          borderWidth: 1,
-          borderColor: colors.border,
-        }}
+  const renderItem = ({ item, section }: { item: Chore; section: { title: string } }) => {
+    const isToday = section.title === "Due Today";
+
+    return (
+      <Swipeable
+        ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id + section.title, ref); }}
+        renderRightActions={renderRightActions(item.id)}
+        overshootRight={false}
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text, flex: 1 }}>
-            {item.title}
-          </Text>
-          <View
-            style={{
-              backgroundColor: frequencyColors[item.frequency] ?? colors.muted,
-              paddingHorizontal: 10,
-              paddingVertical: 4,
-              borderRadius: 12,
-            }}
-          >
-            <Text style={{ color: "#fff", fontSize: 12, fontWeight: "600" }}>
-              {frequencyLabels[item.frequency] ?? item.frequency}
-            </Text>
-          </View>
-        </View>
-
-        {item.assignments && item.assignments.length > 0 && (
-          <Text style={{ fontSize: 14, color: colors.textSecondary, marginTop: 8 }}>
-            Assigned to: {item.assignments.map((a) => (a as { member?: { displayName?: string } }).member?.displayName ?? "Member").join(", ")}
-          </Text>
-        )}
-
-        {item.lastDone && (
-          <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 4 }}>
-            Last done: {new Date(item.lastDone).toLocaleDateString()}
-          </Text>
-        )}
-
-        <TouchableOpacity
-          onPress={() => handleComplete(item.id)}
+        <View
           style={{
-            backgroundColor: colors.success,
-            borderRadius: 8,
-            padding: 10,
-            alignItems: "center",
-            marginTop: 12,
+            backgroundColor: colors.card,
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 12,
+            borderWidth: 1,
+            borderColor: isToday ? colors.primary + "40" : colors.border,
           }}
         >
-          <Text style={{ color: "#fff", fontWeight: "600" }}>Mark Done</Text>
-        </TouchableOpacity>
-      </View>
-    </Swipeable>
-  );
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text, flex: 1 }}>
+              {item.title}
+            </Text>
+            <View
+              style={{
+                backgroundColor: frequencyColors[item.frequency] ?? colors.muted,
+                paddingHorizontal: 10,
+                paddingVertical: 4,
+                borderRadius: 12,
+              }}
+            >
+              <Text style={{ color: "#fff", fontSize: 12, fontWeight: "600" }}>
+                {frequencyLabels[item.frequency] ?? item.frequency}
+              </Text>
+            </View>
+          </View>
+
+          {item.assignments && item.assignments.length > 0 && (
+            <Text style={{ fontSize: 14, color: colors.textSecondary, marginTop: 8 }}>
+              Assigned to: {item.assignments.map((a) => (a as { member?: { displayName?: string } }).member?.displayName ?? "Member").join(", ")}
+            </Text>
+          )}
+
+          {!isToday && item.lastDone && (
+            <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 4 }}>
+              Last done: {new Date(item.lastDone).toLocaleDateString()}
+            </Text>
+          )}
+
+          {isToday && (
+            <TouchableOpacity
+              onPress={() => handleComplete(item.id)}
+              style={{
+                backgroundColor: colors.success,
+                borderRadius: 8,
+                padding: 10,
+                alignItems: "center",
+                marginTop: 12,
+              }}
+            >
+              <Text style={{ color: "#fff", fontWeight: "600" }}>Mark Done</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </Swipeable>
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
@@ -155,10 +196,20 @@ export default function ChoresScreen() {
           <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ Add</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={data?.chores ?? []}
+      <SectionList
+        sections={sections}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        renderSectionHeader={({ section }) => (
+          <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: 6, backgroundColor: colors.background }}>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, textTransform: "uppercase", letterSpacing: 0.5 }}>
+              {section.title}
+              {section.title === "Due Today" && (
+                <Text style={{ color: colors.primary }}> ({section.data.length})</Text>
+              )}
+            </Text>
+          </View>
+        )}
+        keyExtractor={(item, index) => item.id + index}
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
@@ -168,6 +219,7 @@ export default function ChoresScreen() {
             <Text style={{ fontSize: 16, color: colors.textSecondary }}>No chores yet</Text>
           </View>
         }
+        stickySectionHeadersEnabled={false}
       />
       <AdBanner />
 
