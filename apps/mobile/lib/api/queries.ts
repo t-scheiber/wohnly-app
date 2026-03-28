@@ -195,7 +195,18 @@ export function useCompleteChore() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => apiPatch(`/api/chores/${id}`, { completed: true }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["chores"] }),
+    onMutate: async (id) => {
+      await qc.cancelQueries({ queryKey: ["chores"] });
+      const prev = qc.getQueryData<{ chores: Chore[] }>(["chores"]);
+      qc.setQueryData<{ chores: Chore[] }>(["chores"], (old) =>
+        old ? { ...old, chores: old.chores.map((c) => c.id === id ? { ...c, lastDone: new Date().toISOString() } : c) } : old
+      );
+      return { prev };
+    },
+    onError: (_err, _id, ctx) => {
+      if (ctx?.prev) qc.setQueryData(["chores"], ctx.prev);
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ["chores"] }),
   });
 }
 
