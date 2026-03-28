@@ -28,7 +28,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, amount, category, currency, paidById, paidFromAccount, splitType, date } = body;
+  const { title, description, amount, category, currency, paidById, paidFromAccount, splitType, splits: customSplits, date } = body;
 
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!amount || amount <= 0) return c.json({ error: "Amount must be positive" }, 400);
@@ -40,15 +40,38 @@ app.post("/", async (c) => {
     where: { householdId: member.householdId },
   });
 
-  // Calculate equal splits
-  const splitAmount = new Decimal(amount).div(members.length);
+  const totalAmount = new Decimal(amount);
+  let splitEntries: { memberId: string; amount: typeof totalAmount }[];
+
+  if (splitType === "custom" && customSplits?.length) {
+    // Custom splits: each entry has { memberId, amount } or { memberId, percentage }
+    splitEntries = customSplits.map((s: { memberId: string; amount?: number; percentage?: number }) => ({
+      memberId: s.memberId,
+      amount: s.amount != null
+        ? new Decimal(s.amount)
+        : totalAmount.mul(s.percentage ?? 0).div(100),
+    }));
+  } else if (splitType === "percentage" && customSplits?.length) {
+    // Percentage splits
+    splitEntries = customSplits.map((s: { memberId: string; percentage: number }) => ({
+      memberId: s.memberId,
+      amount: totalAmount.mul(s.percentage).div(100),
+    }));
+  } else {
+    // Equal split (default)
+    const splitAmount = totalAmount.div(members.length);
+    splitEntries = members.map((m) => ({
+      memberId: m.id,
+      amount: splitAmount,
+    }));
+  }
 
   const expense = await prisma.expense.create({
     data: {
       householdId: member.householdId,
       title: title.trim(),
       description: description?.trim() || null,
-      amount: new Decimal(amount),
+      amount: totalAmount,
       currency: currency || "EUR",
       category: category?.trim() || null,
       paidById: paidById || userId,
@@ -56,9 +79,9 @@ app.post("/", async (c) => {
       splitType: splitType || "equal",
       date: date ? new Date(date) : new Date(),
       splits: {
-        create: members.map((m) => ({
-          memberId: m.id,
-          amount: splitAmount,
+        create: splitEntries.map((s) => ({
+          memberId: s.memberId,
+          amount: s.amount,
         })),
       },
     },
