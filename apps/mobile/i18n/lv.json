@@ -132,6 +132,14 @@
     "billingDate": "Norēķinu datums",
     "billingDateOptional": "Norēķinu datums (neobligāts)"
   },
+  "more": {
+    "title": "Vairāk",
+    "schedule": "Grafiks",
+    "calendar": "Kalendārs",
+    "calendarSubtitle": "Mājsaimniecības notikumi un grafiki",
+    "settings": "Iestatījumi",
+    "settingsSubtitle": "Mājsaimniecība, konts un preferences"
+  },
   "settings": {
     "title": "Iestatījumi",
     "household": "Mājsaimniecība",
@@ -149,7 +157,19 @@
     "members": "Dalībnieki",
     "you": "Tu",
     "setNickname": "Iestatīt iesauku",
-    "nicknamePlaceholder": "piem. Tomsons, Istabene..."
+    "nicknamePlaceholder": "piem. Tomsons, Istabene...",
+    "deleteAccount": "Dzēst kontu",
+    "premium": "Premium",
+    "upgradeToPremium": "Uzlabot līdz Premium",
+    "restorePurchases": "Atjaunot pirkumus",
+    "free": "Bezmaksas",
+    "active": "Aktīvs",
+    "leaveConfirm": "Vai tiešām vēlies pamest šo mājsaimniecību?",
+    "leaveDescription": "Tu zaudēsi piekļuvi visiem kopīgajiem datiem. Apstiprinājums tiks nosūtīts uz tavu e-pastu.",
+    "upgradeDescription": "Noņem reklāmas un atbalsti Wohnly attīstību",
+    "purchaseSuccess": "Laipni lūgti Wohnly Pro!",
+    "restoreSuccess": "Pirkumi veiksmīgi atjaunoti",
+    "restoreNone": "Iepriekšējie pirkumi nav atrasti"
   },
   "balances": {
     "owedToYou": "Parādā tev",

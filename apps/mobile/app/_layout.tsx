@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { authClient } from "@/lib/auth/client";
 import { initRevenueCat } from "@/lib/payments/setup";
+import { useConsent } from "@/lib/hooks/useConsent";
 import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
 import { Colors } from "@/constants/Colors";
 import "@/i18n";
@@ -95,6 +96,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { colorScheme } = useTheme();
   const [namePromptDismissed, setNamePromptDismissed] = useState(false);
+  useConsent(); // GDPR consent for AdMob — runs once on app start
 
   useEffect(() => {
     if (isPending) return;

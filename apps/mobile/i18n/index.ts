@@ -36,6 +36,13 @@ import hi from "./hi.json";
 import th from "./th.json";
 import vi from "./vi.json";
 import id from "./id.json";
+import bn from "./bn.json";
+import ms from "./ms.json";
+import tl from "./tl.json";
+import sw from "./sw.json";
+import ta from "./ta.json";
+import te from "./te.json";
+import mr from "./mr.json";
 
 const resources = {
   en: { translation: en },
@@ -73,6 +80,13 @@ const resources = {
   th: { translation: th },
   vi: { translation: vi },
   id: { translation: id },
+  bn: { translation: bn },
+  ms: { translation: ms },
+  tl: { translation: tl },
+  sw: { translation: sw },
+  ta: { translation: ta },
+  te: { translation: te },
+  mr: { translation: mr },
 } as const;
 
 export type SupportedLanguage = keyof typeof resources;
@@ -113,6 +127,13 @@ export const LANGUAGES: { code: SupportedLanguage; name: string; nativeName: str
   { code: "th", name: "Thai", nativeName: "ไทย" },
   { code: "vi", name: "Vietnamese", nativeName: "Tiếng Việt" },
   { code: "id", name: "Indonesian", nativeName: "Bahasa Indonesia" },
+  { code: "bn", name: "Bengali", nativeName: "বাংলা" },
+  { code: "ms", name: "Malay", nativeName: "Bahasa Melayu" },
+  { code: "tl", name: "Filipino", nativeName: "Filipino" },
+  { code: "sw", name: "Swahili", nativeName: "Kiswahili" },
+  { code: "ta", name: "Tamil", nativeName: "தமிழ்" },
+  { code: "te", name: "Telugu", nativeName: "తెలుగు" },
+  { code: "mr", name: "Marathi", nativeName: "मराठी" },
 ];
 
 const SUPPORTED_CODES = Object.keys(resources);

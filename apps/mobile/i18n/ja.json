@@ -132,6 +132,14 @@
     "billingDate": "請求日",
     "billingDateOptional": "請求日（任意）"
   },
+  "more": {
+    "title": "その他",
+    "schedule": "スケジュール",
+    "calendar": "カレンダー",
+    "calendarSubtitle": "ハウスホールドのイベントとスケジュール",
+    "settings": "設定",
+    "settingsSubtitle": "ハウスホールド、アカウント、環境設定"
+  },
   "settings": {
     "title": "設定",
     "household": "ハウスホールド",
@@ -149,7 +157,19 @@
     "members": "メンバー",
     "you": "あなた",
     "setNickname": "ニックネームを設定",
-    "nicknamePlaceholder": "例：たっくん、ルームメイト..."
+    "nicknamePlaceholder": "例：たっくん、ルームメイト...",
+    "deleteAccount": "アカウントを削除",
+    "premium": "プレミアム",
+    "upgradeToPremium": "プレミアムにアップグレード",
+    "restorePurchases": "購入を復元",
+    "free": "無料",
+    "active": "有効",
+    "leaveConfirm": "本当にこのハウスホールドを離れる？",
+    "leaveDescription": "すべての共有データへのアクセスを失います。確認メールがあなたのメールアドレスに送信されます。",
+    "upgradeDescription": "広告を非表示にしてWohnlyの開発をサポートしよう",
+    "purchaseSuccess": "Wohnly Proへようこそ！",
+    "restoreSuccess": "購入が正常に復元されました",
+    "restoreNone": "以前の購入が見つかりませんでした"
   },
   "balances": {
     "owedToYou": "もらえるお金",

@@ -132,6 +132,14 @@
     "billingDate": "Faktureringsdatum",
     "billingDateOptional": "Faktureringsdatum (valfritt)"
   },
+  "more": {
+    "title": "Mer",
+    "schedule": "Schema",
+    "calendar": "Kalender",
+    "calendarSubtitle": "Hushållets händelser och scheman",
+    "settings": "Inställningar",
+    "settingsSubtitle": "Hushåll, konto och preferenser"
+  },
   "settings": {
     "title": "Inställningar",
     "household": "Hushåll",
@@ -149,7 +157,19 @@
     "members": "Medlemmar",
     "you": "Du",
     "setNickname": "Ange smeknamn",
-    "nicknamePlaceholder": "t.ex. Tommy, Rumansen..."
+    "nicknamePlaceholder": "t.ex. Tommy, Rumansen...",
+    "deleteAccount": "Radera konto",
+    "premium": "Premium",
+    "upgradeToPremium": "Uppgradera till Premium",
+    "restorePurchases": "Återställ köp",
+    "free": "Gratis",
+    "active": "Aktiv",
+    "leaveConfirm": "Är du säker på att du vill lämna detta hushåll?",
+    "leaveDescription": "Du kommer att förlora åtkomst till all delad data. En bekräftelse skickas till din e-post.",
+    "upgradeDescription": "Ta bort annonser och stöd utvecklingen av Wohnly",
+    "purchaseSuccess": "Välkommen till Wohnly Pro!",
+    "restoreSuccess": "Köp har återställts",
+    "restoreNone": "Inga tidigare köp hittades"
   },
   "balances": {
     "owedToYou": "Skyldig dig",
