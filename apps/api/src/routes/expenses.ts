@@ -28,11 +28,10 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, amount, category, paidById, paidFromAccount, splitType, date } = body;
+  const { title, description, amount, category, currency, paidById, paidFromAccount, splitType, date } = body;
 
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!amount || amount <= 0) return c.json({ error: "Amount must be positive" }, 400);
-  if (!category?.trim()) return c.json({ error: "Category is required" }, 400);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
@@ -50,7 +49,8 @@ app.post("/", async (c) => {
       title: title.trim(),
       description: description?.trim() || null,
       amount: new Decimal(amount),
-      category: category.trim(),
+      currency: currency || "EUR",
+      category: category?.trim() || null,
       paidById: paidById || userId,
       paidFromAccount: paidFromAccount?.trim() || null,
       splitType: splitType || "equal",
