@@ -5,11 +5,9 @@
 import { View, Platform } from "react-native";
 import { usePremium } from "@/lib/hooks/usePremium";
 
-// Use test ad unit IDs during development
-// Replace with real IDs from AdMob dashboard before production
 const AD_UNIT_IDS = {
-  ios: process.env.EXPO_PUBLIC_ADMOB_BANNER_IOS ?? "ca-app-pub-3940256099942544/2934735716", // test
-  android: process.env.EXPO_PUBLIC_ADMOB_BANNER_ANDROID ?? "ca-app-pub-3940256099942544/6300978111", // test
+  ios: process.env.EXPO_PUBLIC_ADMOB_BANNER_IOS ?? "ca-app-pub-9336334259937355/6145690883",
+  android: process.env.EXPO_PUBLIC_ADMOB_BANNER_ANDROID ?? "ca-app-pub-9336334259937355/4994991829",
 };
 
 let BannerAd: any = null;
