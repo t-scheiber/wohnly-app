@@ -85,8 +85,8 @@ app.patch("/:id", async (c) => {
         ...(frequency !== undefined && { frequency }),
         ...(dayOfWeek !== undefined && { dayOfWeek }),
         ...(completed !== undefined && {
-          completed,
-          ...(completed && { lastCompleted: new Date(), lastDoneBy: userId }),
+          lastCompleted: new Date(),
+          lastDoneBy: userId,
         }),
       },
       include: { assignments: { include: { member: true } } },
