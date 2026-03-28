@@ -393,7 +393,7 @@ model Expense {
   description     String?
   amount          Decimal  @db.Decimal(10, 2)
   currency        String   @default("EUR")
-  category        String
+  category        String?
   paidById        String
   paidFromAccount String?
   splitType       String   @default("equal") // "equal" | "percentage" | "fixed"
