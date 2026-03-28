@@ -132,6 +132,14 @@
     "billingDate": "Data facturării",
     "billingDateOptional": "Data facturării (opțional)"
   },
+  "more": {
+    "title": "Mai mult",
+    "schedule": "Program",
+    "calendar": "Calendar",
+    "calendarSubtitle": "Evenimente și programe ale locuinței",
+    "settings": "Setări",
+    "settingsSubtitle": "Locuință, cont și preferințe"
+  },
   "settings": {
     "title": "Setări",
     "household": "Locuință",
@@ -149,7 +157,19 @@
     "members": "Membri",
     "you": "Tu",
     "setNickname": "Setează poreclă",
-    "nicknamePlaceholder": "ex. Tommy, Coleg..."
+    "nicknamePlaceholder": "ex. Tommy, Coleg...",
+    "deleteAccount": "Șterge contul",
+    "premium": "Premium",
+    "upgradeToPremium": "Treci la Premium",
+    "restorePurchases": "Restaurează achizițiile",
+    "free": "Gratuit",
+    "active": "Activ",
+    "leaveConfirm": "Ești sigur că vrei să părăsești această locuință?",
+    "leaveDescription": "Vei pierde accesul la toate datele partajate. O confirmare va fi trimisă pe e-mailul tău.",
+    "upgradeDescription": "Elimină reclamele și susține dezvoltarea Wohnly",
+    "purchaseSuccess": "Bine ai venit în Wohnly Pro!",
+    "restoreSuccess": "Achizițiile au fost restaurate cu succes",
+    "restoreNone": "Nu s-au găsit achiziții anterioare"
   },
   "balances": {
     "owedToYou": "Ți se datorează",

@@ -132,6 +132,14 @@
     "billingDate": "วันเรียกเก็บเงิน",
     "billingDateOptional": "วันเรียกเก็บเงิน (ไม่บังคับ)"
   },
+  "more": {
+    "title": "เพิ่มเติม",
+    "schedule": "ตารางเวลา",
+    "calendar": "ปฏิทิน",
+    "calendarSubtitle": "กิจกรรมและตารางเวลาของครัวเรือน",
+    "settings": "ตั้งค่า",
+    "settingsSubtitle": "ครัวเรือน, บัญชี และการตั้งค่า"
+  },
   "settings": {
     "title": "ตั้งค่า",
     "household": "ครัวเรือน",
@@ -149,7 +157,19 @@
     "members": "สมาชิก",
     "you": "คุณ",
     "setNickname": "ตั้งชื่อเล่น",
-    "nicknamePlaceholder": "เช่น ต้อม, รูมเมท..."
+    "nicknamePlaceholder": "เช่น ต้อม, รูมเมท...",
+    "deleteAccount": "ลบบัญชี",
+    "premium": "พรีเมียม",
+    "upgradeToPremium": "อัปเกรดเป็นพรีเมียม",
+    "restorePurchases": "กู้คืนการซื้อ",
+    "free": "ฟรี",
+    "active": "ใช้งานอยู่",
+    "leaveConfirm": "แน่ใจนะว่าจะออกจากครัวเรือนนี้?",
+    "leaveDescription": "คุณจะสูญเสียสิทธิ์เข้าถึงข้อมูลที่แชร์ทั้งหมด ระบบจะส่งอีเมลยืนยันให้คุณ",
+    "upgradeDescription": "ปิดโฆษณาและสนับสนุนการพัฒนา Wohnly",
+    "purchaseSuccess": "ยินดีต้อนรับสู่ Wohnly Pro!",
+    "restoreSuccess": "กู้คืนการซื้อสำเร็จแล้ว",
+    "restoreNone": "ไม่พบการซื้อก่อนหน้า"
   },
   "balances": {
     "owedToYou": "เขาเป็นหนี้คุณ",

@@ -132,6 +132,14 @@
     "billingDate": "Számlázási dátum",
     "billingDateOptional": "Számlázási dátum (opcionális)"
   },
+  "more": {
+    "title": "Továbbiak",
+    "schedule": "Ütemezés",
+    "calendar": "Naptár",
+    "calendarSubtitle": "Háztartási események és ütemezések",
+    "settings": "Beállítások",
+    "settingsSubtitle": "Háztartás, fiók és beállítások"
+  },
   "settings": {
     "title": "Beállítások",
     "household": "Háztartás",
@@ -149,7 +157,19 @@
     "members": "Tagok",
     "you": "Te",
     "setNickname": "Becenév beállítása",
-    "nicknamePlaceholder": "pl. Tommy, Szobatárs..."
+    "nicknamePlaceholder": "pl. Tommy, Szobatárs...",
+    "deleteAccount": "Fiók törlése",
+    "premium": "Prémium",
+    "upgradeToPremium": "Váltás Prémiumra",
+    "restorePurchases": "Vásárlások visszaállítása",
+    "free": "Ingyenes",
+    "active": "Aktív",
+    "leaveConfirm": "Biztos el akarod hagyni ezt a háztartást?",
+    "leaveDescription": "Elveszíted a hozzáférést az összes megosztott adathoz. Egy megerősítés lesz küldve az e-mail címedre.",
+    "upgradeDescription": "Távolítsd el a hirdetéseket és támogasd a Wohnly fejlesztését",
+    "purchaseSuccess": "Üdvözlünk a Wohnly Pro-ban!",
+    "restoreSuccess": "Vásárlások sikeresen visszaállítva",
+    "restoreNone": "Nem találhatók korábbi vásárlások"
   },
   "balances": {
     "owedToYou": "Neked tartoznak",

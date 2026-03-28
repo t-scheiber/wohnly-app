@@ -132,6 +132,14 @@
     "billingDate": "Laskutuspäivä",
     "billingDateOptional": "Laskutuspäivä (valinnainen)"
   },
+  "more": {
+    "title": "Lisää",
+    "schedule": "Aikataulu",
+    "calendar": "Kalenteri",
+    "calendarSubtitle": "Talouden tapahtumat ja aikataulut",
+    "settings": "Asetukset",
+    "settingsSubtitle": "Talous, tili ja mieltymykset"
+  },
   "settings": {
     "title": "Asetukset",
     "household": "Talous",
@@ -149,7 +157,19 @@
     "members": "Jäsenet",
     "you": "Sinä",
     "setNickname": "Aseta lempinimi",
-    "nicknamePlaceholder": "esim. Tommi, Kämppis..."
+    "nicknamePlaceholder": "esim. Tommi, Kämppis...",
+    "deleteAccount": "Poista tili",
+    "premium": "Premium",
+    "upgradeToPremium": "Päivitä Premiumiin",
+    "restorePurchases": "Palauta ostokset",
+    "free": "Ilmainen",
+    "active": "Aktiivinen",
+    "leaveConfirm": "Haluatko varmasti poistua tästä taloudesta?",
+    "leaveDescription": "Menetät pääsyn kaikkiin jaettuihin tietoihin. Vahvistus lähetetään sähköpostiisi.",
+    "upgradeDescription": "Poista mainokset ja tue Wohnlyn kehitystä",
+    "purchaseSuccess": "Tervetuloa Wohnly Prohon!",
+    "restoreSuccess": "Ostokset palautettu onnistuneesti",
+    "restoreNone": "Aiempia ostoksia ei löytynyt"
   },
   "balances": {
     "owedToYou": "Sinulle velkaa",

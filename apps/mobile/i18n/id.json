@@ -132,6 +132,14 @@
     "billingDate": "Tanggal Tagihan",
     "billingDateOptional": "Tanggal Tagihan (opsional)"
   },
+  "more": {
+    "title": "Lainnya",
+    "schedule": "Jadwal",
+    "calendar": "Kalender",
+    "calendarSubtitle": "Acara & jadwal rumah tangga",
+    "settings": "Pengaturan",
+    "settingsSubtitle": "Rumah tangga, akun & preferensi"
+  },
   "settings": {
     "title": "Pengaturan",
     "household": "Rumah Tangga",
@@ -149,7 +157,19 @@
     "members": "Anggota",
     "you": "Kamu",
     "setNickname": "Atur Nama Panggilan",
-    "nicknamePlaceholder": "cth. Tom, Teman Kos..."
+    "nicknamePlaceholder": "cth. Tom, Teman Kos...",
+    "deleteAccount": "Hapus Akun",
+    "premium": "Premium",
+    "upgradeToPremium": "Upgrade ke Premium",
+    "restorePurchases": "Pulihkan Pembelian",
+    "free": "Gratis",
+    "active": "Aktif",
+    "leaveConfirm": "Kamu yakin mau keluar dari rumah tangga ini?",
+    "leaveDescription": "Kamu akan kehilangan akses ke semua data bersama. Konfirmasi akan dikirim ke emailmu.",
+    "upgradeDescription": "Hilangkan iklan dan dukung pengembangan Wohnly",
+    "purchaseSuccess": "Selamat datang di Wohnly Pro!",
+    "restoreSuccess": "Pembelian berhasil dipulihkan",
+    "restoreNone": "Tidak ditemukan pembelian sebelumnya"
   },
   "balances": {
     "owedToYou": "Orang lain utang ke kamu",

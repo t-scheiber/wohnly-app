@@ -1,0 +1,73 @@
+name: Build & Submit Mobile
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build"
+        required: true
+        type: choice
+        options:
+          - all
+          - ios
+          - android
+      profile:
+        description: "Build profile"
+        required: true
+        type: choice
+        options:
+          - production
+          - preview
+        default: production
+      submit:
+        description: "Submit to stores after build"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: Build ${{ inputs.platform }} (${{ inputs.profile }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build iOS
+        if: inputs.platform == 'ios' || inputs.platform == 'all'
+        working-directory: apps/mobile
+        run: eas build --profile ${{ inputs.profile }} --platform ios --non-interactive
+        env:
+          EXPO_NO_CAPABILITY_SYNC: "1"
+
+      - name: Build Android
+        if: inputs.platform == 'android' || inputs.platform == 'all'
+        working-directory: apps/mobile
+        run: eas build --profile ${{ inputs.profile }} --platform android --non-interactive
+        env:
+          EXPO_NO_CAPABILITY_SYNC: "1"
+
+      - name: Submit iOS to App Store
+        if: inputs.submit && (inputs.platform == 'ios' || inputs.platform == 'all')
+        working-directory: apps/mobile
+        run: eas submit --platform ios --non-interactive --latest
+
+      - name: Submit Android to Play Store
+        if: inputs.submit && (inputs.platform == 'android' || inputs.platform == 'all')
+        working-directory: apps/mobile
+        run: eas submit --platform android --non-interactive --latest

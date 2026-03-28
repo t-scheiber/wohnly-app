@@ -132,6 +132,14 @@
     "billingDate": "Arvelduskuupäev",
     "billingDateOptional": "Arvelduskuupäev (valikuline)"
   },
+  "more": {
+    "title": "Rohkem",
+    "schedule": "Ajakava",
+    "calendar": "Kalender",
+    "calendarSubtitle": "Majapidamise sündmused ja ajakavad",
+    "settings": "Seaded",
+    "settingsSubtitle": "Majapidamine, konto ja eelistused"
+  },
   "settings": {
     "title": "Seaded",
     "household": "Majapidamine",
@@ -149,7 +157,19 @@
     "members": "Liikmed",
     "you": "Sina",
     "setNickname": "Määra hüüdnimi",
-    "nicknamePlaceholder": "nt Tommi, Kortsikaaslane..."
+    "nicknamePlaceholder": "nt Tommi, Kortsikaaslane...",
+    "deleteAccount": "Kustuta konto",
+    "premium": "Premium",
+    "upgradeToPremium": "Uuenda Premiumile",
+    "restorePurchases": "Taasta ostud",
+    "free": "Tasuta",
+    "active": "Aktiivne",
+    "leaveConfirm": "Oled kindel, et soovid sellest majapidamisest lahkuda?",
+    "leaveDescription": "Kaotad ligipääsu kõigile jagatud andmetele. Kinnitus saadetakse sinu e-postile.",
+    "upgradeDescription": "Eemalda reklaamid ja toeta Wohnly arendust",
+    "purchaseSuccess": "Tere tulemast Wohnly Prosse!",
+    "restoreSuccess": "Ostud edukalt taastatud",
+    "restoreNone": "Varasemaid oste ei leitud"
   },
   "balances": {
     "owedToYou": "Sulle võlgu",
