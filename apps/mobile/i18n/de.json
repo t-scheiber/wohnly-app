@@ -132,6 +132,14 @@
     "billingDate": "Abrechnungsdatum",
     "billingDateOptional": "Abrechnungsdatum (optional)"
   },
+  "more": {
+    "title": "Mehr",
+    "schedule": "Zeitplan",
+    "calendar": "Kalender",
+    "calendarSubtitle": "Haushaltstermine & Zeitpläne",
+    "settings": "Einstellungen",
+    "settingsSubtitle": "Haushalt, Konto & Einstellungen"
+  },
   "settings": {
     "title": "Einstellungen",
     "household": "Haushalt",
@@ -149,7 +157,19 @@
     "members": "Mitglieder",
     "you": "Du",
     "setNickname": "Spitzname setzen",
-    "nicknamePlaceholder": "z.B. Tommy, Mitbewohner..."
+    "nicknamePlaceholder": "z.B. Tommy, Mitbewohner...",
+    "deleteAccount": "Konto löschen",
+    "premium": "Premium",
+    "upgradeToPremium": "Auf Premium upgraden",
+    "restorePurchases": "Käufe wiederherstellen",
+    "free": "Kostenlos",
+    "active": "Aktiv",
+    "leaveConfirm": "Möchtest du diesen Haushalt wirklich verlassen?",
+    "leaveDescription": "Du verlierst den Zugriff auf alle gemeinsamen Daten. Eine Bestätigung wird an deine E-Mail gesendet.",
+    "upgradeDescription": "Werbung entfernen und Wohnly-Entwicklung unterstützen",
+    "purchaseSuccess": "Willkommen bei Wohnly Pro!",
+    "restoreSuccess": "Käufe erfolgreich wiederhergestellt",
+    "restoreNone": "Keine früheren Käufe gefunden"
   },
   "balances": {
     "owedToYou": "Dir geschuldet",

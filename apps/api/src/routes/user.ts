@@ -67,4 +67,53 @@ app.get("/entitlements", async (c) => {
   });
 });
 
+// DELETE /api/user/account - Delete user account and all associated data
+app.delete("/account", async (c) => {
+  const userId = c.get("userId") as string;
+
+  await prisma.$transaction(async (tx) => {
+    // Find all household memberships
+    const memberships = await tx.householdMember.findMany({
+      where: { userId },
+      include: { household: { include: { members: true } } },
+    });
+
+    for (const membership of memberships) {
+      const household = membership.household;
+      const isLastMember = household.members.length === 1;
+
+      if (isLastMember) {
+        // Delete entire household and all related data (cascades via Prisma)
+        await tx.household.delete({ where: { id: household.id } });
+      } else {
+        // Remove member's nicknames, assignments, splits, etc.
+        await tx.memberNickname.deleteMany({
+          where: { OR: [{ giverId: membership.id }, { targetId: membership.id }] },
+        });
+        await tx.choreAssignment.deleteMany({ where: { memberId: membership.id } });
+        await tx.eventAttendee.deleteMany({ where: { memberId: membership.id } });
+        await tx.expenseSplit.deleteMany({ where: { memberId: membership.id } });
+        await tx.subscriptionSplit.deleteMany({ where: { memberId: membership.id } });
+        await tx.householdMember.delete({ where: { id: membership.id } });
+      }
+    }
+
+    // Delete user's devices and key envelopes
+    await tx.device.deleteMany({ where: { userId } });
+
+    // Delete user preferences, push tokens, notification logs
+    await tx.userPreferences.deleteMany({ where: { userId } });
+    await tx.pushToken.deleteMany({ where: { userId } });
+    await tx.notificationLog.deleteMany({ where: { userId } });
+    await tx.userSubscription.deleteMany({ where: { userId } });
+
+    // Delete auth data (sessions, accounts) and the user
+    await tx.session.deleteMany({ where: { userId } });
+    await tx.account.deleteMany({ where: { userId } });
+    await tx.user.delete({ where: { id: userId } });
+  });
+
+  return c.json({ success: true, message: "Account and all associated data have been deleted." });
+});
+
 export default app;

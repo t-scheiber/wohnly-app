@@ -132,6 +132,14 @@
     "billingDate": "बिलिंग तारीख",
     "billingDateOptional": "बिलिंग तारीख (वैकल्पिक)"
   },
+  "more": {
+    "title": "और देखो",
+    "schedule": "शेड्यूल",
+    "calendar": "कैलेंडर",
+    "calendarSubtitle": "हाउसहोल्ड इवेंट्स और शेड्यूल",
+    "settings": "सेटिंग्स",
+    "settingsSubtitle": "हाउसहोल्ड, अकाउंट और प्राथमिकताएं"
+  },
   "settings": {
     "title": "सेटिंग्स",
     "household": "हाउसहोल्ड",
@@ -149,7 +157,19 @@
     "members": "मेंबर्स",
     "you": "तुम",
     "setNickname": "निकनेम रखो",
-    "nicknamePlaceholder": "जैसे: टॉमी, रूममेट..."
+    "nicknamePlaceholder": "जैसे: टॉमी, रूममेट...",
+    "deleteAccount": "अकाउंट डिलीट करो",
+    "premium": "प्रीमियम",
+    "upgradeToPremium": "प्रीमियम में अपग्रेड करो",
+    "restorePurchases": "खरीदारी रिस्टोर करो",
+    "free": "मुफ्त",
+    "active": "एक्टिव",
+    "leaveConfirm": "क्या तुम सच में इस हाउसहोल्ड को छोड़ना चाहते हो?",
+    "leaveDescription": "तुम सभी शेयर किए गए डेटा का एक्सेस खो दोगे। तुम्हारे ईमेल पर एक कन्फर्मेशन भेजा जाएगा।",
+    "upgradeDescription": "विज्ञापन हटाओ और Wohnly के विकास में सहयोग दो",
+    "purchaseSuccess": "Wohnly Pro में स्वागत है!",
+    "restoreSuccess": "खरीदारी सफलतापूर्वक रिस्टोर हो गई",
+    "restoreNone": "पिछली खरीदारी नहीं मिली"
   },
   "balances": {
     "owedToYou": "तुम्हें मिलने हैं",

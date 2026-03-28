@@ -132,6 +132,14 @@
     "billingDate": "결제일",
     "billingDateOptional": "결제일 (선택사항)"
   },
+  "more": {
+    "title": "더보기",
+    "schedule": "일정",
+    "calendar": "캘린더",
+    "calendarSubtitle": "하우스홀드 이벤트 및 일정",
+    "settings": "설정",
+    "settingsSubtitle": "하우스홀드, 계정 및 환경설정"
+  },
   "settings": {
     "title": "설정",
     "household": "하우스홀드",
@@ -149,7 +157,19 @@
     "members": "멤버",
     "you": "나",
     "setNickname": "닉네임 설정",
-    "nicknamePlaceholder": "예: 토미, 룸메이트..."
+    "nicknamePlaceholder": "예: 토미, 룸메이트...",
+    "deleteAccount": "계정 삭제",
+    "premium": "프리미엄",
+    "upgradeToPremium": "프리미엄으로 업그레이드",
+    "restorePurchases": "구매 복원",
+    "free": "무료",
+    "active": "활성",
+    "leaveConfirm": "정말 이 하우스홀드를 나갈 거야?",
+    "leaveDescription": "모든 공유 데이터에 대한 접근 권한을 잃게 돼. 확인 이메일이 전송될 거야.",
+    "upgradeDescription": "광고를 제거하고 Wohnly 개발을 지원해",
+    "purchaseSuccess": "Wohnly Pro에 오신 것을 환영해!",
+    "restoreSuccess": "구매가 성공적으로 복원됐어",
+    "restoreNone": "이전 구매 내역을 찾지 못했어"
   },
   "balances": {
     "owedToYou": "받을 돈",

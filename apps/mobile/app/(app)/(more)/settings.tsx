@@ -4,13 +4,14 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
-import { useHouseholdMembers, useSetNickname } from "@/lib/api/queries";
+import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold } from "@/lib/api/queries";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
 import { LANGUAGES as ALL_LANGUAGES } from "@/i18n";
 import { clearDeviceKeys } from "@/lib/crypto/device-storage";
 import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
+import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
 
 // ── Picker Modal (works on web + native) ──
 
@@ -130,7 +131,9 @@ export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const { data: session } = authClient.useSession();
   const { data: membersData } = useHouseholdMembers();
+  const { data: entitlements } = useEntitlements();
   const setNickname = useSetNickname();
+  const leaveHousehold = useLeaveHousehold();
   const notifications = useNotificationSettings();
 
   const [langPickerOpen, setLangPickerOpen] = useState(false);
@@ -172,6 +175,59 @@ export default function SettingsScreen() {
     { value: "light" as const, label: themeLabels.light },
     { value: "dark" as const, label: themeLabels.dark },
   ];
+
+  const handleLeaveHousehold = () => {
+    if (Platform.OS === "web") {
+      if (confirm(t("settings.leaveConfirm") + "\n\n" + t("settings.leaveDescription"))) {
+        leaveHousehold.mutate(undefined, {
+          onSuccess: () => {
+            Alert.alert(t("common.done"), t("settings.leaveDescription"));
+          },
+          onError: (err) => {
+            Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+          },
+        });
+      }
+      return;
+    }
+    Alert.alert(t("household.leaveHousehold"), t("settings.leaveConfirm") + "\n\n" + t("settings.leaveDescription"), [
+      { text: t("common.cancel"), style: "cancel" },
+      {
+        text: t("household.leaveHousehold"),
+        style: "destructive",
+        onPress: () => {
+          leaveHousehold.mutate(undefined, {
+            onSuccess: () => {
+              router.replace("/(app)/(dashboard)");
+            },
+            onError: (err) => {
+              Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+            },
+          });
+        },
+      },
+    ]);
+  };
+
+  const handleUpgrade = async () => {
+    try {
+      const success = await purchaseLifetime();
+      if (success) {
+        Alert.alert(t("settings.premium"), t("settings.purchaseSuccess"));
+      }
+    } catch (err) {
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+    }
+  };
+
+  const handleRestore = async () => {
+    try {
+      const success = await restorePurchases();
+      Alert.alert(t("settings.premium"), success ? t("settings.restoreSuccess") : t("settings.restoreNone"));
+    } catch (err) {
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+    }
+  };
 
   const handleShareInvite = async () => {
     try {
@@ -293,11 +349,21 @@ export default function SettingsScreen() {
               setNameModalOpen(true);
             }}
           />
-          <SettingsRow colors={colors} label={t("settings.subscription")} value="Free" isLast />
+          <SettingsRow
+            colors={colors}
+            label={t("settings.subscription")}
+            value={entitlements?.premium ? t("settings.active") : t("settings.free")}
+            onPress={entitlements?.premium ? undefined : handleUpgrade}
+            isLast={entitlements?.premium}
+          />
+          {!entitlements?.premium && (
+            <SettingsRow colors={colors} label={t("settings.restorePurchases")} onPress={handleRestore} isLast />
+          )}
         </SettingsSection>
 
         <SettingsSection title={t("settings.dangerZone")} colors={colors}>
-          <SettingsRow colors={colors} label={t("household.leaveHousehold")} onPress={() => {}} destructive />
+          <SettingsRow colors={colors} label={t("household.leaveHousehold")} onPress={handleLeaveHousehold} destructive />
+          <SettingsRow colors={colors} label={t("settings.deleteAccount")} onPress={() => router.push("/delete-account" as any)} destructive />
           <SettingsRow colors={colors} label={t("settings.signOut")} onPress={handleSignOut} destructive isLast />
         </SettingsSection>
       </ScrollView>

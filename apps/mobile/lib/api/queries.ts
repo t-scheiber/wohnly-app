@@ -316,6 +316,18 @@ export function useEntitlements() {
   });
 }
 
+// ── Leave Household ──
+
+export function useLeaveHousehold() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => apiPost<{ success: boolean; token: string }>("/api/members/leave", {}),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["members"] });
+    },
+  });
+}
+
 // ── Invitations ──
 
 export function useInvitations() {

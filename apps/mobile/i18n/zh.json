@@ -132,6 +132,14 @@
     "billingDate": "账单日期",
     "billingDateOptional": "账单日期（可选）"
   },
+  "more": {
+    "title": "更多",
+    "schedule": "日程",
+    "calendar": "日历",
+    "calendarSubtitle": "家庭事件与日程安排",
+    "settings": "设置",
+    "settingsSubtitle": "家庭、账号与偏好设置"
+  },
   "settings": {
     "title": "设置",
     "household": "家庭",
@@ -149,7 +157,19 @@
     "members": "成员",
     "you": "你",
     "setNickname": "设置昵称",
-    "nicknamePlaceholder": "例如：小明、室友..."
+    "nicknamePlaceholder": "例如：小明、室友...",
+    "deleteAccount": "删除账号",
+    "premium": "高级版",
+    "upgradeToPremium": "升级到高级版",
+    "restorePurchases": "恢复购买",
+    "free": "免费",
+    "active": "已激活",
+    "leaveConfirm": "确定要离开这个家庭吗？",
+    "leaveDescription": "你将失去对所有共享数据的访问权限。确认邮件将发送到你的邮箱。",
+    "upgradeDescription": "移除广告并支持 Wohnly 的开发",
+    "purchaseSuccess": "欢迎加入 Wohnly Pro！",
+    "restoreSuccess": "购买已成功恢复",
+    "restoreNone": "未找到之前的购买记录"
   },
   "balances": {
     "owedToYou": "别人欠你的",

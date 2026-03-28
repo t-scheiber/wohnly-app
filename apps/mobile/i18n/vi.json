@@ -132,6 +132,14 @@
     "billingDate": "Ngày thanh toán",
     "billingDateOptional": "Ngày thanh toán (không bắt buộc)"
   },
+  "more": {
+    "title": "Thêm",
+    "schedule": "Lịch trình",
+    "calendar": "Lịch",
+    "calendarSubtitle": "Sự kiện & lịch trình hộ gia đình",
+    "settings": "Cài đặt",
+    "settingsSubtitle": "Hộ, tài khoản & tùy chọn"
+  },
   "settings": {
     "title": "Cài đặt",
     "household": "Hộ",
@@ -149,7 +157,19 @@
     "members": "Thành viên",
     "you": "Bạn",
     "setNickname": "Đặt biệt danh",
-    "nicknamePlaceholder": "ví dụ: Tí, Bạn cùng phòng..."
+    "nicknamePlaceholder": "ví dụ: Tí, Bạn cùng phòng...",
+    "deleteAccount": "Xóa tài khoản",
+    "premium": "Premium",
+    "upgradeToPremium": "Nâng cấp lên Premium",
+    "restorePurchases": "Khôi phục giao dịch mua",
+    "free": "Miễn phí",
+    "active": "Đang hoạt động",
+    "leaveConfirm": "Bạn chắc chắn muốn rời hộ này không?",
+    "leaveDescription": "Bạn sẽ mất quyền truy cập vào tất cả dữ liệu chung. Một email xác nhận sẽ được gửi đến bạn.",
+    "upgradeDescription": "Tắt quảng cáo và ủng hộ phát triển Wohnly",
+    "purchaseSuccess": "Chào mừng đến với Wohnly Pro!",
+    "restoreSuccess": "Khôi phục giao dịch mua thành công",
+    "restoreNone": "Không tìm thấy giao dịch mua trước đó"
   },
   "balances": {
     "owedToYou": "Người khác nợ bạn",

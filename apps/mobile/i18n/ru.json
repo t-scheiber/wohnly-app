@@ -132,6 +132,14 @@
     "billingDate": "Дата оплаты",
     "billingDateOptional": "Дата оплаты (необязательно)"
   },
+  "more": {
+    "title": "Ещё",
+    "schedule": "Расписание",
+    "calendar": "Календарь",
+    "calendarSubtitle": "События и расписание домохозяйства",
+    "settings": "Настройки",
+    "settingsSubtitle": "Домохозяйство, аккаунт и предпочтения"
+  },
   "settings": {
     "title": "Настройки",
     "household": "Домохозяйство",
@@ -149,7 +157,19 @@
     "members": "Участники",
     "you": "Ты",
     "setNickname": "Задать прозвище",
-    "nicknamePlaceholder": "напр. Томми, Сосед..."
+    "nicknamePlaceholder": "напр. Томми, Сосед...",
+    "deleteAccount": "Удалить аккаунт",
+    "premium": "Премиум",
+    "upgradeToPremium": "Перейти на Премиум",
+    "restorePurchases": "Восстановить покупки",
+    "free": "Бесплатно",
+    "active": "Активна",
+    "leaveConfirm": "Ты уверен, что хочешь покинуть это домохозяйство?",
+    "leaveDescription": "Ты потеряешь доступ ко всем общим данным. На твою почту будет отправлено подтверждение.",
+    "upgradeDescription": "Убери рекламу и поддержи развитие Wohnly",
+    "purchaseSuccess": "Добро пожаловать в Wohnly Pro!",
+    "restoreSuccess": "Покупки успешно восстановлены",
+    "restoreNone": "Предыдущие покупки не найдены"
   },
   "balances": {
     "owedToYou": "Тебе должны",

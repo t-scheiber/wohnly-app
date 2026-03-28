@@ -132,6 +132,14 @@
     "billingDate": "Дата оплати",
     "billingDateOptional": "Дата оплати (необов'язково)"
   },
+  "more": {
+    "title": "Більше",
+    "schedule": "Розклад",
+    "calendar": "Календар",
+    "calendarSubtitle": "Події та розклади домогосподарства",
+    "settings": "Налаштування",
+    "settingsSubtitle": "Домогосподарство, акаунт та вподобання"
+  },
   "settings": {
     "title": "Налаштування",
     "household": "Домогосподарство",
@@ -149,7 +157,19 @@
     "members": "Учасники",
     "you": "Ти",
     "setNickname": "Встановити прізвисько",
-    "nicknamePlaceholder": "напр. Томмі, Сусід..."
+    "nicknamePlaceholder": "напр. Томмі, Сусід...",
+    "deleteAccount": "Видалити акаунт",
+    "premium": "Преміум",
+    "upgradeToPremium": "Оновити до Преміум",
+    "restorePurchases": "Відновити покупки",
+    "free": "Безкоштовно",
+    "active": "Активний",
+    "leaveConfirm": "Ти впевнений, що хочеш покинути це домогосподарство?",
+    "leaveDescription": "Ти втратиш доступ до всіх спільних даних. Підтвердження буде надіслано на твою електронну пошту.",
+    "upgradeDescription": "Прибери рекламу та підтримай розвиток Wohnly",
+    "purchaseSuccess": "Ласкаво просимо до Wohnly Pro!",
+    "restoreSuccess": "Покупки успішно відновлено",
+    "restoreNone": "Попередніх покупок не знайдено"
   },
   "balances": {
     "owedToYou": "Тобі винні",

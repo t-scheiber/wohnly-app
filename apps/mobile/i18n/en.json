@@ -132,6 +132,14 @@
     "billingDate": "Billing Date",
     "billingDateOptional": "Billing Date (optional)"
   },
+  "more": {
+    "title": "More",
+    "schedule": "Schedule",
+    "calendar": "Calendar",
+    "calendarSubtitle": "Household events & schedules",
+    "settings": "Settings",
+    "settingsSubtitle": "Household, account & preferences"
+  },
   "settings": {
     "title": "Settings",
     "household": "Household",
@@ -149,7 +157,19 @@
     "members": "Members",
     "you": "You",
     "setNickname": "Set Nickname",
-    "nicknamePlaceholder": "e.g. Tommy, Roomie..."
+    "nicknamePlaceholder": "e.g. Tommy, Roomie...",
+    "deleteAccount": "Delete Account",
+    "premium": "Premium",
+    "upgradeToPremium": "Upgrade to Premium",
+    "restorePurchases": "Restore Purchases",
+    "free": "Free",
+    "active": "Active",
+    "leaveConfirm": "Are you sure you want to leave this household?",
+    "leaveDescription": "You will lose access to all shared data. A confirmation will be sent to your email.",
+    "upgradeDescription": "Remove ads and support Wohnly development",
+    "purchaseSuccess": "Welcome to Wohnly Pro!",
+    "restoreSuccess": "Purchases restored successfully",
+    "restoreNone": "No previous purchases found"
   },
   "balances": {
     "owedToYou": "Owed to you",
