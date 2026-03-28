@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckSquare, ShoppingCart, ChevronRight } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { AdBanner } from "@/components/common/AdBanner";
 
 export default function ListsScreen() {
   const colorScheme = useColorScheme() ?? "light";
@@ -62,6 +63,7 @@ export default function ListsScreen() {
           ))}
         </View>
       </ScrollView>
+      <AdBanner />
     </SafeAreaView>
   );
 }
