@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth/client";
 import { initRevenueCat } from "@/lib/payments/setup";
 import { useConsent } from "@/lib/hooks/useConsent";
 import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
+import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
 import { Colors } from "@/constants/Colors";
 import "@/i18n";
 
@@ -114,6 +115,19 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       initRevenueCat(session.user.id);
     }
   }, [session, isPending, segments]);
+
+  // Register device for E2EE on all platforms
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    (async () => {
+      try {
+        await ensureDeviceRegistered();
+      } catch {
+        // Silent fail — device registration is best-effort
+      }
+    })();
+  }, [session?.user?.id]);
 
   // Reset dismissal when session changes (new login)
   useEffect(() => {

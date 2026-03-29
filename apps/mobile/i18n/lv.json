@@ -169,7 +169,17 @@
     "upgradeDescription": "Noņem reklāmas un atbalsti Wohnly attīstību",
     "purchaseSuccess": "Laipni lūgti Wohnly Pro!",
     "restoreSuccess": "Pirkumi veiksmīgi atjaunoti",
-    "restoreNone": "Iepriekšējie pirkumi nav atrasti"
+    "restoreNone": "Iepriekšējie pirkumi nav atrasti",
+    "devices": "Ierīces un drošība",
+    "pendingDevices": "Gaidošās ierīces",
+    "approvedDevices": "Apstiprinātās ierīces",
+    "approveDevice": "Apstiprināt",
+    "rejectDevice": "Noraidīt",
+    "deviceApproved": "Ierīce apstiprināta",
+    "deviceRejected": "Ierīce noraidīta",
+    "noDevices": "Vēl nav reģistrētu ierīču",
+    "devicePending": "Gaida apstiprinājumu",
+    "encryptedData": "Šifrēts — atver savā ierīcē, lai apskatītu"
   },
   "balances": {
     "owedToYou": "Parādā tev",

@@ -130,8 +130,11 @@ app.post("/distribute-keys", async (c) => {
   });
   if (!member) return c.json({ error: "Not a member" }, 403);
 
-  // Upsert each envelope
+  // Upsert each envelope (only for approved devices)
   for (const env of envelopes) {
+    const device = await prisma.device.findUnique({ where: { id: env.deviceId } });
+    if (!device || device.status !== "approved") continue;
+
     await prisma.householdKeyEnvelope.upsert({
       where: {
         householdId_deviceId: { householdId, deviceId: env.deviceId },

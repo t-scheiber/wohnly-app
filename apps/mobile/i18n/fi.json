@@ -169,7 +169,17 @@
     "upgradeDescription": "Poista mainokset ja tue Wohnlyn kehitystä",
     "purchaseSuccess": "Tervetuloa Wohnly Prohon!",
     "restoreSuccess": "Ostokset palautettu onnistuneesti",
-    "restoreNone": "Aiempia ostoksia ei löytynyt"
+    "restoreNone": "Aiempia ostoksia ei löytynyt",
+    "devices": "Laitteet ja turvallisuus",
+    "pendingDevices": "Odottavat laitteet",
+    "approvedDevices": "Hyväksytyt laitteet",
+    "approveDevice": "Hyväksy",
+    "rejectDevice": "Hylkää",
+    "deviceApproved": "Laite hyväksytty",
+    "deviceRejected": "Laite hylätty",
+    "noDevices": "Ei rekisteröityjä laitteita vielä",
+    "devicePending": "Odottaa hyväksyntää",
+    "encryptedData": "Salattu — avaa laitteellasi nähdäksesi"
   },
   "balances": {
     "owedToYou": "Sinulle velkaa",

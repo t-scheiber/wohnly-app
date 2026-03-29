@@ -80,7 +80,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule } = body;
+  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce } = body;
   if (!title?.trim() || !startDate) {
     return c.json({ error: "Title and startDate are required" }, 400);
   }
@@ -109,9 +109,11 @@ app.post("/", async (c) => {
   const event = await prisma.event.create({
     data: {
       householdId: member.householdId,
-      title: title.trim(),
-      description: description?.trim() || null,
-      location: location?.trim() || null,
+      title: encrypted ? title : title.trim(),
+      description: encrypted ? (description || null) : (description?.trim() || null),
+      location: encrypted ? (location || null) : (location?.trim() || null),
+      encrypted: !!encrypted,
+      nonce: nonce || null,
       startDate: new Date(startDate),
       endDate: endDate ? new Date(endDate) : null,
       allDay: allDay ?? false,
@@ -148,7 +150,7 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Event not found" }, 404);
 
-  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule } = body;
+  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce } = body;
 
   const event = await prisma.$transaction(async (tx) => {
     if (attendeeIds !== undefined) {
@@ -176,9 +178,11 @@ app.patch("/:id", async (c) => {
     return tx.event.update({
       where: { id: eventId },
       data: {
-        ...(title !== undefined && { title: title.trim() }),
-        ...(description !== undefined && { description: description?.trim() || null }),
-        ...(location !== undefined && { location: location?.trim() || null }),
+        ...(title !== undefined && { title: encrypted ? title : title.trim() }),
+        ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
+        ...(location !== undefined && { location: encrypted ? (location || null) : (location?.trim() || null) }),
+        ...(encrypted !== undefined && { encrypted }),
+        ...(nonce !== undefined && { nonce: nonce || null }),
         ...(startDate !== undefined && { startDate: new Date(startDate) }),
         ...(endDate !== undefined && { endDate: endDate ? new Date(endDate) : null }),
         ...(allDay !== undefined && { allDay }),

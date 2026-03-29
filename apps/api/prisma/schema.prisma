@@ -222,6 +222,8 @@ model Todo {
   isPersonal  Boolean   @default(false)
   creatorId   String
   dueDate     DateTime?
+  encrypted   Boolean   @default(false)
+  nonce       String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -256,6 +258,8 @@ model ShoppingItem {
   checked     Boolean  @default(false)
   isPersonal  Boolean  @default(false)
   addedBy     String
+  encrypted   Boolean  @default(false)
+  nonce       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -280,6 +284,8 @@ model Chore {
   completed     Boolean   @default(false)
   lastCompleted DateTime?
   lastDoneBy    String?
+  encrypted     Boolean   @default(false)
+  nonce         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -328,6 +334,8 @@ model Event {
   household    Household       @relation(fields: [householdId], references: [id], onDelete: Cascade)
   attendees    EventAttendee[]
   reminders    EventReminder[]
+  encrypted    Boolean         @default(false)
+  nonce        String?
   calendarSync CalendarSync?   @relation(fields: [calendarSyncId], references: [id], onDelete: SetNull)
 
   @@index([householdId, startDate, endDate])
@@ -401,6 +409,8 @@ model Expense {
   paidFromAccount String?
   splitType       String   @default("equal") // "equal" | "percentage" | "fixed"
   date            DateTime @default(now())
+  encrypted       Boolean  @default(false)
+  nonce           String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -443,6 +453,8 @@ model Subscription {
   createdBy   String
   active      Boolean  @default(true)
   splitType   String   @default("equal")
+  encrypted   Boolean  @default(false)
+  nonce       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -478,12 +490,14 @@ model Device {
   userId    String
   name      String?
   publicKey String   // X25519 public key (base64)
+  status    String   @default("pending") // "pending" | "approved" | "rejected"
   createdAt DateTime @default(now())
 
   user      User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   envelopes HouseholdKeyEnvelope[]
 
   @@index([userId])
+  @@index([userId, status])
 }
 
 model HouseholdKeyEnvelope {

@@ -1,5 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, apiPost, apiPatch, apiDelete } from "./client";
+import { getEncryptionKey } from "@/lib/crypto/active-household";
+import {
+  encryptTodo, decryptTodo,
+  encryptShoppingItem, decryptShoppingItem,
+  encryptChore, decryptChore,
+  encryptEvent, decryptEvent,
+  encryptExpense, decryptExpense,
+  encryptSubscription, decryptSubscription,
+} from "@/lib/crypto/encrypt-service";
 import type {
   Todo,
   ShoppingItem,
@@ -12,6 +21,7 @@ import type {
   UserPreferences,
   UserEntitlements,
   MemberBalance,
+  Device,
 } from "@wohnly/shared";
 
 // ── Household & Members ──
@@ -47,12 +57,59 @@ export function useSetNickname() {
   });
 }
 
+// ── Devices ──
+
+export function useHouseholdDevices() {
+  return useQuery({
+    queryKey: ["household-devices"],
+    queryFn: () => api<{ devices: Device[] }>("/api/devices/household?includeAll=true"),
+  });
+}
+
+export function usePendingDevices() {
+  return useQuery({
+    queryKey: ["pending-devices"],
+    queryFn: () => api<{ devices: Device[]; count: number }>("/api/devices/pending"),
+    refetchInterval: 30_000,
+  });
+}
+
+export function useApproveDevice() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (deviceId: string) =>
+      apiPost<{ success: boolean; device: Device }>("/api/devices/approve", { deviceId }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["household-devices"] });
+      qc.invalidateQueries({ queryKey: ["pending-devices"] });
+    },
+  });
+}
+
+export function useRejectDevice() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (deviceId: string) =>
+      apiPost("/api/devices/reject", { deviceId }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["household-devices"] });
+      qc.invalidateQueries({ queryKey: ["pending-devices"] });
+    },
+  });
+}
+
 // ── Todos ──
 
 export function useTodos() {
   return useQuery({
     queryKey: ["todos"],
-    queryFn: () => api<{ todos: Todo[]; pagination: unknown }>("/api/todos"),
+    queryFn: async () => {
+      const res = await api<{ todos: Todo[]; pagination: unknown }>("/api/todos");
+      const hk = getEncryptionKey();
+      if (!hk) return res;
+      const todos = await Promise.all(res.todos.map((t) => decryptTodo(t, hk)));
+      return { ...res, todos };
+    },
   });
 }
 
@@ -88,8 +145,13 @@ export function useToggleTodo() {
 export function useCreateTodo() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { title: string; description?: string; dueDate?: string; assigneeIds?: string[]; isPersonal?: boolean }) => {
+    mutationFn: async (data: { title: string; description?: string; dueDate?: string; assigneeIds?: string[]; isPersonal?: boolean }) => {
       const { isPersonal, ...body } = data;
+      const hk = getEncryptionKey();
+      if (hk && !isPersonal) {
+        const enc = await encryptTodo(body, hk);
+        return apiPost(isPersonal ? "/api/personal-todos" : "/api/todos", { ...body, ...enc });
+      }
       return apiPost(isPersonal ? "/api/personal-todos" : "/api/todos", body);
     },
     onSuccess: () => {
@@ -116,7 +178,13 @@ export function useDeleteTodo() {
 export function useShoppingList() {
   return useQuery({
     queryKey: ["shopping"],
-    queryFn: () => api<{ items: ShoppingItem[] }>("/api/shopping"),
+    queryFn: async () => {
+      const res = await api<{ items: ShoppingItem[] }>("/api/shopping");
+      const hk = getEncryptionKey();
+      if (!hk) return res;
+      const items = await Promise.all(res.items.map((i) => decryptShoppingItem(i, hk)));
+      return { ...res, items };
+    },
   });
 }
 
@@ -157,8 +225,14 @@ export function useToggleShoppingItem() {
 export function useCreateShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; quantity?: string; isPersonal?: boolean }) =>
-      apiPost("/api/shopping", data),
+    mutationFn: async (data: { name: string; quantity?: string; isPersonal?: boolean }) => {
+      const hk = getEncryptionKey();
+      if (hk && !data.isPersonal) {
+        const enc = await encryptShoppingItem(data, hk);
+        return apiPost("/api/shopping", { ...data, ...enc });
+      }
+      return apiPost("/api/shopping", data);
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["shopping"] });
       qc.invalidateQueries({ queryKey: ["personal-shopping"] });
@@ -182,15 +256,27 @@ export function useDeleteShoppingItem() {
 export function useChores() {
   return useQuery({
     queryKey: ["chores"],
-    queryFn: () => api<{ chores: Chore[] }>("/api/chores"),
+    queryFn: async () => {
+      const res = await api<{ chores: Chore[] }>("/api/chores");
+      const hk = getEncryptionKey();
+      if (!hk) return res;
+      const chores = await Promise.all(res.chores.map((c) => decryptChore(c, hk)));
+      return { ...res, chores };
+    },
   });
 }
 
 export function useCreateChore() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { title: string; frequency: string; description?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) =>
-      apiPost("/api/chores", data),
+    mutationFn: async (data: { title: string; frequency: string; description?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
+      const hk = getEncryptionKey();
+      if (hk) {
+        const enc = await encryptChore(data, hk);
+        return apiPost("/api/chores", { ...data, ...enc });
+      }
+      return apiPost("/api/chores", data);
+    },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["chores"] }),
   });
 }
@@ -232,14 +318,30 @@ export function useEvents(startDate?: string, endDate?: string) {
 
   return useQuery({
     queryKey: ["events", startDate, endDate],
-    queryFn: () => api<{ events: Event[] }>(`/api/events${query ? `?${query}` : ""}`),
+    queryFn: async () => {
+      const res = await api<{ events: Event[] }>(`/api/events${query ? `?${query}` : ""}`);
+      const hk = getEncryptionKey();
+      if (!hk) return res;
+      const events = await Promise.all(res.events.map((e) => decryptEvent(e, hk)));
+      return { ...res, events };
+    },
   });
 }
 
 export function useCreateEvent() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: Record<string, unknown>) => apiPost("/api/events", data),
+    mutationFn: async (data: Record<string, unknown>) => {
+      const hk = getEncryptionKey();
+      if (hk && data.title) {
+        const enc = await encryptEvent(
+          { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
+          hk
+        );
+        return apiPost("/api/events", { ...data, ...enc });
+      }
+      return apiPost("/api/events", data);
+    },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
   });
 }
@@ -257,14 +359,30 @@ export function useDeleteEvent() {
 export function useExpenses() {
   return useQuery({
     queryKey: ["expenses"],
-    queryFn: () => api<{ expenses: Expense[] }>("/api/expenses"),
+    queryFn: async () => {
+      const res = await api<{ expenses: Expense[] }>("/api/expenses");
+      const hk = getEncryptionKey();
+      if (!hk) return res;
+      const expenses = await Promise.all(res.expenses.map((e) => decryptExpense(e, hk)));
+      return { ...res, expenses };
+    },
   });
 }
 
 export function useCreateExpense() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: Record<string, unknown>) => apiPost("/api/expenses", data),
+    mutationFn: async (data: Record<string, unknown>) => {
+      const hk = getEncryptionKey();
+      if (hk && data.title) {
+        const enc = await encryptExpense(
+          { title: data.title as string, description: data.description as string | null },
+          hk
+        );
+        return apiPost("/api/expenses", { ...data, ...enc });
+      }
+      return apiPost("/api/expenses", data);
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["expenses"] });
       qc.invalidateQueries({ queryKey: ["balances"] });
@@ -288,14 +406,30 @@ export function useDeleteExpense() {
 export function useSubscriptions() {
   return useQuery({
     queryKey: ["subscriptions"],
-    queryFn: () => api<{ subscriptions: Subscription[] }>("/api/subscriptions"),
+    queryFn: async () => {
+      const res = await api<{ subscriptions: Subscription[] }>("/api/subscriptions");
+      const hk = getEncryptionKey();
+      if (!hk) return res;
+      const subscriptions = await Promise.all(res.subscriptions.map((s) => decryptSubscription(s, hk)));
+      return { ...res, subscriptions };
+    },
   });
 }
 
 export function useCreateSubscription() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: Record<string, unknown>) => apiPost("/api/subscriptions", data),
+    mutationFn: async (data: Record<string, unknown>) => {
+      const hk = getEncryptionKey();
+      if (hk && data.name) {
+        const enc = await encryptSubscription(
+          { name: data.name as string, description: data.description as string | null },
+          hk
+        );
+        return apiPost("/api/subscriptions", { ...data, ...enc });
+      }
+      return apiPost("/api/subscriptions", data);
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["subscriptions"] });
       qc.invalidateQueries({ queryKey: ["balances"] });
@@ -327,7 +461,7 @@ export function useEntitlements() {
   return useQuery({
     queryKey: ["entitlements"],
     queryFn: () => api<UserEntitlements>("/api/user/entitlements"),
-    staleTime: 5 * 60 * 1000, // 5 min cache
+    staleTime: 5 * 60 * 1000,
   });
 }
 

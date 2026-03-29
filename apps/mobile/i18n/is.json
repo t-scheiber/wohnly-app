@@ -169,7 +169,17 @@
     "upgradeDescription": "Fjarlægðu auglýsingar og styrktu þróun Wohnly",
     "purchaseSuccess": "Velkomin í Wohnly Pro!",
     "restoreSuccess": "Kaup endurheimt",
-    "restoreNone": "Engin fyrri kaup fundust"
+    "restoreNone": "Engin fyrri kaup fundust",
+    "devices": "Tæki og öryggi",
+    "pendingDevices": "Tæki í bið",
+    "approvedDevices": "Samþykkt tæki",
+    "approveDevice": "Samþykkja",
+    "rejectDevice": "Hafna",
+    "deviceApproved": "Tæki samþykkt",
+    "deviceRejected": "Tæki hafnað",
+    "noDevices": "Engin tæki skráð ennþá",
+    "devicePending": "Bíður samþykktar",
+    "encryptedData": "Dulkóðað — opnaðu á tækinu þínu til að sjá"
   },
   "balances": {
     "owedToYou": "Skulda þér",

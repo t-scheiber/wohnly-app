@@ -1,22 +1,8 @@
 /**
- * Client-side E2EE using XChaCha20-Poly1305 via react-native-libsodium.
- * Ported from haushoit/lib/crypto/encryption.ts.
- *
- * Note: react-native-libsodium provides the same API as libsodium-wrappers.
+ * Client-side E2EE using XChaCha20-Poly1305.
+ * Uses platform-aware sodium loader (native: react-native-libsodium, web: libsodium-wrappers).
  */
-
-let sodiumReady = false;
-let sodium: typeof import("react-native-libsodium") | null = null;
-
-async function ensureSodium() {
-  if (sodiumReady && sodium) return sodium;
-  // Dynamic import to avoid issues on web
-  const mod = await import("react-native-libsodium");
-  await mod.ready;
-  sodium = mod;
-  sodiumReady = true;
-  return mod;
-}
+import { getSodium } from "./sodium";
 
 /**
  * Encrypt plaintext with a household key using XChaCha20-Poly1305.
@@ -27,7 +13,7 @@ export async function encryptData(
   householdKey: Uint8Array,
   associatedData?: string
 ): Promise<{ cipher: string; nonce: string }> {
-  const s = await ensureSodium();
+  const s = await getSodium();
 
   if (householdKey.length !== s.crypto_aead_xchacha20poly1305_ietf_KEYBYTES) {
     throw new Error(`Invalid key length: expected ${s.crypto_aead_xchacha20poly1305_ietf_KEYBYTES}, got ${householdKey.length}`);
@@ -61,7 +47,7 @@ export async function decryptData(
   householdKey: Uint8Array,
   associatedData?: string
 ): Promise<string> {
-  const s = await ensureSodium();
+  const s = await getSodium();
 
   const ciphertext = s.from_base64(cipherBase64);
   const nonce = s.from_base64(nonceBase64);

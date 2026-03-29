@@ -169,7 +169,17 @@
     "upgradeDescription": "యాడ్స్ తీసేసి Wohnly అభివృద్ధికి సపోర్ట్ చెయ్యి",
     "purchaseSuccess": "Wohnly Pro కి స్వాగతం!",
     "restoreSuccess": "కొనుగోళ్ళు విజయవంతంగా పునరుద్ధరించబడ్డాయి",
-    "restoreNone": "మునుపటి కొనుగోళ్ళు ఏమీ దొరకలేదు"
+    "restoreNone": "మునుపటి కొనుగోళ్ళు ఏమీ దొరకలేదు",
+    "devices": "డివైస్‌లు మరియు భద్రత",
+    "pendingDevices": "పెండింగ్ డివైస్‌లు",
+    "approvedDevices": "ఆమోదించబడిన డివైస్‌లు",
+    "approveDevice": "ఆమోదించు",
+    "rejectDevice": "తిరస్కరించు",
+    "deviceApproved": "డివైస్ ఆమోదించబడింది",
+    "deviceRejected": "డివైస్ తిరస్కరించబడింది",
+    "noDevices": "ఇంకా డివైస్‌లు ఏవీ నమోదు కాలేదు",
+    "devicePending": "ఆమోదం కోసం వేచి ఉంది",
+    "encryptedData": "ఎన్‌క్రిప్ట్ చేయబడింది — చూడటానికి నీ డివైస్‌లో తెరువు"
   },
   "balances": {
     "owedToYou": "నీకు ఇవ్వాల్సింది",

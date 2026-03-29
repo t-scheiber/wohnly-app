@@ -28,7 +28,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { name, description, amount, frequency, category, billingDate, splitType } = body;
+  const { name, description, amount, frequency, category, billingDate, splitType, encrypted, nonce } = body;
 
   if (!name?.trim()) return c.json({ error: "Name is required" }, 400);
   if (!amount || amount <= 0) return c.json({ error: "Amount must be positive" }, 400);
@@ -47,8 +47,10 @@ app.post("/", async (c) => {
   const subscription = await prisma.subscription.create({
     data: {
       householdId: member.householdId,
-      name: name.trim(),
-      description: description?.trim() || null,
+      name: encrypted ? name : name.trim(),
+      description: encrypted ? (description || null) : (description?.trim() || null),
+      encrypted: !!encrypted,
+      nonce: nonce || null,
       amount: new Decimal(amount),
       frequency,
       category: category.trim(),
@@ -82,13 +84,15 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Subscription not found" }, 404);
 
-  const { name, description, amount, frequency, category, billingDate, active } = body;
+  const { name, description, amount, frequency, category, billingDate, active, encrypted, nonce } = body;
 
   const subscription = await prisma.subscription.update({
     where: { id: subscriptionId },
     data: {
-      ...(name !== undefined && { name: name.trim() }),
-      ...(description !== undefined && { description: description?.trim() || null }),
+      ...(name !== undefined && { name: encrypted ? name : name.trim() }),
+      ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
+      ...(encrypted !== undefined && { encrypted }),
+      ...(nonce !== undefined && { nonce: nonce || null }),
       ...(amount !== undefined && { amount: new Decimal(amount) }),
       ...(frequency !== undefined && { frequency }),
       ...(category !== undefined && { category: category.trim() }),

@@ -340,6 +340,25 @@ export async function notifyDeletionRequest(
 }
 
 /**
+ * Send notification when a new device requests approval
+ */
+export async function notifyDeviceApprovalRequest(
+  targetUserId: string,
+  requestingUserName: string,
+  deviceName: string
+) {
+  return await sendPushNotification(targetUserId, {
+    title: "New Device Request",
+    body: `${requestingUserName} wants to access from ${deviceName}`,
+    channelId: "device_approval",
+    data: {
+      type: "device_approval",
+      url: "/settings",
+    },
+  });
+}
+
+/**
  * Clean up old notification logs (older than 30 days)
  */
 export async function cleanupOldNotifications() {

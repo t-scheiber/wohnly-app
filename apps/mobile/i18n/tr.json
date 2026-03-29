@@ -169,7 +169,17 @@
     "upgradeDescription": "Reklamları kaldır ve Wohnly'nin gelişimini destekle",
     "purchaseSuccess": "Wohnly Pro'ya hoş geldin!",
     "restoreSuccess": "Satın alımlar başarıyla geri yüklendi",
-    "restoreNone": "Önceki satın alım bulunamadı"
+    "restoreNone": "Önceki satın alım bulunamadı",
+    "devices": "Cihazlar ve Güvenlik",
+    "pendingDevices": "Bekleyen Cihazlar",
+    "approvedDevices": "Onaylı Cihazlar",
+    "approveDevice": "Onayla",
+    "rejectDevice": "Reddet",
+    "deviceApproved": "Cihaz onaylandı",
+    "deviceRejected": "Cihaz reddedildi",
+    "noDevices": "Henüz kayıtlı cihaz yok",
+    "devicePending": "Onay bekleniyor",
+    "encryptedData": "Şifreli — görmek için cihazında aç"
   },
   "balances": {
     "owedToYou": "Sana borçlu",
