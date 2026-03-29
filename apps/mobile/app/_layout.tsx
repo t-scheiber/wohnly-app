@@ -1,6 +1,6 @@
 import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Modal, Pressable, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Modal, Pressable, Alert, Platform } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -150,7 +150,15 @@ export default function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <AuthGate>
               <StatusBar style={theme.colorScheme === "dark" ? "light" : "dark"} />
-              <Slot />
+              {Platform.OS === "web" ? (
+                <View style={{ flex: 1, alignItems: "center" }}>
+                  <View style={{ flex: 1, width: "100%", maxWidth: 600 }}>
+                    <Slot />
+                  </View>
+                </View>
+              ) : (
+                <Slot />
+              )}
             </AuthGate>
           </QueryClientProvider>
         </SafeAreaProvider>
