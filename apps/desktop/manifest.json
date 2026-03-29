@@ -6,12 +6,83 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "background_color": "#faf8f5",
   "theme_color": "#6db5a8",
   "orientation": "any",
-  "categories": ["lifestyle", "productivity"],
+  "dir": "ltr",
   "lang": "en",
+  "categories": ["lifestyle", "productivity"],
   "iarc_rating_id": "",
+  "scope_extensions": [
+    { "origin": "https://api.wohnly.app" }
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Home",
+      "url": "/",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Add Expense",
+      "short_name": "Expense",
+      "url": "/(app)/(finances)",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Shopping List",
+      "short_name": "Shopping",
+      "url": "/(app)/(lists)/shopping",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Chores",
+      "short_name": "Chores",
+      "url": "/(app)/(chores)",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "file_handlers": [],
+  "protocol_handlers": [
+    {
+      "protocol": "web+wohnly",
+      "url": "/?action=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "widgets": [
+    {
+      "name": "Wohnly Chores",
+      "description": "View today's chores at a glance",
+      "tag": "chores",
+      "ms_ac_template": "widget/chores",
+      "screenshots": [],
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Wohnly Todos",
+      "description": "View your to-do list at a glance",
+      "tag": "todos",
+      "ms_ac_template": "widget/todos",
+      "screenshots": [],
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
   "icons": [
     {
       "src": "/icons/icon-44.png",
