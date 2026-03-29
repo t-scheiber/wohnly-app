@@ -72,6 +72,22 @@
       "url": "url"
     }
   },
+  "widgets": [
+    {
+      "name": "Wohnly Calendar",
+      "description": "Today's events and chores at a glance",
+      "tag": "calendar",
+      "ms_ac_template": "https://api.wohnly.app/api/widgets/calendar",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Wohnly Todos",
+      "description": "Your pending to-do items",
+      "tag": "todos",
+      "ms_ac_template": "https://api.wohnly.app/api/widgets/todos",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
   "edge_side_panel": {
     "preferred_width": 400
   },
