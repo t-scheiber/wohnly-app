@@ -33,6 +33,8 @@ export interface Todo {
   isPersonal: boolean;
   creatorId: string;
   dueDate?: Date | null;
+  encrypted?: boolean;
+  nonce?: string | null;
   createdAt: Date;
   updatedAt: Date;
   assignments?: TodoAssignment[];
@@ -51,6 +53,8 @@ export interface ShoppingItem {
   quantity?: string | null;
   checked: boolean;
   addedBy: string;
+  encrypted?: boolean;
+  nonce?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,6 +68,8 @@ export interface Chore {
   dayOfWeek?: number | null;
   lastDone?: Date | null;
   lastDoneBy?: string | null;
+  encrypted?: boolean;
+  nonce?: string | null;
   createdAt: Date;
   updatedAt: Date;
   assignments?: ChoreAssignment[];
@@ -92,6 +98,8 @@ export interface Event {
   recurrenceRule?: string | null;
   creatorId: string;
   externalId?: string | null;
+  encrypted?: boolean;
+  nonce?: string | null;
   createdAt: Date;
   updatedAt: Date;
   attendees?: EventAttendee[];
@@ -125,6 +133,8 @@ export interface Expense {
   paidFromAccount?: string | null;
   splitType: SplitType;
   date: Date;
+  encrypted?: boolean;
+  nonce?: string | null;
   createdAt: Date;
   updatedAt: Date;
   splits?: ExpenseSplit[];
@@ -154,6 +164,8 @@ export interface Subscription {
   active: boolean;
   paidById: string;
   splitType: SplitType;
+  encrypted?: boolean;
+  nonce?: string | null;
   createdAt: Date;
   updatedAt: Date;
   splits?: SubscriptionSplit[];
@@ -214,6 +226,16 @@ export interface MemberBalance {
     owed: number;
   };
   totalBalance: number;
+}
+
+export interface Device {
+  id: string;
+  userId: string;
+  name: string | null;
+  publicKey: string;
+  status: "pending" | "approved" | "rejected";
+  createdAt: Date;
+  user?: { id: string; name: string; email: string };
 }
 
 // API response types

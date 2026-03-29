@@ -169,7 +169,17 @@
     "upgradeDescription": "Ta bort annonser och stöd utvecklingen av Wohnly",
     "purchaseSuccess": "Välkommen till Wohnly Pro!",
     "restoreSuccess": "Köp har återställts",
-    "restoreNone": "Inga tidigare köp hittades"
+    "restoreNone": "Inga tidigare köp hittades",
+    "devices": "Enheter och säkerhet",
+    "pendingDevices": "Väntande enheter",
+    "approvedDevices": "Godkända enheter",
+    "approveDevice": "Godkänn",
+    "rejectDevice": "Avvisa",
+    "deviceApproved": "Enhet godkänd",
+    "deviceRejected": "Enhet avvisad",
+    "noDevices": "Inga enheter registrerade ännu",
+    "devicePending": "Väntar på godkännande",
+    "encryptedData": "Krypterat — öppna på din enhet för att visa"
   },
   "balances": {
     "owedToYou": "Skyldig dig",

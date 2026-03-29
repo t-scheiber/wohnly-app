@@ -169,7 +169,17 @@
     "upgradeDescription": "Pašalink reklamas ir palaikyk Wohnly vystymą",
     "purchaseSuccess": "Sveiki atvykę į Wohnly Pro!",
     "restoreSuccess": "Pirkiniai sėkmingai atkurti",
-    "restoreNone": "Ankstesnių pirkinių nerasta"
+    "restoreNone": "Ankstesnių pirkinių nerasta",
+    "devices": "Įrenginiai ir saugumas",
+    "pendingDevices": "Laukiantys įrenginiai",
+    "approvedDevices": "Patvirtinti įrenginiai",
+    "approveDevice": "Patvirtinti",
+    "rejectDevice": "Atmesti",
+    "deviceApproved": "Įrenginys patvirtintas",
+    "deviceRejected": "Įrenginys atmestas",
+    "noDevices": "Dar nėra registruotų įrenginių",
+    "devicePending": "Laukiama patvirtinimo",
+    "encryptedData": "Užšifruota — atidaryk savo įrenginyje, kad pamatytum"
   },
   "balances": {
     "owedToYou": "Skolingi tau",

@@ -28,7 +28,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, amount, category, currency, paidById, paidFromAccount, splitType, splits: customSplits, date } = body;
+  const { title, description, amount, category, currency, paidById, paidFromAccount, splitType, splits: customSplits, date, encrypted, nonce } = body;
 
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!amount || amount <= 0) return c.json({ error: "Amount must be positive" }, 400);
@@ -44,7 +44,6 @@ app.post("/", async (c) => {
   let splitEntries: { memberId: string; amount: typeof totalAmount }[];
 
   if (splitType === "custom" && customSplits?.length) {
-    // Custom splits: each entry has { memberId, amount } or { memberId, percentage }
     splitEntries = customSplits.map((s: { memberId: string; amount?: number; percentage?: number }) => ({
       memberId: s.memberId,
       amount: s.amount != null
@@ -52,13 +51,11 @@ app.post("/", async (c) => {
         : totalAmount.mul(s.percentage ?? 0).div(100),
     }));
   } else if (splitType === "percentage" && customSplits?.length) {
-    // Percentage splits
     splitEntries = customSplits.map((s: { memberId: string; percentage: number }) => ({
       memberId: s.memberId,
       amount: totalAmount.mul(s.percentage).div(100),
     }));
   } else {
-    // Equal split (default)
     const splitAmount = totalAmount.div(members.length);
     splitEntries = members.map((m) => ({
       memberId: m.id,
@@ -69,8 +66,10 @@ app.post("/", async (c) => {
   const expense = await prisma.expense.create({
     data: {
       householdId: member.householdId,
-      title: title.trim(),
-      description: description?.trim() || null,
+      title: encrypted ? title : title.trim(),
+      description: encrypted ? (description || null) : (description?.trim() || null),
+      encrypted: !!encrypted,
+      nonce: nonce || null,
       amount: totalAmount,
       currency: currency || "EUR",
       category: category?.trim() || null,
@@ -105,13 +104,15 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Expense not found" }, 404);
 
-  const { title, description, amount, category, paidById, paidFromAccount, date } = body;
+  const { title, description, amount, category, paidById, paidFromAccount, date, encrypted, nonce } = body;
 
   const expense = await prisma.expense.update({
     where: { id: expenseId },
     data: {
-      ...(title !== undefined && { title: title.trim() }),
-      ...(description !== undefined && { description: description?.trim() || null }),
+      ...(title !== undefined && { title: encrypted ? title : title.trim() }),
+      ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
+      ...(encrypted !== undefined && { encrypted }),
+      ...(nonce !== undefined && { nonce: nonce || null }),
       ...(amount !== undefined && { amount: new Decimal(amount) }),
       ...(category !== undefined && { category: category.trim() }),
       ...(paidById !== undefined && { paidById }),

@@ -169,7 +169,17 @@
     "upgradeDescription": "광고를 제거하고 Wohnly 개발을 지원해",
     "purchaseSuccess": "Wohnly Pro에 오신 것을 환영해!",
     "restoreSuccess": "구매가 성공적으로 복원됐어",
-    "restoreNone": "이전 구매 내역을 찾지 못했어"
+    "restoreNone": "이전 구매 내역을 찾지 못했어",
+    "devices": "기기 및 보안",
+    "pendingDevices": "대기 중인 기기",
+    "approvedDevices": "승인된 기기",
+    "approveDevice": "승인",
+    "rejectDevice": "거부",
+    "deviceApproved": "기기가 승인됐어",
+    "deviceRejected": "기기가 거부됐어",
+    "noDevices": "아직 등록된 기기가 없어",
+    "devicePending": "승인 대기 중",
+    "encryptedData": "암호화됨 — 기기에서 열어서 확인해"
   },
   "balances": {
     "owedToYou": "받을 돈",

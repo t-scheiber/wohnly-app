@@ -169,7 +169,17 @@
     "upgradeDescription": "広告を非表示にしてWohnlyの開発をサポートしよう",
     "purchaseSuccess": "Wohnly Proへようこそ！",
     "restoreSuccess": "購入が正常に復元されました",
-    "restoreNone": "以前の購入が見つかりませんでした"
+    "restoreNone": "以前の購入が見つかりませんでした",
+    "devices": "デバイスとセキュリティ",
+    "pendingDevices": "承認待ちのデバイス",
+    "approvedDevices": "承認済みのデバイス",
+    "approveDevice": "承認",
+    "rejectDevice": "拒否",
+    "deviceApproved": "デバイスが承認されました",
+    "deviceRejected": "デバイスが拒否されました",
+    "noDevices": "まだデバイスが登録されていません",
+    "devicePending": "承認待ち",
+    "encryptedData": "暗号化済み — デバイスで開いて確認してね"
   },
   "balances": {
     "owedToYou": "もらえるお金",

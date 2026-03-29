@@ -169,7 +169,17 @@
     "upgradeDescription": "বিজ্ঞাপন বন্ধ করো আর Wohnly-র উন্নয়নে সাহায্য করো",
     "purchaseSuccess": "Wohnly Pro-তে স্বাগতম!",
     "restoreSuccess": "কেনাকাটা সফলভাবে পুনরুদ্ধার হয়েছে",
-    "restoreNone": "আগের কোনো কেনাকাটা পাওয়া যায়নি"
+    "restoreNone": "আগের কোনো কেনাকাটা পাওয়া যায়নি",
+    "devices": "ডিভাইস ও নিরাপত্তা",
+    "pendingDevices": "অপেক্ষমাণ ডিভাইস",
+    "approvedDevices": "অনুমোদিত ডিভাইস",
+    "approveDevice": "অনুমোদন করো",
+    "rejectDevice": "প্রত্যাখ্যান করো",
+    "deviceApproved": "ডিভাইস অনুমোদিত হয়েছে",
+    "deviceRejected": "ডিভাইস প্রত্যাখ্যাত হয়েছে",
+    "noDevices": "এখনো কোনো ডিভাইস নিবন্ধিত হয়নি",
+    "devicePending": "অনুমোদনের জন্য অপেক্ষারত",
+    "encryptedData": "এনক্রিপ্ট করা — দেখতে তোমার ডিভাইসে খোলো"
   },
   "balances": {
     "owedToYou": "তোমাকে দিতে হবে",

@@ -169,7 +169,17 @@
     "upgradeDescription": "Премахни рекламите и подкрепи развитието на Wohnly",
     "purchaseSuccess": "Добре дошъл в Wohnly Pro!",
     "restoreSuccess": "Покупките са възстановени успешно",
-    "restoreNone": "Не са намерени предишни покупки"
+    "restoreNone": "Не са намерени предишни покупки",
+    "devices": "Устройства и сигурност",
+    "pendingDevices": "Изчакващи устройства",
+    "approvedDevices": "Одобрени устройства",
+    "approveDevice": "Одобри",
+    "rejectDevice": "Отхвърли",
+    "deviceApproved": "Устройството е одобрено",
+    "deviceRejected": "Устройството е отхвърлено",
+    "noDevices": "Все още няма регистрирани устройства",
+    "devicePending": "Изчаква одобрение",
+    "encryptedData": "Криптирано — отвори на устройството си, за да видиш"
   },
   "balances": {
     "owedToYou": "Дължат ти",

@@ -1,6 +1,7 @@
 /**
  * E2EE setup helpers for household creation and joining.
  * Orchestrates device registration, key generation, sealing, and caching.
+ * Works on all platforms (iOS, Android, Web).
  */
 import { Platform } from "react-native";
 import { generateDeviceKeys, generateHouseholdKey } from "./keys";
@@ -18,11 +19,6 @@ export async function ensureDeviceRegistered(): Promise<{
   publicKey: string;
   privateKey: Uint8Array;
 }> {
-  // Web doesn't support SecureStore — skip E2EE
-  if (Platform.OS === "web") {
-    throw new Error("E2EE not supported on web");
-  }
-
   const existing = await getDeviceKeys();
   if (existing) return existing;
 
@@ -30,7 +26,7 @@ export async function ensureDeviceRegistered(): Promise<{
   const { publicKey, privateKey } = await generateDeviceKeys();
 
   // Register with server
-  const res = await apiPost<{ deviceId: string }>("/api/devices/register", {
+  const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
     publicKey,
     name: Platform.OS,
   });
@@ -52,11 +48,6 @@ export async function ensureDeviceRegistered(): Promise<{
 export async function createHouseholdWithE2EE(name: string): Promise<{
   household: { id: string; inviteCode: string };
 }> {
-  if (Platform.OS === "web") {
-    // Fallback: create without E2EE on web
-    return apiPost("/api/households", { name });
-  }
-
   const device = await ensureDeviceRegistered();
   const householdKey = await generateHouseholdKey();
   const sealed = await sealToDevice(householdKey, device.publicKey);
@@ -82,8 +73,6 @@ export async function createHouseholdWithE2EE(name: string): Promise<{
  * If no envelope exists yet (creator hasn't distributed keys), this is a no-op.
  */
 export async function fetchAndCacheHouseholdKey(householdId: string): Promise<void> {
-  if (Platform.OS === "web") return;
-
   const device = await getDeviceKeys();
   if (!device) return; // No device keys — can't decrypt
 

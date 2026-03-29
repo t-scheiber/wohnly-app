@@ -39,7 +39,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, dueDate, assigneeIds } = body;
+  const { title, description, dueDate, assigneeIds, encrypted, nonce } = body;
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
@@ -48,10 +48,12 @@ app.post("/", async (c) => {
   const todo = await prisma.todo.create({
     data: {
       householdId: member.householdId,
-      title: title.trim(),
-      description: description?.trim() || null,
+      title: encrypted ? title : title.trim(),
+      description: encrypted ? (description || null) : (description?.trim() || null),
       creatorId: userId,
       dueDate: dueDate ? new Date(dueDate) : null,
+      encrypted: !!encrypted,
+      nonce: nonce || null,
       assignments: assigneeIds?.length
         ? { create: assigneeIds.map((id: string) => ({ memberId: id })) }
         : undefined,
@@ -76,7 +78,7 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Todo not found" }, 404);
 
-  const { title, description, completed, dueDate, assigneeIds } = body;
+  const { title, description, completed, dueDate, assigneeIds, encrypted, nonce } = body;
 
   const todo = await prisma.$transaction(async (tx) => {
     if (assigneeIds !== undefined) {
@@ -91,10 +93,12 @@ app.patch("/:id", async (c) => {
     return tx.todo.update({
       where: { id: todoId },
       data: {
-        ...(title !== undefined && { title: title.trim() }),
-        ...(description !== undefined && { description: description?.trim() || null }),
+        ...(title !== undefined && { title: encrypted ? title : title.trim() }),
+        ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
         ...(completed !== undefined && { completed }),
         ...(dueDate !== undefined && { dueDate: dueDate ? new Date(dueDate) : null }),
+        ...(encrypted !== undefined && { encrypted }),
+        ...(nonce !== undefined && { nonce: nonce || null }),
       },
       include: { assignments: { include: { member: true } } },
     });

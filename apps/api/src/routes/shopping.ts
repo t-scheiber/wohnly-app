@@ -29,7 +29,7 @@ app.get("/", async (c) => {
 // POST /api/shopping
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const { name, quantity, isPersonal } = await c.req.json();
+  const { name, quantity, isPersonal, encrypted, nonce } = await c.req.json();
 
   if (!name?.trim()) return c.json({ error: "Item name is required" }, 400);
 
@@ -39,10 +39,12 @@ app.post("/", async (c) => {
   const item = await prisma.shoppingItem.create({
     data: {
       householdId: member.householdId,
-      name: name.trim(),
-      quantity: quantity?.trim() || null,
+      name: encrypted ? name : name.trim(),
+      quantity: encrypted ? (quantity || null) : (quantity?.trim() || null),
       isPersonal: !!isPersonal,
       addedBy: userId,
+      encrypted: !!encrypted,
+      nonce: nonce || null,
     },
   });
 
@@ -66,9 +68,11 @@ app.patch("/:id", async (c) => {
   const item = await prisma.shoppingItem.update({
     where: { id: itemId },
     data: {
-      ...(body.name !== undefined && { name: body.name.trim() }),
-      ...(body.quantity !== undefined && { quantity: body.quantity?.trim() || null }),
+      ...(body.name !== undefined && { name: body.encrypted ? body.name : body.name.trim() }),
+      ...(body.quantity !== undefined && { quantity: body.encrypted ? (body.quantity || null) : (body.quantity?.trim() || null) }),
       ...(body.checked !== undefined && { checked: body.checked }),
+      ...(body.encrypted !== undefined && { encrypted: body.encrypted }),
+      ...(body.nonce !== undefined && { nonce: body.nonce || null }),
     },
   });
 
