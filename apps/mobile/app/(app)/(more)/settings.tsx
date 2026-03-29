@@ -4,7 +4,8 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
-import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold } from "@/lib/api/queries";
+import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences } from "@/lib/api/queries";
+import { apiPatch } from "@/lib/api/client";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
@@ -122,6 +123,29 @@ const THEME_LABELS: Record<string, Record<string, string>> = {
   de: { system: "System", light: "Hell", dark: "Dunkel" },
 };
 
+const CURRENCY_OPTIONS = [
+  { value: "EUR", label: "EUR (€)" },
+  { value: "USD", label: "USD ($)" },
+  { value: "GBP", label: "GBP (£)" },
+  { value: "CHF", label: "CHF" },
+  { value: "SEK", label: "SEK (kr)" },
+  { value: "NOK", label: "NOK (kr)" },
+  { value: "DKK", label: "DKK (kr)" },
+  { value: "PLN", label: "PLN (zł)" },
+  { value: "CZK", label: "CZK (Kč)" },
+  { value: "HUF", label: "HUF (Ft)" },
+  { value: "RON", label: "RON (lei)" },
+  { value: "TRY", label: "TRY (₺)" },
+  { value: "JPY", label: "JPY (¥)" },
+  { value: "CNY", label: "CNY (¥)" },
+  { value: "KRW", label: "KRW (₩)" },
+  { value: "INR", label: "INR (₹)" },
+  { value: "BRL", label: "BRL (R$)" },
+  { value: "CAD", label: "CAD (C$)" },
+  { value: "AUD", label: "AUD (A$)" },
+  { value: "NZD", label: "NZD (NZ$)" },
+];
+
 // ── Settings Screen ──
 
 export default function SettingsScreen() {
@@ -135,9 +159,11 @@ export default function SettingsScreen() {
   const setNickname = useSetNickname();
   const leaveHousehold = useLeaveHousehold();
   const notifications = useNotificationSettings();
+  const { data: prefs } = usePreferences();
 
   const [langPickerOpen, setLangPickerOpen] = useState(false);
   const [themePickerOpen, setThemePickerOpen] = useState(false);
+  const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false);
   const [nameModalOpen, setNameModalOpen] = useState(false);
   const [editName, setEditName] = useState("");
   const [savingName, setSavingName] = useState(false);
@@ -319,7 +345,8 @@ export default function SettingsScreen() {
 
         <SettingsSection title={t("settings.preferences")} colors={colors}>
           <SettingsRow colors={colors} label={t("settings.language")} value={currentLang.label} onPress={() => setLangPickerOpen(true)} />
-          <SettingsRow colors={colors} label={t("settings.theme")} value={themeLabels[mode]} onPress={() => setThemePickerOpen(true)} isLast={Platform.OS === "web"} />
+          <SettingsRow colors={colors} label={t("settings.theme")} value={themeLabels[mode]} onPress={() => setThemePickerOpen(true)} />
+          <SettingsRow colors={colors} label="Currency" value={prefs?.defaultCurrency || "EUR"} onPress={() => setCurrencyPickerOpen(true)} isLast={Platform.OS === "web"} />
           {Platform.OS !== "web" && (
             <SettingsRow
               colors={colors}
@@ -385,6 +412,18 @@ export default function SettingsScreen() {
         options={themeOptions}
         selected={mode}
         onSelect={setMode}
+        colors={colors}
+      />
+
+      <PickerModal
+        visible={currencyPickerOpen}
+        onClose={() => setCurrencyPickerOpen(false)}
+        title="Currency"
+        options={CURRENCY_OPTIONS}
+        selected={(prefs?.defaultCurrency || "EUR") as string}
+        onSelect={(code) => {
+          apiPatch("/api/user/preferences", { defaultCurrency: code });
+        }}
         colors={colors}
       />
 
