@@ -169,7 +169,17 @@
     "upgradeDescription": "移除广告并支持 Wohnly 的开发",
     "purchaseSuccess": "欢迎加入 Wohnly Pro！",
     "restoreSuccess": "购买已成功恢复",
-    "restoreNone": "未找到之前的购买记录"
+    "restoreNone": "未找到之前的购买记录",
+    "devices": "设备与安全",
+    "pendingDevices": "待审核设备",
+    "approvedDevices": "已批准设备",
+    "approveDevice": "批准",
+    "rejectDevice": "拒绝",
+    "deviceApproved": "设备已批准",
+    "deviceRejected": "设备已拒绝",
+    "noDevices": "还没有注册的设备",
+    "devicePending": "等待审核",
+    "encryptedData": "已加密 — 在你的设备上打开查看"
   },
   "balances": {
     "owedToYou": "别人欠你的",

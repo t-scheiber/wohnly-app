@@ -169,7 +169,17 @@
     "upgradeDescription": "Buang iklan dan sokong pembangunan Wohnly",
     "purchaseSuccess": "Selamat datang ke Wohnly Pro!",
     "restoreSuccess": "Pembelian berjaya dipulihkan",
-    "restoreNone": "Tiada pembelian terdahulu dijumpai"
+    "restoreNone": "Tiada pembelian terdahulu dijumpai",
+    "devices": "Peranti & Keselamatan",
+    "pendingDevices": "Peranti Menunggu",
+    "approvedDevices": "Peranti Diluluskan",
+    "approveDevice": "Luluskan",
+    "rejectDevice": "Tolak",
+    "deviceApproved": "Peranti diluluskan",
+    "deviceRejected": "Peranti ditolak",
+    "noDevices": "Belum ada peranti didaftarkan",
+    "devicePending": "Menunggu kelulusan",
+    "encryptedData": "Disulitkan — buka di peranti kau untuk tengok"
   },
   "balances": {
     "owedToYou": "Orang hutang kau",

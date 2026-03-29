@@ -39,7 +39,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, assigneeIds } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, assigneeIds, encrypted, nonce } = body;
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!frequency) return c.json({ error: "Frequency is required" }, 400);
 
@@ -49,8 +49,10 @@ app.post("/", async (c) => {
   const chore = await prisma.chore.create({
     data: {
       householdId: member.householdId,
-      title: title.trim(),
-      description: description?.trim() || null,
+      title: encrypted ? title : title.trim(),
+      description: encrypted ? (description || null) : (description?.trim() || null),
+      encrypted: !!encrypted,
+      nonce: nonce || null,
       frequency,
       dayOfWeek: dayOfWeek ?? null,
       dayOfMonth: dayOfMonth ?? null,
@@ -80,7 +82,7 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Chore not found" }, 404);
 
-  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, completed, assigneeIds } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, completed, assigneeIds, encrypted, nonce } = body;
 
   const chore = await prisma.$transaction(async (tx) => {
     if (assigneeIds !== undefined) {
@@ -100,8 +102,10 @@ app.patch("/:id", async (c) => {
     return tx.chore.update({
       where: { id: choreId },
       data: {
-        ...(title !== undefined && { title: title.trim() }),
-        ...(description !== undefined && { description: description?.trim() || null }),
+        ...(title !== undefined && { title: encrypted ? title : title.trim() }),
+        ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
+        ...(encrypted !== undefined && { encrypted }),
+        ...(nonce !== undefined && { nonce: nonce || null }),
         ...(frequency !== undefined && { frequency }),
         ...(dayOfWeek !== undefined && { dayOfWeek }),
         ...(dayOfMonth !== undefined && { dayOfMonth }),

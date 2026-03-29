@@ -4,8 +4,11 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
-import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences } from "@/lib/api/queries";
+import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences, useHouseholdDevices, usePendingDevices, useApproveDevice, useRejectDevice } from "@/lib/api/queries";
 import { apiPatch } from "@/lib/api/client";
+import { useHousehold } from "@/lib/hooks/useHousehold";
+import { useHouseholdKey } from "@/lib/hooks/useHouseholdKey";
+import { distributeKeyToDevice } from "@/lib/crypto/e2ee-setup";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
@@ -160,6 +163,12 @@ export default function SettingsScreen() {
   const leaveHousehold = useLeaveHousehold();
   const notifications = useNotificationSettings();
   const { data: prefs } = usePreferences();
+  const { data: household } = useHousehold();
+  const { data: devicesData } = useHouseholdDevices();
+  const { data: pendingData } = usePendingDevices();
+  const approveDevice = useApproveDevice();
+  const rejectDevice = useRejectDevice();
+  const { key: householdKey } = useHouseholdKey(household?.householdId ?? null);
 
   const [langPickerOpen, setLangPickerOpen] = useState(false);
   const [themePickerOpen, setThemePickerOpen] = useState(false);
@@ -255,6 +264,30 @@ export default function SettingsScreen() {
     }
   };
 
+  const handleApproveDevice = async (deviceId: string, publicKey: string) => {
+    try {
+      await approveDevice.mutateAsync(deviceId);
+      // Distribute the household key to the newly approved device
+      if (household?.householdId && householdKey) {
+        try {
+          await distributeKeyToDevice(household.householdId, householdKey, publicKey, deviceId);
+        } catch {
+          // Key distribution will be retried on next dashboard load
+        }
+      }
+    } catch (err) {
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+    }
+  };
+
+  const handleRejectDevice = async (deviceId: string) => {
+    try {
+      await rejectDevice.mutateAsync(deviceId);
+    } catch (err) {
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+    }
+  };
+
   const handleShareInvite = async () => {
     try {
       await Share.share({ message: t("household.shareCode") + "\nhttps://wohnly.app/join" });
@@ -340,6 +373,105 @@ export default function SettingsScreen() {
                 </TouchableOpacity>
               );
             })}
+          </SettingsSection>
+        )}
+
+        {/* Devices & Security */}
+        {Platform.OS !== "web" && (
+          <SettingsSection title={t("settings.devices")} colors={colors}>
+            {/* Pending devices */}
+            {pendingData?.devices && pendingData.devices.length > 0 && (
+              <>
+                <View style={{ padding: 12, paddingHorizontal: 16, backgroundColor: colors.background }}>
+                  <Text style={{ fontSize: 12, fontWeight: "600", color: colors.destructive, textTransform: "uppercase" }}>
+                    {t("settings.pendingDevices")} ({pendingData.count})
+                  </Text>
+                </View>
+                {pendingData.devices.map((device, i) => (
+                  <View
+                    key={device.id}
+                    style={{
+                      padding: 16,
+                      borderBottomWidth: i < pendingData.devices.length - 1 ? 1 : 0,
+                      borderBottomColor: colors.border,
+                    }}
+                  >
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 16, color: colors.text, fontWeight: "600" }}>
+                          {device.name || "Unknown"} — {device.user?.name || device.user?.email || ""}
+                        </Text>
+                        <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
+                          {t("settings.devicePending")}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "row", gap: 8 }}>
+                        <TouchableOpacity
+                          onPress={() => handleApproveDevice(device.id, device.publicKey)}
+                          disabled={approveDevice.isPending}
+                          style={{
+                            backgroundColor: colors.primary,
+                            borderRadius: 8,
+                            paddingHorizontal: 12,
+                            paddingVertical: 6,
+                            opacity: approveDevice.isPending ? 0.5 : 1,
+                          }}
+                        >
+                          <Text style={{ color: colors.primaryForeground, fontSize: 13, fontWeight: "600" }}>
+                            {t("settings.approveDevice")}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleRejectDevice(device.id)}
+                          disabled={rejectDevice.isPending}
+                          style={{
+                            borderWidth: 1,
+                            borderColor: colors.destructive,
+                            borderRadius: 8,
+                            paddingHorizontal: 12,
+                            paddingVertical: 6,
+                          }}
+                        >
+                          <Text style={{ color: colors.destructive, fontSize: 13, fontWeight: "600" }}>
+                            {t("settings.rejectDevice")}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+              </>
+            )}
+            {/* Approved devices */}
+            {devicesData?.devices && devicesData.devices.filter((d) => d.status === "approved").length > 0 ? (
+              devicesData.devices
+                .filter((d) => d.status === "approved")
+                .map((device, i, arr) => (
+                  <View
+                    key={device.id}
+                    style={{
+                      padding: 16,
+                      borderBottomWidth: i < arr.length - 1 ? 1 : 0,
+                      borderBottomColor: colors.border,
+                    }}
+                  >
+                    <Text style={{ fontSize: 16, color: colors.text, fontWeight: "600" }}>
+                      {device.name || "Unknown"}
+                    </Text>
+                    <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
+                      {device.user?.name || device.user?.email || ""}
+                    </Text>
+                  </View>
+                ))
+            ) : (
+              !pendingData?.devices?.length && (
+                <View style={{ padding: 16 }}>
+                  <Text style={{ fontSize: 15, color: colors.textSecondary, textAlign: "center" }}>
+                    {t("settings.noDevices")}
+                  </Text>
+                </View>
+              )
+            )}
           </SettingsSection>
         )}
 

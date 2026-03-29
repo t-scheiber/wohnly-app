@@ -169,7 +169,17 @@
     "upgradeDescription": "विज्ञापन हटाओ और Wohnly के विकास में सहयोग दो",
     "purchaseSuccess": "Wohnly Pro में स्वागत है!",
     "restoreSuccess": "खरीदारी सफलतापूर्वक रिस्टोर हो गई",
-    "restoreNone": "पिछली खरीदारी नहीं मिली"
+    "restoreNone": "पिछली खरीदारी नहीं मिली",
+    "devices": "डिवाइस और सुरक्षा",
+    "pendingDevices": "लंबित डिवाइस",
+    "approvedDevices": "स्वीकृत डिवाइस",
+    "approveDevice": "स्वीकार करो",
+    "rejectDevice": "अस्वीकार करो",
+    "deviceApproved": "डिवाइस स्वीकृत हो गया",
+    "deviceRejected": "डिवाइस अस्वीकार हो गया",
+    "noDevices": "अभी कोई डिवाइस रजिस्टर नहीं है",
+    "devicePending": "स्वीकृति की प्रतीक्षा में",
+    "encryptedData": "एन्क्रिप्टेड — देखने के लिए अपने डिवाइस पर खोलो"
   },
   "balances": {
     "owedToYou": "तुम्हें मिलने हैं",

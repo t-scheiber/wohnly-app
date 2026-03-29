@@ -169,7 +169,17 @@
     "upgradeDescription": "Odstráň reklamy a podpor vývoj Wohnly",
     "purchaseSuccess": "Vitaj vo Wohnly Pro!",
     "restoreSuccess": "Nákupy boli úspešne obnovené",
-    "restoreNone": "Žiadne predchádzajúce nákupy neboli nájdené"
+    "restoreNone": "Žiadne predchádzajúce nákupy neboli nájdené",
+    "devices": "Zariadenia a bezpečnosť",
+    "pendingDevices": "Čakajúce zariadenia",
+    "approvedDevices": "Schválené zariadenia",
+    "approveDevice": "Schváliť",
+    "rejectDevice": "Odmietnuť",
+    "deviceApproved": "Zariadenie schválené",
+    "deviceRejected": "Zariadenie odmietnuté",
+    "noDevices": "Zatiaľ žiadne registrované zariadenia",
+    "devicePending": "Čaká na schválenie",
+    "encryptedData": "Zašifrované — otvor na svojom zariadení pre zobrazenie"
   },
   "balances": {
     "owedToYou": "Dlhujú ti",

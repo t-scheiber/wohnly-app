@@ -1,17 +1,7 @@
 /**
  * Key generation for E2EE.
- * Ported from haushoit/lib/crypto/keys.ts.
  */
-
-let sodium: typeof import("react-native-libsodium") | null = null;
-
-async function ensureSodium() {
-  if (sodium) return sodium;
-  const mod = await import("react-native-libsodium");
-  await mod.ready;
-  sodium = mod;
-  return mod;
-}
+import { getSodium } from "./sodium";
 
 /**
  * Generate an X25519 device keypair.
@@ -21,7 +11,7 @@ export async function generateDeviceKeys(): Promise<{
   publicKey: string; // base64
   privateKey: Uint8Array;
 }> {
-  const s = await ensureSodium();
+  const s = await getSodium();
   const keypair = s.crypto_box_keypair();
   return {
     publicKey: s.to_base64(keypair.publicKey),
@@ -34,6 +24,6 @@ export async function generateDeviceKeys(): Promise<{
  * Used with XChaCha20-Poly1305.
  */
 export async function generateHouseholdKey(): Promise<Uint8Array> {
-  const s = await ensureSodium();
+  const s = await getSodium();
   return s.crypto_aead_xchacha20poly1305_ietf_keygen();
 }

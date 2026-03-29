@@ -4,15 +4,15 @@
  *
  * Flow:
  * 1. Check if we have the household key cached
- * 2. Fetch all devices in the household
+ * 2. Fetch all approved devices in the household
  * 3. Check which devices don't have an envelope yet
  * 4. Seal the key to those devices and upload
  */
 import { useEffect } from "react";
-import { Platform } from "react-native";
 import { getCachedHouseholdKey } from "@/lib/crypto/household-key-cache";
 import { getDeviceKeys } from "@/lib/crypto/device-storage";
 import { distributeKeyToDevice, fetchAndCacheHouseholdKey } from "@/lib/crypto/e2ee-setup";
+import { setActiveHouseholdId } from "@/lib/crypto/active-household";
 import { api } from "@/lib/api/client";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 
@@ -20,7 +20,11 @@ export function useKeyDistribution() {
   const { data: household } = useHousehold();
 
   useEffect(() => {
-    if (Platform.OS === "web") return;
+    // Set active household for encryption key access in queryFn
+    if (household?.householdId) {
+      setActiveHouseholdId(household.householdId);
+    }
+
     if (!household?.hasHousehold || !household?.householdId) return;
 
     const householdId = household.householdId;
@@ -35,13 +39,12 @@ export function useKeyDistribution() {
         }
         if (!hk) return; // We don't have the key — nothing to distribute
 
-        // Fetch all devices in the household that need keys
         const deviceKeys = await getDeviceKeys();
         if (!deviceKeys) return;
 
-        // Get all members' devices
+        // Get all approved devices in the household
         const res = await api<{ devices: { id: string; publicKey: string; userId: string }[] }>(
-          `/api/devices/list`
+          `/api/devices/household`
         );
 
         // For each device, check if it has an envelope
@@ -53,7 +56,6 @@ export function useKeyDistribution() {
               `/api/households/${householdId}/envelopes?deviceId=${device.id}`
             );
             if (!envRes.envelope) {
-              // This device doesn't have the key yet — distribute
               await distributeKeyToDevice(householdId, hk, device.publicKey, device.id);
             }
           } catch {

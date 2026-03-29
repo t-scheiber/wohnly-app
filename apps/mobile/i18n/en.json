@@ -169,7 +169,17 @@
     "upgradeDescription": "Remove ads and support Wohnly development",
     "purchaseSuccess": "Welcome to Wohnly Pro!",
     "restoreSuccess": "Purchases restored successfully",
-    "restoreNone": "No previous purchases found"
+    "restoreNone": "No previous purchases found",
+    "devices": "Devices & Security",
+    "pendingDevices": "Pending Devices",
+    "approvedDevices": "Approved Devices",
+    "approveDevice": "Approve",
+    "rejectDevice": "Reject",
+    "deviceApproved": "Device approved",
+    "deviceRejected": "Device rejected",
+    "noDevices": "No devices registered yet",
+    "devicePending": "Waiting for approval",
+    "encryptedData": "Encrypted — open on your device to view"
   },
   "balances": {
     "owedToYou": "Owed to you",

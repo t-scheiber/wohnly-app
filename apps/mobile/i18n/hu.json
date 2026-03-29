@@ -169,7 +169,17 @@
     "upgradeDescription": "Távolítsd el a hirdetéseket és támogasd a Wohnly fejlesztését",
     "purchaseSuccess": "Üdvözlünk a Wohnly Pro-ban!",
     "restoreSuccess": "Vásárlások sikeresen visszaállítva",
-    "restoreNone": "Nem találhatók korábbi vásárlások"
+    "restoreNone": "Nem találhatók korábbi vásárlások",
+    "devices": "Eszközök és biztonság",
+    "pendingDevices": "Függőben lévő eszközök",
+    "approvedDevices": "Jóváhagyott eszközök",
+    "approveDevice": "Jóváhagyás",
+    "rejectDevice": "Elutasítás",
+    "deviceApproved": "Eszköz jóváhagyva",
+    "deviceRejected": "Eszköz elutasítva",
+    "noDevices": "Még nincs regisztrált eszköz",
+    "devicePending": "Jóváhagyásra vár",
+    "encryptedData": "Titkosított — nyisd meg az eszközödön a megtekintéshez"
   },
   "balances": {
     "owedToYou": "Neked tartoznak",

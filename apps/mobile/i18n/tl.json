@@ -169,7 +169,17 @@
     "upgradeDescription": "Tanggalin ang ads at suportahan ang development ng Wohnly",
     "purchaseSuccess": "Welcome sa Wohnly Pro!",
     "restoreSuccess": "Matagumpay na na-restore ang mga binili",
-    "restoreNone": "Walang nahanap na dating binili"
+    "restoreNone": "Walang nahanap na dating binili",
+    "devices": "Mga Device at Seguridad",
+    "pendingDevices": "Mga Naghihintay na Device",
+    "approvedDevices": "Mga Na-approve na Device",
+    "approveDevice": "I-approve",
+    "rejectDevice": "I-reject",
+    "deviceApproved": "Na-approve na ang device",
+    "deviceRejected": "Na-reject ang device",
+    "noDevices": "Wala pang nakarehistrong device",
+    "devicePending": "Naghihintay ng approval",
+    "encryptedData": "Naka-encrypt — buksan sa device mo para makita"
   },
   "balances": {
     "owedToYou": "Utang sa'yo",

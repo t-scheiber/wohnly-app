@@ -169,7 +169,17 @@
     "upgradeDescription": "Eemalda reklaamid ja toeta Wohnly arendust",
     "purchaseSuccess": "Tere tulemast Wohnly Prosse!",
     "restoreSuccess": "Ostud edukalt taastatud",
-    "restoreNone": "Varasemaid oste ei leitud"
+    "restoreNone": "Varasemaid oste ei leitud",
+    "devices": "Seadmed ja turvalisus",
+    "pendingDevices": "Ootel seadmed",
+    "approvedDevices": "Kinnitatud seadmed",
+    "approveDevice": "Kinnita",
+    "rejectDevice": "Keeldu",
+    "deviceApproved": "Seade kinnitatud",
+    "deviceRejected": "Seade keeldutud",
+    "noDevices": "Seadmeid pole veel registreeritud",
+    "devicePending": "Ootab kinnitust",
+    "encryptedData": "Krüpteeritud — ava oma seadmes, et vaadata"
   },
   "balances": {
     "owedToYou": "Sulle võlgu",
