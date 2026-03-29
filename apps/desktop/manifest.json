@@ -72,24 +72,6 @@
       "url": "url"
     }
   },
-  "widgets": [
-    {
-      "name": "Wohnly Chores",
-      "description": "View today's chores at a glance",
-      "tag": "chores",
-      "ms_ac_template": "widget/chores",
-      "screenshots": [],
-      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Wohnly Todos",
-      "description": "View your to-do list at a glance",
-      "tag": "todos",
-      "ms_ac_template": "widget/todos",
-      "screenshots": [],
-      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
-    }
-  ],
   "edge_side_panel": {
     "preferred_width": 400
   },
