@@ -42,22 +42,26 @@ export default function FinancesScreen() {
   }, [tab, refetchExp, refetchSub]);
 
   const expenses = expData?.expenses ?? [];
-  const totalExpenses = expenses.reduce((sum, e) => sum + parseFloat(e.amount), 0);
+  const expenseTotals = expenses.reduce<Record<string, number>>((acc, e) => {
+    const currency = e.currency || "EUR";
+    acc[currency] = (acc[currency] || 0) + parseFloat(e.amount);
+    return acc;
+  }, {});
 
   const subscriptions = subData?.subscriptions ?? [];
-  const monthlyTotal = subscriptions
+  const subTotals = subscriptions
     .filter((s) => s.active)
-    .reduce((sum, s) => {
+    .reduce<Record<string, number>>((acc, s) => {
+      const currency = s.currency || "EUR";
       const amount = parseFloat(s.amount);
-      switch (s.frequency) {
-        case "weekly": return sum + amount * 4.33;
-        case "biweekly": return sum + amount * 2.17;
-        case "monthly": return sum + amount;
-        case "quarterly": return sum + amount / 3;
-        case "yearly": return sum + amount / 12;
-        default: return sum + amount;
-      }
-    }, 0);
+      const monthly = s.frequency === "weekly" ? amount * 4.33
+        : s.frequency === "biweekly" ? amount * 2.17
+        : s.frequency === "quarterly" ? amount / 3
+        : s.frequency === "yearly" ? amount / 12
+        : amount;
+      acc[currency] = (acc[currency] || 0) + monthly;
+      return acc;
+    }, {});
 
   const handleDeleteExpense = (id: string) => {
     Alert.alert("Delete Expense", "Are you sure?", [
@@ -217,16 +221,32 @@ export default function FinancesScreen() {
       {tab === "expenses" ? (
         <View style={{ backgroundColor: colors.primary, padding: 20, marginHorizontal: 16, marginBottom: 8, borderRadius: 16 }}>
           <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>Total Expenses</Text>
-          <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
-            {formatCurrency(totalExpenses)}
-          </Text>
+          {Object.keys(expenseTotals).length === 0 ? (
+            <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+              {formatCurrency(0)}
+            </Text>
+          ) : (
+            Object.entries(expenseTotals).map(([currency, total]) => (
+              <Text key={currency} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+                {formatCurrency(total, currency)}
+              </Text>
+            ))
+          )}
         </View>
       ) : (
         <View style={{ backgroundColor: "#6366f1", padding: 20, marginHorizontal: 16, marginBottom: 8, borderRadius: 16 }}>
           <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>Monthly Cost</Text>
-          <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
-            {formatCurrency(Math.round(monthlyTotal * 100) / 100)}
-          </Text>
+          {Object.keys(subTotals).length === 0 ? (
+            <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+              {formatCurrency(0)}
+            </Text>
+          ) : (
+            Object.entries(subTotals).map(([currency, total]) => (
+              <Text key={currency} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+                {formatCurrency(Math.round(total * 100) / 100, currency)}
+              </Text>
+            ))
+          )}
         </View>
       )}
 
