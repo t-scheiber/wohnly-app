@@ -169,7 +169,17 @@
     "upgradeDescription": "Rimuovi le pubblicità e sostieni lo sviluppo di Wohnly",
     "purchaseSuccess": "Benvenuto su Wohnly Pro!",
     "restoreSuccess": "Acquisti ripristinati con successo",
-    "restoreNone": "Nessun acquisto precedente trovato"
+    "restoreNone": "Nessun acquisto precedente trovato",
+    "devices": "Dispositivi e sicurezza",
+    "pendingDevices": "Dispositivi in attesa",
+    "approvedDevices": "Dispositivi approvati",
+    "approveDevice": "Approva",
+    "rejectDevice": "Rifiuta",
+    "deviceApproved": "Dispositivo approvato",
+    "deviceRejected": "Dispositivo rifiutato",
+    "noDevices": "Nessun dispositivo registrato ancora",
+    "devicePending": "In attesa di approvazione",
+    "encryptedData": "Crittografato — apri sul tuo dispositivo per visualizzare"
   },
   "balances": {
     "owedToYou": "Ti devono",

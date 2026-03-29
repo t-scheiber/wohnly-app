@@ -169,7 +169,17 @@
     "upgradeDescription": "ปิดโฆษณาและสนับสนุนการพัฒนา Wohnly",
     "purchaseSuccess": "ยินดีต้อนรับสู่ Wohnly Pro!",
     "restoreSuccess": "กู้คืนการซื้อสำเร็จแล้ว",
-    "restoreNone": "ไม่พบการซื้อก่อนหน้า"
+    "restoreNone": "ไม่พบการซื้อก่อนหน้า",
+    "devices": "อุปกรณ์และความปลอดภัย",
+    "pendingDevices": "อุปกรณ์ที่รอดำเนินการ",
+    "approvedDevices": "อุปกรณ์ที่อนุมัติแล้ว",
+    "approveDevice": "อนุมัติ",
+    "rejectDevice": "ปฏิเสธ",
+    "deviceApproved": "อนุมัติอุปกรณ์แล้ว",
+    "deviceRejected": "ปฏิเสธอุปกรณ์แล้ว",
+    "noDevices": "ยังไม่มีอุปกรณ์ที่ลงทะเบียน",
+    "devicePending": "รอการอนุมัติ",
+    "encryptedData": "เข้ารหัสแล้ว — เปิดบนอุปกรณ์ของคุณเพื่อดู"
   },
   "balances": {
     "owedToYou": "เขาเป็นหนี้คุณ",

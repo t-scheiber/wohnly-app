@@ -169,7 +169,17 @@
     "upgradeDescription": "Αφαίρεσε τις διαφημίσεις και στήριξε την ανάπτυξη του Wohnly",
     "purchaseSuccess": "Καλώς ήρθες στο Wohnly Pro!",
     "restoreSuccess": "Οι αγορές επαναφέρθηκαν επιτυχώς",
-    "restoreNone": "Δε βρέθηκαν προηγούμενες αγορές"
+    "restoreNone": "Δε βρέθηκαν προηγούμενες αγορές",
+    "devices": "Συσκευές και ασφάλεια",
+    "pendingDevices": "Εκκρεμείς συσκευές",
+    "approvedDevices": "Εγκεκριμένες συσκευές",
+    "approveDevice": "Έγκριση",
+    "rejectDevice": "Απόρριψη",
+    "deviceApproved": "Η συσκευή εγκρίθηκε",
+    "deviceRejected": "Η συσκευή απορρίφθηκε",
+    "noDevices": "Δεν υπάρχουν καταχωρημένες συσκευές ακόμα",
+    "devicePending": "Αναμονή για έγκριση",
+    "encryptedData": "Κρυπτογραφημένο — άνοιξε στη συσκευή σου για προβολή"
   },
   "balances": {
     "owedToYou": "Σου χρωστάνε",

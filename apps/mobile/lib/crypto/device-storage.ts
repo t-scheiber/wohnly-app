@@ -1,10 +1,11 @@
 /**
- * Device key storage using expo-secure-store.
- * Replaces haushoit's IndexedDB-based storage.
+ * Device key storage.
+ * Native (iOS/Android): expo-secure-store
+ * Web: IndexedDB
  *
- * The device private key is stored securely and NEVER leaves the device.
+ * The device private key NEVER leaves the device.
  */
-import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
 
 const DEVICE_ID_KEY = "wohnly_device_id";
 const DEVICE_PUBLIC_KEY = "wohnly_device_public_key";
@@ -33,14 +34,67 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes;
 }
 
-/**
- * Save device keys to SecureStore.
- */
+// ── IndexedDB helpers (web only) ──
+
+const IDB_NAME = "wohnly-keys";
+const IDB_STORE = "device-keys";
+
+function openIDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => {
+      req.result.createObjectStore(IDB_STORE);
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function idbGet(key: string): Promise<string | null> {
+  const db = await openIDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, "readonly");
+    const req = tx.objectStore(IDB_STORE).get(key);
+    req.onsuccess = () => resolve(req.result ?? null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function idbSet(key: string, value: string): Promise<void> {
+  const db = await openIDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, "readwrite");
+    tx.objectStore(IDB_STORE).put(value, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function idbDelete(key: string): Promise<void> {
+  const db = await openIDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, "readwrite");
+    tx.objectStore(IDB_STORE).delete(key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+// ── Public API ──
+
 export async function saveDeviceKeys(
   deviceId: string,
   publicKey: string,
   privateKey: Uint8Array
 ): Promise<void> {
+  if (Platform.OS === "web") {
+    await idbSet(DEVICE_ID_KEY, deviceId);
+    await idbSet(DEVICE_PUBLIC_KEY, publicKey);
+    await idbSet(DEVICE_PRIVATE_KEY, uint8ArrayToBase64(privateKey));
+    return;
+  }
+
+  const SecureStore = await import("expo-secure-store");
   await SecureStore.setItemAsync(DEVICE_ID_KEY, deviceId, {
     keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
   });
@@ -52,13 +106,21 @@ export async function saveDeviceKeys(
   });
 }
 
-/**
- * Retrieve device keys from SecureStore.
- */
 export async function getDeviceKeys(): Promise<DeviceKeyStore | null> {
-  const deviceId = await SecureStore.getItemAsync(DEVICE_ID_KEY);
-  const publicKey = await SecureStore.getItemAsync(DEVICE_PUBLIC_KEY);
-  const privateKeyB64 = await SecureStore.getItemAsync(DEVICE_PRIVATE_KEY);
+  let deviceId: string | null;
+  let publicKey: string | null;
+  let privateKeyB64: string | null;
+
+  if (Platform.OS === "web") {
+    deviceId = await idbGet(DEVICE_ID_KEY);
+    publicKey = await idbGet(DEVICE_PUBLIC_KEY);
+    privateKeyB64 = await idbGet(DEVICE_PRIVATE_KEY);
+  } else {
+    const SecureStore = await import("expo-secure-store");
+    deviceId = await SecureStore.getItemAsync(DEVICE_ID_KEY);
+    publicKey = await SecureStore.getItemAsync(DEVICE_PUBLIC_KEY);
+    privateKeyB64 = await SecureStore.getItemAsync(DEVICE_PRIVATE_KEY);
+  }
 
   if (!deviceId || !publicKey || !privateKeyB64) return null;
 
@@ -69,18 +131,22 @@ export async function getDeviceKeys(): Promise<DeviceKeyStore | null> {
   };
 }
 
-/**
- * Check if device keys exist.
- */
 export async function hasDeviceKeys(): Promise<boolean> {
-  const deviceId = await SecureStore.getItemAsync(DEVICE_ID_KEY);
-  return deviceId !== null;
+  if (Platform.OS === "web") {
+    return (await idbGet(DEVICE_ID_KEY)) !== null;
+  }
+  const SecureStore = await import("expo-secure-store");
+  return (await SecureStore.getItemAsync(DEVICE_ID_KEY)) !== null;
 }
 
-/**
- * Clear device keys (for logout/reset).
- */
 export async function clearDeviceKeys(): Promise<void> {
+  if (Platform.OS === "web") {
+    await idbDelete(DEVICE_ID_KEY);
+    await idbDelete(DEVICE_PUBLIC_KEY);
+    await idbDelete(DEVICE_PRIVATE_KEY);
+    return;
+  }
+  const SecureStore = await import("expo-secure-store");
   await SecureStore.deleteItemAsync(DEVICE_ID_KEY);
   await SecureStore.deleteItemAsync(DEVICE_PUBLIC_KEY);
   await SecureStore.deleteItemAsync(DEVICE_PRIVATE_KEY);

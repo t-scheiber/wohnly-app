@@ -169,7 +169,17 @@
     "upgradeDescription": "Verwijder advertenties en steun de ontwikkeling van Wohnly",
     "purchaseSuccess": "Welkom bij Wohnly Pro!",
     "restoreSuccess": "Aankopen succesvol hersteld",
-    "restoreNone": "Geen eerdere aankopen gevonden"
+    "restoreNone": "Geen eerdere aankopen gevonden",
+    "devices": "Apparaten en beveiliging",
+    "pendingDevices": "Wachtende apparaten",
+    "approvedDevices": "Goedgekeurde apparaten",
+    "approveDevice": "Goedkeuren",
+    "rejectDevice": "Weigeren",
+    "deviceApproved": "Apparaat goedgekeurd",
+    "deviceRejected": "Apparaat geweigerd",
+    "noDevices": "Nog geen apparaten geregistreerd",
+    "devicePending": "Wachten op goedkeuring",
+    "encryptedData": "Versleuteld — open op je apparaat om te bekijken"
   },
   "balances": {
     "owedToYou": "Aan jou verschuldigd",

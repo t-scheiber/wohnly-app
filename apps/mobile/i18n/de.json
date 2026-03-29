@@ -169,7 +169,17 @@
     "upgradeDescription": "Werbung entfernen und Wohnly-Entwicklung unterstützen",
     "purchaseSuccess": "Willkommen bei Wohnly Pro!",
     "restoreSuccess": "Käufe erfolgreich wiederhergestellt",
-    "restoreNone": "Keine früheren Käufe gefunden"
+    "restoreNone": "Keine früheren Käufe gefunden",
+    "devices": "Geräte & Sicherheit",
+    "pendingDevices": "Ausstehende Geräte",
+    "approvedDevices": "Genehmigte Geräte",
+    "approveDevice": "Genehmigen",
+    "rejectDevice": "Ablehnen",
+    "deviceApproved": "Gerät genehmigt",
+    "deviceRejected": "Gerät abgelehnt",
+    "noDevices": "Noch keine Geräte registriert",
+    "devicePending": "Wartet auf Genehmigung",
+    "encryptedData": "Verschlüsselt — auf deinem Gerät öffnen"
   },
   "balances": {
     "owedToYou": "Dir geschuldet",

@@ -169,7 +169,17 @@
     "upgradeDescription": "Tắt quảng cáo và ủng hộ phát triển Wohnly",
     "purchaseSuccess": "Chào mừng đến với Wohnly Pro!",
     "restoreSuccess": "Khôi phục giao dịch mua thành công",
-    "restoreNone": "Không tìm thấy giao dịch mua trước đó"
+    "restoreNone": "Không tìm thấy giao dịch mua trước đó",
+    "devices": "Thiết bị và bảo mật",
+    "pendingDevices": "Thiết bị đang chờ",
+    "approvedDevices": "Thiết bị đã duyệt",
+    "approveDevice": "Duyệt",
+    "rejectDevice": "Từ chối",
+    "deviceApproved": "Đã duyệt thiết bị",
+    "deviceRejected": "Đã từ chối thiết bị",
+    "noDevices": "Chưa có thiết bị nào được đăng ký",
+    "devicePending": "Đang chờ duyệt",
+    "encryptedData": "Đã mã hóa — mở trên thiết bị của bạn để xem"
   },
   "balances": {
     "owedToYou": "Người khác nợ bạn",

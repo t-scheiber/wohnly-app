@@ -169,7 +169,17 @@
     "upgradeDescription": "Ondoa matangazo na usaidie maendeleo ya Wohnly",
     "purchaseSuccess": "Karibu kwenye Wohnly Pro!",
     "restoreSuccess": "Manunuzi yamerejeshwa kikamilifu",
-    "restoreNone": "Hakuna manunuzi ya awali yaliyopatikana"
+    "restoreNone": "Hakuna manunuzi ya awali yaliyopatikana",
+    "devices": "Vifaa na Usalama",
+    "pendingDevices": "Vifaa Vinavyosubiri",
+    "approvedDevices": "Vifaa Vilivyoidhinishwa",
+    "approveDevice": "Idhinisha",
+    "rejectDevice": "Kataa",
+    "deviceApproved": "Kifaa kimeidhinishwa",
+    "deviceRejected": "Kifaa kimekataliwa",
+    "noDevices": "Hakuna vifaa vilivyosajiliwa bado",
+    "devicePending": "Inasubiri idhini",
+    "encryptedData": "Imefichwa — fungua kwenye kifaa chako kuona"
   },
   "balances": {
     "owedToYou": "Unadaiwa",
