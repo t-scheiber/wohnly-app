@@ -1,7 +1,9 @@
-import { useState, useCallback } from "react";
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal } from "react-native";
+import { useState, useCallback, useRef } from "react";
+import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useExpenses, useSubscriptions } from "@/lib/api/queries";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import * as Haptics from "expo-haptics";
+import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription } from "@/lib/api/queries";
 import { AddExpenseForm } from "@/components/forms/AddExpenseForm";
 import { AddSubscriptionForm } from "@/components/forms/AddSubscriptionForm";
 import { Colors } from "@/constants/Colors";
@@ -25,9 +27,12 @@ export default function FinancesScreen() {
   const [tab, setTab] = useState<"expenses" | "subscriptions">("expenses");
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showSubForm, setShowSubForm] = useState(false);
+  const swipeableRefs = useRef<Map<string, any>>(new Map());
 
   const { data: expData, refetch: refetchExp } = useExpenses();
   const { data: subData, refetch: refetchSub } = useSubscriptions();
+  const deleteExpense = useDeleteExpense();
+  const deleteSubscription = useDeleteSubscription();
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
@@ -54,57 +59,114 @@ export default function FinancesScreen() {
       }
     }, 0);
 
-  const renderExpense = ({ item }: { item: Expense }) => (
-    <View
+  const handleDeleteExpense = (id: string) => {
+    Alert.alert("Delete Expense", "Are you sure?", [
+      { text: "Cancel", style: "cancel", onPress: () => swipeableRefs.current.get(id)?.close() },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          deleteExpense.mutate(id);
+        },
+      },
+    ]);
+  };
+
+  const handleDeleteSubscription = (id: string) => {
+    Alert.alert("Delete Subscription", "Are you sure?", [
+      { text: "Cancel", style: "cancel", onPress: () => swipeableRefs.current.get(id)?.close() },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          deleteSubscription.mutate(id);
+        },
+      },
+    ]);
+  };
+
+  const renderRightActions = (id: string, onDelete: (id: string) => void) => () => (
+    <TouchableOpacity
+      onPress={() => onDelete(id)}
       style={{
-        backgroundColor: colors.card,
+        backgroundColor: colors.destructive,
+        justifyContent: "center",
+        alignItems: "center",
+        width: 80,
         borderRadius: 12,
-        padding: 16,
         marginBottom: 8,
-        borderWidth: 1,
-        borderColor: colors.border,
+        marginLeft: 8,
       }}
     >
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1 }}>{item.title}</Text>
-        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>
-          {formatCurrency(item.amount, item.currency)}
-        </Text>
+      <Text style={{ color: "#fff", fontWeight: "700", fontSize: 14 }}>Delete</Text>
+    </TouchableOpacity>
+  );
+
+  const renderExpense = ({ item }: { item: Expense }) => (
+    <Swipeable
+      ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id, ref); }}
+      renderRightActions={renderRightActions(item.id, handleDeleteExpense)}
+      overshootRight={false}
+    >
+      <View
+        style={{
+          backgroundColor: colors.card,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 8,
+          borderWidth: 1,
+          borderColor: colors.border,
+        }}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1 }}>{item.title}</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>
+            {formatCurrency(item.amount, item.currency)}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
+          <Text style={{ fontSize: 13, color: colors.textSecondary }}>{item.category}</Text>
+          <Text style={{ fontSize: 13, color: colors.textSecondary }}>{formatDate(item.date)}</Text>
+        </View>
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
-        <Text style={{ fontSize: 13, color: colors.textSecondary }}>{item.category}</Text>
-        <Text style={{ fontSize: 13, color: colors.textSecondary }}>{formatDate(item.date)}</Text>
-      </View>
-    </View>
+    </Swipeable>
   );
 
   const renderSubscription = ({ item }: { item: Subscription }) => (
-    <View
-      style={{
-        backgroundColor: colors.card,
-        borderRadius: 12,
-        padding: 16,
-        marginBottom: 8,
-        borderWidth: 1,
-        borderColor: colors.border,
-        opacity: item.active ? 1 : 0.5,
-      }}
+    <Swipeable
+      ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id, ref); }}
+      renderRightActions={renderRightActions(item.id, handleDeleteSubscription)}
+      overshootRight={false}
     >
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1 }}>{item.name}</Text>
-        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>
-          {formatCurrency(item.amount, item.currency)}
-        </Text>
+      <View
+        style={{
+          backgroundColor: colors.card,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 8,
+          borderWidth: 1,
+          borderColor: colors.border,
+          opacity: item.active ? 1 : 0.5,
+        }}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1 }}>{item.name}</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>
+            {formatCurrency(item.amount, item.currency)}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
+          <Text style={{ fontSize: 13, color: colors.textSecondary }}>
+            {frequencyLabels[item.frequency] ?? item.frequency}{item.category ? ` · ${item.category}` : ""}
+          </Text>
+          {!item.active && (
+            <Text style={{ fontSize: 12, color: colors.destructive, fontWeight: "600" }}>Inactive</Text>
+          )}
+        </View>
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
-        <Text style={{ fontSize: 13, color: colors.textSecondary }}>
-          {frequencyLabels[item.frequency] ?? item.frequency} · {item.category}
-        </Text>
-        {!item.active && (
-          <Text style={{ fontSize: 12, color: colors.destructive, fontWeight: "600" }}>Inactive</Text>
-        )}
-      </View>
-    </View>
+    </Swipeable>
   );
 
   return (
@@ -197,14 +259,14 @@ export default function FinancesScreen() {
         />
       )}
 
+      <AdBanner />
+
       {/* Add Expense Modal */}
       <Modal visible={showExpenseForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowExpenseForm(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddExpenseForm onSuccess={() => setShowExpenseForm(false)} onCancel={() => setShowExpenseForm(false)} />
         </View>
       </Modal>
-
-      <AdBanner />
 
       {/* Add Subscription Modal */}
       <Modal visible={showSubForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowSubForm(false)}>
