@@ -179,12 +179,37 @@
     "deviceRejected": "Dispozitiv respins",
     "noDevices": "Niciun dispozitiv înregistrat încă",
     "devicePending": "Se așteaptă aprobarea",
-    "encryptedData": "Criptat — deschide pe dispozitivul tău pentru a vedea"
+    "encryptedData": "Criptat — deschide pe dispozitivul tău pentru a vedea",
+    "manageDevices": "Gestionează dispozitivele"
   },
   "balances": {
     "owedToYou": "Ți se datorează",
     "youOwe": "Datorezi",
     "settled": "Achitat",
     "totalBalance": "Sold total"
+  },
+  "widgets": {
+    "todosTitle": "De făcut",
+    "todosEmpty": "Totul gata!",
+    "calendarTitle": "Astăzi",
+    "calendarEmpty": "Niciun eveniment astăzi",
+    "shoppingTitle": "Listă de cumpărături",
+    "shoppingEmpty": "Lista de cumpărături e goală",
+    "itemsLeft": "{{count}} rămas(e)",
+    "moreItems": "+{{count}} mai mult(e)"
+  },
+  "devices": {
+    "approved": "Aprobat",
+    "pending": "În așteptare",
+    "rejected": "Respins",
+    "unnamed": "Dispozitiv fără nume",
+    "description": "Dispozitive asociate contului tău. Fiecare dispozitiv aprobat deține o copie criptată a cheii gospodăriei pentru criptare end-to-end.",
+    "noDevices": "Niciun dispozitiv înregistrat încă",
+    "renameDevice": "Redenumește dispozitivul",
+    "removeDevice": "Elimină dispozitivul",
+    "removeConfirm": "Elimini \"{{name}}\"? Acest dispozitiv va pierde accesul la datele criptate ale gospodăriei.",
+    "deviceNamePlaceholder": "ex. iPhone-ul meu, Laptop de serviciu",
+    "e2eeInfo": "Criptare end-to-end",
+    "e2eeDescription": "Datele gospodăriei tale sunt criptate cu chei accesibile doar dispozitivelor tale aprobate. Dispozitivele noi trebuie aprobate de un dispozitiv existent înainte de a putea decripta datele."
   }
 }

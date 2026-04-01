@@ -179,12 +179,37 @@
     "deviceRejected": "Zařízení odmítnuto",
     "noDevices": "Zatím žádná registrovaná zařízení",
     "devicePending": "Čeká na schválení",
-    "encryptedData": "Zašifrováno — otevři na svém zařízení pro zobrazení"
+    "encryptedData": "Zašifrováno — otevři na svém zařízení pro zobrazení",
+    "manageDevices": "Spravovat zařízení"
   },
   "balances": {
     "owedToYou": "Dluží ti",
     "youOwe": "Dlužíš",
     "settled": "Vyrovnáno",
     "totalBalance": "Celkový zůstatek"
+  },
+  "widgets": {
+    "todosTitle": "Úkoly",
+    "todosEmpty": "Vše hotovo!",
+    "calendarTitle": "Dnes",
+    "calendarEmpty": "Žádné události dnes",
+    "shoppingTitle": "Nákupní seznam",
+    "shoppingEmpty": "Nákupní seznam je prázdný",
+    "itemsLeft": "{{count}} zbývá",
+    "moreItems": "+{{count}} dalších"
+  },
+  "devices": {
+    "approved": "Schváleno",
+    "pending": "Čeká",
+    "rejected": "Odmítnuto",
+    "unnamed": "Zařízení bez názvu",
+    "description": "Zařízení spojená s tvým účtem. Každé schválené zařízení uchovává šifrovanou kopii klíče domácnosti pro koncové šifrování.",
+    "noDevices": "Zatím žádná registrovaná zařízení",
+    "renameDevice": "Přejmenovat zařízení",
+    "removeDevice": "Odebrat zařízení",
+    "removeConfirm": "Odebrat \"{{name}}\"? Toto zařízení ztratí přístup k šifrovaným datům domácnosti.",
+    "deviceNamePlaceholder": "např. Můj iPhone, Pracovní notebook",
+    "e2eeInfo": "Koncové šifrování",
+    "e2eeDescription": "Data tvé domácnosti jsou šifrována klíči, ke kterým mají přístup pouze tvá schválená zařízení. Nová zařízení musí být schválena stávajícím zařízením, než budou moci dešifrovat data."
   }
 }

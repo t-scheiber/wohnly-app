@@ -179,12 +179,37 @@
     "deviceRejected": "Seade keeldutud",
     "noDevices": "Seadmeid pole veel registreeritud",
     "devicePending": "Ootab kinnitust",
-    "encryptedData": "Krüpteeritud — ava oma seadmes, et vaadata"
+    "encryptedData": "Krüpteeritud — ava oma seadmes, et vaadata",
+    "manageDevices": "Halda seadmeid"
   },
   "balances": {
     "owedToYou": "Sulle võlgu",
     "youOwe": "Sa oled võlgu",
     "settled": "Tasutud",
     "totalBalance": "Kogusaldo"
+  },
+  "widgets": {
+    "todosTitle": "Ülesanded",
+    "todosEmpty": "Kõik tehtud!",
+    "calendarTitle": "Täna",
+    "calendarEmpty": "Täna sündmusi pole",
+    "shoppingTitle": "Ostunimekiri",
+    "shoppingEmpty": "Ostunimekiri on tühi",
+    "itemsLeft": "{{count}} alles",
+    "moreItems": "+{{count}} veel"
+  },
+  "devices": {
+    "approved": "Kinnitatud",
+    "pending": "Ootel",
+    "rejected": "Tagasi lükatud",
+    "unnamed": "Nimetu seade",
+    "description": "Sinu kontoga seotud seadmed. Iga kinnitatud seade hoiab krüpteeritud koopiat koduse võtme kohta otsast-otsani krüpteerimiseks.",
+    "noDevices": "Seadmeid pole veel registreeritud",
+    "renameDevice": "Nimeta seade ümber",
+    "removeDevice": "Eemalda seade",
+    "removeConfirm": "Eemaldada \"{{name}}\"? See seade kaotab juurdepääsu krüpteeritud kodustele andmetele.",
+    "deviceNamePlaceholder": "nt. Minu iPhone, Tööarvuti",
+    "e2eeInfo": "Otsast-otsani krüpteerimine",
+    "e2eeDescription": "Sinu kodu andmed on krüpteeritud võtmetega, millele pääsevad ligi ainult sinu kinnitatud seadmed. Uued seadmed peavad olema kinnitatud olemasoleva seadme poolt, enne kui saavad andmeid dekrüpteerida."
   }
 }

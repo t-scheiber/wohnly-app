@@ -179,12 +179,37 @@
     "deviceRejected": "Naprava zavrnjena",
     "noDevices": "Še ni registriranih naprav",
     "devicePending": "Čakanje na odobritev",
-    "encryptedData": "Šifrirano — odpri na svoji napravi za ogled"
+    "encryptedData": "Šifrirano — odpri na svoji napravi za ogled",
+    "manageDevices": "Upravljanje naprav"
   },
   "balances": {
     "owedToYou": "Dolgujejo ti",
     "youOwe": "Dolguješ",
     "settled": "Poravnano",
     "totalBalance": "Skupno stanje"
+  },
+  "widgets": {
+    "todosTitle": "Opravila",
+    "todosEmpty": "Vse opravljeno!",
+    "calendarTitle": "Danes",
+    "calendarEmpty": "Danes ni dogodkov",
+    "shoppingTitle": "Nakupovalni seznam",
+    "shoppingEmpty": "Nakupovalni seznam je prazen",
+    "itemsLeft": "{{count}} preostalo",
+    "moreItems": "+{{count}} več"
+  },
+  "devices": {
+    "approved": "Odobreno",
+    "pending": "V čakanju",
+    "rejected": "Zavrnjeno",
+    "unnamed": "Nepoimenovana naprava",
+    "description": "Naprave, povezane s tvojim računom. Vsaka odobrena naprava hrani šifrirano kopijo ključa gospodinjstva za šifriranje od konca do konca.",
+    "noDevices": "Še ni registriranih naprav",
+    "renameDevice": "Preimenuj napravo",
+    "removeDevice": "Odstrani napravo",
+    "removeConfirm": "Odstraniti \"{{name}}\"? Ta naprava bo izgubila dostop do šifriranih podatkov gospodinjstva.",
+    "deviceNamePlaceholder": "npr. Moj iPhone, Službeni prenosnik",
+    "e2eeInfo": "Šifriranje od konca do konca",
+    "e2eeDescription": "Podatki tvojega gospodinjstva so šifrirani s ključi, do katerih imajo dostop le tvoje odobrene naprave. Nove naprave mora odobriti obstoječa naprava, preden lahko dešifrirajo podatke."
   }
 }

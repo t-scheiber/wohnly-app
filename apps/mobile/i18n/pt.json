@@ -179,12 +179,37 @@
     "deviceRejected": "Dispositivo rejeitado",
     "noDevices": "Nenhum dispositivo registado ainda",
     "devicePending": "A aguardar aprovação",
-    "encryptedData": "Encriptado — abre no teu dispositivo para ver"
+    "encryptedData": "Encriptado — abre no teu dispositivo para ver",
+    "manageDevices": "Gerir dispositivos"
   },
   "balances": {
     "owedToYou": "Devem-te",
     "youOwe": "Deves",
     "settled": "Liquidado",
     "totalBalance": "Saldo total"
+  },
+  "widgets": {
+    "todosTitle": "Tarefas",
+    "todosEmpty": "Tudo feito!",
+    "calendarTitle": "Hoje",
+    "calendarEmpty": "Sem eventos hoje",
+    "shoppingTitle": "Lista de compras",
+    "shoppingEmpty": "A lista de compras está vazia",
+    "itemsLeft": "{{count}} restante(s)",
+    "moreItems": "+{{count}} mais"
+  },
+  "devices": {
+    "approved": "Aprovado",
+    "pending": "Pendente",
+    "rejected": "Rejeitado",
+    "unnamed": "Dispositivo sem nome",
+    "description": "Dispositivos ligados à tua conta. Cada dispositivo aprovado possui uma cópia encriptada da tua chave doméstica para encriptação ponto a ponto.",
+    "noDevices": "Nenhum dispositivo registado ainda",
+    "renameDevice": "Renomear dispositivo",
+    "removeDevice": "Remover dispositivo",
+    "removeConfirm": "Remover \"{{name}}\"? Este dispositivo perderá acesso aos dados encriptados do lar.",
+    "deviceNamePlaceholder": "ex. Meu iPhone, Portátil de trabalho",
+    "e2eeInfo": "Encriptação ponto a ponto",
+    "e2eeDescription": "Os dados do teu lar são encriptados com chaves que só os teus dispositivos aprovados podem aceder. Novos dispositivos devem ser aprovados por um dispositivo existente antes de poderem desencriptar dados."
   }
 }

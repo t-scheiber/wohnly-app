@@ -203,6 +203,88 @@ app.get("/calendar", async (c) => {
   return c.json(card);
 });
 
+// GET /api/widgets/shopping - Adaptive Card for shopping list widget
+app.get("/shopping", async (c) => {
+  const userId = c.get("userId") as string;
+
+  const member = await prisma.householdMember.findFirst({ where: { userId } });
+  if (!member) return c.json(emptyCard("No household", "Join a household to see your shopping list"));
+
+  const items = await prisma.shoppingItem.findMany({
+    where: { householdId: member.householdId, checked: false },
+    orderBy: { createdAt: "desc" },
+    take: 8,
+  });
+
+  const rows = items.map((item) => ({
+    type: "ColumnSet",
+    columns: [
+      {
+        type: "Column",
+        width: "auto",
+        items: [{
+          type: "TextBlock",
+          text: "☐",
+          size: "Medium",
+        }],
+        verticalContentAlignment: "Center",
+      },
+      {
+        type: "Column",
+        width: "stretch",
+        items: [{
+          type: "TextBlock",
+          text: item.name,
+          wrap: true,
+          size: "Default",
+        }],
+        verticalContentAlignment: "Center",
+      },
+      ...(item.quantity ? [{
+        type: "Column",
+        width: "auto",
+        items: [{
+          type: "TextBlock",
+          text: item.quantity,
+          size: "Small",
+          isSubtle: true,
+        }],
+        verticalContentAlignment: "Center",
+      }] : []),
+    ],
+    spacing: "Small",
+  }));
+
+  const card = {
+    type: "AdaptiveCard",
+    $schema: "http://adaptivecards.io/schemas/adaptive-card.json",
+    version: "1.5",
+    body: [
+      {
+        type: "TextBlock",
+        text: "Shopping List",
+        size: "Medium",
+        weight: "Bolder",
+      },
+      ...(rows.length > 0 ? rows : [{
+        type: "TextBlock",
+        text: "Shopping list is empty.",
+        wrap: true,
+        isSubtle: true,
+      }]),
+      {
+        type: "TextBlock",
+        text: `${items.length} items remaining`,
+        size: "Small",
+        isSubtle: true,
+        spacing: "Medium",
+      },
+    ],
+  };
+
+  return c.json(card);
+});
+
 function emptyCard(title: string, subtitle: string) {
   return {
     type: "AdaptiveCard",

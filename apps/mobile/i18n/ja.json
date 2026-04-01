@@ -179,12 +179,37 @@
     "deviceRejected": "デバイスが拒否されました",
     "noDevices": "まだデバイスが登録されていません",
     "devicePending": "承認待ち",
-    "encryptedData": "暗号化済み — デバイスで開いて確認してね"
+    "encryptedData": "暗号化済み — デバイスで開いて確認してね",
+    "manageDevices": "デバイス管理"
   },
   "balances": {
     "owedToYou": "もらえるお金",
     "youOwe": "払うお金",
     "settled": "精算済み",
     "totalBalance": "合計残高"
+  },
+  "widgets": {
+    "todosTitle": "やること",
+    "todosEmpty": "すべて完了！",
+    "calendarTitle": "今日",
+    "calendarEmpty": "今日の予定はありません",
+    "shoppingTitle": "買い物リスト",
+    "shoppingEmpty": "買い物リストは空です",
+    "itemsLeft": "残り {{count}} 件",
+    "moreItems": "+{{count}} 件"
+  },
+  "devices": {
+    "approved": "承認済み",
+    "pending": "承認待ち",
+    "rejected": "拒否済み",
+    "unnamed": "名前のないデバイス",
+    "description": "アカウントに紐づいたデバイス。各承認済みデバイスは、エンドツーエンド暗号化のためにハウスホールドキーの暗号化されたコピーを保持します。",
+    "noDevices": "まだデバイスが登録されていません",
+    "renameDevice": "デバイス名を変更",
+    "removeDevice": "デバイスを削除",
+    "removeConfirm": "\"{{name}}\" を削除しますか？このデバイスは暗号化されたハウスホールドデータにアクセスできなくなります。",
+    "deviceNamePlaceholder": "例: 私のiPhone、仕事用ノートPC",
+    "e2eeInfo": "エンドツーエンド暗号化",
+    "e2eeDescription": "ハウスホールドのデータは、承認済みデバイスのみがアクセスできるキーで暗号化されています。新しいデバイスは、データを復号するために既存のデバイスによる承認が必要です。"
   }
 }

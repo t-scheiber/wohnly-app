@@ -179,12 +179,37 @@
     "deviceRejected": "Appareil rejeté",
     "noDevices": "Aucun appareil enregistré pour l'instant",
     "devicePending": "En attente d'approbation",
-    "encryptedData": "Chiffré — ouvre sur ton appareil pour voir"
+    "encryptedData": "Chiffré — ouvre sur ton appareil pour voir",
+    "manageDevices": "Gérer les appareils"
   },
   "balances": {
     "owedToYou": "On te doit",
     "youOwe": "Tu dois",
     "settled": "Réglé",
     "totalBalance": "Solde total"
+  },
+  "widgets": {
+    "todosTitle": "Tâches",
+    "todosEmpty": "Tout est fait !",
+    "calendarTitle": "Aujourd'hui",
+    "calendarEmpty": "Aucun événement aujourd'hui",
+    "shoppingTitle": "Liste de courses",
+    "shoppingEmpty": "La liste de courses est vide",
+    "itemsLeft": "{{count}} restant(s)",
+    "moreItems": "+{{count}} de plus"
+  },
+  "devices": {
+    "approved": "Approuvé",
+    "pending": "En attente",
+    "rejected": "Rejeté",
+    "unnamed": "Appareil sans nom",
+    "description": "Appareils liés à ton compte. Chaque appareil approuvé détient une copie chiffrée de ta clé de foyer pour le chiffrement de bout en bout.",
+    "noDevices": "Aucun appareil enregistré",
+    "renameDevice": "Renommer l'appareil",
+    "removeDevice": "Supprimer l'appareil",
+    "removeConfirm": "Supprimer « {{name}} » ? Cet appareil perdra l'accès aux données chiffrées du foyer.",
+    "deviceNamePlaceholder": "ex. Mon iPhone, Portable de travail",
+    "e2eeInfo": "Chiffrement de bout en bout",
+    "e2eeDescription": "Les données de ton foyer sont chiffrées avec des clés accessibles uniquement par tes appareils approuvés. Les nouveaux appareils doivent être approuvés par un appareil existant avant de pouvoir déchiffrer les données."
   }
 }

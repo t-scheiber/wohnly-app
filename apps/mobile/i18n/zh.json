@@ -179,12 +179,37 @@
     "deviceRejected": "设备已拒绝",
     "noDevices": "还没有注册的设备",
     "devicePending": "等待审核",
-    "encryptedData": "已加密 — 在你的设备上打开查看"
+    "encryptedData": "已加密 — 在你的设备上打开查看",
+    "manageDevices": "管理设备"
   },
   "balances": {
     "owedToYou": "别人欠你的",
     "youOwe": "你欠的",
     "settled": "已结清",
     "totalBalance": "总余额"
+  },
+  "widgets": {
+    "todosTitle": "待办事项",
+    "todosEmpty": "全部完成！",
+    "calendarTitle": "今天",
+    "calendarEmpty": "今天没有日程",
+    "shoppingTitle": "购物清单",
+    "shoppingEmpty": "购物清单为空",
+    "itemsLeft": "还剩 {{count}} 项",
+    "moreItems": "+{{count}} 更多"
+  },
+  "devices": {
+    "approved": "已批准",
+    "pending": "待审核",
+    "rejected": "已拒绝",
+    "unnamed": "未命名设备",
+    "description": "与你的账户关联的设备。每个已批准的设备都持有你家庭密钥的加密副本，用于端到端加密。",
+    "noDevices": "尚无已注册的设备",
+    "renameDevice": "重命名设备",
+    "removeDevice": "移除设备",
+    "removeConfirm": "移除 \"{{name}}\"？此设备将失去对加密家庭数据的访问权限。",
+    "deviceNamePlaceholder": "例如 我的 iPhone、工作笔记本",
+    "e2eeInfo": "端到端加密",
+    "e2eeDescription": "你的家庭数据使用只有已批准设备才能访问的密钥进行加密。新设备必须由现有设备批准后才能解密数据。"
   }
 }

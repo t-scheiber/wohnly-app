@@ -179,12 +179,37 @@
     "deviceRejected": "Peranti ditolak",
     "noDevices": "Belum ada peranti didaftarkan",
     "devicePending": "Menunggu kelulusan",
-    "encryptedData": "Disulitkan — buka di peranti kau untuk tengok"
+    "encryptedData": "Disulitkan — buka di peranti kau untuk tengok",
+    "manageDevices": "Urus peranti"
   },
   "balances": {
     "owedToYou": "Orang hutang kau",
     "youOwe": "Kau hutang",
     "settled": "Dah selesai",
     "totalBalance": "Jumlah Baki"
+  },
+  "widgets": {
+    "todosTitle": "Tugasan",
+    "todosEmpty": "Semua siap!",
+    "calendarTitle": "Hari ini",
+    "calendarEmpty": "Tiada acara hari ini",
+    "shoppingTitle": "Senarai beli-belah",
+    "shoppingEmpty": "Senarai beli-belah kosong",
+    "itemsLeft": "{{count}} lagi",
+    "moreItems": "+{{count}} lagi"
+  },
+  "devices": {
+    "approved": "Diluluskan",
+    "pending": "Menunggu",
+    "rejected": "Ditolak",
+    "unnamed": "Peranti tanpa nama",
+    "description": "Peranti yang dipautkan ke akaun anda. Setiap peranti yang diluluskan menyimpan salinan terenkripsi kunci isi rumah untuk enkripsi hujung ke hujung.",
+    "noDevices": "Belum ada peranti yang didaftarkan",
+    "renameDevice": "Namakan semula peranti",
+    "removeDevice": "Alih keluar peranti",
+    "removeConfirm": "Alih keluar \"{{name}}\"? Peranti ini akan kehilangan akses kepada data isi rumah yang dienkripsi.",
+    "deviceNamePlaceholder": "cth. iPhone saya, Laptop kerja",
+    "e2eeInfo": "Enkripsi hujung ke hujung",
+    "e2eeDescription": "Data isi rumah anda dienkripsi dengan kunci yang hanya boleh diakses oleh peranti yang diluluskan. Peranti baharu mesti diluluskan oleh peranti sedia ada sebelum boleh menyahsulit data."
   }
 }

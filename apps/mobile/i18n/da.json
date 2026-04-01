@@ -179,12 +179,37 @@
     "deviceRejected": "Enhed afvist",
     "noDevices": "Ingen enheder registreret endnu",
     "devicePending": "Afventer godkendelse",
-    "encryptedData": "Krypteret — åbn på din enhed for at se"
+    "encryptedData": "Krypteret — åbn på din enhed for at se",
+    "manageDevices": "Administrer enheder"
   },
   "balances": {
     "owedToYou": "Skylder dig",
     "youOwe": "Du skylder",
     "settled": "Udlignet",
     "totalBalance": "Samlet saldo"
+  },
+  "widgets": {
+    "todosTitle": "Opgaver",
+    "todosEmpty": "Alt er klaret!",
+    "calendarTitle": "I dag",
+    "calendarEmpty": "Ingen begivenheder i dag",
+    "shoppingTitle": "Indkøbsliste",
+    "shoppingEmpty": "Indkøbslisten er tom",
+    "itemsLeft": "{{count}} tilbage",
+    "moreItems": "+{{count}} mere"
+  },
+  "devices": {
+    "approved": "Godkendt",
+    "pending": "Afventer",
+    "rejected": "Afvist",
+    "unnamed": "Unavngivet enhed",
+    "description": "Enheder forbundet til din konto. Hver godkendt enhed har en krypteret kopi af husstandsnøglen til end-to-end-kryptering.",
+    "noDevices": "Ingen enheder registreret endnu",
+    "renameDevice": "Omdøb enhed",
+    "removeDevice": "Fjern enhed",
+    "removeConfirm": "Fjern \"{{name}}\"? Denne enhed vil miste adgang til krypterede husstandsdata.",
+    "deviceNamePlaceholder": "f.eks. Min iPhone, Arbejds-laptop",
+    "e2eeInfo": "End-to-end-kryptering",
+    "e2eeDescription": "Din husstands data er krypteret med nøgler, som kun dine godkendte enheder kan tilgå. Nye enheder skal godkendes af en eksisterende enhed, før de kan dekryptere data."
   }
 }
