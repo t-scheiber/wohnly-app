@@ -206,6 +206,44 @@ Alternatively, submit the PWA version:
 
 The PWA route is simpler for updates since it picks up web deploys automatically, but the Tauri build provides a richer native experience (system tray, native menus, smaller runtime).
 
+#### macOS Signing Setup (one-time)
+
+The CI workflow signs, notarizes, and (optionally) submits to the Mac App Store. Before it can do that, you need to export your signing certificate and configure GitHub secrets.
+
+**On your Mac:**
+
+1. **Export the signing certificate**
+   - Open Keychain Access > My Certificates > `Developer ID Application: ...`
+   - Right-click > Export Items > Save as `.p12` with a password
+
+2. **Get your signing identity name**
+
+   ```bash
+   security find-identity -v -p codesigning
+   ```
+
+   Copy the line that says `Developer ID Application: Your Name (TEAMID)`.
+
+3. **Generate an app-specific password**
+   - Go to [appleid.apple.com](https://appleid.apple.com) > Sign-In and Security > App-Specific Passwords
+   - Generate one named "Wohnly CI"
+
+**Then add these as GitHub repo secrets:**
+
+| Secret | Value |
+| --- | --- |
+| `APPLE_CERTIFICATE` | `base64 -i certificate.p12 \| pbcopy` (paste the output) |
+| `APPLE_CERTIFICATE_PASSWORD` | The password you set when exporting the `.p12` |
+| `KEYCHAIN_PASSWORD` | Any random string, e.g. `wohnly-ci-keychain-2026` |
+| `APPLE_SIGNING_IDENTITY` | The identity string from step 2 |
+| `APPLE_ID` | Your Apple ID email |
+| `APPLE_APP_PASSWORD` | The app-specific password from step 3 |
+| `APPLE_TEAM_ID` | Your team ID (the part in parentheses from step 2) |
+| `ASC_API_KEY_ID` | `C5QRM2S8XQ` |
+| `ASC_API_ISSUER_ID` | `5f00ed40-b6d3-4426-8584-9fcd845087cd` |
+
+Once those secrets are set, the workflow will sign, notarize, and submit to the Mac App Store automatically when you dispatch with `submit: true`.
+
 ## Widgets
 
 Home screen widgets are available on all platforms:
@@ -231,6 +269,18 @@ To add a new language:
 1. Create a new `{code}.json` file with all keys translated
 2. Import it in `apps/mobile/i18n/index.ts`
 3. Add the language to the `LANGUAGES` array
+
+## Pending Tasks
+
+- [ ] **macOS signing secrets** — Export certificate and configure GitHub secrets (see [macOS Signing Setup](#macos-signing-setup-one-time) above)
+- [ ] **Desktop ads** — Set up Google AdSense or an alternative ad provider for the desktop platform (AdMob is mobile-only, not available in Tauri/web context)
+- [ ] **Store screenshots** — Take screenshots and add them to all app store listings:
+  - [ ] iOS (iPhone 6.7", 6.5", 5.5")
+  - [ ] iPadOS (12.9", 11")
+  - [ ] macOS (Mac App Store screenshots)
+  - [ ] Android (Google Play — phone + tablet)
+  - [ ] Windows (Microsoft Store screenshots)
+- [ ] **Submit for review** — Submit builds for store review on all platforms (iOS, iPadOS, macOS, Windows, Android)
 
 ## License
 
