@@ -1,0 +1,283 @@
+name: Build & Deploy Desktop (macOS + Windows)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/mobile/**'
+      - 'apps/desktop/**'
+      - 'packages/shared/**'
+      - '.github/workflows/deploy-desktop.yml'
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build"
+        required: true
+        type: choice
+        options:
+          - all
+          - macos
+          - windows
+      submit:
+        description: "Submit to stores after build"
+        required: false
+        type: boolean
+        default: false
+      release:
+        description: "Create GitHub release with artifacts"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-web:
+    name: Build web export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install sharp for icon generation
+        run: npm install --no-save sharp
+
+      - name: Generate Tauri icons
+        run: node apps/desktop/generate-icons.mjs
+
+      - name: Export web build
+        working-directory: apps/mobile
+        run: npx expo export --platform web
+
+      - name: Add PWA assets
+        working-directory: apps/desktop
+        run: bash build-pwa.sh
+
+      - name: Upload web dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/mobile/dist
+          retention-days: 1
+
+      - name: Upload Tauri icons
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-icons
+          path: apps/desktop/tauri/icons
+          retention-days: 1
+
+  # ── macOS: build, sign, notarize, optionally submit to Mac App Store ──
+
+  build-macos:
+    name: Build & sign macOS
+    needs: build-web
+    if: >
+      github.event_name == 'push' ||
+      inputs.platform == 'all' ||
+      inputs.platform == 'macos'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: apps/mobile/dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: tauri-icons
+          path: apps/desktop/tauri/icons
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/tauri
+
+      - name: Import Apple signing certificate
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+          rm certificate.p12
+
+      - name: Build Tauri app (signed)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        with:
+          projectPath: apps/desktop
+          tauriScript: npx tauri
+          args: --verbose
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: |
+            apps/desktop/tauri/target/release/bundle/dmg/*.dmg
+            apps/desktop/tauri/target/release/bundle/macos/*.app
+          retention-days: 30
+
+  submit-macos:
+    name: Submit to Mac App Store
+    needs: build-macos
+    if: >
+      github.event_name == 'workflow_dispatch' &&
+      inputs.submit &&
+      (inputs.platform == 'all' || inputs.platform == 'macos')
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+          path: artifacts/macos
+
+      - name: Get version
+        id: version
+        run: echo "version=$(jq -r '.version' apps/desktop/tauri/tauri.conf.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to App Store Connect
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          DMG=$(find artifacts/macos -name '*.dmg' | head -1)
+          if [ -z "$DMG" ]; then
+            echo "No .dmg found, looking for .app"
+            APP=$(find artifacts/macos -name '*.app' -type d | head -1)
+            # Create a pkg from the .app for App Store submission
+            productbuild --component "$APP" /Applications "Wohnly-${{ steps.version.outputs.version }}.pkg"
+            PKG="Wohnly-${{ steps.version.outputs.version }}.pkg"
+          else
+            PKG="$DMG"
+          fi
+
+          xcrun notarytool submit "$PKG" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_APP_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait
+
+          echo "Notarization complete. Submitting to App Store Connect..."
+
+          xcrun altool --upload-app \
+            --type macos \
+            --file "$PKG" \
+            --apiKey "${{ secrets.ASC_API_KEY_ID }}" \
+            --apiIssuer "${{ secrets.ASC_API_ISSUER_ID }}" \
+            --verbose
+
+  # ── Windows: build, optionally submit to Microsoft Store ──
+
+  build-windows:
+    name: Build Windows (.msi + .msix)
+    needs: build-web
+    if: >
+      github.event_name == 'push' ||
+      inputs.platform == 'all' ||
+      inputs.platform == 'windows'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: apps/mobile/dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: tauri-icons
+          path: apps/desktop/tauri/icons
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/tauri
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: apps/desktop
+          tauriScript: npx tauri
+          args: --verbose
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: |
+            apps/desktop/tauri/target/release/bundle/msi/*.msi
+            apps/desktop/tauri/target/release/bundle/nsis/*.exe
+          retention-days: 30
+
+  # Windows Store: download the .msi artifact from the build and upload
+  # manually at https://partner.microsoft.com/dashboard
+  # Or submit the PWA at https://wohnly.app via https://pwabuilder.com
+
+  # ── GitHub Release (optional) ──
+
+  release:
+    name: Create GitHub release
+    needs: [build-macos, build-windows]
+    if: >
+      github.event_name == 'workflow_dispatch' &&
+      inputs.release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+          path: artifacts/macos
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+          path: artifacts/windows
+
+      - name: Get version
+        id: version
+        run: echo "version=$(jq -r '.version' apps/desktop/tauri/tauri.conf.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: desktop-v${{ steps.version.outputs.version }}
+          name: Wohnly Desktop v${{ steps.version.outputs.version }}
+          files: |
+            artifacts/macos/**/*
+            artifacts/windows/**/*
+          draft: true

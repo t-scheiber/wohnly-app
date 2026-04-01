@@ -16,6 +16,9 @@ app.post("/", async (c) => {
   if (!name) {
     return c.json({ error: "name is required" }, 400);
   }
+  if (!deviceId || !sealedHK) {
+    return c.json({ error: "deviceId and sealedHK are required — register a device first" }, 400);
+  }
 
   const household = await prisma.$transaction(async (tx) => {
     const h = await tx.household.create({
@@ -33,24 +36,20 @@ app.post("/", async (c) => {
       include: { members: true },
     });
 
-    // TODO: E2EE — once device registration is wired up in the mobile app,
-    // make deviceId + sealedHK required again so every household has encryption from the start.
-    // See: apps/mobile/lib/crypto/ for the client-side implementation.
-    // Store sealed household key if device is registered (E2EE)
-    if (deviceId && sealedHK) {
-      const device = await tx.device.findFirst({
-        where: { id: deviceId, userId },
-      });
-      if (device) {
-        await tx.householdKeyEnvelope.create({
-          data: {
-            householdId: h.id,
-            deviceId,
-            sealedHK,
-          },
-        });
-      }
+    // Store sealed household key for the creating device (E2EE)
+    const device = await tx.device.findFirst({
+      where: { id: deviceId, userId },
+    });
+    if (!device) {
+      throw new Error("Device not found");
     }
+    await tx.householdKeyEnvelope.create({
+      data: {
+        householdId: h.id,
+        deviceId,
+        sealedHK,
+      },
+    });
 
     return h;
   });

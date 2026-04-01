@@ -377,103 +377,78 @@ export default function SettingsScreen() {
         )}
 
         {/* Devices & Security */}
-        {Platform.OS !== "web" && (
-          <SettingsSection title={t("settings.devices")} colors={colors}>
-            {/* Pending devices */}
-            {pendingData?.devices && pendingData.devices.length > 0 && (
-              <>
-                <View style={{ padding: 12, paddingHorizontal: 16, backgroundColor: colors.background }}>
-                  <Text style={{ fontSize: 12, fontWeight: "600", color: colors.destructive, textTransform: "uppercase" }}>
-                    {t("settings.pendingDevices")} ({pendingData.count})
-                  </Text>
-                </View>
-                {pendingData.devices.map((device, i) => (
-                  <View
-                    key={device.id}
-                    style={{
-                      padding: 16,
-                      borderBottomWidth: i < pendingData.devices.length - 1 ? 1 : 0,
-                      borderBottomColor: colors.border,
-                    }}
-                  >
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                      <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 16, color: colors.text, fontWeight: "600" }}>
-                          {device.name || "Unknown"} — {device.user?.name || device.user?.email || ""}
+        <SettingsSection title={t("settings.devices")} colors={colors}>
+          {/* Pending devices needing approval */}
+          {pendingData?.devices && pendingData.devices.length > 0 && (
+            <>
+              <View style={{ padding: 12, paddingHorizontal: 16, backgroundColor: colors.background }}>
+                <Text style={{ fontSize: 12, fontWeight: "600", color: colors.destructive, textTransform: "uppercase" }}>
+                  {t("settings.pendingDevices")} ({pendingData.count})
+                </Text>
+              </View>
+              {pendingData.devices.map((device, i) => (
+                <View
+                  key={device.id}
+                  style={{
+                    padding: 16,
+                    borderBottomWidth: i < pendingData.devices.length - 1 ? 1 : 0,
+                    borderBottomColor: colors.border,
+                  }}
+                >
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ fontSize: 16, color: colors.text, fontWeight: "600" }}>
+                        {device.name || "Unknown"} — {device.user?.name || device.user?.email || ""}
+                      </Text>
+                      <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
+                        {t("settings.devicePending")}
+                      </Text>
+                    </View>
+                    <View style={{ flexDirection: "row", gap: 8 }}>
+                      <TouchableOpacity
+                        onPress={() => handleApproveDevice(device.id, device.publicKey)}
+                        disabled={approveDevice.isPending}
+                        style={{
+                          backgroundColor: colors.primary,
+                          borderRadius: 8,
+                          paddingHorizontal: 12,
+                          paddingVertical: 6,
+                          opacity: approveDevice.isPending ? 0.5 : 1,
+                        }}
+                      >
+                        <Text style={{ color: colors.primaryForeground, fontSize: 13, fontWeight: "600" }}>
+                          {t("settings.approveDevice")}
                         </Text>
-                        <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
-                          {t("settings.devicePending")}
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => handleRejectDevice(device.id)}
+                        disabled={rejectDevice.isPending}
+                        style={{
+                          borderWidth: 1,
+                          borderColor: colors.destructive,
+                          borderRadius: 8,
+                          paddingHorizontal: 12,
+                          paddingVertical: 6,
+                        }}
+                      >
+                        <Text style={{ color: colors.destructive, fontSize: 13, fontWeight: "600" }}>
+                          {t("settings.rejectDevice")}
                         </Text>
-                      </View>
-                      <View style={{ flexDirection: "row", gap: 8 }}>
-                        <TouchableOpacity
-                          onPress={() => handleApproveDevice(device.id, device.publicKey)}
-                          disabled={approveDevice.isPending}
-                          style={{
-                            backgroundColor: colors.primary,
-                            borderRadius: 8,
-                            paddingHorizontal: 12,
-                            paddingVertical: 6,
-                            opacity: approveDevice.isPending ? 0.5 : 1,
-                          }}
-                        >
-                          <Text style={{ color: colors.primaryForeground, fontSize: 13, fontWeight: "600" }}>
-                            {t("settings.approveDevice")}
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => handleRejectDevice(device.id)}
-                          disabled={rejectDevice.isPending}
-                          style={{
-                            borderWidth: 1,
-                            borderColor: colors.destructive,
-                            borderRadius: 8,
-                            paddingHorizontal: 12,
-                            paddingVertical: 6,
-                          }}
-                        >
-                          <Text style={{ color: colors.destructive, fontSize: 13, fontWeight: "600" }}>
-                            {t("settings.rejectDevice")}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
+                      </TouchableOpacity>
                     </View>
                   </View>
-                ))}
-              </>
-            )}
-            {/* Approved devices */}
-            {devicesData?.devices && devicesData.devices.filter((d) => d.status === "approved").length > 0 ? (
-              devicesData.devices
-                .filter((d) => d.status === "approved")
-                .map((device, i, arr) => (
-                  <View
-                    key={device.id}
-                    style={{
-                      padding: 16,
-                      borderBottomWidth: i < arr.length - 1 ? 1 : 0,
-                      borderBottomColor: colors.border,
-                    }}
-                  >
-                    <Text style={{ fontSize: 16, color: colors.text, fontWeight: "600" }}>
-                      {device.name || "Unknown"}
-                    </Text>
-                    <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
-                      {device.user?.name || device.user?.email || ""}
-                    </Text>
-                  </View>
-                ))
-            ) : (
-              !pendingData?.devices?.length && (
-                <View style={{ padding: 16 }}>
-                  <Text style={{ fontSize: 15, color: colors.textSecondary, textAlign: "center" }}>
-                    {t("settings.noDevices")}
-                  </Text>
                 </View>
-              )
-            )}
-          </SettingsSection>
-        )}
+              ))}
+            </>
+          )}
+          <SettingsRow
+            colors={colors}
+            label={t("settings.manageDevices")}
+            value={`${devicesData?.devices?.filter((d) => d.status === "approved").length ?? 0} ${t("devices.approved").toLowerCase()}`}
+            onPress={() => router.push("/(app)/(more)/devices" as any)}
+            isLast
+          />
+        </SettingsSection>
 
         <SettingsSection title={t("settings.preferences")} colors={colors}>
           <SettingsRow colors={colors} label={t("settings.language")} value={currentLang.label} onPress={() => setLangPickerOpen(true)} />
