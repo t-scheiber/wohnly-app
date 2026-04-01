@@ -106,6 +106,11 @@ app.post("/stripe", async (c) => {
       const userId = session.client_reference_id || session.metadata?.userId;
 
       if (userId && session.payment_status === "paid") {
+        // Store payment_intent as providerSubId so charge.refunded events can match
+        const paymentIntentId = typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : session.payment_intent?.id ?? session.id;
+
         await prisma.userSubscription.upsert({
           where: { userId },
           create: {
@@ -113,13 +118,13 @@ app.post("/stripe", async (c) => {
             status: "active",
             plan: "lifetime",
             provider: "stripe",
-            providerSubId: session.id,
+            providerSubId: paymentIntentId,
           },
           update: {
             status: "active",
             plan: "lifetime",
             provider: "stripe",
-            providerSubId: session.id,
+            providerSubId: paymentIntentId,
           },
         });
       }
