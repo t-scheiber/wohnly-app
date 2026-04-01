@@ -98,6 +98,37 @@ export function useRejectDevice() {
   });
 }
 
+export function useMyDevices() {
+  return useQuery({
+    queryKey: ["my-devices"],
+    queryFn: () => api<{ devices: Device[] }>("/api/devices/list"),
+  });
+}
+
+export function useRenameDevice() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ deviceId, name }: { deviceId: string; name: string }) =>
+      apiPatch<{ device: Device }>(`/api/devices/${deviceId}`, { name }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["my-devices"] });
+      qc.invalidateQueries({ queryKey: ["household-devices"] });
+    },
+  });
+}
+
+export function useRemoveDevice() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (deviceId: string) =>
+      apiDelete(`/api/devices/${deviceId}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["my-devices"] });
+      qc.invalidateQueries({ queryKey: ["household-devices"] });
+    },
+  });
+}
+
 // ── Todos ──
 
 export function useTodos() {

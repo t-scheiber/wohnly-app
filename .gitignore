@@ -32,6 +32,10 @@ yarn-error.*
 .env
 .env*.local
 
+# Service account keys
+google-service-account.json
+wohnly-app-*.json
+
 # typescript
 *.tsbuildinfo
 
