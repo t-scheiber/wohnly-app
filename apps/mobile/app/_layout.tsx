@@ -99,6 +99,21 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   const [namePromptDismissed, setNamePromptDismissed] = useState(false);
   useConsent(); // GDPR consent for AdMob — runs once on app start
 
+  // Handle Stripe checkout return on web
+  useEffect(() => {
+    if (Platform.OS !== "web") return;
+    const params = new URLSearchParams(window.location.search);
+    const purchase = params.get("purchase");
+    if (purchase === "success") {
+      // Clean up URL and refresh entitlements
+      window.history.replaceState({}, "", window.location.pathname);
+      queryClient.invalidateQueries({ queryKey: ["entitlements"] });
+      Alert.alert("Wohnly Pro", "Welcome to Wohnly Pro!");
+    } else if (purchase === "cancelled") {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
   useEffect(() => {
     if (isPending) return;
 

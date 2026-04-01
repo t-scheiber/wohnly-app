@@ -16,6 +16,7 @@ import { LANGUAGES as ALL_LANGUAGES } from "@/i18n";
 import { clearDeviceKeys } from "@/lib/crypto/device-storage";
 import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
+import { apiPost } from "@/lib/api/client";
 
 // ── Picker Modal (works on web + native) ──
 
@@ -246,6 +247,13 @@ export default function SettingsScreen() {
 
   const handleUpgrade = async () => {
     try {
+      if (Platform.OS === "web") {
+        // Web/Desktop: redirect to Stripe Checkout
+        const { url } = await apiPost<{ url: string }>("/api/webhooks/stripe/checkout", {});
+        if (url) window.location.href = url;
+        return;
+      }
+      // Mobile: use RevenueCat
       const success = await purchaseLifetime();
       if (success) {
         Alert.alert(t("settings.premium"), t("settings.purchaseSuccess"));
@@ -257,6 +265,10 @@ export default function SettingsScreen() {
 
   const handleRestore = async () => {
     try {
+      if (Platform.OS === "web") {
+        // Web users don't need restore — entitlements sync automatically from the API
+        return;
+      }
       const success = await restorePurchases();
       Alert.alert(t("settings.premium"), success ? t("settings.restoreSuccess") : t("settings.restoreNone"));
     } catch (err) {
@@ -490,7 +502,7 @@ export default function SettingsScreen() {
             onPress={entitlements?.premium ? undefined : handleUpgrade}
             isLast={entitlements?.premium}
           />
-          {!entitlements?.premium && (
+          {!entitlements?.premium && Platform.OS !== "web" && (
             <SettingsRow colors={colors} label={t("settings.restorePurchases")} onPress={handleRestore} isLast />
           )}
         </SettingsSection>
