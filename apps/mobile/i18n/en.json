@@ -179,12 +179,37 @@
     "deviceRejected": "Device rejected",
     "noDevices": "No devices registered yet",
     "devicePending": "Waiting for approval",
+    "manageDevices": "Manage Devices",
     "encryptedData": "Encrypted — open on your device to view"
+  },
+  "devices": {
+    "approved": "Approved",
+    "pending": "Pending",
+    "rejected": "Rejected",
+    "unnamed": "Unnamed device",
+    "description": "Devices linked to your account. Each approved device holds an encrypted copy of your household key for end-to-end encryption.",
+    "noDevices": "No devices registered yet",
+    "renameDevice": "Rename Device",
+    "removeDevice": "Remove Device",
+    "removeConfirm": "Remove \"{{name}}\"? This device will lose access to encrypted household data.",
+    "deviceNamePlaceholder": "e.g. My iPhone, Work laptop",
+    "e2eeInfo": "End-to-End Encryption",
+    "e2eeDescription": "Your household data is encrypted with keys that only your approved devices can access. New devices must be approved by an existing device holder before they can decrypt data."
   },
   "balances": {
     "owedToYou": "Owed to you",
     "youOwe": "You owe",
     "settled": "Settled",
     "totalBalance": "Total Balance"
+  },
+  "widgets": {
+    "todosTitle": "Todos",
+    "todosEmpty": "All done!",
+    "calendarTitle": "Today",
+    "calendarEmpty": "No events today",
+    "shoppingTitle": "Shopping List",
+    "shoppingEmpty": "Shopping list is empty",
+    "itemsLeft": "{{count}} left",
+    "moreItems": "+{{count}} more"
   }
 }

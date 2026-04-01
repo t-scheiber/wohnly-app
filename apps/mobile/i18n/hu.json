@@ -179,12 +179,37 @@
     "deviceRejected": "Eszköz elutasítva",
     "noDevices": "Még nincs regisztrált eszköz",
     "devicePending": "Jóváhagyásra vár",
-    "encryptedData": "Titkosított — nyisd meg az eszközödön a megtekintéshez"
+    "encryptedData": "Titkosított — nyisd meg az eszközödön a megtekintéshez",
+    "manageDevices": "Eszközök kezelése"
   },
   "balances": {
     "owedToYou": "Neked tartoznak",
     "youOwe": "Te tartozol",
     "settled": "Rendezve",
     "totalBalance": "Teljes egyenleg"
+  },
+  "widgets": {
+    "todosTitle": "Teendők",
+    "todosEmpty": "Minden kész!",
+    "calendarTitle": "Ma",
+    "calendarEmpty": "Ma nincs esemény",
+    "shoppingTitle": "Bevásárlólista",
+    "shoppingEmpty": "A bevásárlólista üres",
+    "itemsLeft": "{{count}} maradt",
+    "moreItems": "+{{count}} további"
+  },
+  "devices": {
+    "approved": "Jóváhagyva",
+    "pending": "Függőben",
+    "rejected": "Elutasítva",
+    "unnamed": "Névtelen eszköz",
+    "description": "A fiókodhoz kapcsolt eszközök. Minden jóváhagyott eszköz a háztartási kulcsod titkosított másolatát tárolja a végpontok közötti titkosításhoz.",
+    "noDevices": "Még nincsenek regisztrált eszközök",
+    "renameDevice": "Eszköz átnevezése",
+    "removeDevice": "Eszköz eltávolítása",
+    "removeConfirm": "Eltávolítod a(z) \"{{name}}\" eszközt? Ez az eszköz elveszíti a hozzáférést a titkosított háztartási adatokhoz.",
+    "deviceNamePlaceholder": "pl. Az iPhone-om, Munkahelyi laptop",
+    "e2eeInfo": "Végpontok közötti titkosítás",
+    "e2eeDescription": "A háztartásod adatai olyan kulcsokkal vannak titkosítva, amelyekhez csak a jóváhagyott eszközeid férhetnek hozzá. Az új eszközöket egy meglévő eszköznek kell jóváhagynia, mielőtt visszafejthetik az adatokat."
   }
 }

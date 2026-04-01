@@ -179,12 +179,37 @@
     "deviceRejected": "Dispositivo rifiutato",
     "noDevices": "Nessun dispositivo registrato ancora",
     "devicePending": "In attesa di approvazione",
-    "encryptedData": "Crittografato — apri sul tuo dispositivo per visualizzare"
+    "encryptedData": "Crittografato — apri sul tuo dispositivo per visualizzare",
+    "manageDevices": "Gestisci dispositivi"
   },
   "balances": {
     "owedToYou": "Ti devono",
     "youOwe": "Devi",
     "settled": "Saldato",
     "totalBalance": "Saldo totale"
+  },
+  "widgets": {
+    "todosTitle": "Cose da fare",
+    "todosEmpty": "Tutto fatto!",
+    "calendarTitle": "Oggi",
+    "calendarEmpty": "Nessun evento oggi",
+    "shoppingTitle": "Lista della spesa",
+    "shoppingEmpty": "La lista della spesa è vuota",
+    "itemsLeft": "{{count}} rimanente/i",
+    "moreItems": "+{{count}} altro/i"
+  },
+  "devices": {
+    "approved": "Approvato",
+    "pending": "In attesa",
+    "rejected": "Rifiutato",
+    "unnamed": "Dispositivo senza nome",
+    "description": "Dispositivi collegati al tuo account. Ogni dispositivo approvato detiene una copia crittografata della tua chiave domestica per la crittografia end-to-end.",
+    "noDevices": "Nessun dispositivo registrato",
+    "renameDevice": "Rinomina dispositivo",
+    "removeDevice": "Rimuovi dispositivo",
+    "removeConfirm": "Rimuovere \"{{name}}\"? Questo dispositivo perderà l'accesso ai dati crittografati del nucleo.",
+    "deviceNamePlaceholder": "es. Il mio iPhone, Portatile di lavoro",
+    "e2eeInfo": "Crittografia end-to-end",
+    "e2eeDescription": "I dati del tuo nucleo sono crittografati con chiavi accessibili solo ai tuoi dispositivi approvati. I nuovi dispositivi devono essere approvati da un dispositivo esistente prima di poter decrittare i dati."
   }
 }

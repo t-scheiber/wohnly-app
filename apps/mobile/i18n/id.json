@@ -179,12 +179,37 @@
     "deviceRejected": "Perangkat ditolak",
     "noDevices": "Belum ada perangkat terdaftar",
     "devicePending": "Menunggu persetujuan",
-    "encryptedData": "Terenkripsi — buka di perangkatmu untuk melihat"
+    "encryptedData": "Terenkripsi — buka di perangkatmu untuk melihat",
+    "manageDevices": "Kelola perangkat"
   },
   "balances": {
     "owedToYou": "Orang lain utang ke kamu",
     "youOwe": "Kamu utang",
     "settled": "Lunas",
     "totalBalance": "Total Saldo"
+  },
+  "widgets": {
+    "todosTitle": "Tugas",
+    "todosEmpty": "Semua selesai!",
+    "calendarTitle": "Hari ini",
+    "calendarEmpty": "Tidak ada acara hari ini",
+    "shoppingTitle": "Daftar belanja",
+    "shoppingEmpty": "Daftar belanja kosong",
+    "itemsLeft": "{{count}} tersisa",
+    "moreItems": "+{{count}} lagi"
+  },
+  "devices": {
+    "approved": "Disetujui",
+    "pending": "Menunggu",
+    "rejected": "Ditolak",
+    "unnamed": "Perangkat tanpa nama",
+    "description": "Perangkat yang terhubung ke akunmu. Setiap perangkat yang disetujui menyimpan salinan terenkripsi dari kunci rumah tangga untuk enkripsi end-to-end.",
+    "noDevices": "Belum ada perangkat yang terdaftar",
+    "renameDevice": "Ubah nama perangkat",
+    "removeDevice": "Hapus perangkat",
+    "removeConfirm": "Hapus \"{{name}}\"? Perangkat ini akan kehilangan akses ke data rumah tangga terenkripsi.",
+    "deviceNamePlaceholder": "mis. iPhone saya, Laptop kantor",
+    "e2eeInfo": "Enkripsi end-to-end",
+    "e2eeDescription": "Data rumah tanggamu dienkripsi dengan kunci yang hanya dapat diakses oleh perangkat yang disetujui. Perangkat baru harus disetujui oleh perangkat yang ada sebelum dapat mendekripsi data."
   }
 }

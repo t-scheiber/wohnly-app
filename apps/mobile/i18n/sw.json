@@ -179,12 +179,37 @@
     "deviceRejected": "Kifaa kimekataliwa",
     "noDevices": "Hakuna vifaa vilivyosajiliwa bado",
     "devicePending": "Inasubiri idhini",
-    "encryptedData": "Imefichwa — fungua kwenye kifaa chako kuona"
+    "encryptedData": "Imefichwa — fungua kwenye kifaa chako kuona",
+    "manageDevices": "Dhibiti vifaa"
   },
   "balances": {
     "owedToYou": "Unadaiwa",
     "youOwe": "Unadai",
     "settled": "Imeisha",
     "totalBalance": "Salio Zima"
+  },
+  "widgets": {
+    "todosTitle": "Kazi",
+    "todosEmpty": "Zote zimekamilika!",
+    "calendarTitle": "Leo",
+    "calendarEmpty": "Hakuna matukio leo",
+    "shoppingTitle": "Orodha ya ununuzi",
+    "shoppingEmpty": "Orodha ya ununuzi ni tupu",
+    "itemsLeft": "{{count}} zimesalia",
+    "moreItems": "+{{count}} zaidi"
+  },
+  "devices": {
+    "approved": "Imeidhinishwa",
+    "pending": "Inasubiri",
+    "rejected": "Imekataliwa",
+    "unnamed": "Kifaa bila jina",
+    "description": "Vifaa vilivyounganishwa na akaunti yako. Kila kifaa kilichoidhinishwa kina nakala iliyosimbwa ya funguo ya kaya kwa usimbaji fiche wa mwisho hadi mwisho.",
+    "noDevices": "Bado hakuna vifaa vilivyosajiliwa",
+    "renameDevice": "Badilisha jina la kifaa",
+    "removeDevice": "Ondoa kifaa",
+    "removeConfirm": "Ondoa \"{{name}}\"? Kifaa hiki kitapoteza upatikanaji wa data iliyosimbwa fiche ya kaya.",
+    "deviceNamePlaceholder": "mfano iPhone yangu, Laptop ya kazi",
+    "e2eeInfo": "Usimbaji fiche wa mwisho hadi mwisho",
+    "e2eeDescription": "Data ya kaya yako imesimbwa kwa funguo ambazo vifaa vyako vilivyoidhinishwa pekee vinaweza kufikia. Vifaa vipya lazima viidhinishwe na kifaa kilichopo kabla ya kuweza kufungua data."
   }
 }
