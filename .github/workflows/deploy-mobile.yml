@@ -1,6 +1,12 @@
 name: Build & Submit Mobile
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/mobile/**'
+      - 'packages/shared/**'
+      - '.github/workflows/deploy-mobile.yml'
   workflow_dispatch:
     inputs:
       platform:
@@ -26,7 +32,45 @@ on:
         default: false
 
 jobs:
-  build:
+  # Automatic preview build on push to main
+  auto-build:
+    if: github.event_name == 'push'
+    name: Auto-build preview (all platforms)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build iOS (preview)
+        working-directory: apps/mobile
+        run: eas build --profile preview --platform ios --non-interactive
+        env:
+          EXPO_NO_CAPABILITY_SYNC: "1"
+
+      - name: Build Android (preview)
+        working-directory: apps/mobile
+        run: eas build --profile preview --platform android --non-interactive
+        env:
+          EXPO_NO_CAPABILITY_SYNC: "1"
+
+  # Manual production build + optional store submission
+  manual-build:
+    if: github.event_name == 'workflow_dispatch'
     name: Build ${{ inputs.platform }} (${{ inputs.profile }})
     runs-on: ubuntu-latest
     steps:

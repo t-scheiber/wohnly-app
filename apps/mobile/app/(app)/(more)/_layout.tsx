@@ -17,6 +17,7 @@ export default function MoreLayout() {
     >
       <Stack.Screen name="index" options={{ title: "More" }} />
       <Stack.Screen name="settings" options={{ title: "Settings" }} />
+      <Stack.Screen name="devices" options={{ title: "My Devices" }} />
     </Stack>
   );
 }

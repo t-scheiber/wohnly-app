@@ -204,4 +204,43 @@ app.get("/pending", async (c) => {
   return c.json({ devices, count: devices.length });
 });
 
+// PATCH /api/devices/:id - Rename a device
+app.patch("/:id", async (c) => {
+  const userId = c.get("userId") as string;
+  const deviceId = c.req.param("id");
+  const { name } = await c.req.json();
+
+  if (!name || typeof name !== "string" || !name.trim())
+    return c.json({ error: "name is required" }, 400);
+
+  const device = await prisma.device.findUnique({ where: { id: deviceId } });
+  if (!device) return c.json({ error: "Device not found" }, 404);
+  if (device.userId !== userId)
+    return c.json({ error: "Not your device" }, 403);
+
+  const updated = await prisma.device.update({
+    where: { id: deviceId },
+    data: { name: name.trim() },
+  });
+
+  return c.json({ device: updated });
+});
+
+// DELETE /api/devices/:id - Revoke/remove a device
+app.delete("/:id", async (c) => {
+  const userId = c.get("userId") as string;
+  const deviceId = c.req.param("id");
+
+  const device = await prisma.device.findUnique({ where: { id: deviceId } });
+  if (!device) return c.json({ error: "Device not found" }, 404);
+  if (device.userId !== userId)
+    return c.json({ error: "Not your device" }, 403);
+
+  // Delete associated key envelopes first
+  await prisma.householdKeyEnvelope.deleteMany({ where: { deviceId } });
+  await prisma.device.delete({ where: { id: deviceId } });
+
+  return c.json({ success: true });
+});
+
 export default app;
