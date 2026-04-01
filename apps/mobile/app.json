@@ -19,7 +19,10 @@
         "UIRequiredDeviceCapabilities": []
       },
       "supportsMultipleInterfaceOrientations": true,
-      "buildNumber": "3"
+      "buildNumber": "3",
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.app.wohnly"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -46,6 +49,7 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      ["@bacons/apple-targets"],
       [
         "expo-splash-screen",
         {
@@ -60,6 +64,50 @@
       ],
       "expo-localization",
       "@react-native-community/datetimepicker",
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "WohnlyTodos",
+              "label": "Wohnly Todos",
+              "description": "Your pending household tasks",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "widgetFeatures": "reconfigurable",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "WohnlyCalendar",
+              "label": "Wohnly Calendar",
+              "description": "Today's household events",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "widgetFeatures": "reconfigurable",
+              "updatePeriodMillis": 900000
+            },
+            {
+              "name": "WohnlyShoppingList",
+              "label": "Wohnly Shopping List",
+              "description": "Your household shopping list",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "widgetFeatures": "reconfigurable",
+              "updatePeriodMillis": 900000
+            }
+          ],
+          "widgetTaskHandlerPath": "lib/widgets/android/widget-task-handler"
+        }
+      ],
       [
         "react-native-google-mobile-ads",
         {
