@@ -179,12 +179,37 @@
     "deviceRejected": "Apparaat geweigerd",
     "noDevices": "Nog geen apparaten geregistreerd",
     "devicePending": "Wachten op goedkeuring",
-    "encryptedData": "Versleuteld — open op je apparaat om te bekijken"
+    "encryptedData": "Versleuteld — open op je apparaat om te bekijken",
+    "manageDevices": "Apparaten beheren"
   },
   "balances": {
     "owedToYou": "Aan jou verschuldigd",
     "youOwe": "Jij bent verschuldigd",
     "settled": "Verrekend",
     "totalBalance": "Totaal saldo"
+  },
+  "widgets": {
+    "todosTitle": "Taken",
+    "todosEmpty": "Alles gedaan!",
+    "calendarTitle": "Vandaag",
+    "calendarEmpty": "Geen evenementen vandaag",
+    "shoppingTitle": "Boodschappenlijst",
+    "shoppingEmpty": "Boodschappenlijst is leeg",
+    "itemsLeft": "{{count}} over",
+    "moreItems": "+{{count}} meer"
+  },
+  "devices": {
+    "approved": "Goedgekeurd",
+    "pending": "In afwachting",
+    "rejected": "Afgewezen",
+    "unnamed": "Naamloos apparaat",
+    "description": "Apparaten gekoppeld aan je account. Elk goedgekeurd apparaat heeft een versleutelde kopie van je huishoudsleutel voor end-to-end-versleuteling.",
+    "noDevices": "Nog geen apparaten geregistreerd",
+    "renameDevice": "Apparaat hernoemen",
+    "removeDevice": "Apparaat verwijderen",
+    "removeConfirm": "\"{{name}}\" verwijderen? Dit apparaat verliest toegang tot versleutelde huishoudgegevens.",
+    "deviceNamePlaceholder": "bijv. Mijn iPhone, Werk-laptop",
+    "e2eeInfo": "End-to-end-versleuteling",
+    "e2eeDescription": "Je huishoudgegevens worden versleuteld met sleutels die alleen je goedgekeurde apparaten kunnen openen. Nieuwe apparaten moeten worden goedgekeurd door een bestaand apparaat voordat ze gegevens kunnen ontsleutelen."
   }
 }

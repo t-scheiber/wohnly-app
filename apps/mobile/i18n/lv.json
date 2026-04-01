@@ -179,12 +179,37 @@
     "deviceRejected": "Ierīce noraidīta",
     "noDevices": "Vēl nav reģistrētu ierīču",
     "devicePending": "Gaida apstiprinājumu",
-    "encryptedData": "Šifrēts — atver savā ierīcē, lai apskatītu"
+    "encryptedData": "Šifrēts — atver savā ierīcē, lai apskatītu",
+    "manageDevices": "Pārvaldīt ierīces"
   },
   "balances": {
     "owedToYou": "Parādā tev",
     "youOwe": "Tu esi parādā",
     "settled": "Nokārtots",
     "totalBalance": "Kopējā bilance"
+  },
+  "widgets": {
+    "todosTitle": "Uzdevumi",
+    "todosEmpty": "Viss izdarīts!",
+    "calendarTitle": "Šodien",
+    "calendarEmpty": "Šodien nav notikumu",
+    "shoppingTitle": "Iepirkumu saraksts",
+    "shoppingEmpty": "Iepirkumu saraksts ir tukšs",
+    "itemsLeft": "{{count}} atlikuši",
+    "moreItems": "+{{count}} vēl"
+  },
+  "devices": {
+    "approved": "Apstiprināts",
+    "pending": "Gaida",
+    "rejected": "Noraidīts",
+    "unnamed": "Ierīce bez nosaukuma",
+    "description": "Ierīces, kas saistītas ar tavu kontu. Katra apstiprinātā ierīce glabā šifrētu mājsaimniecības atslēgas kopiju pilnīgai šifrēšanai.",
+    "noDevices": "Vēl nav reģistrētu ierīču",
+    "renameDevice": "Pārdēvēt ierīci",
+    "removeDevice": "Noņemt ierīci",
+    "removeConfirm": "Noņemt \"{{name}}\"? Šī ierīce zaudēs piekļuvi šifrētiem mājsaimniecības datiem.",
+    "deviceNamePlaceholder": "piem. Mans iPhone, Darba klēpjdators",
+    "e2eeInfo": "Pilnīga šifrēšana",
+    "e2eeDescription": "Tavas mājsaimniecības dati tiek šifrēti ar atslēgām, kurām var piekļūt tikai tavas apstiprinātās ierīces. Jaunām ierīcēm jābūt apstiprinātām ar esošu ierīci, pirms tās var atšifrēt datus."
   }
 }

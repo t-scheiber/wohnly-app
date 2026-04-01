@@ -86,6 +86,13 @@
       "tag": "todos",
       "ms_ac_template": "https://api.wohnly.app/api/widgets/todos",
       "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Wohnly Shopping List",
+      "description": "Your household shopping list",
+      "tag": "shopping",
+      "ms_ac_template": "https://api.wohnly.app/api/widgets/shopping",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
     }
   ],
   "edge_side_panel": {

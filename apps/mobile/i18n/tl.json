@@ -179,12 +179,37 @@
     "deviceRejected": "Na-reject ang device",
     "noDevices": "Wala pang nakarehistrong device",
     "devicePending": "Naghihintay ng approval",
-    "encryptedData": "Naka-encrypt — buksan sa device mo para makita"
+    "encryptedData": "Naka-encrypt — buksan sa device mo para makita",
+    "manageDevices": "Pamahalaan ang mga device"
   },
   "balances": {
     "owedToYou": "Utang sa'yo",
     "youOwe": "Utang mo",
     "settled": "Settled na",
     "totalBalance": "Kabuuang Balanse"
+  },
+  "widgets": {
+    "todosTitle": "Gagawin",
+    "todosEmpty": "Tapos na lahat!",
+    "calendarTitle": "Ngayon",
+    "calendarEmpty": "Walang event ngayon",
+    "shoppingTitle": "Listahan ng bibilhin",
+    "shoppingEmpty": "Walang laman ang listahan",
+    "itemsLeft": "{{count}} natitira",
+    "moreItems": "+{{count}} pa"
+  },
+  "devices": {
+    "approved": "Naaprubahan",
+    "pending": "Naghihintay",
+    "rejected": "Tinanggihan",
+    "unnamed": "Walang pangalang device",
+    "description": "Mga device na naka-link sa iyong account. Bawat naaprubahang device ay may hawak na naka-encrypt na kopya ng household key para sa end-to-end encryption.",
+    "noDevices": "Wala pang nakarehistrong device",
+    "renameDevice": "Palitan ang pangalan ng device",
+    "removeDevice": "Alisin ang device",
+    "removeConfirm": "Alisin ang \"{{name}}\"? Mawawalan ng access ang device na ito sa encrypted household data.",
+    "deviceNamePlaceholder": "hal. Aking iPhone, Work laptop",
+    "e2eeInfo": "End-to-end encryption",
+    "e2eeDescription": "Ang data ng iyong household ay naka-encrypt gamit ang mga key na tanging mga naaprubahang device mo lang ang may access. Kailangang aprubahan ng isang umiiral na device ang mga bagong device bago nila ma-decrypt ang data."
   }
 }

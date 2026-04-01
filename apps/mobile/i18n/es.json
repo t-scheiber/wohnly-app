@@ -179,12 +179,37 @@
     "deviceRejected": "Dispositivo rechazado",
     "noDevices": "Aún no hay dispositivos registrados",
     "devicePending": "Esperando aprobación",
-    "encryptedData": "Cifrado — abre en tu dispositivo para ver"
+    "encryptedData": "Cifrado — abre en tu dispositivo para ver",
+    "manageDevices": "Gestionar dispositivos"
   },
   "balances": {
     "owedToYou": "Te deben",
     "youOwe": "Debes",
     "settled": "Saldado",
     "totalBalance": "Saldo total"
+  },
+  "widgets": {
+    "todosTitle": "Tareas",
+    "todosEmpty": "¡Todo hecho!",
+    "calendarTitle": "Hoy",
+    "calendarEmpty": "Sin eventos hoy",
+    "shoppingTitle": "Lista de compras",
+    "shoppingEmpty": "La lista de compras está vacía",
+    "itemsLeft": "{{count}} pendiente(s)",
+    "moreItems": "+{{count}} más"
+  },
+  "devices": {
+    "approved": "Aprobado",
+    "pending": "Pendiente",
+    "rejected": "Rechazado",
+    "unnamed": "Dispositivo sin nombre",
+    "description": "Dispositivos vinculados a tu cuenta. Cada dispositivo aprobado tiene una copia cifrada de tu clave del hogar para el cifrado de extremo a extremo.",
+    "noDevices": "Aún no hay dispositivos registrados",
+    "renameDevice": "Renombrar dispositivo",
+    "removeDevice": "Eliminar dispositivo",
+    "removeConfirm": "¿Eliminar \"{{name}}\"? Este dispositivo perderá acceso a los datos cifrados del hogar.",
+    "deviceNamePlaceholder": "ej. Mi iPhone, Portátil de trabajo",
+    "e2eeInfo": "Cifrado de extremo a extremo",
+    "e2eeDescription": "Los datos de tu hogar se cifran con claves a las que solo pueden acceder tus dispositivos aprobados. Los nuevos dispositivos deben ser aprobados por un dispositivo existente antes de poder descifrar datos."
   }
 }

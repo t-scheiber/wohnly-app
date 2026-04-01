@@ -179,12 +179,37 @@
     "deviceRejected": "Tæki hafnað",
     "noDevices": "Engin tæki skráð ennþá",
     "devicePending": "Bíður samþykktar",
-    "encryptedData": "Dulkóðað — opnaðu á tækinu þínu til að sjá"
+    "encryptedData": "Dulkóðað — opnaðu á tækinu þínu til að sjá",
+    "manageDevices": "Stjórna tækjum"
   },
   "balances": {
     "owedToYou": "Skulda þér",
     "youOwe": "Þú skuldar",
     "settled": "Uppgert",
     "totalBalance": "Heildarstaða"
+  },
+  "widgets": {
+    "todosTitle": "Verkefni",
+    "todosEmpty": "Allt búið!",
+    "calendarTitle": "Í dag",
+    "calendarEmpty": "Engir viðburðir í dag",
+    "shoppingTitle": "Innkaupalisti",
+    "shoppingEmpty": "Innkaupalisti er tómur",
+    "itemsLeft": "{{count}} eftir",
+    "moreItems": "+{{count}} fleiri"
+  },
+  "devices": {
+    "approved": "Samþykkt",
+    "pending": "Í bið",
+    "rejected": "Hafnað",
+    "unnamed": "Ónefnt tæki",
+    "description": "Tæki tengd reikningnum þínum. Hvert samþykkt tæki geymir dulkóðað afrit af heimilislyklinum fyrir enda-í-enda dulkóðun.",
+    "noDevices": "Engin tæki skráð ennþá",
+    "renameDevice": "Endurnefna tæki",
+    "removeDevice": "Fjarlægja tæki",
+    "removeConfirm": "Fjarlægja \"{{name}}\"? Þetta tæki mun missa aðgang að dulkóðuðum heimilagögnum.",
+    "deviceNamePlaceholder": "t.d. iPhone minn, Vinnufartölva",
+    "e2eeInfo": "Enda-í-enda dulkóðun",
+    "e2eeDescription": "Gögn heimilis þíns eru dulkóðuð með lyklum sem aðeins samþykkt tæki þín hafa aðgang að. Ný tæki verða að vera samþykkt af núverandi tæki áður en þau geta afkóðað gögn."
   }
 }

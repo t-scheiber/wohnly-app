@@ -179,12 +179,37 @@
     "deviceRejected": "Laite hylätty",
     "noDevices": "Ei rekisteröityjä laitteita vielä",
     "devicePending": "Odottaa hyväksyntää",
-    "encryptedData": "Salattu — avaa laitteellasi nähdäksesi"
+    "encryptedData": "Salattu — avaa laitteellasi nähdäksesi",
+    "manageDevices": "Hallinnoi laitteita"
   },
   "balances": {
     "owedToYou": "Sinulle velkaa",
     "youOwe": "Olet velkaa",
     "settled": "Selvitetty",
     "totalBalance": "Kokonaissaldo"
+  },
+  "widgets": {
+    "todosTitle": "Tehtävät",
+    "todosEmpty": "Kaikki tehty!",
+    "calendarTitle": "Tänään",
+    "calendarEmpty": "Ei tapahtumia tänään",
+    "shoppingTitle": "Ostoslista",
+    "shoppingEmpty": "Ostoslista on tyhjä",
+    "itemsLeft": "{{count}} jäljellä",
+    "moreItems": "+{{count}} lisää"
+  },
+  "devices": {
+    "approved": "Hyväksytty",
+    "pending": "Odottaa",
+    "rejected": "Hylätty",
+    "unnamed": "Nimetön laite",
+    "description": "Tilillesi yhdistetyt laitteet. Jokaisella hyväksytyllä laitteella on salattu kopio talouden avaimesta päästä päähän -salausta varten.",
+    "noDevices": "Ei vielä rekisteröityjä laitteita",
+    "renameDevice": "Nimeä laite uudelleen",
+    "removeDevice": "Poista laite",
+    "removeConfirm": "Poistetaanko \"{{name}}\"? Tämä laite menettää pääsyn salattuihin taloustietoihin.",
+    "deviceNamePlaceholder": "esim. Oma iPhone, Työkannettava",
+    "e2eeInfo": "Päästä päähän -salaus",
+    "e2eeDescription": "Taloutesi tiedot on salattu avaimilla, joihin vain hyväksytyillä laitteillasi on pääsy. Uudet laitteet on hyväksyttävä olemassa olevalla laitteella ennen kuin ne voivat purkaa salauksen."
   }
 }

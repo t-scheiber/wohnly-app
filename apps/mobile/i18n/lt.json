@@ -179,12 +179,37 @@
     "deviceRejected": "Įrenginys atmestas",
     "noDevices": "Dar nėra registruotų įrenginių",
     "devicePending": "Laukiama patvirtinimo",
-    "encryptedData": "Užšifruota — atidaryk savo įrenginyje, kad pamatytum"
+    "encryptedData": "Užšifruota — atidaryk savo įrenginyje, kad pamatytum",
+    "manageDevices": "Tvarkyti įrenginius"
   },
   "balances": {
     "owedToYou": "Skolingi tau",
     "youOwe": "Tu skolingas",
     "settled": "Atsiskaityta",
     "totalBalance": "Bendras balansas"
+  },
+  "widgets": {
+    "todosTitle": "Užduotys",
+    "todosEmpty": "Viskas padaryta!",
+    "calendarTitle": "Šiandien",
+    "calendarEmpty": "Šiandien renginių nėra",
+    "shoppingTitle": "Pirkinių sąrašas",
+    "shoppingEmpty": "Pirkinių sąrašas tuščias",
+    "itemsLeft": "{{count}} liko",
+    "moreItems": "+{{count}} daugiau"
+  },
+  "devices": {
+    "approved": "Patvirtintas",
+    "pending": "Laukiama",
+    "rejected": "Atmestas",
+    "unnamed": "Įrenginys be pavadinimo",
+    "description": "Įrenginiai, susieti su tavo paskyra. Kiekvienas patvirtintas įrenginys turi šifruotą namų ūkio rakto kopiją dėl galutinio šifravimo.",
+    "noDevices": "Dar nėra registruotų įrenginių",
+    "renameDevice": "Pervadinti įrenginį",
+    "removeDevice": "Pašalinti įrenginį",
+    "removeConfirm": "Pašalinti \"{{name}}\"? Šis įrenginys praras prieigą prie šifruotų namų ūkio duomenų.",
+    "deviceNamePlaceholder": "pvz. Mano iPhone, Darbo nešiojamas",
+    "e2eeInfo": "Galutinis šifravimas",
+    "e2eeDescription": "Tavo namų ūkio duomenys yra šifruojami raktais, prie kurių turi prieigą tik tavo patvirtinti įrenginiai. Nauji įrenginiai turi būti patvirtinti esamo įrenginio, kad galėtų iššifruoti duomenis."
   }
 }

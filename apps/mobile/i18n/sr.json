@@ -179,12 +179,37 @@
     "deviceRejected": "Uređaj odbijen",
     "noDevices": "Još nema registrovanih uređaja",
     "devicePending": "Čeka se odobrenje",
-    "encryptedData": "Šifrovano — otvori na svom uređaju za pregled"
+    "encryptedData": "Šifrovano — otvori na svom uređaju za pregled",
+    "manageDevices": "Управљање уређајима"
   },
   "balances": {
     "owedToYou": "Duguju ti",
     "youOwe": "Duguješ",
     "settled": "Izmireno",
     "totalBalance": "Ukupno stanje"
+  },
+  "widgets": {
+    "todosTitle": "Задаци",
+    "todosEmpty": "Све је готово!",
+    "calendarTitle": "Данас",
+    "calendarEmpty": "Нема догађаја данас",
+    "shoppingTitle": "Листа за куповину",
+    "shoppingEmpty": "Листа за куповину је празна",
+    "itemsLeft": "{{count}} преостало",
+    "moreItems": "+{{count}} још"
+  },
+  "devices": {
+    "approved": "Одобрено",
+    "pending": "На чекању",
+    "rejected": "Одбијено",
+    "unnamed": "Уређај без имена",
+    "description": "Уређаји повезани са твојим налогом. Сваки одобрени уређај чува шифровану копију кључа домаћинства за end-to-end шифровање.",
+    "noDevices": "Још нема регистрованих уређаја",
+    "renameDevice": "Преименуј уређај",
+    "removeDevice": "Уклони уређај",
+    "removeConfirm": "Уклонити \"{{name}}\"? Овај уређај ће изгубити приступ шифрованим подацима домаћинства.",
+    "deviceNamePlaceholder": "нпр. Мој iPhone, Пословни лаптоп",
+    "e2eeInfo": "End-to-end шифровање",
+    "e2eeDescription": "Подаци твог домаћинства су шифровани кључевима којима могу приступити само твоји одобрени уређаји. Нови уређаји морају бити одобрени од стране постојећег уређаја пре него што могу дешифровати податке."
   }
 }
