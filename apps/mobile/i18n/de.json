@@ -179,12 +179,37 @@
     "deviceRejected": "Gerät abgelehnt",
     "noDevices": "Noch keine Geräte registriert",
     "devicePending": "Wartet auf Genehmigung",
+    "manageDevices": "Geräte verwalten",
     "encryptedData": "Verschlüsselt — auf deinem Gerät öffnen"
+  },
+  "devices": {
+    "approved": "Genehmigt",
+    "pending": "Ausstehend",
+    "rejected": "Abgelehnt",
+    "unnamed": "Unbenanntes Gerät",
+    "description": "Geräte, die mit deinem Konto verknüpft sind. Jedes genehmigte Gerät besitzt eine verschlüsselte Kopie deines Haushaltsschlüssels für Ende-zu-Ende-Verschlüsselung.",
+    "noDevices": "Noch keine Geräte registriert",
+    "renameDevice": "Gerät umbenennen",
+    "removeDevice": "Gerät entfernen",
+    "removeConfirm": "\"{{name}}\" entfernen? Dieses Gerät verliert den Zugriff auf verschlüsselte Haushaltsdaten.",
+    "deviceNamePlaceholder": "z.B. Mein iPhone, Arbeitslaptop",
+    "e2eeInfo": "Ende-zu-Ende-Verschlüsselung",
+    "e2eeDescription": "Deine Haushaltsdaten werden mit Schlüsseln verschlüsselt, auf die nur deine genehmigten Geräte zugreifen können. Neue Geräte müssen von einem bestehenden Geräteinhaber genehmigt werden."
   },
   "balances": {
     "owedToYou": "Dir geschuldet",
     "youOwe": "Du schuldest",
     "settled": "Ausgeglichen",
     "totalBalance": "Gesamtsaldo"
+  },
+  "widgets": {
+    "todosTitle": "Aufgaben",
+    "todosEmpty": "Alles erledigt!",
+    "calendarTitle": "Heute",
+    "calendarEmpty": "Keine Termine heute",
+    "shoppingTitle": "Einkaufsliste",
+    "shoppingEmpty": "Einkaufsliste ist leer",
+    "itemsLeft": "{{count}} übrig",
+    "moreItems": "+{{count}} weitere"
   }
 }

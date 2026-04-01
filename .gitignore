@@ -42,9 +42,9 @@ wohnly-app-*.json
 # Expo template
 app-example
 
-# generated native folders
-ios/
-android/
+# generated native folders (Expo prebuild output at repo root)
+/ios/
+/android/
 
 # API build output
 apps/api/dist/

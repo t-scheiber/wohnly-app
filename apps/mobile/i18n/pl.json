@@ -179,12 +179,37 @@
     "deviceRejected": "Urządzenie odrzucone",
     "noDevices": "Brak zarejestrowanych urządzeń",
     "devicePending": "Oczekuje na zatwierdzenie",
-    "encryptedData": "Zaszyfrowane — otwórz na swoim urządzeniu, aby zobaczyć"
+    "encryptedData": "Zaszyfrowane — otwórz na swoim urządzeniu, aby zobaczyć",
+    "manageDevices": "Zarządzaj urządzeniami"
   },
   "balances": {
     "owedToYou": "Należne tobie",
     "youOwe": "Jesteś winien",
     "settled": "Rozliczone",
     "totalBalance": "Saldo łączne"
+  },
+  "widgets": {
+    "todosTitle": "Zadania",
+    "todosEmpty": "Wszystko zrobione!",
+    "calendarTitle": "Dziś",
+    "calendarEmpty": "Brak wydarzeń na dziś",
+    "shoppingTitle": "Lista zakupów",
+    "shoppingEmpty": "Lista zakupów jest pusta",
+    "itemsLeft": "{{count}} pozostało",
+    "moreItems": "+{{count}} więcej"
+  },
+  "devices": {
+    "approved": "Zatwierdzono",
+    "pending": "Oczekujące",
+    "rejected": "Odrzucono",
+    "unnamed": "Urządzenie bez nazwy",
+    "description": "Urządzenia powiązane z Twoim kontem. Każde zatwierdzone urządzenie przechowuje zaszyfrowaną kopię klucza gospodarstwa domowego do szyfrowania end-to-end.",
+    "noDevices": "Brak zarejestrowanych urządzeń",
+    "renameDevice": "Zmień nazwę urządzenia",
+    "removeDevice": "Usuń urządzenie",
+    "removeConfirm": "Usunąć \"{{name}}\"? To urządzenie straci dostęp do zaszyfrowanych danych gospodarstwa.",
+    "deviceNamePlaceholder": "np. Mój iPhone, Laptop służbowy",
+    "e2eeInfo": "Szyfrowanie end-to-end",
+    "e2eeDescription": "Dane Twojego gospodarstwa domowego są szyfrowane kluczami, do których mają dostęp tylko Twoje zatwierdzone urządzenia. Nowe urządzenia muszą zostać zatwierdzone przez istniejące urządzenie, zanim będą mogły odszyfrować dane."
   }
 }

@@ -179,12 +179,37 @@
     "deviceRejected": "Cihaz reddedildi",
     "noDevices": "Henüz kayıtlı cihaz yok",
     "devicePending": "Onay bekleniyor",
-    "encryptedData": "Şifreli — görmek için cihazında aç"
+    "encryptedData": "Şifreli — görmek için cihazında aç",
+    "manageDevices": "Cihazları yönet"
   },
   "balances": {
     "owedToYou": "Sana borçlu",
     "youOwe": "Borcun var",
     "settled": "Ödendi",
     "totalBalance": "Toplam Bakiye"
+  },
+  "widgets": {
+    "todosTitle": "Yapılacaklar",
+    "todosEmpty": "Hepsi tamam!",
+    "calendarTitle": "Bugün",
+    "calendarEmpty": "Bugün etkinlik yok",
+    "shoppingTitle": "Alışveriş listesi",
+    "shoppingEmpty": "Alışveriş listesi boş",
+    "itemsLeft": "{{count}} kaldı",
+    "moreItems": "+{{count}} daha"
+  },
+  "devices": {
+    "approved": "Onaylandı",
+    "pending": "Bekliyor",
+    "rejected": "Reddedildi",
+    "unnamed": "Adsız cihaz",
+    "description": "Hesabına bağlı cihazlar. Her onaylanmış cihaz, uçtan uca şifreleme için ev anahtarının şifreli bir kopyasını saklar.",
+    "noDevices": "Henüz kayıtlı cihaz yok",
+    "renameDevice": "Cihazı yeniden adlandır",
+    "removeDevice": "Cihazı kaldır",
+    "removeConfirm": "\"{{name}}\" kaldırılsın mı? Bu cihaz şifreli ev verilerine erişimini kaybedecek.",
+    "deviceNamePlaceholder": "örn. iPhone'um, İş bilgisayarı",
+    "e2eeInfo": "Uçtan uca şifreleme",
+    "e2eeDescription": "Evinin verileri yalnızca onaylanmış cihazlarının erişebildiği anahtarlarla şifrelenir. Yeni cihazların verileri çözebilmesi için mevcut bir cihaz tarafından onaylanması gerekir."
   }
 }

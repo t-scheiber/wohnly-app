@@ -179,12 +179,37 @@
     "deviceRejected": "Enhet avvisad",
     "noDevices": "Inga enheter registrerade ännu",
     "devicePending": "Väntar på godkännande",
-    "encryptedData": "Krypterat — öppna på din enhet för att visa"
+    "encryptedData": "Krypterat — öppna på din enhet för att visa",
+    "manageDevices": "Hantera enheter"
   },
   "balances": {
     "owedToYou": "Skyldig dig",
     "youOwe": "Du är skyldig",
     "settled": "Reglerat",
     "totalBalance": "Totalt saldo"
+  },
+  "widgets": {
+    "todosTitle": "Att göra",
+    "todosEmpty": "Allt klart!",
+    "calendarTitle": "Idag",
+    "calendarEmpty": "Inga händelser idag",
+    "shoppingTitle": "Inköpslista",
+    "shoppingEmpty": "Inköpslistan är tom",
+    "itemsLeft": "{{count}} kvar",
+    "moreItems": "+{{count}} till"
+  },
+  "devices": {
+    "approved": "Godkänd",
+    "pending": "Väntande",
+    "rejected": "Avvisad",
+    "unnamed": "Namnlös enhet",
+    "description": "Enheter kopplade till ditt konto. Varje godkänd enhet har en krypterad kopia av hushållsnyckeln för end-to-end-kryptering.",
+    "noDevices": "Inga enheter registrerade ännu",
+    "renameDevice": "Byt namn på enhet",
+    "removeDevice": "Ta bort enhet",
+    "removeConfirm": "Ta bort \"{{name}}\"? Denna enhet förlorar åtkomst till krypterad hushållsdata.",
+    "deviceNamePlaceholder": "t.ex. Min iPhone, Jobb-laptop",
+    "e2eeInfo": "End-to-end-kryptering",
+    "e2eeDescription": "Ditt hushålls data krypteras med nycklar som bara dina godkända enheter kan komma åt. Nya enheter måste godkännas av en befintlig enhet innan de kan dekryptera data."
   }
 }

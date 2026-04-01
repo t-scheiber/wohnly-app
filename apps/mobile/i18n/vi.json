@@ -179,12 +179,37 @@
     "deviceRejected": "Đã từ chối thiết bị",
     "noDevices": "Chưa có thiết bị nào được đăng ký",
     "devicePending": "Đang chờ duyệt",
-    "encryptedData": "Đã mã hóa — mở trên thiết bị của bạn để xem"
+    "encryptedData": "Đã mã hóa — mở trên thiết bị của bạn để xem",
+    "manageDevices": "Quản lý thiết bị"
   },
   "balances": {
     "owedToYou": "Người khác nợ bạn",
     "youOwe": "Bạn nợ",
     "settled": "Đã thanh toán",
     "totalBalance": "Tổng số dư"
+  },
+  "widgets": {
+    "todosTitle": "Việc cần làm",
+    "todosEmpty": "Hoàn tất!",
+    "calendarTitle": "Hôm nay",
+    "calendarEmpty": "Không có sự kiện hôm nay",
+    "shoppingTitle": "Danh sách mua sắm",
+    "shoppingEmpty": "Danh sách mua sắm trống",
+    "itemsLeft": "Còn {{count}}",
+    "moreItems": "+{{count}} nữa"
+  },
+  "devices": {
+    "approved": "Đã phê duyệt",
+    "pending": "Đang chờ",
+    "rejected": "Đã từ chối",
+    "unnamed": "Thiết bị chưa đặt tên",
+    "description": "Các thiết bị liên kết với tài khoản của bạn. Mỗi thiết bị được phê duyệt giữ một bản sao mã hóa của khóa hộ gia đình cho mã hóa đầu cuối.",
+    "noDevices": "Chưa có thiết bị nào được đăng ký",
+    "renameDevice": "Đổi tên thiết bị",
+    "removeDevice": "Xóa thiết bị",
+    "removeConfirm": "Xóa \"{{name}}\"? Thiết bị này sẽ mất quyền truy cập vào dữ liệu hộ gia đình đã mã hóa.",
+    "deviceNamePlaceholder": "vd. iPhone của tôi, Laptop công việc",
+    "e2eeInfo": "Mã hóa đầu cuối",
+    "e2eeDescription": "Dữ liệu hộ gia đình của bạn được mã hóa bằng các khóa mà chỉ các thiết bị được phê duyệt mới có thể truy cập. Thiết bị mới phải được phê duyệt bởi thiết bị hiện có trước khi có thể giải mã dữ liệu."
   }
 }
