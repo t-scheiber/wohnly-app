@@ -1,7 +1,11 @@
 /**
  * Ad banner component that shows ads for free-tier users.
+ * - Mobile: AdMob banner ads
+ * - Web/Desktop: Google AdSense (auto ads injected via +html.tsx,
+ *   plus an explicit in-page slot here)
  * Hidden for Wohnly Pro subscribers.
  */
+import { useEffect, useRef } from "react";
 import { View, Platform } from "react-native";
 import { usePremium } from "@/lib/hooks/usePremium";
 
@@ -22,6 +26,29 @@ if (Platform.OS !== "web") {
   } catch {}
 }
 
+/** AdSense in-page banner for web/desktop */
+function WebAdBanner() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    try {
+      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+    } catch {}
+  }, []);
+
+  return (
+    <div ref={ref} style={{ textAlign: "center", padding: "4px 0" }}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-9336334259937355"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
+}
+
 interface AdBannerProps {
   style?: object;
 }
@@ -29,10 +56,18 @@ interface AdBannerProps {
 export function AdBanner({ style }: AdBannerProps) {
   const { isPremium, isLoading } = usePremium();
 
-  // Don't show ads for premium users, on web, or while loading
-  if (isPremium || isLoading || Platform.OS === "web" || !BannerAd) {
+  // Don't show ads for premium users or while loading
+  if (isPremium || isLoading) {
     return null;
   }
+
+  // Web/Desktop: AdSense
+  if (Platform.OS === "web") {
+    return <WebAdBanner />;
+  }
+
+  // Native: AdMob
+  if (!BannerAd) return null;
 
   const adUnitId = Platform.select({
     ios: AD_UNIT_IDS.ios,
