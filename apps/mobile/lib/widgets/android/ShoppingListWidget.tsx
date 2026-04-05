@@ -3,7 +3,6 @@ import {
   FlexWidget,
   TextWidget,
   ListWidget,
-  ClickAction,
 } from "react-native-android-widget";
 
 interface ShoppingItem {
@@ -48,7 +47,7 @@ export function ShoppingListWidget({ items, strings }: Props) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space_between",
+          justifyContent: "space-between",
           marginBottom: 8,
           width: "match_parent",
         }}
@@ -79,7 +78,7 @@ export function ShoppingListWidget({ items, strings }: Props) {
           />
         </FlexWidget>
       ) : (
-        <ListWidget style={{ flex: 1 }}>
+        <ListWidget style={{ height: "match_parent" } as any}>
           {items.slice(0, 5).map((item) => (
             <FlexWidget
               key={item.id}
@@ -89,7 +88,7 @@ export function ShoppingListWidget({ items, strings }: Props) {
                 paddingVertical: 4,
                 width: "match_parent",
               }}
-              clickAction={ClickAction.OPEN_APP}
+              clickAction="OPEN_APP"
             >
               <TextWidget
                 text={item.checked ? "☑" : "☐"}
@@ -104,8 +103,7 @@ export function ShoppingListWidget({ items, strings }: Props) {
                 style={{
                   fontSize: 14,
                   color: item.checked ? "#9ca3af" : "#1f2937",
-                  flex: 1,
-                }}
+                } as any}
                 truncate="END"
                 maxLines={1}
               />

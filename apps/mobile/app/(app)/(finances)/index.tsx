@@ -407,7 +407,7 @@ export default function FinancesScreen() {
         <FlatList
           data={expenses}
           renderItem={renderExpense}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item: Expense) => item.id}
           contentContainerStyle={{ paddingHorizontal: 16 }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
           ListEmptyComponent={
@@ -420,7 +420,7 @@ export default function FinancesScreen() {
         <FlatList
           data={subscriptions}
           renderItem={renderSubscription}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item: Subscription) => item.id}
           contentContainerStyle={{ paddingHorizontal: 16 }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
           ListEmptyComponent={

@@ -241,7 +241,7 @@ export default function TodosScreen() {
       <FlatList
         data={allTodos}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: Todo) => item.id}
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />

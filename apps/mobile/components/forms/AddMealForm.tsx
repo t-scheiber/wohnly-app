@@ -132,7 +132,7 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
           <View key={i} style={{ flexDirection: "row", gap: 8, marginBottom: 6 }}>
             <TextInput
               value={ing.name}
-              onChangeText={(v) => updateIngredient(i, "name", v)}
+              onChangeText={(v: string) => updateIngredient(i, "name", v)}
               placeholder="Ingredient"
               placeholderTextColor={colors.textSecondary}
               style={{
@@ -149,7 +149,7 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
             />
             <TextInput
               value={ing.quantity}
-              onChangeText={(v) => updateIngredient(i, "quantity", v)}
+              onChangeText={(v: string) => updateIngredient(i, "quantity", v)}
               placeholder="Qty"
               placeholderTextColor={colors.textSecondary}
               style={{
