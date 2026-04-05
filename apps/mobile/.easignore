@@ -1,0 +1,11 @@
+# Tauri desktop build artifacts (huge)
+../desktop/tauri/target/
+../desktop/tauri/gen/
+
+# Node modules are reinstalled on EAS
+node_modules/
+
+# Other large/unnecessary files
+.expo/
+dist/
+*.tsbuildinfo
