@@ -52,6 +52,10 @@ app-example
 # API build output
 apps/api/dist/
 
+# Tauri desktop build output
+apps/desktop/tauri/gen/
+apps/desktop/tauri/target/
+
 # Prisma
 apps/api/prisma/migrations/**/migration_lock.toml
 
