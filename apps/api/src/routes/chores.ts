@@ -39,7 +39,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, assigneeIds, encrypted, nonce } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, effortWeight, assigneeIds, encrypted, nonce } = body;
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!frequency) return c.json({ error: "Frequency is required" }, 400);
 
@@ -57,6 +57,7 @@ app.post("/", async (c) => {
       dayOfWeek: dayOfWeek ?? null,
       dayOfMonth: dayOfMonth ?? null,
       rotate: !!rotate,
+      effortWeight: effortWeight ?? 2,
       assignments: assigneeIds?.length
         ? { create: assigneeIds.map((id: string) => ({ memberId: id })) }
         : undefined,
@@ -82,7 +83,7 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Chore not found" }, 404);
 
-  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, completed, assigneeIds, encrypted, nonce } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, effortWeight, completed, assigneeIds, encrypted, nonce } = body;
 
   const chore = await prisma.$transaction(async (tx) => {
     if (assigneeIds !== undefined) {
@@ -99,6 +100,23 @@ app.patch("/:id", async (c) => {
       ? { rotateIndex: (existing.rotateIndex + 1) % existing.assignments.length }
       : {};
 
+    // Log completion for analytics + award points
+    if (completed) {
+      await tx.choreCompletion.create({
+        data: {
+          choreId,
+          memberId: member.id,
+          effortWeight: existing.effortWeight,
+        },
+      });
+
+      // Award points: effortWeight * 10
+      await tx.householdMember.update({
+        where: { id: member.id },
+        data: { points: { increment: existing.effortWeight * 10 } },
+      });
+    }
+
     return tx.chore.update({
       where: { id: choreId },
       data: {
@@ -110,6 +128,7 @@ app.patch("/:id", async (c) => {
         ...(dayOfWeek !== undefined && { dayOfWeek }),
         ...(dayOfMonth !== undefined && { dayOfMonth }),
         ...(rotate !== undefined && { rotate }),
+        ...(effortWeight !== undefined && { effortWeight }),
         ...(completed !== undefined && {
           lastCompleted: new Date(),
           lastDoneBy: userId,
@@ -138,6 +157,104 @@ app.delete("/:id", async (c) => {
 
   await prisma.chore.delete({ where: { id: choreId } });
   return c.json({ success: true });
+});
+
+// GET /api/chores/analytics — Fair labor distribution analytics
+app.get("/analytics", async (c) => {
+  const userId = c.get("userId") as string;
+  const period = c.req.query("period") || "month"; // week | month | all
+
+  const member = await prisma.householdMember.findFirst({ where: { userId } });
+  if (!member) return c.json({ error: "No household" }, 400);
+
+  // Calculate date range
+  const now = new Date();
+  let since: Date | undefined;
+  if (period === "week") {
+    since = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  } else if (period === "month") {
+    since = new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+  // "all" = no date filter
+
+  const completions = await prisma.choreCompletion.findMany({
+    where: {
+      chore: { householdId: member.householdId },
+      ...(since && { completedAt: { gte: since } }),
+    },
+    include: { member: true },
+  });
+
+  // Aggregate per member
+  const memberStats = new Map<string, { memberId: string; displayName: string; completions: number; effortPoints: number }>();
+
+  for (const comp of completions) {
+    const key = comp.memberId;
+    const existing = memberStats.get(key) ?? {
+      memberId: comp.memberId,
+      displayName: comp.member.displayName || comp.member.email || "Member",
+      completions: 0,
+      effortPoints: 0,
+    };
+    existing.completions++;
+    existing.effortPoints += comp.effortWeight;
+    memberStats.set(key, existing);
+  }
+
+  const totalEffort = [...memberStats.values()].reduce((s, m) => s + m.effortPoints, 0);
+
+  const members = [...memberStats.values()].map((m) => ({
+    ...m,
+    percentage: totalEffort > 0 ? Math.round((m.effortPoints / totalEffort) * 100) : 0,
+  }));
+
+  // Sort by effort points descending
+  members.sort((a, b) => b.effortPoints - a.effortPoints);
+
+  return c.json({ members, period, totalEffort });
+});
+
+// POST /api/chores/:id/nudge — Send reminder to assignees
+app.post("/:id/nudge", async (c) => {
+  const userId = c.get("userId") as string;
+  const choreId = c.req.param("id");
+
+  const member = await prisma.householdMember.findFirst({ where: { userId } });
+  if (!member) return c.json({ error: "No household" }, 400);
+
+  const chore = await prisma.chore.findFirst({
+    where: { id: choreId, householdId: member.householdId },
+    include: { assignments: { include: { member: true } } },
+  });
+  if (!chore) return c.json({ error: "Chore not found" }, 404);
+
+  // Send push notifications to assigned members (skip self)
+  const targets = chore.assignments
+    .filter((a) => a.member.userId !== userId)
+    .map((a) => a.member.userId);
+
+  if (targets.length === 0) {
+    return c.json({ error: "No other members to nudge" }, 400);
+  }
+
+  // Import push helper dynamically to avoid circular deps
+  try {
+    const { sendPushNotification } = await import("../lib/push.js");
+    const senderName = member.displayName || member.email || "Someone";
+    const choreTitle = chore.encrypted ? "a chore" : chore.title;
+
+    for (const targetUserId of targets) {
+      await sendPushNotification(targetUserId, {
+        title: "Chore Reminder",
+        body: `${senderName} reminded you about ${choreTitle}`,
+        data: { type: "chore_nudge", choreId },
+      });
+    }
+  } catch {
+    // Push not available, ignore silently
+  }
+
+  return c.json({ success: true, nudgedCount: targets.length });
 });
 
 export default app;

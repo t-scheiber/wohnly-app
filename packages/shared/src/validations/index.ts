@@ -89,7 +89,7 @@ export const updateEventSchema = z.object({
 
 // ── Expense Schemas ──
 
-export const splitTypeSchema = z.enum(["equal", "percentage", "fixed", "shares"]);
+export const splitTypeSchema = z.enum(["equal", "percentage", "fixed", "shares", "itemized"]);
 
 export const createExpenseSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
@@ -149,6 +149,7 @@ export const createSubscriptionSchema = z.object({
         memberId: z.string(),
         amount: z.number().optional(),
         percentage: z.number().min(0).max(100).optional(),
+        shares: z.number().int().min(1).optional(),
       })
     )
     .optional(),
@@ -162,6 +163,42 @@ export const updateSubscriptionSchema = z.object({
   category: z.string().min(1).max(100).optional(),
   billingDate: z.string().datetime().optional().nullable(),
   active: z.boolean().optional(),
+});
+
+// ── Meal Plan Schemas ──
+
+export const mealTypeSchema = z.enum(["breakfast", "lunch", "dinner", "snack"]);
+
+export const createMealPlanSchema = z.object({
+  date: z.string().datetime(),
+  mealType: mealTypeSchema,
+  title: z.string().min(1, "Title is required").max(200),
+  recipe: z.string().max(5000).optional(),
+  ingredients: z
+    .array(
+      z.object({
+        name: z.string().min(1).max(100),
+        quantity: z.string().max(50).optional(),
+        unit: z.string().max(20).optional(),
+      })
+    )
+    .optional(),
+});
+
+export const updateMealPlanSchema = z.object({
+  date: z.string().datetime().optional(),
+  mealType: mealTypeSchema.optional(),
+  title: z.string().min(1).max(200).optional(),
+  recipe: z.string().max(5000).optional().nullable(),
+  ingredients: z
+    .array(
+      z.object({
+        name: z.string().min(1).max(100),
+        quantity: z.string().max(50).optional(),
+        unit: z.string().max(20).optional(),
+      })
+    )
+    .optional(),
 });
 
 // ── Household Schemas ──
@@ -206,3 +243,5 @@ export type CreateHousehold = z.infer<typeof createHouseholdSchema>;
 export type JoinHousehold = z.infer<typeof joinHouseholdSchema>;
 export type UpdateNickname = z.infer<typeof updateNicknameSchema>;
 export type UpdatePreferences = z.infer<typeof updatePreferencesSchema>;
+export type CreateMealPlan = z.infer<typeof createMealPlanSchema>;
+export type UpdateMealPlan = z.infer<typeof updateMealPlanSchema>;

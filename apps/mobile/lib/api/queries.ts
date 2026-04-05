@@ -8,6 +8,7 @@ import {
   encryptEvent, decryptEvent,
   encryptExpense, decryptExpense,
   encryptSubscription, decryptSubscription,
+  encryptAttachment, decryptAttachment,
 } from "@/lib/crypto/encrypt-service";
 import type {
   Todo,
@@ -15,7 +16,9 @@ import type {
   Chore,
   Event,
   Expense,
+  ExpenseAttachment,
   Subscription,
+  MealPlan,
   HouseholdMember,
   HouseholdInvitation,
   UserPreferences,
@@ -416,6 +419,117 @@ export function useUpdateChore() {
   });
 }
 
+export function useChoreAnalytics(period: "week" | "month" | "all" = "month") {
+  return useQuery({
+    queryKey: ["chore-analytics", period],
+    queryFn: () =>
+      api<{ members: { memberId: string; displayName: string; completions: number; effortPoints: number; percentage: number }[]; period: string; totalEffort: number }>(
+        `/api/chores/analytics?period=${period}`
+      ),
+  });
+}
+
+export function useNudgeChore() {
+  return useMutation({
+    mutationFn: (choreId: string) => apiPost(`/api/chores/${choreId}/nudge`, {}),
+  });
+}
+
+export function useShoppingSuggestions() {
+  return useQuery({
+    queryKey: ["shopping-suggestions"],
+    queryFn: () =>
+      api<{ suggestions: { name: string; count: number }[] }>("/api/shopping/suggestions"),
+  });
+}
+
+export function useBreakMode() {
+  return useQuery({
+    queryKey: ["break-mode"],
+    queryFn: () =>
+      api<{ breakMode: { start: string; end: string | null; active: boolean } | null }>(
+        "/api/households/break-mode"
+      ),
+  });
+}
+
+export function useSetBreakMode() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { start: string | null; end: string | null }) =>
+      apiPatch("/api/households/break-mode", data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["break-mode"] });
+      qc.invalidateQueries({ queryKey: ["chores"] });
+    },
+  });
+}
+
+// ── Leaderboard ──
+
+export function useLeaderboard() {
+  return useQuery({
+    queryKey: ["leaderboard"],
+    queryFn: () =>
+      api<{ leaderboard: { memberId: string; displayName: string; points: number; isCurrentUser: boolean }[] }>(
+        "/api/members/leaderboard"
+      ),
+  });
+}
+
+// ── Roles ──
+
+export function useSetMemberRole() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ memberId, role }: { memberId: string; role: string }) =>
+      apiPatch(`/api/members/${memberId}/role`, { role }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["members"] });
+    },
+  });
+}
+
+// ── Meals ──
+
+export function useMealPlans(from?: string, to?: string) {
+  const params = new URLSearchParams();
+  if (from) params.set("from", from);
+  if (to) params.set("to", to);
+  const query = params.toString();
+
+  return useQuery({
+    queryKey: ["meals", from, to],
+    queryFn: () => api<{ meals: MealPlan[] }>(`/api/meals${query ? `?${query}` : ""}`),
+  });
+}
+
+export function useCreateMealPlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) => apiPost("/api/meals", data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["meals"] }),
+  });
+}
+
+export function useDeleteMealPlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => apiDelete(`/api/meals/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["meals"] }),
+  });
+}
+
+export function useAddMealToShopping() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (mealId: string) => apiPost(`/api/meals/${mealId}/to-shopping`, {}),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["shopping"] });
+    },
+  });
+}
+
 // ── Events ──
 
 export function useEvents(startDate?: string, endDate?: string) {
@@ -511,6 +625,119 @@ export function useCreateExpense() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["expenses"] });
+      qc.invalidateQueries({ queryKey: ["balances"] });
+    },
+  });
+}
+
+export function useSettleUp() {
+  return useQuery({
+    queryKey: ["settle-up"],
+    queryFn: () =>
+      api<{
+        settlements: { from: string; to: string; fromName: string; toName: string; amount: number }[];
+        currency: string;
+      }>("/api/expenses/settle-up"),
+  });
+}
+
+export function useExpenseAttachments(expenseId: string | null) {
+  return useQuery({
+    queryKey: ["expense-attachments", expenseId],
+    queryFn: async () => {
+      if (!expenseId) return { attachments: [] };
+      const res = await api<{ attachments: ExpenseAttachment[] }>(`/api/expenses/${expenseId}/attachments`);
+      const hk = getEncryptionKey();
+      if (!hk) return res;
+      const attachments = await Promise.all(res.attachments.map((a) => decryptAttachment(a, hk)));
+      return { ...res, attachments };
+    },
+    enabled: !!expenseId,
+  });
+}
+
+export function useAddAttachment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ expenseId, type, content, mimeType, fileName }: {
+      expenseId: string;
+      type: "note" | "photo";
+      content: string;
+      mimeType?: string;
+      fileName?: string;
+    }) => {
+      const hk = getEncryptionKey();
+      if (hk) {
+        const enc = await encryptAttachment(content, hk);
+        return apiPost(`/api/expenses/${expenseId}/attachments`, {
+          type, mimeType, fileName, ...enc,
+        });
+      }
+      return apiPost(`/api/expenses/${expenseId}/attachments`, {
+        type, content, mimeType, fileName,
+      });
+    },
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ["expense-attachments", vars.expenseId] });
+      qc.invalidateQueries({ queryKey: ["expenses"] });
+    },
+  });
+}
+
+export function useDeleteAttachment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ expenseId, attachmentId }: { expenseId: string; attachmentId: string }) =>
+      apiDelete(`/api/expenses/${expenseId}/attachments/${attachmentId}`),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ["expense-attachments", vars.expenseId] });
+      qc.invalidateQueries({ queryKey: ["expenses"] });
+    },
+  });
+}
+
+export function useExpenseAnalytics(period: "week" | "month" | "year" = "month") {
+  return useQuery({
+    queryKey: ["expense-analytics", period],
+    queryFn: () =>
+      api<{
+        baseCurrency: string;
+        period: string;
+        totalSpend: number;
+        averagePerDay: number;
+        byCategory: { category: string; total: number; percentage: number }[];
+        byMember: { memberId: string; displayName: string; totalPaid: number; totalOwed: number }[];
+        overTime: { date: string; total: number }[];
+      }>(`/api/expenses/analytics?period=${period}`),
+  });
+}
+
+export function useExchangeRates(base?: string) {
+  return useQuery({
+    queryKey: ["exchange-rates", base],
+    queryFn: () =>
+      api<{ base: string; rates: Record<string, number>; fetchedAt: string }>(
+        `/api/expenses/rates?base=${base || "EUR"}`
+      ),
+    staleTime: 1000 * 60 * 60, // 1 hour
+    enabled: !!base,
+  });
+}
+
+export function useBaseCurrency() {
+  return useQuery({
+    queryKey: ["base-currency"],
+    queryFn: () => api<{ baseCurrency: string }>("/api/households/base-currency"),
+  });
+}
+
+export function useSetBaseCurrency() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (currency: string) => apiPatch("/api/households/base-currency", { currency }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["base-currency"] });
+      qc.invalidateQueries({ queryKey: ["expense-analytics"] });
       qc.invalidateQueries({ queryKey: ["balances"] });
     },
   });

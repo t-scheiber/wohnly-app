@@ -79,6 +79,38 @@ app.patch("/:id", async (c) => {
   return c.json({ success: true, item });
 });
 
+// GET /api/shopping/suggestions — frequently bought items not currently on list
+app.get("/suggestions", async (c) => {
+  const userId = c.get("userId") as string;
+
+  const member = await prisma.householdMember.findFirst({ where: { userId } });
+  if (!member) return c.json({ error: "No household" }, 400);
+
+  // Get names of current unchecked items to exclude
+  const currentItems = await prisma.shoppingItem.findMany({
+    where: { householdId: member.householdId, isPersonal: false, checked: false },
+    select: { name: true },
+  });
+  const currentNames = new Set(currentItems.map((i) => i.name.toLowerCase()));
+
+  // Group all historical items by name, count occurrences
+  const allItems = await prisma.shoppingItem.groupBy({
+    by: ["name"],
+    where: { householdId: member.householdId, isPersonal: false, encrypted: false },
+    _count: { name: true },
+    orderBy: { _count: { name: "desc" } },
+    take: 50,
+  });
+
+  // Filter out items currently on the list
+  const suggestions = allItems
+    .filter((item) => !currentNames.has(item.name.toLowerCase()))
+    .slice(0, 15)
+    .map((item) => ({ name: item.name, count: item._count.name }));
+
+  return c.json({ suggestions });
+});
+
 // DELETE /api/shopping/:id
 app.delete("/:id", async (c) => {
   const userId = c.get("userId") as string;

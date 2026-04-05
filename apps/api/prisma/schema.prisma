@@ -81,8 +81,11 @@ model Household {
   name          String
   createdBy     String
   inviteCode    String   @unique @default(cuid())
-  trackExpenses Boolean  @default(true)
-  keyEpoch      Int      @default(1)
+  trackExpenses  Boolean   @default(true)
+  keyEpoch       Int       @default(1)
+  baseCurrency   String    @default("EUR")
+  breakModeStart DateTime?
+  breakModeEnd   DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -98,6 +101,7 @@ model Household {
   keyEnvelopes      HouseholdKeyEnvelope[]
   encryptedItems    EncryptedItem[]
   shoppingItems     ShoppingItem[]
+  mealPlans         MealPlan[]
   deletionRequest   HouseholdDeletionRequest?
 
   @@index([createdBy])
@@ -109,7 +113,8 @@ model HouseholdMember {
   householdId String
   displayName String?
   email       String?
-  role        String   @default("member")
+  role        String   @default("member") // "admin" | "member" | "limited"
+  points      Int      @default(0)
   joinedAt    DateTime @default(now())
 
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -124,6 +129,8 @@ model HouseholdMember {
   nicknamesReceived      MemberNickname[] @relation("NicknameTarget")
   leaveConfirmation      LeaveConfirmation?
   deletionApprovals      HouseholdDeletionApproval[]
+  choreCompletions       ChoreCompletion[]
+  lineItemAssignments    ExpenseLineItemAssignment[]
 
   @@unique([userId, householdId])
   @@index([userId])
@@ -281,6 +288,7 @@ model Chore {
   dayOfMonth    Int?      // 1-31 for monthly chores
   rotate        Boolean   @default(false) // rotate assignees each cycle
   rotateIndex   Int       @default(0)     // current position in rotation
+  effortWeight  Int       @default(2)     // 1=trivial, 2=light, 3=medium, 4=heavy, 5=major
   completed     Boolean   @default(false)
   lastCompleted DateTime?
   lastDoneBy    String?
@@ -291,9 +299,25 @@ model Chore {
 
   household   Household          @relation(fields: [householdId], references: [id], onDelete: Cascade)
   assignments ChoreAssignment[]
+  completions ChoreCompletion[]
 
   @@index([householdId])
   @@index([householdId, completed])
+}
+
+model ChoreCompletion {
+  id           String   @id @default(cuid())
+  choreId      String
+  memberId     String
+  effortWeight Int      // Snapshot of chore effort at completion time
+  completedAt  DateTime @default(now())
+
+  chore  Chore           @relation(fields: [choreId], references: [id], onDelete: Cascade)
+  member HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([choreId])
+  @@index([memberId])
+  @@index([completedAt])
 }
 
 model ChoreAssignment {
@@ -414,12 +438,56 @@ model Expense {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  household Household      @relation(fields: [householdId], references: [id], onDelete: Cascade)
-  splits    ExpenseSplit[]
+  household   Household            @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  splits      ExpenseSplit[]
+  attachments ExpenseAttachment[]
+  lineItems   ExpenseLineItem[]
 
   @@index([householdId])
   @@index([householdId, date])
   @@index([category])
+}
+
+model ExpenseAttachment {
+  id        String   @id @default(cuid())
+  expenseId String
+  type      String   // "note" | "photo"
+  content   String   @db.Text // note text or base64 image data
+  mimeType  String?  // e.g. "image/jpeg"
+  fileName  String?
+  encrypted Boolean  @default(false)
+  nonce     String?
+  createdAt DateTime @default(now())
+
+  expense Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  @@index([expenseId])
+}
+
+model ExpenseLineItem {
+  id        String  @id @default(cuid())
+  expenseId String
+  name      String
+  amount    Decimal @db.Decimal(10, 2)
+  encrypted Boolean @default(false)
+  nonce     String?
+
+  expense     Expense                      @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  assignments ExpenseLineItemAssignment[]
+
+  @@index([expenseId])
+}
+
+model ExpenseLineItemAssignment {
+  id         String @id @default(cuid())
+  lineItemId String
+  memberId   String
+
+  lineItem ExpenseLineItem @relation(fields: [lineItemId], references: [id], onDelete: Cascade)
+  member   HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([lineItemId, memberId])
+  @@index([lineItemId])
 }
 
 model ExpenseSplit {
@@ -591,4 +659,35 @@ model UserSubscription {
   updatedAt     DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ── Meal Planning ──────────────────────────────────────────────────
+
+model MealPlan {
+  id          String   @id @default(cuid())
+  householdId String
+  date        DateTime
+  mealType    String   // "breakfast" | "lunch" | "dinner" | "snack"
+  title       String
+  recipe      String?  @db.Text
+  ingredients Json?    // Array of { name, quantity?, unit? }
+  encrypted   Boolean  @default(false)
+  nonce       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@index([householdId, date])
+}
+
+// ── Exchange Rates Cache ───────────────────────────────────────────
+
+model ExchangeRate {
+  id        String   @id @default(cuid())
+  base      String
+  rates     Json     // { "USD": 1.08, "GBP": 0.86, ... }
+  fetchedAt DateTime @default(now())
+
+  @@index([base, fetchedAt])
 }

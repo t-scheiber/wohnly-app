@@ -85,7 +85,17 @@
     "daily": "Täglich",
     "weekly": "Wöchentlich",
     "biweekly": "Alle 2 Wochen",
-    "monthly": "Monatlich"
+    "monthly": "Monatlich",
+    "fairShare": "Faire Aufteilung",
+    "thisWeek": "Diese Woche",
+    "thisMonth": "Diesen Monat",
+    "allTime": "Gesamt",
+    "tasks": "Aufgaben",
+    "noAnalytics": "Noch keine erledigten Aufgaben. Erledige Aufgaben, um Statistiken zu sehen.",
+    "effortLevel": "Aufwand",
+    "breakMode": "Pause-Modus",
+    "breakModeActive": "Aufgaben sind pausiert",
+    "breakModeUntil": "bis {{date}}"
   },
   "events": {
     "title": "Kalender",
@@ -123,7 +133,42 @@
     "percentage": "Prozentual",
     "fixed": "Festbetrag",
     "date": "Datum",
-    "selectDate": "Datum wählen"
+    "selectDate": "Datum wählen",
+    "editExpense": "Ausgabe bearbeiten",
+    "shares": "Anteile",
+    "splitPerPerson": "Aufteilen pro Person",
+    "balanced": "Ausgeglichen",
+    "remaining": "{{amount}} übrig",
+    "overBudget": "{{amount}} zu viel",
+    "categories": {
+      "groceries": "Lebensmittel",
+      "dining": "Essen gehen",
+      "rent": "Miete",
+      "utilities": "Nebenkosten",
+      "transport": "Transport",
+      "entertainment": "Unterhaltung",
+      "health": "Gesundheit",
+      "travel": "Reisen",
+      "shopping": "Einkaufen",
+      "subscriptions": "Abonnements",
+      "education": "Bildung",
+      "pets": "Haustiere",
+      "gifts": "Geschenke",
+      "household": "Haushalt",
+      "other": "Sonstiges"
+    },
+    "allCategories": "Alle",
+    "settleUp": "Ausgleichen",
+    "settleUpDescription": "Minimale Zahlungen zum Ausgleich aller Schulden",
+    "noDebts": "Alles ausgeglichen!",
+    "markAsPaid": "Als bezahlt markieren",
+    "export": "Exportieren",
+    "exportExpenses": "Ausgaben exportieren",
+    "exportFormat": "Format",
+    "exportDateRange": "Zeitraum",
+    "exportFrom": "Von",
+    "exportTo": "Bis",
+    "exportAll": "Gesamter Zeitraum"
   },
   "subscriptions": {
     "title": "Abonnements",
@@ -289,6 +334,44 @@
     "pendingDeviceCount": "{{count}} Gerät(e) warten auf Genehmigung",
     "approveNow": "Jetzt prüfen",
     "contactSupport": "Support kontaktieren"
+  },
+  "meals": {
+    "title": "Essensplan",
+    "addMeal": "Mahlzeit planen",
+    "empty": "Keine Mahlzeiten geplant",
+    "breakfast": "Frühstück",
+    "lunch": "Mittagessen",
+    "dinner": "Abendessen",
+    "snack": "Snack",
+    "ingredients": "Zutaten",
+    "addToShopping": "Zur Einkaufsliste hinzufügen",
+    "noIngredients": "Keine Zutaten zum Hinzufügen",
+    "addedToShopping": "Zutaten zur Einkaufsliste hinzugefügt"
+  },
+  "leaderboard": {
+    "title": "Bestenliste",
+    "points": "Pkt",
+    "you": "du"
+  },
+  "roles": {
+    "admin": "Admin",
+    "member": "Mitglied",
+    "limited": "Eingeschränkt",
+    "changeRole": "Rolle ändern",
+    "onlyAdmins": "Nur Admins können Rollen ändern",
+    "lastAdmin": "Der letzte Admin kann nicht entfernt werden"
+  },
+  "export": {
+    "fullExport": "Alle Daten exportieren",
+    "fullExportDesc": "Alle Haushaltsdaten als JSON herunterladen",
+    "exporting": "Exportiere..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google Kalender verbinden",
+    "syncNow": "Jetzt synchronisieren",
+    "lastSynced": "Zuletzt synchronisiert",
+    "syncing": "Synchronisiere...",
+    "syncSuccess": "Kalender erfolgreich synchronisiert"
   },
   "widgets": {
     "todosTitle": "Aufgaben",

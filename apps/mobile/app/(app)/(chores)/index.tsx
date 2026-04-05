@@ -2,8 +2,11 @@ import { useState, useCallback, useMemo } from "react";
 import { View, Text, SectionList, TouchableOpacity, RefreshControl, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { startOfDay, isSameDay } from "date-fns";
-import { useChores, useCompleteChore, useDeleteChore } from "@/lib/api/queries";
+import { useChores, useCompleteChore, useDeleteChore, useBreakMode, useNudgeChore } from "@/lib/api/queries";
 import { AddChoreForm } from "@/components/forms/AddChoreForm";
+import { ChoreAnalytics } from "@/components/chores/ChoreAnalytics";
+import { Leaderboard } from "@/components/chores/Leaderboard";
+import { Bell, PauseCircle } from "lucide-react-native";
 import SwipeableListItem from "@/components/list/SwipeableListItem";
 import SelectModeBar from "@/components/list/SelectModeBar";
 import { useSelectMode } from "@/hooks/useSelectMode";
@@ -67,8 +70,13 @@ export default function ChoresScreen() {
   const { data, refetch } = useChores();
   const completeChore = useCompleteChore();
   const deleteChore = useDeleteChore();
+  const { data: breakModeData } = useBreakMode();
+  const nudgeChore = useNudgeChore();
   const [showForm, setShowForm] = useState(false);
   const [editingChore, setEditingChore] = useState<Chore | null>(null);
+  const [showAnalytics, setShowAnalytics] = useState(false);
+
+  const isBreakActive = breakModeData?.breakMode?.active ?? false;
 
   const selectMode = useSelectMode();
 
@@ -184,19 +192,35 @@ export default function ChoresScreen() {
             </Text>
           )}
 
-          {isToday && (
-            <TouchableOpacity
-              onPress={() => handleComplete(item.id)}
-              style={{
-                backgroundColor: colors.success,
-                borderRadius: 8,
-                padding: 10,
-                alignItems: "center",
-                marginTop: 12,
-              }}
-            >
-              <Text style={{ color: "#fff", fontWeight: "600" }}>Mark Done</Text>
-            </TouchableOpacity>
+          {isToday && !isBreakActive && (
+            <View style={{ flexDirection: "row", gap: 8, marginTop: 12 }}>
+              <TouchableOpacity
+                onPress={() => handleComplete(item.id)}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.success,
+                  borderRadius: 8,
+                  padding: 10,
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "#fff", fontWeight: "600" }}>Mark Done</Text>
+              </TouchableOpacity>
+              {item.assignments && item.assignments.length > 0 && (
+                <TouchableOpacity
+                  onPress={() => nudgeChore.mutate(item.id)}
+                  style={{
+                    backgroundColor: colors.muted,
+                    borderRadius: 8,
+                    padding: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Bell size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
+              )}
+            </View>
           )}
         </View>
       </SwipeableListItem>
@@ -229,6 +253,47 @@ export default function ChoresScreen() {
         onCancel={selectMode.clearSelection}
         totalCount={allChores.length}
       />
+
+      {/* Break Mode Banner */}
+      {isBreakActive && (
+        <View style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 8,
+          backgroundColor: "#f59e0b20",
+          borderWidth: 1,
+          borderColor: "#f59e0b",
+          borderRadius: 12,
+          padding: 12,
+          marginHorizontal: 16,
+          marginBottom: 8,
+        }}>
+          <PauseCircle size={20} color="#f59e0b" />
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 14, fontWeight: "600", color: "#f59e0b" }}>Break Mode Active</Text>
+            <Text style={{ fontSize: 12, color: colors.textSecondary }}>
+              Chores are paused{breakModeData?.breakMode?.end ? ` until ${new Date(breakModeData.breakMode.end).toLocaleDateString()}` : ""}
+            </Text>
+          </View>
+        </View>
+      )}
+
+      {/* Analytics toggle */}
+      <TouchableOpacity
+        onPress={() => setShowAnalytics(!showAnalytics)}
+        style={{ paddingHorizontal: 16, paddingBottom: 8 }}
+      >
+        <Text style={{ fontSize: 13, color: colors.primary, fontWeight: "600" }}>
+          {showAnalytics ? "Hide Analytics" : "Show Fair Share Analytics"}
+        </Text>
+      </TouchableOpacity>
+
+      {showAnalytics && (
+        <>
+          <ChoreAnalytics />
+          <Leaderboard />
+        </>
+      )}
 
       <SectionList
         sections={sections}
