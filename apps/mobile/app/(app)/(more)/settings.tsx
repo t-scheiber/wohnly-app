@@ -301,8 +301,11 @@ export default function SettingsScreen() {
   };
 
   const handleShareInvite = async () => {
+    if (!household?.inviteCode) return;
     try {
-      await Share.share({ message: t("household.shareCode") + "\nhttps://wohnly.app/join" });
+      await Share.share({
+        message: `${t("household.shareCode")} ${household.inviteCode}\n\nhttps://wohnly.app/join?code=${household.inviteCode}`,
+      });
     } catch (_) {}
   };
 
