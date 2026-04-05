@@ -288,6 +288,13 @@
     "encryptionDesc": "Ang iyong data ay protektado ng end-to-end na pag-encrypt.",
     "e2ee": "Ang lahat ng data ng sambahayan ay naka-encrypt bago umalis sa iyong device",
     "deviceApproval": "Ang mga bagong device ay dapat aprubahan ng isang kasalukuyang miyembro",
-    "contactSupport": "Makipag-ugnayan sa Suporta"
+    "contactSupport": "Makipag-ugnayan sa Suporta",
+    "devicePendingBanner": "Nakabinbin ang pag-apruba ng device na ito. Mangyaring aprubahan ito sa iyong iba pang device upang ma-access ang nakabahaging data.",
+    "deviceApprovedBanner": "Naaprubahan ang device na ito! Kinukuha ang iyong mga susi sa pag-encrypt ng sambahayan...",
+    "missingKeysBanner": "Naaprubahan ang device, ngunit nawawala ang mga susi sa pag-encrypt. Tiyaking bukas ang isa pang device para mag-sync.",
+    "checkStatus": "Suriin ang Katayuan",
+    "checkAndKeys": "Sync Keys",
+    "pendingDeviceCount": "{{count}} (mga) device na naghihintay ng pag-apruba",
+    "approveNow": "Aprubahan Ngayon"
   }
 }

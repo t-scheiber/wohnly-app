@@ -288,6 +288,13 @@
     "encryptionDesc": "Vaši su podaci zaštićeni end-to-end enkripcijom.",
     "e2ee": "Svi podaci o kućanstvu su šifrirani prije nego napustite svoj uređaj",
     "deviceApproval": "Nove uređaje mora odobriti postojeći član",
-    "contactSupport": "Obratite se podršci"
+    "contactSupport": "Obratite se podršci",
+    "devicePendingBanner": "Ovaj uređaj čeka odobrenje. Odobrite ga na svom drugom uređaju za pristup dijeljenim podacima.",
+    "deviceApprovedBanner": "Ovaj uređaj je odobren! Dohvaćanje ključeva za šifriranje vašeg kućanstva...",
+    "missingKeysBanner": "Uređaj je odobren, ali nedostaju ključevi za šifriranje. Provjerite je li drugi uređaj otvoren za sinkronizaciju.",
+    "checkStatus": "Provjerite status",
+    "checkAndKeys": "Tipke za sinkronizaciju",
+    "pendingDeviceCount": "{{count}} uređaj(a) čeka na odobrenje",
+    "approveNow": "Odobri sada"
   }
 }

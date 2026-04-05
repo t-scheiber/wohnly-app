@@ -288,6 +288,13 @@
     "encryptionDesc": "Verileriniz uçtan uca şifreleme ile korunmaktadır.",
     "e2ee": "Cihazınızdan ayrılmadan önce tüm ev verileri şifrelenir",
     "deviceApproval": "Yeni cihazların mevcut bir üye tarafından onaylanması gerekir",
-    "contactSupport": "Destek Ekibiyle İletişime Geçin"
+    "contactSupport": "Destek Ekibiyle İletişime Geçin",
+    "devicePendingBanner": "Bu cihaz onay bekliyor. Paylaşılan verilere erişmek için lütfen diğer cihazınızda onaylayın.",
+    "deviceApprovedBanner": "Bu cihaz onaylandı! Ev şifreleme anahtarlarınız alınıyor...",
+    "missingKeysBanner": "Cihaz onaylandı ancak şifreleme anahtarları eksik. Başka bir cihazın senkronizasyona açık olduğundan emin olun.",
+    "checkStatus": "Durumu Kontrol Et",
+    "checkAndKeys": "Tuşları Senkronize Et",
+    "pendingDeviceCount": "{{count}} cihaz onay bekliyor",
+    "approveNow": "Şimdi Onayla"
   }
 }

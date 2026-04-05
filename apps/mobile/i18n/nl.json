@@ -288,6 +288,13 @@
     "encryptionDesc": "Uw gegevens worden beschermd met end-to-end-encryptie.",
     "e2ee": "Alle huishoudelijke gegevens worden gecodeerd voordat ze uw apparaat verlaten",
     "deviceApproval": "Nieuwe apparaten moeten worden goedgekeurd door een bestaand lid",
-    "contactSupport": "Neem contact op met ondersteuning"
+    "contactSupport": "Neem contact op met ondersteuning",
+    "devicePendingBanner": "Dit apparaat wacht op goedkeuring. Keur het goed op uw andere apparaat om toegang te krijgen tot gedeelde gegevens.",
+    "deviceApprovedBanner": "Dit apparaat is goedgekeurd! De coderingssleutels van uw huishouden ophalen...",
+    "missingKeysBanner": "Apparaat goedgekeurd, maar er ontbreken coderingssleutels. Zorg ervoor dat een ander apparaat openstaat om te synchroniseren.",
+    "checkStatus": "Controleer status",
+    "checkAndKeys": "Synchroniseer sleutels",
+    "pendingDeviceCount": "{{count}} apparaat(en) wachten op goedkeuring",
+    "approveNow": "Nu goedkeuren"
   }
 }

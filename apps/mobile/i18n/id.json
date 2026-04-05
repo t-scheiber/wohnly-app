@@ -288,6 +288,13 @@
     "encryptionDesc": "Data Anda dilindungi dengan enkripsi ujung ke ujung.",
     "e2ee": "Semua data rumah tangga dienkripsi sebelum meninggalkan perangkat Anda",
     "deviceApproval": "Perangkat baru harus disetujui oleh anggota yang sudah ada",
-    "contactSupport": "Hubungi Dukungan"
+    "contactSupport": "Hubungi Dukungan",
+    "devicePendingBanner": "Perangkat ini sedang menunggu persetujuan. Harap setujui di perangkat Anda yang lain untuk mengakses data bersama.",
+    "deviceApprovedBanner": "Perangkat ini disetujui! Mengambil kunci enkripsi rumah tangga Anda...",
+    "missingKeysBanner": "Perangkat disetujui, tetapi kunci enkripsi tidak ada. Pastikan perangkat lain terbuka untuk sinkronisasi.",
+    "checkStatus": "Periksa Status",
+    "checkAndKeys": "Kunci Sinkronisasi",
+    "pendingDeviceCount": "{{count}} perangkat menunggu persetujuan",
+    "approveNow": "Setujui Sekarang"
   }
 }

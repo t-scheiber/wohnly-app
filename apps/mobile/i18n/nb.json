@@ -288,6 +288,13 @@
     "encryptionDesc": "Dataene dine er beskyttet med ende-til-ende-kryptering.",
     "e2ee": "All husholdningsdata er kryptert før du forlater enheten",
     "deviceApproval": "Nye enheter må godkjennes av et eksisterende medlem",
-    "contactSupport": "Kontakt kundestøtte"
+    "contactSupport": "Kontakt kundestøtte",
+    "devicePendingBanner": "Denne enheten venter på godkjenning. Godkjenn den på den andre enheten for å få tilgang til delte data.",
+    "deviceApprovedBanner": "Denne enheten er godkjent! Henter husholdningskrypteringsnøklene ...",
+    "missingKeysBanner": "Enheten er godkjent, men mangler krypteringsnøkler. Sørg for at en annen enhet er åpen for synkronisering.",
+    "checkStatus": "Sjekk status",
+    "checkAndKeys": "Synkroniseringstaster",
+    "pendingDeviceCount": "{{count}} enhet(er) venter på godkjenning",
+    "approveNow": "Godkjenn nå"
   }
 }

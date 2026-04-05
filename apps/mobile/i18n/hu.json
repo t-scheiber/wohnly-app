@@ -288,6 +288,13 @@
     "encryptionDesc": "Adatait végpontok közötti titkosítás védi.",
     "e2ee": "Az összes háztartási adat titkosítva lesz, mielőtt elhagyja az eszközt",
     "deviceApproval": "Az új eszközöket egy meglévő tagnak jóvá kell hagynia",
-    "contactSupport": "Lépjen kapcsolatba az ügyfélszolgálattal"
+    "contactSupport": "Lépjen kapcsolatba az ügyfélszolgálattal",
+    "devicePendingBanner": "Ez az eszköz jóváhagyásra vár. A megosztott adatok eléréséhez hagyja jóvá másik eszközén.",
+    "deviceApprovedBanner": "Ez a készülék jóváhagyott! A háztartási titkosítási kulcsok lekérése...",
+    "missingKeysBanner": "Az eszköz jóváhagyva, de hiányoznak a titkosítási kulcsok. Győződjön meg arról, hogy egy másik eszköz nyitva van a szinkronizáláshoz.",
+    "checkStatus": "Állapot ellenőrzése",
+    "checkAndKeys": "Szinkronbillentyűk",
+    "pendingDeviceCount": "{{count}} eszköz vár jóváhagyásra",
+    "approveNow": "Jóváhagyás most"
   }
 }

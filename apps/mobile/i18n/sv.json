@@ -288,6 +288,13 @@
     "encryptionDesc": "Dina data är skyddade med end-to-end-kryptering.",
     "e2ee": "All hushållsdata krypteras innan du lämnar din enhet",
     "deviceApproval": "Nya enheter måste godkännas av en befintlig medlem",
-    "contactSupport": "Kontakta support"
+    "contactSupport": "Kontakta support",
+    "devicePendingBanner": "Den här enheten väntar på godkännande. Vänligen godkänn det på din andra enhet för att få åtkomst till delad data.",
+    "deviceApprovedBanner": "Denna enhet är godkänd! Hämtar ditt hushålls krypteringsnycklar...",
+    "missingKeysBanner": "Enheten godkänd men saknar krypteringsnycklar. Se till att en annan enhet är öppen för synkronisering.",
+    "checkStatus": "Kontrollera status",
+    "checkAndKeys": "Synkronisera nycklar",
+    "pendingDeviceCount": "{{count}} enhet(er) väntar på godkännande",
+    "approveNow": "Godkänn nu"
   }
 }
