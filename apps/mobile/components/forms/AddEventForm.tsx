@@ -5,33 +5,44 @@ import { Input } from "../ui/Input";
 import { Checkbox } from "../ui/Checkbox";
 import { DatePicker } from "../ui/DatePicker";
 import { MemberPicker } from "../common/MemberPicker";
-import { useCreateEvent, useHouseholdMembers } from "@/lib/api/queries";
+import { useCreateEvent, useUpdateEvent, useHouseholdMembers } from "@/lib/api/queries";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import type { Event } from "@wohnly/shared";
 
 type Visibility = "personal" | "household" | "custom";
 
 interface AddEventFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  editItem?: Event;
 }
 
-export function AddEventForm({ onSuccess, onCancel }: AddEventFormProps) {
+export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [allDay, setAllDay] = useState(false);
-  const [visibility, setVisibility] = useState<Visibility>("household");
-  const [attendeeIds, setAttendeeIds] = useState<string[]>([]);
+  const isEditing = !!editItem;
+
+  const [title, setTitle] = useState(editItem?.title ?? "");
+  const [description, setDescription] = useState(editItem?.description ?? "");
+  const [location, setLocation] = useState(editItem?.location ?? "");
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    editItem?.startDate ? new Date(editItem.startDate) : undefined
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    editItem?.endDate ? new Date(editItem.endDate) : undefined
+  );
+  const [allDay, setAllDay] = useState(editItem?.allDay ?? false);
+  const [visibility, setVisibility] = useState<Visibility>(editItem?.visibility ?? "household");
+  const [attendeeIds, setAttendeeIds] = useState<string[]>(
+    editItem?.attendees?.map((a) => a.memberId) ?? []
+  );
 
   const createEvent = useCreateEvent();
+  const updateEvent = useUpdateEvent();
   const { data: membersData } = useHouseholdMembers();
 
   const handleSubmit = async () => {
@@ -41,7 +52,7 @@ export function AddEventForm({ onSuccess, onCancel }: AddEventFormProps) {
     }
 
     try {
-      await createEvent.mutateAsync({
+      const payload = {
         title: title.trim(),
         description: description.trim() || undefined,
         location: location.trim() || undefined,
@@ -50,10 +61,15 @@ export function AddEventForm({ onSuccess, onCancel }: AddEventFormProps) {
         allDay,
         visibility,
         attendeeIds: visibility === "custom" ? attendeeIds : undefined,
-      });
+      };
+      if (isEditing) {
+        await updateEvent.mutateAsync({ id: editItem.id, ...payload });
+      } else {
+        await createEvent.mutateAsync(payload);
+      }
       onSuccess?.();
     } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : "Failed to create event");
+      Alert.alert("Error", err instanceof Error ? err.message : `Failed to ${isEditing ? "update" : "create"} event`);
     }
   };
 
@@ -66,7 +82,7 @@ export function AddEventForm({ onSuccess, onCancel }: AddEventFormProps) {
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
-        {t("events.addEvent")}
+        {isEditing ? t("events.editEvent", "Edit Event") : t("events.addEvent")}
       </Text>
 
       <Input label={t("events.title")} placeholder="Event name" value={title} onChangeText={setTitle} />
@@ -137,8 +153,8 @@ export function AddEventForm({ onSuccess, onCancel }: AddEventFormProps) {
         {onCancel && (
           <Button variant="ghost" onPress={onCancel} style={{ flex: 1 }}>Cancel</Button>
         )}
-        <Button onPress={handleSubmit} loading={createEvent.isPending} disabled={!title.trim() || !startDate} style={{ flex: 2 }}>
-          {t("events.addEvent")}
+        <Button onPress={handleSubmit} loading={isEditing ? updateEvent.isPending : createEvent.isPending} disabled={!title.trim() || !startDate} style={{ flex: 2 }}>
+          {isEditing ? t("common.save", "Save") : t("events.addEvent")}
         </Button>
       </View>
     </ScrollView>

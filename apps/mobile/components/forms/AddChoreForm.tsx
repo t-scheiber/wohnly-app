@@ -3,10 +3,11 @@ import { View, Text, ScrollView, Alert, Switch } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { MemberPicker } from "../common/MemberPicker";
-import { useCreateChore, useHouseholdMembers } from "@/lib/api/queries";
+import { useCreateChore, useUpdateChore, useHouseholdMembers } from "@/lib/api/queries";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import type { Chore } from "@wohnly/shared";
 
 const frequencies = [
   { label: "Daily", value: "daily" },
@@ -28,22 +29,28 @@ const DAYS_OF_WEEK = [
 interface AddChoreFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  editItem?: Chore;
 }
 
-export function AddChoreForm({ onSuccess, onCancel }: AddChoreFormProps) {
+export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [frequency, setFrequency] = useState("weekly");
-  const [dayOfWeek, setDayOfWeek] = useState<number | null>(null);
-  const [dayOfMonth, setDayOfMonth] = useState<number | null>(null);
-  const [assigneeIds, setAssigneeIds] = useState<string[]>([]);
-  const [rotate, setRotate] = useState(false);
+  const isEditing = !!editItem;
+
+  const [title, setTitle] = useState(editItem?.title ?? "");
+  const [description, setDescription] = useState(editItem?.description ?? "");
+  const [frequency, setFrequency] = useState(editItem?.frequency ?? "weekly");
+  const [dayOfWeek, setDayOfWeek] = useState<number | null>(editItem?.dayOfWeek ?? null);
+  const [dayOfMonth, setDayOfMonth] = useState<number | null>((editItem as any)?.dayOfMonth ?? null);
+  const [assigneeIds, setAssigneeIds] = useState<string[]>(
+    editItem?.assignments?.map((a) => a.memberId) ?? []
+  );
+  const [rotate, setRotate] = useState((editItem as any)?.rotate ?? false);
 
   const createChore = useCreateChore();
+  const updateChore = useUpdateChore();
   const { data: membersData } = useHouseholdMembers();
 
   const showDayOfWeek = frequency === "weekly" || frequency === "biweekly";
@@ -56,7 +63,7 @@ export function AddChoreForm({ onSuccess, onCancel }: AddChoreFormProps) {
     }
 
     try {
-      await createChore.mutateAsync({
+      const payload = {
         title: title.trim(),
         frequency,
         description: description.trim() || undefined,
@@ -64,17 +71,22 @@ export function AddChoreForm({ onSuccess, onCancel }: AddChoreFormProps) {
         dayOfMonth: showDayOfMonth ? dayOfMonth ?? undefined : undefined,
         rotate: rotate && assigneeIds.length > 1 ? true : undefined,
         assigneeIds: assigneeIds.length > 0 ? assigneeIds : undefined,
-      });
+      };
+      if (isEditing) {
+        await updateChore.mutateAsync({ id: editItem.id, ...payload });
+      } else {
+        await createChore.mutateAsync(payload);
+      }
       onSuccess?.();
     } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : "Failed to create chore");
+      Alert.alert("Error", err instanceof Error ? err.message : `Failed to ${isEditing ? "update" : "create"} chore`);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
-        {t("chores.addChore")}
+        {isEditing ? t("chores.editChore", "Edit Chore") : t("chores.addChore")}
       </Text>
 
       <Input
@@ -212,11 +224,11 @@ export function AddChoreForm({ onSuccess, onCancel }: AddChoreFormProps) {
         )}
         <Button
           onPress={handleSubmit}
-          loading={createChore.isPending}
+          loading={isEditing ? updateChore.isPending : createChore.isPending}
           disabled={!title.trim()}
           style={{ flex: 2 }}
         >
-          {t("chores.addChore")}
+          {isEditing ? t("common.save", "Save") : t("chores.addChore")}
         </Button>
       </View>
     </ScrollView>
