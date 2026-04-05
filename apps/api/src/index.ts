@@ -41,6 +41,22 @@ app.use(
   })
 );
 
+// Tauri desktop: browsers forbid setting the Cookie header in fetch(),
+// so the Tauri client sends the session token via x-session-token.
+// Convert it to a Cookie header so Better Auth can read it.
+app.use("*", async (c, next) => {
+  const sessionToken = c.req.header("x-session-token");
+  if (sessionToken && !c.req.header("cookie")) {
+    const cookieName = "__Secure-better-auth.session_token";
+    const newHeaders = new Headers(c.req.raw.headers);
+    newHeaders.set("cookie", `${cookieName}=${sessionToken}`);
+    const newRequest = new Request(c.req.raw, { headers: newHeaders });
+    // Replace the raw request so downstream handlers see the cookie
+    Object.defineProperty(c.req, "raw", { value: newRequest, writable: true });
+  }
+  await next();
+});
+
 // Better Auth handles its own routes
 app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
