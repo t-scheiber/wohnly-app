@@ -34,6 +34,8 @@ app.use(
       "https://www.wohnly.app",
       "http://localhost:8081",
       "http://localhost:19006",
+      "tauri://localhost",
+      "https://tauri.localhost",
     ],
     credentials: true,
   })
