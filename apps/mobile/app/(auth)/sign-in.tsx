@@ -5,14 +5,16 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  ScrollView,
   Platform,
   ActivityIndicator,
   Alert,
   Image,
+  StyleSheet,
 } from "react-native";
 import { Link } from "expo-router";
 import * as Linking from "expo-linking";
-import Svg, { Path, G, Rect } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 import { authClient } from "@/lib/auth/client";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -88,158 +90,201 @@ export default function SignInScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: colors.background }}
     >
-      <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
-        <Image
-          source={require("@/assets/images/icon.png")}
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 20,
-            alignSelf: "center",
-            marginBottom: 16,
-          }}
-        />
-        <Text
-          style={{
-            fontSize: 36,
-            fontWeight: "bold",
-            color: colors.primary,
-            textAlign: "center",
-            marginBottom: 8,
-          }}
-        >
-          Wohnly
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            color: colors.textSecondary,
-            textAlign: "center",
-            marginBottom: 32,
-          }}
-        >
-          Manage your household together
-        </Text>
-
-        <TextInput
-          placeholder="Email"
-          placeholderTextColor={colors.textSecondary}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          style={{
-            backgroundColor: colors.card,
-            borderWidth: 1,
-            borderColor: colors.border,
-            borderRadius: 12,
-            padding: 16,
-            fontSize: 16,
-            color: colors.text,
-            marginBottom: 12,
-          }}
-        />
-
-        <TextInput
-          placeholder="Password"
-          placeholderTextColor={colors.textSecondary}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoComplete="password"
-          style={{
-            backgroundColor: colors.card,
-            borderWidth: 1,
-            borderColor: colors.border,
-            borderRadius: 12,
-            padding: 16,
-            fontSize: 16,
-            color: colors.text,
-            marginBottom: 20,
-          }}
-        />
-
-        <TouchableOpacity
-          onPress={handleSignIn}
-          disabled={loading}
-          style={{
-            backgroundColor: colors.primary,
-            borderRadius: 12,
-            padding: 16,
-            alignItems: "center",
-            marginBottom: 24,
-            opacity: loading ? 0.7 : 1,
-          }}
-        >
-          {loading ? (
-            <ActivityIndicator color={colors.primaryForeground} />
-          ) : (
-            <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "600" }}>
-              Sign In
-            </Text>
-          )}
-        </TouchableOpacity>
-
-        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 24 }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
-          <Text style={{ marginHorizontal: 16, color: colors.textSecondary }}>or</Text>
-          <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
-        </View>
-
-        {/* Google Sign-In — per Google branding guidelines */}
-        <TouchableOpacity
-          onPress={handleGoogleSignIn}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#fff",
-            borderWidth: 1,
-            borderColor: "#dadce0",
-            borderRadius: 12,
-            padding: 14,
-            marginBottom: 12,
-            gap: 12,
-          }}
-        >
-          <GoogleLogo size={20} />
-          <Text style={{ color: "#1f1f1f", fontSize: 16, fontWeight: "500" }}>
-            Continue with Google
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 24,
+        }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.form}>
+          <Image
+            source={require("@/assets/images/icon.png")}
+            style={styles.icon}
+          />
+          <Text style={[styles.title, { color: colors.primary }]}>Wohnly</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            Manage your household together
           </Text>
-        </TouchableOpacity>
 
-        {/* Apple Sign-In — per Apple Human Interface Guidelines */}
-        <TouchableOpacity
-          onPress={handleAppleSignIn}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#000",
-            borderRadius: 12,
-            padding: 14,
-            marginBottom: 32,
-            gap: 10,
-          }}
-        >
-          <AppleLogo size={20} color="#fff" />
-          <Text style={{ color: "#fff", fontSize: 16, fontWeight: "600" }}>
-            Continue with Apple
-          </Text>
-        </TouchableOpacity>
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor={colors.textSecondary}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            style={[styles.input, {
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+              color: colors.text,
+            }]}
+          />
 
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Text style={{ color: colors.textSecondary }}>Don't have an account? </Text>
-          <Link href="/(auth)/sign-up">
-            <Text style={{ color: colors.primary, fontWeight: "600" }}>Sign Up</Text>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor={colors.textSecondary}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            autoComplete="password"
+            style={[styles.input, {
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+              color: colors.text,
+              marginBottom: 20,
+            }]}
+          />
+
+          <TouchableOpacity
+            onPress={handleSignIn}
+            disabled={loading}
+            style={[styles.signInBtn, {
+              backgroundColor: colors.primary,
+              opacity: loading ? 0.7 : 1,
+            }]}
+          >
+            {loading ? (
+              <ActivityIndicator color={colors.primaryForeground} />
+            ) : (
+              <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "600" }}>
+                Sign In
+              </Text>
+            )}
+          </TouchableOpacity>
+
+          <View style={styles.divider}>
+            <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+            <Text style={{ marginHorizontal: 16, color: colors.textSecondary }}>or</Text>
+            <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+          </View>
+
+          {/* Google Sign-In — per Google branding guidelines */}
+          <TouchableOpacity
+            onPress={handleGoogleSignIn}
+            activeOpacity={0.8}
+            style={styles.googleBtn}
+          >
+            <View style={styles.oauthContent}>
+              <GoogleLogo size={20} />
+              <Text style={styles.googleText}>Continue with Google</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Apple Sign-In — per Apple Human Interface Guidelines */}
+          <TouchableOpacity
+            onPress={handleAppleSignIn}
+            activeOpacity={0.8}
+            style={styles.appleBtn}
+          >
+            <View style={styles.oauthContent}>
+              <AppleLogo size={20} color="#fff" />
+              <Text style={styles.appleText}>Continue with Apple</Text>
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.signUpRow}>
+            <Text style={{ color: colors.textSecondary }}>Don't have an account? </Text>
+            <Link href="/(auth)/sign-up">
+              <Text style={{ color: colors.primary, fontWeight: "600" }}>Sign Up</Text>
+            </Link>
+          </View>
+
+          <Link href="/privacy-policy" style={{ alignSelf: "center", marginTop: 24 }}>
+            <Text style={{ color: colors.textSecondary, fontSize: 13 }}>Privacy Policy</Text>
           </Link>
         </View>
-
-        <Link href="/privacy-policy" style={{ alignSelf: "center", marginTop: 24 }}>
-          <Text style={{ color: colors.textSecondary, fontSize: 13 }}>Privacy Policy</Text>
-        </Link>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  form: {
+    width: "100%",
+    maxWidth: 400,
+    alignItems: "stretch",
+  },
+  icon: {
+    width: 80,
+    height: 80,
+    borderRadius: 20,
+    alignSelf: "center",
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 32,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
+    marginBottom: 12,
+  },
+  signInBtn: {
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+  oauthContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  googleBtn: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#dadce0",
+    borderRadius: 12,
+    height: 48,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  googleText: {
+    color: "#1f1f1f",
+    fontSize: 16,
+    fontWeight: "500",
+    marginLeft: 12,
+  },
+  appleBtn: {
+    backgroundColor: "#000",
+    borderRadius: 12,
+    height: 48,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 32,
+  },
+  appleText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: 10,
+  },
+  signUpRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+});
