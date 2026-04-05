@@ -56,15 +56,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build iOS (preview)
+      - name: Build iOS (production)
         working-directory: apps/mobile
-        run: eas build --profile preview --platform ios --non-interactive
+        run: eas build --profile production --platform ios --non-interactive
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
-      - name: Build Android (preview)
+      - name: Build Android (production)
         working-directory: apps/mobile
-        run: eas build --profile preview --platform android --non-interactive
+        run: eas build --profile production --platform android --non-interactive
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
