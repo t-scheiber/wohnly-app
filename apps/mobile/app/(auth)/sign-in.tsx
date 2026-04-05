@@ -98,9 +98,14 @@ export default function SignInScreen() {
           callbackURL: CALLBACK_URL,
         });
       }
-    } catch {
-      // Error handling: on Tauri, Alert.alert doesn't work,
-      // so we just reset the loading state
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Sign-in failed. Please try again.";
+
+      // Tauri runs on the web platform, so use the browser alert there.
+      if (Platform.OS === "web" && typeof window !== "undefined") {
+        window.alert(message);
+      }
     } finally {
       setLoading(false);
     }
