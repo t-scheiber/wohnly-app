@@ -32,6 +32,14 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   const [createdCode, setCreatedCode] = useState("");
   const [copied, setCopied] = useState(false);
 
+  const showError = (title: string, message: string) => {
+    if (Platform.OS === "web") {
+      window.alert(`${title}: ${message}`);
+    } else {
+      Alert.alert(title, message);
+    }
+  };
+
   const handleCreate = async () => {
     if (!householdName.trim()) return;
     setLoading(true);
@@ -40,7 +48,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       setCreatedCode(res.household.inviteCode);
       setStep("success");
     } catch (err: unknown) {
-      Alert.alert(t("common.error"), err instanceof Error ? err.message : "Failed to create household");
+      showError(t("common.error"), err instanceof Error ? err.message : "Failed to create household");
     } finally {
       setLoading(false);
     }
@@ -68,7 +76,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       queryClient.invalidateQueries({ queryKey: ["balances"] });
       queryClient.invalidateQueries({ queryKey: ["household"] });
     } catch (err: unknown) {
-      Alert.alert(t("common.error"), err instanceof Error ? err.message : "Failed to join household");
+      showError(t("common.error"), err instanceof Error ? err.message : "Failed to join household");
     } finally {
       setLoading(false);
     }
