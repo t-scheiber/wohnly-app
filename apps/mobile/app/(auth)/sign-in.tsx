@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
   ScrollView,
   Platform,
   ActivityIndicator,
@@ -16,6 +14,12 @@ import { Link } from "expo-router";
 import * as Linking from "expo-linking";
 import Svg, { Path } from "react-native-svg";
 import { authClient } from "@/lib/auth/client";
+import {
+  isTauri,
+  onDeepLink,
+  tauriSignIn,
+  handleTauriDeepLink,
+} from "@/lib/auth/tauri";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
@@ -43,166 +47,110 @@ const CALLBACK_URL = Platform.OS === "web" ? "https://wohnly.app" : Linking.crea
 export default function SignInScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const [loadingApple, setLoadingApple] = useState(false);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  // Listen for deep link callback from system browser (Tauri only)
+  useEffect(() => {
+    if (!isTauri()) return;
+    const cleanup = onDeepLink((url) => {
+      const stored = handleTauriDeepLink(url);
+      if (stored) {
+        // Session cookie stored — reload to pick up the session
+        window.location.reload();
+      }
+    });
+    return cleanup;
+  }, []);
 
-  const handleSignIn = async () => {
-    if (!email.trim() || !password) {
-      Alert.alert("Error", "Please enter email and password");
-      return;
-    }
+  const handleSocialSignIn = async (provider: "google" | "apple") => {
+    const setLoading = provider === "google" ? setLoadingGoogle : setLoadingApple;
     setLoading(true);
     try {
-      await authClient.signIn.email({ email: email.trim(), password });
+      if (isTauri()) {
+        // Open system browser for OAuth to avoid webview cookie issues
+        await tauriSignIn(provider);
+      } else {
+        await authClient.signIn.social({
+          provider,
+          callbackURL: CALLBACK_URL,
+        });
+      }
     } catch (err: unknown) {
-      Alert.alert("Sign In Failed", err instanceof Error ? err.message : "Please try again");
+      Alert.alert("Error", err instanceof Error ? err.message : `${provider} sign in failed`);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await authClient.signIn.social({
-        provider: "google",
-        callbackURL: CALLBACK_URL,
-      });
-    } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : "Google sign in failed");
-    }
-  };
-
-  const handleAppleSignIn = async () => {
-    try {
-      await authClient.signIn.social({
-        provider: "apple",
-        callbackURL: CALLBACK_URL,
-      });
-    } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : "Apple sign in failed");
-    }
-  };
-
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: colors.background }}
+    <ScrollView
+      contentContainerStyle={[styles.scrollContent, { backgroundColor: colors.background }]}
+      keyboardShouldPersistTaps="handled"
     >
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 24,
-        }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.form}>
-          <Image
-            source={require("@/assets/images/icon.png")}
-            style={styles.icon}
-          />
-          <Text style={[styles.title, { color: colors.primary }]}>Wohnly</Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Manage your household together
-          </Text>
+      <View style={styles.form}>
+        <Image
+          source={require("@/assets/images/icon.png")}
+          style={styles.icon}
+        />
+        <Text style={[styles.title, { color: colors.primary }]}>Wohnly</Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          Manage your household together
+        </Text>
 
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={colors.textSecondary}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            style={[styles.input, {
-              backgroundColor: colors.card,
-              borderColor: colors.border,
-              color: colors.text,
-            }]}
-          />
-
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor={colors.textSecondary}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            autoComplete="password"
-            style={[styles.input, {
-              backgroundColor: colors.card,
-              borderColor: colors.border,
-              color: colors.text,
-              marginBottom: 20,
-            }]}
-          />
-
-          <TouchableOpacity
-            onPress={handleSignIn}
-            disabled={loading}
-            style={[styles.signInBtn, {
-              backgroundColor: colors.primary,
-              opacity: loading ? 0.7 : 1,
-            }]}
-          >
-            {loading ? (
-              <ActivityIndicator color={colors.primaryForeground} />
+        {/* Google Sign-In */}
+        <TouchableOpacity
+          onPress={() => handleSocialSignIn("google")}
+          activeOpacity={0.8}
+          disabled={loadingGoogle}
+          style={styles.googleBtn}
+        >
+          <View style={styles.oauthContent}>
+            {loadingGoogle ? (
+              <ActivityIndicator size="small" color="#1f1f1f" />
             ) : (
-              <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "600" }}>
-                Sign In
-              </Text>
+              <>
+                <GoogleLogo size={20} />
+                <Text style={styles.googleText}>Continue with Google</Text>
+              </>
             )}
-          </TouchableOpacity>
-
-          <View style={styles.divider}>
-            <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
-            <Text style={{ marginHorizontal: 16, color: colors.textSecondary }}>or</Text>
-            <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
           </View>
+        </TouchableOpacity>
 
-          {/* Google Sign-In — per Google branding guidelines */}
-          <TouchableOpacity
-            onPress={handleGoogleSignIn}
-            activeOpacity={0.8}
-            style={styles.googleBtn}
-          >
-            <View style={styles.oauthContent}>
-              <GoogleLogo size={20} />
-              <Text style={styles.googleText}>Continue with Google</Text>
-            </View>
-          </TouchableOpacity>
-
-          {/* Apple Sign-In — per Apple Human Interface Guidelines */}
-          <TouchableOpacity
-            onPress={handleAppleSignIn}
-            activeOpacity={0.8}
-            style={styles.appleBtn}
-          >
-            <View style={styles.oauthContent}>
-              <AppleLogo size={20} color="#fff" />
-              <Text style={styles.appleText}>Continue with Apple</Text>
-            </View>
-          </TouchableOpacity>
-
-          <View style={styles.signUpRow}>
-            <Text style={{ color: colors.textSecondary }}>Don't have an account? </Text>
-            <Link href="/(auth)/sign-up">
-              <Text style={{ color: colors.primary, fontWeight: "600" }}>Sign Up</Text>
-            </Link>
+        {/* Apple Sign-In */}
+        <TouchableOpacity
+          onPress={() => handleSocialSignIn("apple")}
+          activeOpacity={0.8}
+          disabled={loadingApple}
+          style={styles.appleBtn}
+        >
+          <View style={styles.oauthContent}>
+            {loadingApple ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <>
+                <AppleLogo size={20} color="#fff" />
+                <Text style={styles.appleText}>Continue with Apple</Text>
+              </>
+            )}
           </View>
+        </TouchableOpacity>
 
-          <Link href="/privacy-policy" style={{ alignSelf: "center", marginTop: 24 }}>
-            <Text style={{ color: colors.textSecondary, fontSize: 13 }}>Privacy Policy</Text>
-          </Link>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        <Link href="/privacy-policy" style={styles.privacyLink}>
+          <Text style={[styles.privacyText, { color: colors.textSecondary }]}>Privacy Policy</Text>
+        </Link>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+  },
   form: {
     width: "100%",
     maxWidth: 400,
@@ -224,29 +172,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     textAlign: "center",
-    marginBottom: 32,
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    marginBottom: 12,
-  },
-  signInBtn: {
-    borderRadius: 12,
-    padding: 16,
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
+    marginBottom: 40,
   },
   oauthContent: {
     flexDirection: "row",
@@ -283,8 +209,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 10,
   },
-  signUpRow: {
-    flexDirection: "row",
-    justifyContent: "center",
+  privacyLink: {
+    alignSelf: "center",
+  },
+  privacyText: {
+    fontSize: 13,
   },
 });
