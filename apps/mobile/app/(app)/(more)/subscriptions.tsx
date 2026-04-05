@@ -93,7 +93,7 @@ export default function SubscriptionsScreen() {
       <FlatList
         data={subscriptions}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: Subscription) => item.id}
         contentContainerStyle={{ paddingHorizontal: 16 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />

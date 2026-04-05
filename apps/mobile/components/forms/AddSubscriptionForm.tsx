@@ -93,7 +93,7 @@ export function AddSubscriptionForm({ onSuccess, onCancel, editItem }: AddSubscr
       <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>{t("subscriptions.frequency")}</Text>
       <View style={{ flexDirection: "row", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
         {frequencies.map((f) => (
-          <Button key={f.value} variant={frequency === f.value ? "primary" : "outline"} size="sm" onPress={() => setFrequency(f.value)}>
+          <Button key={f.value} variant={frequency === f.value ? "primary" : "outline"} size="sm" onPress={() => setFrequency(f.value as typeof frequency)}>
             {f.label}
           </Button>
         ))}

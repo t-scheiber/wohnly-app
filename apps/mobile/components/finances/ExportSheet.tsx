@@ -45,7 +45,7 @@ export function ExportSheet({ onClose }: ExportSheetProps) {
         // Native: download to temp file and share
         const csv = await api<string>(`/api/expenses/export?${params}`);
         const filename = `wohnly-expenses-${new Date().toISOString().split("T")[0]}.csv`;
-        const fileUri = `${FileSystem.cacheDirectory}${filename}`;
+        const fileUri = `${(FileSystem as any).cacheDirectory}${filename}`;
         await FileSystem.writeAsStringAsync(fileUri, typeof csv === "string" ? csv : JSON.stringify(csv));
 
         if (await Sharing.isAvailableAsync()) {
