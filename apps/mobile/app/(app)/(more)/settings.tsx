@@ -12,7 +12,7 @@ import { distributeKeyToDevice } from "@/lib/crypto/e2ee-setup";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
-import { LANGUAGES as ALL_LANGUAGES } from "@/i18n";
+import { LANGUAGES as ALL_LANGUAGES, changeLanguage as setI18nLanguage } from "@/i18n";
 import { clearDeviceKeys } from "@/lib/crypto/device-storage";
 import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
@@ -541,8 +541,8 @@ export default function SettingsScreen() {
         onClose={() => setLangPickerOpen(false)}
         title={t("settings.language")}
         options={LANGUAGES}
-        selected={i18n.language as "en" | "de"}
-        onSelect={(code) => i18n.changeLanguage(code)}
+        selected={i18n.language}
+        onSelect={(code) => setI18nLanguage(code as any)}
         colors={colors}
       />
       <PickerModal

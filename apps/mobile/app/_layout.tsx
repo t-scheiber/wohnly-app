@@ -11,7 +11,7 @@ import { useConsent } from "@/lib/hooks/useConsent";
 import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
 import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
 import { Colors } from "@/constants/Colors";
-import "@/i18n";
+import i18n from "@/i18n";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -169,6 +169,13 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
 export default function RootLayout() {
   const theme = useThemeProvider();
+
+  // Web document language handling
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      document.documentElement.lang = i18n.language;
+    }
+  }, [i18n.language]);
 
   if (!theme.loaded) return null;
 

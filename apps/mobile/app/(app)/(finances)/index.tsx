@@ -1,9 +1,10 @@
 import { useState, useCallback } from "react";
 import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription } from "@/lib/api/queries";
+import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription, useMemberBalances, useHouseholdMembers } from "@/lib/api/queries";
 import { AddExpenseForm } from "@/components/forms/AddExpenseForm";
 import { AddSubscriptionForm } from "@/components/forms/AddSubscriptionForm";
+import { ListGuideTooltips } from "@/components/guide/ListGuideTooltips";
 import SwipeableListItem from "@/components/list/SwipeableListItem";
 import SelectModeBar from "@/components/list/SelectModeBar";
 import { useSelectMode } from "@/hooks/useSelectMode";
@@ -13,6 +14,8 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { formatCurrency, formatDate } from "@wohnly/shared";
 import { AdBanner } from "@/components/common/AdBanner";
+import { HelpCircle, Info, TrendingUp, Wallet } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import type { Expense, Subscription } from "@wohnly/shared";
 
 const frequencyLabels: Record<string, string> = {
@@ -26,10 +29,12 @@ const frequencyLabels: Record<string, string> = {
 export default function FinancesScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { t } = useTranslation();
 
   const [tab, setTab] = useState<"expenses" | "subscriptions">("expenses");
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showSubForm, setShowSubForm] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
 
@@ -38,6 +43,8 @@ export default function FinancesScreen() {
 
   const { data: expData, refetch: refetchExp } = useExpenses();
   const { data: subData, refetch: refetchSub } = useSubscriptions();
+  const { data: balances } = useMemberBalances();
+  const { data: membersData } = useHouseholdMembers();
   const deleteExpense = useDeleteExpense();
   const deleteSubscription = useDeleteSubscription();
 
@@ -185,7 +192,12 @@ export default function FinancesScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>Finances</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("finances.title")}</Text>
+          <TouchableOpacity onPress={() => setShowHelp(true)}>
+            <HelpCircle size={22} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
           onPress={() => tab === "expenses" ? setShowExpenseForm(true) : setShowSubForm(true)}
           style={{
@@ -195,7 +207,7 @@ export default function FinancesScreen() {
             paddingVertical: 8,
           }}
         >
-          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ Add</Text>
+          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -251,7 +263,7 @@ export default function FinancesScreen() {
       {/* Summary card */}
       {tab === "expenses" ? (
         <View style={{ backgroundColor: colors.primary, padding: 20, marginHorizontal: 16, marginBottom: 8, borderRadius: 16 }}>
-          <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>Total Expenses</Text>
+          <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>{t("expenses.totalExpenses")}</Text>
           {Object.keys(expenseTotals).length === 0 ? (
             <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
               {formatCurrency(0)}
@@ -266,7 +278,7 @@ export default function FinancesScreen() {
         </View>
       ) : (
         <View style={{ backgroundColor: "#6366f1", padding: 20, marginHorizontal: 16, marginBottom: 8, borderRadius: 16 }}>
-          <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>Monthly Cost</Text>
+          <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>{t("subscriptions.monthlyCost")}</Text>
           {Object.keys(subTotals).length === 0 ? (
             <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
               {formatCurrency(0)}
@@ -291,7 +303,7 @@ export default function FinancesScreen() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
           ListEmptyComponent={
             <View style={{ alignItems: "center", paddingVertical: 48 }}>
-              <Text style={{ fontSize: 16, color: colors.textSecondary }}>No expenses yet</Text>
+              <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("expenses.empty")}</Text>
             </View>
           }
         />
@@ -304,13 +316,77 @@ export default function FinancesScreen() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
           ListEmptyComponent={
             <View style={{ alignItems: "center", paddingVertical: 48 }}>
-              <Text style={{ fontSize: 16, color: colors.textSecondary }}>No subscriptions yet</Text>
+              <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("subscriptions.empty")}</Text>
             </View>
           }
         />
       )}
 
       <AdBanner />
+
+      <ListGuideTooltips
+        feature={tab}
+        hasItems={tab === "expenses" ? expenses.length > 0 : subscriptions.length > 0}
+      />
+
+      {/* Help Modal */}
+      <Modal visible={showHelp} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowHelp(false)}>
+        <View style={{ flex: 1, backgroundColor: colors.background, padding: 24 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}>{t("help.finances")}</Text>
+            <TouchableOpacity onPress={() => setShowHelp(false)}>
+              <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 16 }}>{t("common.done")}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ gap: 20 }}>
+            <View style={{ flexDirection: "row", gap: 14 }}>
+              <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: colors.primary + "15", alignItems: "center", justifyContent: "center" }}>
+                <Wallet size={22} color={colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 17, fontWeight: "600", color: colors.text, marginBottom: 4 }}>{t("help.expenses")}</Text>
+                <Text style={{ fontSize: 14, color: colors.textSecondary, lineHeight: 20 }}>{t("help.financesDesc")}</Text>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: "row", gap: 14 }}>
+              <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: colors.success + "15", alignItems: "center", justifyContent: "center" }}>
+                <TrendingUp size={22} color={colors.success} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 17, fontWeight: "600", color: colors.text, marginBottom: 4 }}>{t("help.splits")}</Text>
+                <Text style={{ fontSize: 14, color: colors.textSecondary, lineHeight: 20 }}>{t("guide.financesBalance")}</Text>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: "row", gap: 14 }}>
+              <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: "#6366f115", alignItems: "center", justifyContent: "center" }}>
+                <Info size={22} color="#6366f1" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 17, fontWeight: "600", color: colors.text, marginBottom: 4 }}>{t("help.subscriptions")}</Text>
+                <Text style={{ fontSize: 14, color: colors.textSecondary, lineHeight: 20 }}>{t("help.subscriptions")}</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Balance summary */}
+          {balances?.members && balances.members.length > 0 && (
+            <View style={{ marginTop: 32, padding: 20, backgroundColor: colors.card, borderRadius: 16, borderWidth: 1, borderColor: colors.border }}>
+              <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text, marginBottom: 12 }}>{t("balances.totalBalance")}</Text>
+              {balances.members.map((member) => (
+                <View key={member.memberId} style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
+                  <Text style={{ color: colors.text }}>{membersData?.members?.find(m => m.id === member.memberId)?.nickname || member.displayName}</Text>
+                  <Text style={{ fontWeight: "600", color: member.totalBalance > 0 ? colors.success : member.totalBalance < 0 ? colors.destructive : colors.textSecondary }}>
+                    {formatCurrency(member.totalBalance)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+      </Modal>
 
       {/* Expense Modal (create + edit) */}
       <Modal visible={isExpenseModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseExpenseModal}>
@@ -336,3 +412,4 @@ export default function FinancesScreen() {
     </SafeAreaView>
   );
 }
+
