@@ -4,9 +4,11 @@ import { requireAuth } from "../middleware/auth.js";
 import type { AppEnv } from "../types.js";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2025-04-30.basil" as any,
-});
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2025-04-30.basil" as any,
+    })
+  : null;
 
 const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID || "price_1TG6k2BZI8X1eLjmOGHKyybA";
 
@@ -67,6 +69,7 @@ app.post("/stripe/checkout", requireAuth, async (c) => {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   const appUrl = process.env.APP_URL || "https://wohnly.app";
 
+  if (!stripe) return c.json({ error: "Stripe not configured" }, 503);
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
@@ -90,6 +93,7 @@ app.post("/stripe", async (c) => {
   if (webhookSecret && sig) {
     const body = await c.req.text();
     try {
+      if (!stripe) return c.json({ error: "Stripe not configured" }, 503);
       event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     } catch (err) {
       console.error("Stripe webhook signature verification failed:", err);
