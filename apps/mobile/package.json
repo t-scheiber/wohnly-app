@@ -83,7 +83,9 @@
     "doctor": {
       "reactNativeDirectoryCheck": {
         "exclude": [
-          "react-native-libsodium"
+          "react-native-libsodium",
+          "react-native-shared-group-preferences",
+          "expo-text-extractor"
         ]
       }
     }

@@ -100,8 +100,10 @@ app.use("*", async (c, next) => {
   await next();
 });
 
-// Better Auth handles its own routes
-app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
+// Better Auth handles its own routes.
+// Hono uses `*` as the wildcard matcher for nested paths.
+app.all("/api/auth", (c) => auth.handler(c.req.raw));
+app.all("/api/auth/*", (c) => auth.handler(c.req.raw));
 
 // API Routes
 app.route("/api/households", householdsRouter);
