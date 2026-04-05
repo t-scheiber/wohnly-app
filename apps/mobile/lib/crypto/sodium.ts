@@ -12,8 +12,10 @@ export async function getSodium(): Promise<typeof import("libsodium-wrappers")> 
 
   if (Platform.OS === "web") {
     const mod = await import("libsodium-wrappers");
-    await mod.ready;
-    sodium = mod;
+    // Handle both ESM default export and CommonJS module
+    const lib = (mod as any).default ?? mod;
+    await lib.ready;
+    sodium = lib;
   } else {
     // react-native-libsodium provides the same API as libsodium-wrappers
     const mod = await import("react-native-libsodium");
