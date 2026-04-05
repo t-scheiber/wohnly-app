@@ -288,6 +288,13 @@
     "encryptionDesc": "Tietosi on suojattu päästä päähän -salauksella.",
     "e2ee": "Kaikki kotitalouden tiedot salataan ennen kuin poistut laitteeltasi",
     "deviceApproval": "Nykyisen jäsenen on hyväksyttävä uudet laitteet",
-    "contactSupport": "Ota yhteyttä tukeen"
+    "contactSupport": "Ota yhteyttä tukeen",
+    "devicePendingBanner": "Tämä laite odottaa hyväksyntää. Hyväksy se toisella laitteellasi, jotta voit käyttää jaettuja tietoja.",
+    "deviceApprovedBanner": "Tämä laite on hyväksytty! Haetaan kodin salausavaimia...",
+    "missingKeysBanner": "Laite hyväksytty, mutta salausavaimet puuttuvat. Varmista, että toinen laite on avoinna synkronoitavaksi.",
+    "checkStatus": "Tarkista tila",
+    "checkAndKeys": "Synkronointinäppäimet",
+    "pendingDeviceCount": "{{count}} laitetta odottaa hyväksyntää",
+    "approveNow": "Hyväksy nyt"
   }
 }

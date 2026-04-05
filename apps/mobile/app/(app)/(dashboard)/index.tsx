@@ -10,6 +10,7 @@ import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useKeyDistribution } from "@/lib/hooks/useKeyDistribution";
 import { HouseholdOnboarding } from "@/components/household/HouseholdOnboarding";
 import { GettingStartedCard } from "@/components/dashboard/GettingStartedCard";
+import { DeviceOnboardingBanners } from "@/components/dashboard/DeviceOnboardingBanners";
 import { AdBanner } from "@/components/common/AdBanner";
 import { Spinner } from "@/components/ui/Spinner";
 import { Colors } from "@/constants/Colors";
@@ -94,6 +95,8 @@ export default function DashboardScreen() {
             </Text>
           )}
         </View>
+
+        <DeviceOnboardingBanners />
 
         {/* Getting Started for new households/members */}
         <GettingStartedCard

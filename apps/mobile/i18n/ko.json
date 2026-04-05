@@ -288,6 +288,13 @@
     "encryptionDesc": "귀하의 데이터는 종단 간 암호화로 보호됩니다.",
     "e2ee": "모든 가족 데이터는 기기를 떠나기 전에 암호화됩니다.",
     "deviceApproval": "새 장치는 기존 회원의 승인을 받아야 합니다.",
-    "contactSupport": "지원팀에 문의"
+    "contactSupport": "지원팀에 문의",
+    "devicePendingBanner": "이 기기는 승인 대기 중입니다. 공유 데이터에 접근하려면 다른 기기에서 승인해 주세요.",
+    "deviceApprovedBanner": "이 장치는 승인되었습니다! 가족 암호화 키를 가져오는 중...",
+    "missingKeysBanner": "기기가 승인되었지만 암호화 키가 누락되었습니다. 동기화를 위해 다른 장치가 열려 있는지 확인하세요.",
+    "checkStatus": "상태 확인",
+    "checkAndKeys": "동기화 키",
+    "pendingDeviceCount": "승인 대기 중인 기기 {{count}}대",
+    "approveNow": "지금 승인"
   }
 }

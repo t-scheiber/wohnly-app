@@ -288,6 +288,13 @@
     "encryptionDesc": "Gögnin þín eru vernduð með dulkóðun frá enda til enda.",
     "e2ee": "Öll heimilisgögn eru dulkóðuð áður en þú ferð frá tækinu þínu",
     "deviceApproval": "Ný tæki verða að vera samþykkt af núverandi meðlimi",
-    "contactSupport": "Hafðu samband við þjónustudeild"
+    "contactSupport": "Hafðu samband við þjónustudeild",
+    "devicePendingBanner": "Þetta tæki bíður samþykkis. Vinsamlegast samþykktu það í hinu tækinu þínu til að fá aðgang að sameiginlegum gögnum.",
+    "deviceApprovedBanner": "Þetta tæki er samþykkt! Sækir dulkóðunarlykla heimilanna...",
+    "missingKeysBanner": "Tæki samþykkt, en dulkóðunarlykla vantar. Gakktu úr skugga um að annað tæki sé opið til að samstilla.",
+    "checkStatus": "Athugaðu stöðu",
+    "checkAndKeys": "Samstillingarlyklar",
+    "pendingDeviceCount": "{{count}} tæki/tæki bíða eftir samþykki",
+    "approveNow": "Samþykkja núna"
   }
 }

@@ -288,6 +288,13 @@
     "encryptionDesc": "您的数据受到端到端加密的保护。",
     "e2ee": "所有家庭数据在离开您的设备之前均已加密",
     "deviceApproval": "新设备必须得到现有会员的批准",
-    "contactSupport": "联系支持人员"
+    "contactSupport": "联系支持人员",
+    "devicePendingBanner": "该设备正在等待批准。请在您的其他设备上批准它以访问共享数据。",
+    "deviceApprovedBanner": "该设备已获批准！正在获取您的家庭加密密钥...",
+    "missingKeysBanner": "设备已获批准，但缺少加密密钥。确保另一台设备已打开以进行同步。",
+    "checkStatus": "检查状态",
+    "checkAndKeys": "同步键",
+    "pendingDeviceCount": "{{count}} 台设备等待批准",
+    "approveNow": "立即批准"
   }
 }

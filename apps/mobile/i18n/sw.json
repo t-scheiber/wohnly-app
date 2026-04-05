@@ -288,6 +288,13 @@
     "encryptionDesc": "Data yako inalindwa kwa usimbaji fiche kutoka mwanzo hadi mwisho.",
     "e2ee": "Data yote ya kaya imesimbwa kwa njia fiche kabla ya kuondoka kwenye kifaa chako",
     "deviceApproval": "Vifaa vipya lazima viidhinishwe na mwanachama aliyepo",
-    "contactSupport": "Wasiliana na Usaidizi"
+    "contactSupport": "Wasiliana na Usaidizi",
+    "devicePendingBanner": "Kifaa hiki kinasubiri kuidhinishwa. Tafadhali kiidhinishe kwenye kifaa chako kingine ili kufikia data iliyoshirikiwa.",
+    "deviceApprovedBanner": "Kifaa hiki kimeidhinishwa! Inaleta funguo zako za usimbaji za kaya...",
+    "missingKeysBanner": "Kifaa kimeidhinishwa, lakini hakina funguo za usimbaji fiche. Hakikisha kuwa kifaa kingine kimefunguliwa ili kusawazisha.",
+    "checkStatus": "Angalia Hali",
+    "checkAndKeys": "Funguo za Usawazishaji",
+    "pendingDeviceCount": "Vifaa {{count}} vinasubiri kuidhinishwa",
+    "approveNow": "Idhinisha Sasa"
   }
 }

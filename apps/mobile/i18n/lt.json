@@ -288,6 +288,13 @@
     "encryptionDesc": "Jūsų duomenys yra apsaugoti nuo galo iki galo šifravimu.",
     "e2ee": "Visi namų ūkio duomenys užšifruojami prieš paliekant įrenginį",
     "deviceApproval": "Naujus įrenginius turi patvirtinti esamas narys",
-    "contactSupport": "Susisiekite su palaikymo tarnyba"
+    "contactSupport": "Susisiekite su palaikymo tarnyba",
+    "devicePendingBanner": "Šis įrenginys laukia patvirtinimo. Patvirtinkite jį kitame įrenginyje, kad galėtumėte pasiekti bendrinamus duomenis.",
+    "deviceApprovedBanner": "Šis įrenginys patvirtintas! Gaunami namų šifravimo raktai...",
+    "missingKeysBanner": "Įrenginys patvirtintas, bet trūksta šifravimo raktų. Įsitikinkite, kad kitas įrenginys yra atidarytas sinchronizuoti.",
+    "checkStatus": "Patikrinkite būseną",
+    "checkAndKeys": "Sinchronizavimo klavišai",
+    "pendingDeviceCount": "{{count}} įrenginys (-iai) laukia patvirtinimo",
+    "approveNow": "Patvirtinti dabar"
   }
 }

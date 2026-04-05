@@ -288,6 +288,13 @@
     "encryptionDesc": "Datele dvs. sunt protejate cu criptare end-to-end.",
     "e2ee": "Toate datele casnice sunt criptate înainte de a părăsi dispozitivul",
     "deviceApproval": "Dispozitivele noi trebuie să fie aprobate de un membru existent",
-    "contactSupport": "Contactați asistența"
+    "contactSupport": "Contactați asistența",
+    "devicePendingBanner": "Acest dispozitiv este în așteptarea aprobării. Aprobați-l pe celălalt dispozitiv pentru a accesa datele partajate.",
+    "deviceApprovedBanner": "Acest aparat este omologat! Se preiau cheile de criptare de uz casnic...",
+    "missingKeysBanner": "Dispozitivul a fost aprobat, dar lipsesc cheile de criptare. Asigurați-vă că alt dispozitiv este deschis pentru sincronizare.",
+    "checkStatus": "Verificați starea",
+    "checkAndKeys": "Taste de sincronizare",
+    "pendingDeviceCount": "{{count}} dispozitiv(e) așteaptă aprobare",
+    "approveNow": "Aprobați acum"
   }
 }

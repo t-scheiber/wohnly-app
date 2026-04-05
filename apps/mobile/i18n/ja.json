@@ -288,6 +288,13 @@
     "encryptionDesc": "データはエンドツーエンドの暗号化によって保護されます。",
     "e2ee": "すべての家庭データはデバイスから離れる前に暗号化されます",
     "deviceApproval": "新しいデバイスは既存のメンバーによって承認される必要があります",
-    "contactSupport": "サポートに連絡する"
+    "contactSupport": "サポートに連絡する",
+    "devicePendingBanner": "このデバイスは承認待ちです。共有データにアクセスするには、他のデバイスで承認してください。",
+    "deviceApprovedBanner": "このデバイスは承認されています。家庭用の暗号化キーを取得しています...",
+    "missingKeysBanner": "デバイスは承認されましたが、暗号化キーがありません。別のデバイスが同期できるように開いていることを確認してください。",
+    "checkStatus": "ステータスの確認",
+    "checkAndKeys": "同期キー",
+    "pendingDeviceCount": "{{count}} 台のデバイスが承認を待っています",
+    "approveNow": "今すぐ承認"
   }
 }
