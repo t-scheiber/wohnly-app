@@ -31,12 +31,12 @@ export function RevenueCatPaywall({ onPurchased, onDismiss }: RevenueCatPaywallP
 
   return (
     <RevenueCatUI.Paywall
-      onPurchaseCompleted={({ customerInfo }) => {
+      onPurchaseCompleted={({ customerInfo }: { customerInfo: any }) => {
         if (customerInfo.entitlements.active["Wohnly Pro"]) {
           onPurchased?.();
         }
       }}
-      onRestoreCompleted={({ customerInfo }) => {
+      onRestoreCompleted={({ customerInfo }: { customerInfo: any }) => {
         if (customerInfo.entitlements.active["Wohnly Pro"]) {
           onPurchased?.();
         }

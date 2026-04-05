@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Modal, Pressable, Alert, Platform } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView as _GestureHandlerRootView } from "react-native-gesture-handler";
+
+const GestureHandlerRootView = _GestureHandlerRootView as any;
 import { StatusBar } from "expo-status-bar";
 import { authClient } from "@/lib/auth/client";
 import { initRevenueCat } from "@/lib/payments/setup";

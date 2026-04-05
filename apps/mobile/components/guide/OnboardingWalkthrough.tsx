@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Platform, StyleSheet, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Animated as RNAnimated, Platform, StyleSheet, Modal } from "react-native";
+
+const Animated = RNAnimated as any;
 import { ListTodo, Trash2, Pencil, Users, Laptop } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";

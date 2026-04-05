@@ -111,7 +111,7 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
           <View style={{ flexDirection: "row", gap: 8, marginBottom: 10 }}>
             <TextInput
               value={item.name}
-              onChangeText={(v) => updateItem(index, "name", v)}
+              onChangeText={(v: string) => updateItem(index, "name", v)}
               placeholder="Item name"
               placeholderTextColor={colors.textSecondary}
               style={{
@@ -128,7 +128,7 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
             />
             <TextInput
               value={item.amount}
-              onChangeText={(v) => updateItem(index, "amount", v)}
+              onChangeText={(v: string) => updateItem(index, "amount", v)}
               placeholder="0.00"
               placeholderTextColor={colors.textSecondary}
               keyboardType="decimal-pad"

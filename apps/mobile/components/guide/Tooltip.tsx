@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
-import { View, Text, TouchableOpacity, Animated, Pressable, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Animated as RNAnimated, Pressable, StyleSheet } from "react-native";
+
+const Animated = RNAnimated as any;
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
 

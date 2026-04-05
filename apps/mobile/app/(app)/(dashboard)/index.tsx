@@ -104,7 +104,7 @@ export default function DashboardScreen() {
           hasShoppingItems={(shoppingData?.items?.length ?? 0) > 0}
           hasTodos={(todosData?.todos?.length ?? 0) > 0}
           hasChores={(choresData?.chores?.length ?? 0) > 0}
-          inviteCode={household?.inviteCode}
+          inviteCode={household?.inviteCode ?? undefined}
         />
 
         {/* Quick Actions */}

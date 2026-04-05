@@ -145,14 +145,14 @@ export default function MealsScreen() {
       <SectionList
         sections={sections}
         renderItem={renderMeal}
-        renderSectionHeader={({ section }) => (
+        renderSectionHeader={({ section }: { section: { title: string; data: MealPlan[] } }) => (
           <View style={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 6, backgroundColor: colors.background }}>
             <Text style={{ fontSize: 14, fontWeight: "700", color: colors.text }}>
               {section.title}
             </Text>
           </View>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: MealPlan) => item.id}
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
         stickySectionHeadersEnabled={false}

@@ -471,7 +471,7 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
               <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                 <TextInput
                   value={split.amount}
-                  onChangeText={(v) => updateMemberSplit(split.memberId, v)}
+                  onChangeText={(v: string) => updateMemberSplit(split.memberId, v)}
                   keyboardType="decimal-pad"
                   placeholder="0.00"
                   placeholderTextColor={colors.textSecondary}
@@ -614,8 +614,8 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
             </View>
             <FlatList
               data={filteredCurrencies}
-              keyExtractor={(item) => item.code}
-              renderItem={({ item }) => (
+              keyExtractor={(item: { code: string; name: string; symbol: string }) => item.code}
+              renderItem={({ item }: { item: { code: string; name: string; symbol: string } }) => (
                 <TouchableOpacity
                   onPress={() => { setCurrency(item.code); setCurrencyPickerOpen(false); setCurrencySearch(""); }}
                   style={{
