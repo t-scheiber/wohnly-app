@@ -59,7 +59,6 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
     Constants.expoConfig?.extra?.apiUrl ?? "http://localhost:3001";
   const callbackURL = "wohnly://auth/callback";
 
-  // Step 1: Get the OAuth authorization URL from the API
   const res = await fetch(`${apiUrl}/api/auth/sign-in/social`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -71,9 +70,6 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
     throw new Error(data.error || "Failed to get authorization URL");
   }
 
-  // Step 2: Open the expo-authorization-proxy in the system browser.
-  // This endpoint sets the state cookie properly in the browser context,
-  // then redirects to the OAuth provider.
   const proxyUrl = `${apiUrl}/api/auth/expo-authorization-proxy?authorizationURL=${encodeURIComponent(data.url)}`;
   await openInBrowser(proxyUrl);
 }
