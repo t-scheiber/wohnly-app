@@ -1,8 +1,11 @@
 import { useState, useCallback } from "react";
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription, useMemberBalances, useHouseholdMembers } from "@/lib/api/queries";
 import { AddExpenseForm } from "@/components/forms/AddExpenseForm";
+import { SettleUpCard } from "@/components/finances/SettleUpCard";
+import { ExportSheet } from "@/components/finances/ExportSheet";
+import { SpendingCharts } from "@/components/finances/SpendingCharts";
 import { AddSubscriptionForm } from "@/components/forms/AddSubscriptionForm";
 import { ListGuideTooltips } from "@/components/guide/ListGuideTooltips";
 import SwipeableListItem from "@/components/list/SwipeableListItem";
@@ -14,8 +17,10 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { formatCurrency, formatDate } from "@wohnly/shared";
 import { AdBanner } from "@/components/common/AdBanner";
-import { HelpCircle, Info, TrendingUp, Wallet } from "lucide-react-native";
+import { HelpCircle, Info, TrendingUp, Wallet, Download, Paperclip, BarChart3 } from "lucide-react-native";
+import * as LucideIcons from "lucide-react-native";
 import { useTranslation } from "react-i18next";
+import { EXPENSE_CATEGORIES, getCategory } from "@wohnly/shared";
 import type { Expense, Subscription } from "@wohnly/shared";
 
 const frequencyLabels: Record<string, string> = {
@@ -37,6 +42,9 @@ export default function FinancesScreen() {
   const [showHelp, setShowHelp] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  const [showExport, setShowExport] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const expenseSelectMode = useSelectMode();
   const subscriptionSelectMode = useSelectMode();
@@ -55,7 +63,10 @@ export default function FinancesScreen() {
     setRefreshing(false);
   }, [tab, refetchExp, refetchSub]);
 
-  const expenses = expData?.expenses ?? [];
+  const allExpenses = expData?.expenses ?? [];
+  const expenses = categoryFilter
+    ? allExpenses.filter((e) => e.category === categoryFilter)
+    : allExpenses;
   const expenseTotals = expenses.reduce<Record<string, number>>((acc, e) => {
     const currency = e.currency || "EUR";
     acc[currency] = (acc[currency] || 0) + parseFloat(e.amount);
@@ -122,36 +133,54 @@ export default function FinancesScreen() {
 
   const activeSelectMode = tab === "expenses" ? expenseSelectMode : subscriptionSelectMode;
 
-  const renderExpense = ({ item }: { item: Expense }) => (
-    <SwipeableListItem
-      onDelete={() => handleDeleteExpense(item.id)}
-      onPress={() => handleTapExpense(item)}
-      deleteConfirmTitle="Delete Expense"
-      deleteConfirmMessage="Are you sure you want to delete this expense?"
-    >
-      <View
-        style={{
-          backgroundColor: colors.card,
-          borderRadius: 12,
-          padding: 16,
-          marginBottom: 8,
-          borderWidth: 1,
-          borderColor: colors.border,
-        }}
+  const renderExpense = ({ item }: { item: Expense }) => {
+    const cat = getCategory(item.category);
+    const CatIcon = (LucideIcons as Record<string, any>)[cat.icon];
+    return (
+      <SwipeableListItem
+        onDelete={() => handleDeleteExpense(item.id)}
+        onPress={() => handleTapExpense(item)}
+        deleteConfirmTitle="Delete Expense"
+        deleteConfirmMessage="Are you sure you want to delete this expense?"
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1 }}>{item.title}</Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>
-            {formatCurrency(item.amount, item.currency)}
-          </Text>
+        <View
+          style={{
+            backgroundColor: colors.card,
+            borderRadius: 12,
+            padding: 16,
+            marginBottom: 8,
+            borderWidth: 1,
+            borderColor: colors.border,
+          }}
+        >
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, flex: 1 }}>
+              {CatIcon && (
+                <View style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: cat.color + "18", alignItems: "center", justifyContent: "center" }}>
+                  <CatIcon size={16} color={cat.color} />
+                </View>
+              )}
+              <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1 }}>{item.title}</Text>
+            </View>
+            <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>
+              {formatCurrency(item.amount, item.currency)}
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4, paddingLeft: 42 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+              <Text style={{ fontSize: 13, color: colors.textSecondary }}>
+                {item.category ? t(`expenses.categories.${item.category}`, item.category) : ""}
+              </Text>
+              {(item.attachments?.length ?? 0) > 0 && (
+                <Paperclip size={12} color={colors.textSecondary} />
+              )}
+            </View>
+            <Text style={{ fontSize: 13, color: colors.textSecondary }}>{formatDate(item.date)}</Text>
+          </View>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
-          <Text style={{ fontSize: 13, color: colors.textSecondary }}>{item.category}</Text>
-          <Text style={{ fontSize: 13, color: colors.textSecondary }}>{formatDate(item.date)}</Text>
-        </View>
-      </View>
-    </SwipeableListItem>
-  );
+      </SwipeableListItem>
+    );
+  };
 
   const renderSubscription = ({ item }: { item: Subscription }) => (
     <SwipeableListItem
@@ -198,17 +227,45 @@ export default function FinancesScreen() {
             <HelpCircle size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => tab === "expenses" ? setShowExpenseForm(true) : setShowSubForm(true)}
-          style={{
-            backgroundColor: colors.primary,
-            borderRadius: 10,
-            paddingHorizontal: 16,
-            paddingVertical: 8,
-          }}
-        >
-          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          {tab === "expenses" && (
+            <>
+              <TouchableOpacity
+                onPress={() => setShowAnalytics(true)}
+                style={{
+                  backgroundColor: colors.muted,
+                  borderRadius: 10,
+                  paddingHorizontal: 10,
+                  paddingVertical: 8,
+                }}
+              >
+                <BarChart3 size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setShowExport(true)}
+                style={{
+                  backgroundColor: colors.muted,
+                  borderRadius: 10,
+                  paddingHorizontal: 10,
+                  paddingVertical: 8,
+                }}
+              >
+                <Download size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </>
+          )}
+          <TouchableOpacity
+            onPress={() => tab === "expenses" ? setShowExpenseForm(true) : setShowSubForm(true)}
+            style={{
+              backgroundColor: colors.primary,
+              borderRadius: 10,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+            }}
+          >
+            <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Tab switcher */}
@@ -260,6 +317,55 @@ export default function FinancesScreen() {
         totalCount={tab === "expenses" ? expenses.length : subscriptions.length}
       />
 
+      {/* Category filter (expenses tab only) */}
+      {tab === "expenses" && allExpenses.length > 0 && (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16, gap: 6, paddingBottom: 8 }}
+        >
+          <TouchableOpacity
+            onPress={() => setCategoryFilter(null)}
+            style={{
+              paddingVertical: 6,
+              paddingHorizontal: 12,
+              borderRadius: 16,
+              backgroundColor: !categoryFilter ? colors.primary : colors.muted,
+            }}
+          >
+            <Text style={{ fontSize: 12, fontWeight: "600", color: !categoryFilter ? colors.primaryForeground : colors.textSecondary }}>
+              {t("expenses.allCategories", "All")}
+            </Text>
+          </TouchableOpacity>
+          {EXPENSE_CATEGORIES.filter((cat) => allExpenses.some((e) => e.category === cat.id)).map((cat) => {
+            const isActive = categoryFilter === cat.id;
+            const CatIcon = (LucideIcons as Record<string, any>)[cat.icon];
+            return (
+              <TouchableOpacity
+                key={cat.id}
+                onPress={() => setCategoryFilter(isActive ? null : cat.id)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 4,
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderRadius: 16,
+                  backgroundColor: isActive ? cat.color + "20" : colors.muted,
+                  borderWidth: isActive ? 1 : 0,
+                  borderColor: cat.color,
+                }}
+              >
+                {CatIcon && <CatIcon size={12} color={isActive ? cat.color : colors.textSecondary} />}
+                <Text style={{ fontSize: 12, fontWeight: "600", color: isActive ? cat.color : colors.textSecondary }}>
+                  {t(`expenses.categories.${cat.id}`, cat.id)}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      )}
+
       {/* Summary card */}
       {tab === "expenses" ? (
         <View style={{ backgroundColor: colors.primary, padding: 20, marginHorizontal: 16, marginBottom: 8, borderRadius: 16 }}>
@@ -292,6 +398,9 @@ export default function FinancesScreen() {
           )}
         </View>
       )}
+
+      {/* Settle Up Card */}
+      {tab === "expenses" && <SettleUpCard />}
 
       {/* List */}
       {tab === "expenses" ? (
@@ -396,6 +505,26 @@ export default function FinancesScreen() {
             onSuccess={handleCloseExpenseModal}
             onCancel={handleCloseExpenseModal}
           />
+        </View>
+      </Modal>
+
+      {/* Analytics Modal */}
+      <Modal visible={showAnalytics} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowAnalytics(false)}>
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 16 }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text }}>Spending Analytics</Text>
+            <TouchableOpacity onPress={() => setShowAnalytics(false)}>
+              <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 16 }}>{t("common.done")}</Text>
+            </TouchableOpacity>
+          </View>
+          <SpendingCharts />
+        </View>
+      </Modal>
+
+      {/* Export Modal */}
+      <Modal visible={showExport} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowExport(false)}>
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
+          <ExportSheet onClose={() => setShowExport(false)} />
         </View>
       </Modal>
 

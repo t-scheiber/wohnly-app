@@ -85,7 +85,17 @@
     "daily": "Daily",
     "weekly": "Weekly",
     "biweekly": "Bi-weekly",
-    "monthly": "Monthly"
+    "monthly": "Monthly",
+    "fairShare": "Fair Share",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "allTime": "All Time",
+    "tasks": "tasks",
+    "noAnalytics": "No chore completions yet. Start completing chores to see analytics.",
+    "effortLevel": "Effort Level",
+    "breakMode": "Break Mode",
+    "breakModeActive": "Chores are paused",
+    "breakModeUntil": "until {{date}}"
   },
   "events": {
     "title": "Calendar",
@@ -123,7 +133,42 @@
     "percentage": "Percentage",
     "fixed": "Fixed",
     "date": "Date",
-    "selectDate": "Select Date"
+    "selectDate": "Select Date",
+    "editExpense": "Edit Expense",
+    "shares": "Shares",
+    "splitPerPerson": "Split per person",
+    "balanced": "Balanced",
+    "remaining": "{{amount}} left",
+    "overBudget": "{{amount}} over",
+    "categories": {
+      "groceries": "Groceries",
+      "dining": "Dining",
+      "rent": "Rent",
+      "utilities": "Utilities",
+      "transport": "Transport",
+      "entertainment": "Entertainment",
+      "health": "Health",
+      "travel": "Travel",
+      "shopping": "Shopping",
+      "subscriptions": "Subscriptions",
+      "education": "Education",
+      "pets": "Pets",
+      "gifts": "Gifts",
+      "household": "Household",
+      "other": "Other"
+    },
+    "allCategories": "All",
+    "settleUp": "Settle Up",
+    "settleUpDescription": "Minimal payments to settle all debts",
+    "noDebts": "All settled!",
+    "markAsPaid": "Mark as Paid",
+    "export": "Export",
+    "exportExpenses": "Export Expenses",
+    "exportFormat": "Format",
+    "exportDateRange": "Date Range",
+    "exportFrom": "From",
+    "exportTo": "To",
+    "exportAll": "All Time"
   },
   "subscriptions": {
     "title": "Subscriptions",
@@ -289,6 +334,44 @@
     "pendingDeviceCount": "{{count}} device(s) waiting for approval",
     "approveNow": "Approve Now",
     "contactSupport": "Contact Support"
+  },
+  "meals": {
+    "title": "Meal Plan",
+    "addMeal": "Plan a Meal",
+    "empty": "No meals planned",
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "snack": "Snack",
+    "ingredients": "Ingredients",
+    "addToShopping": "Add to Shopping List",
+    "noIngredients": "No ingredients to add",
+    "addedToShopping": "ingredients added to shopping list"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "points": "pts",
+    "you": "you"
+  },
+  "roles": {
+    "admin": "Admin",
+    "member": "Member",
+    "limited": "Limited",
+    "changeRole": "Change Role",
+    "onlyAdmins": "Only admins can change roles",
+    "lastAdmin": "Cannot remove the last admin"
+  },
+  "export": {
+    "fullExport": "Export All Data",
+    "fullExportDesc": "Download all household data as JSON",
+    "exporting": "Exporting..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Connect Google Calendar",
+    "syncNow": "Sync Now",
+    "lastSynced": "Last synced",
+    "syncing": "Syncing...",
+    "syncSuccess": "Calendar synced successfully"
   },
   "widgets": {
     "todosTitle": "Todos",
