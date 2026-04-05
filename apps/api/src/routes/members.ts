@@ -13,6 +13,7 @@ app.get("/list", async (c) => {
 
   const member = await prisma.householdMember.findFirst({
     where: { userId },
+    include: { household: { select: { id: true, name: true, inviteCode: true, trackExpenses: true } } },
   });
   if (!member) return c.json({ error: "No household" }, 400);
 
@@ -34,7 +35,7 @@ app.get("/list", async (c) => {
     isCurrentUser: m.userId === userId,
   }));
 
-  return c.json({ members: enriched, currentUserId: userId });
+  return c.json({ members: enriched, currentUserId: userId, household: member.household });
 });
 
 // GET /api/members/balances - Financial balances
