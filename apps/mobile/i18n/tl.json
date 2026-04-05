@@ -55,7 +55,10 @@
     "members": "Mga Miyembro",
     "inviteMembers": "Mag-invite ng Miyembro",
     "leaveHousehold": "Umalis sa Bahay",
-    "deleteHousehold": "Burahin ang Bahay"
+    "deleteHousehold": "Burahin ang Bahay",
+    "linkDevice": "I-link ang Device na Ito",
+    "detectedHousehold": "Natagpuan namin ang iyong sambahayan: {{name}}",
+    "linkDeviceDescription": "Member ka na! Mag-tap sa ibaba para irehistro ang device na ito at i-access ang iyong nakabahaging data."
   },
   "todos": {
     "title": "Mga Gagawin",

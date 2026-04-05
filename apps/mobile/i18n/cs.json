@@ -55,7 +55,10 @@
     "members": "Členové",
     "inviteMembers": "Pozvat členy",
     "leaveHousehold": "Opustit domácnost",
-    "deleteHousehold": "Smazat domácnost"
+    "deleteHousehold": "Smazat domácnost",
+    "linkDevice": "Propojit toto zařízení",
+    "detectedHousehold": "Našli jsme vaši domácnost: {{name}}",
+    "linkDeviceDescription": "Již jste členem! Klepnutím níže zaregistrujte toto zařízení a získáte přístup ke sdíleným datům."
   },
   "todos": {
     "title": "Úkoly",

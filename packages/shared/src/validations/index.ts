@@ -89,7 +89,7 @@ export const updateEventSchema = z.object({
 
 // ── Expense Schemas ──
 
-export const splitTypeSchema = z.enum(["equal", "percentage", "fixed"]);
+export const splitTypeSchema = z.enum(["equal", "percentage", "fixed", "shares"]);
 
 export const createExpenseSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
@@ -107,6 +107,7 @@ export const createExpenseSchema = z.object({
         memberId: z.string(),
         amount: z.number().optional(),
         percentage: z.number().min(0).max(100).optional(),
+        shares: z.number().int().min(1).optional(),
       })
     )
     .optional(),

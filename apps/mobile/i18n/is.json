@@ -55,7 +55,10 @@
     "members": "Meðlimir",
     "inviteMembers": "Bjóða meðlimum",
     "leaveHousehold": "Yfirgefa heimili",
-    "deleteHousehold": "Eyða heimili"
+    "deleteHousehold": "Eyða heimili",
+    "linkDevice": "Tengdu þetta tæki",
+    "detectedHousehold": "Við fundum heimilið þitt: {{name}}",
+    "linkDeviceDescription": "Þú ert nú þegar meðlimur! Pikkaðu hér að neðan til að skrá þetta tæki og fá aðgang að sameiginlegu gögnunum þínum."
   },
   "todos": {
     "title": "Verkefni",

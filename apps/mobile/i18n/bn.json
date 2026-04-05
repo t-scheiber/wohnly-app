@@ -55,7 +55,10 @@
     "members": "সদস্যরা",
     "inviteMembers": "সদস্যদের ইনভাইট করো",
     "leaveHousehold": "বাসা ছেড়ে দাও",
-    "deleteHousehold": "বাসা মুছে ফেলো"
+    "deleteHousehold": "বাসা মুছে ফেলো",
+    "linkDevice": "এই ডিভাইসটি লিঙ্ক করুন",
+    "detectedHousehold": "আমরা আপনার পরিবার খুঁজে পেয়েছি: {{name}}",
+    "linkDeviceDescription": "আপনি ইতিমধ্যেই একজন সদস্য! এই ডিভাইসটি নিবন্ধন করতে এবং আপনার ভাগ করা ডেটা অ্যাক্সেস করতে নীচে আলতো চাপুন৷"
   },
   "todos": {
     "title": "টুডু",

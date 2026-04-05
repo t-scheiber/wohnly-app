@@ -55,7 +55,10 @@
     "members": "Thành viên",
     "inviteMembers": "Mời thành viên",
     "leaveHousehold": "Rời hộ",
-    "deleteHousehold": "Xóa hộ"
+    "deleteHousehold": "Xóa hộ",
+    "linkDevice": "Liên kết thiết bị này",
+    "detectedHousehold": "Chúng tôi đã tìm thấy hộ gia đình của bạn: {{name}}",
+    "linkDeviceDescription": "Bạn đã là thành viên! Nhấn vào bên dưới để đăng ký thiết bị này và truy cập dữ liệu được chia sẻ của bạn."
   },
   "todos": {
     "title": "Việc cần làm",
