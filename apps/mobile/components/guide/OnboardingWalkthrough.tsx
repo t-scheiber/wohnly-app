@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated, Platform, StyleSheet, Modal } from "react-native";
-import { ListTodo, Trash2, Pencil, Users } from "lucide-react-native";
+import { ListTodo, Trash2, Pencil, Users, Laptop } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
@@ -34,6 +34,11 @@ const STEPS: Step[] = [
     icon: Users,
     titleKey: "onboarding.step4Title",
     descriptionKey: "onboarding.step4Desc",
+  },
+  {
+    icon: Laptop,
+    titleKey: "onboarding.step5Title",
+    descriptionKey: "onboarding.step5Desc",
   },
 ];
 

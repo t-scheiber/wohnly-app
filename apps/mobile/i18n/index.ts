@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getLocales } from "expo-localization";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import en from "./en.json";
 import de from "./de.json";
 import fr from "./fr.json";
@@ -133,18 +134,35 @@ export const LANGUAGES: { code: SupportedLanguage; name: string; nativeName: str
   { code: "sw", name: "Swahili", nativeName: "Kiswahili" },
   { code: "ta", name: "Tamil", nativeName: "தமிழ்" },
   { code: "te", name: "Telugu", nativeName: "తెలుగు" },
-  { code: "mr", name: "Marathi", nativeName: "मराठी" },
+  { code: "mr", name: "Marathi", nativeName: "مراठी" },
 ];
 
-const SUPPORTED_CODES = Object.keys(resources);
-const deviceLang = getLocales()[0]?.languageCode || "en";
-const initialLang = SUPPORTED_CODES.includes(deviceLang) ? deviceLang : "en";
+const LANGUAGE_KEY = "wohnly_user_language";
 
-i18n.use(initReactI18next).init({
-  resources,
-  lng: initialLang,
-  fallbackLng: "en",
-  interpolation: { escapeValue: false },
-});
+const initI18n = async () => {
+  const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
+  const deviceLocales = getLocales();
+  const deviceLang = deviceLocales[0]?.languageCode || "en";
+  
+  const SUPPORTED_CODES = Object.keys(resources);
+  const initialLang = savedLanguage && SUPPORTED_CODES.includes(savedLanguage)
+    ? savedLanguage 
+    : (SUPPORTED_CODES.includes(deviceLang) ? deviceLang : "en");
+
+  await i18n.use(initReactI18next).init({
+    resources,
+    lng: initialLang,
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+    react: { useSuspense: false }
+  });
+};
+
+initI18n();
+
+export const changeLanguage = async (code: SupportedLanguage) => {
+  await i18n.changeLanguage(code);
+  await AsyncStorage.setItem(LANGUAGE_KEY, code);
+};
 
 export default i18n;
