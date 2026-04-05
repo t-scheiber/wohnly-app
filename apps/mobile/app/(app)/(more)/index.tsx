@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { Calendar, Settings, ChevronRight } from "lucide-react-native";
+import { Calendar, Settings, HelpCircle, ChevronRight } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
 
@@ -81,6 +81,13 @@ export default function MoreScreen() {
               label={t("more.settings")}
               sublabel={t("more.settingsSubtitle")}
               onPress={() => router.push("/(app)/(more)/settings")}
+              colors={colors}
+            />
+            <MenuItem
+              icon={<HelpCircle size={20} color={colors.primary} />}
+              label={t("help.helpAndTips")}
+              sublabel={t("help.helpSubtitle")}
+              onPress={() => router.push("/(app)/(more)/help" as any)}
               colors={colors}
             />
           </View>
