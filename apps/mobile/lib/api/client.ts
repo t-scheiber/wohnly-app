@@ -1,8 +1,12 @@
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 import { authClient } from "../auth/client";
 import { isTauri, getTauriSessionToken } from "../auth/tauri";
 
 const API_BASE = Constants.expoConfig?.extra?.apiUrl ?? "http://localhost:3001";
+
+/** Regular web (not Tauri, not native) uses browser cookies */
+const isRegularWeb = Platform.OS === "web" && !isTauri();
 
 class ApiError extends Error {
   constructor(
@@ -17,29 +21,39 @@ class ApiError extends Error {
 
 /**
  * Authenticated API client for all Wohnly API calls.
- * On native: sends cookies from Better Auth's expo client plugin.
- * On Tauri: sends session token via x-session-token header
- *           (browser forbids setting Cookie header in fetch).
+ * - Regular web: uses browser cookies via credentials: "include"
+ * - Tauri desktop: sends session token via x-session-token header
+ * - Native (iOS/Android): sends cookies from expo client plugin
  */
 export async function api<T>(
   path: string,
   options?: RequestInit
 ): Promise<T> {
-  const cookies = authClient.getCookie();
-  const tauriToken = isTauri() ? getTauriSessionToken() : "";
+  let headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...options?.headers as Record<string, string>,
+  };
+  let credentials: RequestCredentials;
+
+  if (isRegularWeb) {
+    // Regular web: let the browser handle cookies natively
+    credentials = "include";
+  } else if (isTauri()) {
+    // Tauri: browser forbids Cookie header, use custom header
+    const token = getTauriSessionToken();
+    if (token) headers["x-session-token"] = token;
+    credentials = "omit";
+  } else {
+    // Native: expo client plugin manages cookies manually
+    const cookies = authClient.getCookie();
+    if (cookies) headers["Cookie"] = cookies;
+    credentials = "omit";
+  }
 
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-      ...(tauriToken
-        ? { "x-session-token": tauriToken }
-        : cookies
-          ? { Cookie: cookies }
-          : {}),
-    },
-    credentials: "omit", // We send cookies manually
+    headers,
+    credentials,
   });
 
   if (res.status === 401) {
