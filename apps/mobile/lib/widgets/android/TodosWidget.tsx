@@ -3,7 +3,6 @@ import {
   FlexWidget,
   TextWidget,
   ListWidget,
-  ClickAction,
 } from "react-native-android-widget";
 
 interface TodoItem {
@@ -64,7 +63,7 @@ export function TodosWidget({ todos, strings }: Props) {
           />
         </FlexWidget>
       ) : (
-        <ListWidget style={{ flex: 1 }}>
+        <ListWidget style={{ height: "match_parent" } as any}>
           {todos.slice(0, 5).map((todo) => (
             <FlexWidget
               key={todo.id}
@@ -73,7 +72,7 @@ export function TodosWidget({ todos, strings }: Props) {
                 alignItems: "center",
                 paddingVertical: 4,
               }}
-              clickAction={ClickAction.OPEN_APP}
+              clickAction="OPEN_APP"
             >
               <TextWidget
                 text={todo.completed ? "☑" : "☐"}

@@ -3,7 +3,6 @@ import {
   FlexWidget,
   TextWidget,
   ListWidget,
-  ClickAction,
 } from "react-native-android-widget";
 
 interface CalendarEvent {
@@ -46,7 +45,7 @@ export function CalendarWidget({ events, strings }: Props) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space_between",
+          justifyContent: "space-between",
           marginBottom: 8,
           width: "match_parent",
         }}
@@ -75,7 +74,7 @@ export function CalendarWidget({ events, strings }: Props) {
           />
         </FlexWidget>
       ) : (
-        <ListWidget style={{ flex: 1 }}>
+        <ListWidget style={{ height: "match_parent" } as any}>
           {events.slice(0, 5).map((event) => (
             <FlexWidget
               key={event.id}
@@ -84,7 +83,7 @@ export function CalendarWidget({ events, strings }: Props) {
                 alignItems: "center",
                 paddingVertical: 4,
               }}
-              clickAction={ClickAction.OPEN_APP}
+              clickAction="OPEN_APP"
             >
               <FlexWidget
                 style={{

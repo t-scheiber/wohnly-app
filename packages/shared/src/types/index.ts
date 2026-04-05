@@ -15,6 +15,7 @@ export interface HouseholdMember {
   userId: string;
   householdId: string;
   displayName: string | null;
+  email: string | null;
   role: MemberRole;
   points: number;
   joinedAt: Date;
@@ -276,6 +277,7 @@ export interface UserPreferences {
   userId: string;
   language: string;
   theme: "light" | "dark" | "system";
+  defaultCurrency?: string | null;
   pushEnabled: boolean;
   choreReminders: boolean;
   expenseAlerts: boolean;

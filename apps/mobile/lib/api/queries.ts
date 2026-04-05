@@ -384,8 +384,8 @@ export function useCompleteChore() {
     onMutate: async (id) => {
       await qc.cancelQueries({ queryKey: ["chores"] });
       const prev = qc.getQueryData<{ chores: Chore[] }>(["chores"]);
-      qc.setQueryData<{ chores: Chore[] }>(["chores"], (old) =>
-        old ? { ...old, chores: old.chores.map((c) => c.id === id ? { ...c, lastDone: new Date().toISOString() } : c) } : old
+      qc.setQueryData<{ chores: Chore[] }>(["chores"], (old: { chores: Chore[] } | undefined) =>
+        old ? { ...old, chores: old.chores.map((c) => c.id === id ? { ...c, lastDone: new Date() } : c) } : old
       );
       return { prev };
     },

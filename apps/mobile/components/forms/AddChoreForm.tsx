@@ -117,7 +117,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
             key={f.value}
             variant={frequency === f.value ? "primary" : "outline"}
             size="sm"
-            onPress={() => setFrequency(f.value)}
+            onPress={() => setFrequency(f.value as "daily" | "weekly" | "biweekly" | "monthly")}
           >
             {f.label}
           </Button>

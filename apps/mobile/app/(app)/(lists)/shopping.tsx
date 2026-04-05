@@ -272,7 +272,7 @@ export default function ShoppingScreen() {
       <FlatList
         data={allItems}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: ShoppingItem) => item.id}
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />

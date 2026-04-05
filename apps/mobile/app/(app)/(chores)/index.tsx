@@ -298,7 +298,7 @@ export default function ChoresScreen() {
       <SectionList
         sections={sections}
         renderItem={renderItem}
-        renderSectionHeader={({ section }) => (
+        renderSectionHeader={({ section }: { section: { title: string; data: Chore[] } }) => (
           <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: 6, backgroundColor: colors.background }}>
             <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, textTransform: "uppercase", letterSpacing: 0.5 }}>
               {section.title}
@@ -308,7 +308,7 @@ export default function ChoresScreen() {
             </Text>
           </View>
         )}
-        keyExtractor={(item, index) => item.id + index}
+        keyExtractor={(item: Chore, index: number) => item.id + index}
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
