@@ -8,7 +8,7 @@ export function isTauri(): boolean {
   return (
     Platform.OS === "web" &&
     typeof window !== "undefined" &&
-    "__TAURI__" in window
+    "__TAURI_INTERNALS__" in window
   );
 }
 
