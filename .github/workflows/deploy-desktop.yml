@@ -95,6 +95,14 @@ jobs:
           name: tauri-icons
           path: apps/desktop/tauri/icons
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -221,6 +229,14 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: apps/desktop/tauri
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
