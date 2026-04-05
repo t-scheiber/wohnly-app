@@ -44,7 +44,7 @@ interface EmailOptions {
 
 export async function sendEmail(options: EmailOptions): Promise<boolean> {
   const transporter = createTransporter();
-  const emailFrom = process.env.EMAIL_FROM || "noreply@wohnly.app";
+  const emailFrom = process.env.EMAIL_FROM || "Wohnly <noreply@wohnly.app>";
 
   if (!transporter) {
     // Log email instead of sending in development/when not configured
