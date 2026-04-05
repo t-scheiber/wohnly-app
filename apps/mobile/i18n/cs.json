@@ -288,6 +288,13 @@
     "encryptionDesc": "Vaše data jsou chráněna end-to-end šifrováním.",
     "e2ee": "Před opuštěním zařízení jsou všechna data domácnosti zašifrována",
     "deviceApproval": "Nová zařízení musí být schválena stávajícím členem",
-    "contactSupport": "Kontaktujte podporu"
+    "contactSupport": "Kontaktujte podporu",
+    "devicePendingBanner": "Toto zařízení čeká na schválení. Chcete-li získat přístup ke sdíleným datům, schvalte jej na svém druhém zařízení.",
+    "deviceApprovedBanner": "Toto zařízení je schváleno! Načítání šifrovacích klíčů vaší domácnosti...",
+    "missingKeysBanner": "Zařízení schváleno, ale chybí šifrovací klíče. Ujistěte se, že je pro synchronizaci otevřeno jiné zařízení.",
+    "checkStatus": "Zkontrolujte stav",
+    "checkAndKeys": "Synchronizační klíče",
+    "pendingDeviceCount": "{{count}} zařízení čekajících na schválení",
+    "approveNow": "Schválit hned"
   }
 }

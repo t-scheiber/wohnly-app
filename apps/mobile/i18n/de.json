@@ -278,6 +278,13 @@
     "encryptionDesc": "Deine Daten sind mit Ende-zu-Ende-Verschlüsselung geschützt.",
     "e2ee": "Alle Haushaltsdaten werden verschlüsselt, bevor sie dein Gerät verlassen",
     "deviceApproval": "Neue Geräte müssen von einem bestehenden Mitglied genehmigt werden",
+    "devicePendingBanner": "Dieses Gerät wartet auf Genehmigung. Bitte genehmige es auf deinem anderen Gerät, um auf geteilte Daten zuzugreifen.",
+    "deviceApprovedBanner": "Dieses Gerät wurde genehmigt! Lade Haushalts-Schlüssel...",
+    "missingKeysBanner": "Gerät genehmigt, aber Verschlüsselungs-Schlüssel fehlen. Stelle sicher, dass ein anderes Gerät geöffnet ist zum Synchronisieren.",
+    "checkStatus": "Status prüfen",
+    "checkAndKeys": "Synchronisieren",
+    "pendingDeviceCount": "{{count}} Gerät(e) warten auf Genehmigung",
+    "approveNow": "Jetzt prüfen",
     "contactSupport": "Support kontaktieren"
   },
   "widgets": {

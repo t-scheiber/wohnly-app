@@ -288,6 +288,13 @@
     "encryptionDesc": "Vaše údaje sú chránené šifrovaním typu end-to-end.",
     "e2ee": "Všetky údaje o domácnosti sú pred opustením zariadenia zašifrované",
     "deviceApproval": "Nové zariadenia musia byť schválené existujúcim členom",
-    "contactSupport": "Kontaktujte podporu"
+    "contactSupport": "Kontaktujte podporu",
+    "devicePendingBanner": "Toto zariadenie čaká na schválenie. Ak chcete získať prístup k zdieľaným údajom, schváľte ho na svojom druhom zariadení.",
+    "deviceApprovedBanner": "Toto zariadenie je schválené! Načítavajú sa šifrovacie kľúče domácnosti...",
+    "missingKeysBanner": "Zariadenie je schválené, ale chýbajú šifrovacie kľúče. Uistite sa, že iné zariadenie je otvorené na synchronizáciu.",
+    "checkStatus": "Skontrolujte stav",
+    "checkAndKeys": "Synchronizačné kľúče",
+    "pendingDeviceCount": "{{count}} zariadení čaká na schválenie",
+    "approveNow": "Schváliť teraz"
   }
 }

@@ -288,6 +288,13 @@
     "encryptionDesc": "Dữ liệu của bạn được bảo vệ bằng mã hóa đầu cuối.",
     "e2ee": "Tất cả dữ liệu gia đình được mã hóa trước khi rời khỏi thiết bị của bạn",
     "deviceApproval": "Thiết bị mới phải được thành viên hiện tại phê duyệt",
-    "contactSupport": "Liên hệ hỗ trợ"
+    "contactSupport": "Liên hệ hỗ trợ",
+    "devicePendingBanner": "Thiết bị này đang chờ phê duyệt. Vui lòng phê duyệt nó trên thiết bị khác của bạn để truy cập dữ liệu được chia sẻ.",
+    "deviceApprovedBanner": "Thiết bị này đã được phê duyệt! Đang tìm nạp khóa mã hóa hộ gia đình của bạn...",
+    "missingKeysBanner": "Thiết bị đã được phê duyệt nhưng thiếu khóa mã hóa. Đảm bảo thiết bị khác đang mở để đồng bộ hóa.",
+    "checkStatus": "Kiểm tra trạng thái",
+    "checkAndKeys": "Phím đồng bộ hóa",
+    "pendingDeviceCount": "{{count}} thiết bị đang chờ phê duyệt",
+    "approveNow": "Phê duyệt ngay"
   }
 }
