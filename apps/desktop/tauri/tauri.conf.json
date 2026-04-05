@@ -23,6 +23,13 @@
       "csp": null
     }
   },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": ["wohnly"]
+      }
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",
