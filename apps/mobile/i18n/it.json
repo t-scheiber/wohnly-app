@@ -288,6 +288,13 @@
     "encryptionDesc": "I tuoi dati sono protetti con la crittografia end-to-end.",
     "e2ee": "Tutti i dati domestici vengono crittografati prima di lasciare il tuo dispositivo",
     "deviceApproval": "I nuovi dispositivi devono essere approvati da un membro esistente",
-    "contactSupport": "Contatta l'assistenza"
+    "contactSupport": "Contatta l'assistenza",
+    "devicePendingBanner": "Questo dispositivo è in attesa di approvazione. Approvalo sull'altro dispositivo per accedere ai dati condivisi.",
+    "deviceApprovedBanner": "Questo dispositivo è approvato! Recupero delle chiavi di crittografia domestiche in corso...",
+    "missingKeysBanner": "Dispositivo approvato, ma chiavi di crittografia mancanti. Assicurati che un altro dispositivo sia aperto per la sincronizzazione.",
+    "checkStatus": "Controlla lo stato",
+    "checkAndKeys": "Sincronizza le chiavi",
+    "pendingDeviceCount": "{{count}} dispositivi in ​​attesa di approvazione",
+    "approveNow": "Approva ora"
   }
 }

@@ -288,6 +288,13 @@
     "encryptionDesc": "Teie andmed on kaitstud täieliku krüptimisega.",
     "e2ee": "Kõik majapidamise andmed krüpteeritakse enne seadmest lahkumist",
     "deviceApproval": "Uued seadmed peavad olema olemasoleva liikme poolt heaks kiidetud",
-    "contactSupport": "Võtke ühendust tugiteenusega"
+    "contactSupport": "Võtke ühendust tugiteenusega",
+    "devicePendingBanner": "See seade on kinnitamise ootel. Jagatud andmetele juurdepääsuks kinnitage see oma teises seadmes.",
+    "deviceApprovedBanner": "See seade on heaks kiidetud! Teie leibkonna krüpteerimisvõtmete toomine...",
+    "missingKeysBanner": "Seade on heaks kiidetud, kuid krüpteerimisvõtmed puuduvad. Veenduge, et teine ​​seade oleks sünkroonimiseks avatud.",
+    "checkStatus": "Kontrolli olekut",
+    "checkAndKeys": "Sünkroonimisklahvid",
+    "pendingDeviceCount": "{{count}} seadet ootab kinnitamist",
+    "approveNow": "Kinnita kohe"
   }
 }

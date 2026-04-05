@@ -288,6 +288,13 @@
     "encryptionDesc": "Jūsu dati ir aizsargāti ar pilnīgu šifrēšanu.",
     "e2ee": "Visi mājsaimniecības dati tiek šifrēti pirms ierīces atstāšanas",
     "deviceApproval": "Jaunas ierīces ir jāapstiprina esošajam dalībniekam",
-    "contactSupport": "Sazinieties ar atbalsta dienestu"
+    "contactSupport": "Sazinieties ar atbalsta dienestu",
+    "devicePendingBanner": "Šī ierīce gaida apstiprinājumu. Lūdzu, apstipriniet to savā citā ierīcē, lai piekļūtu koplietotajiem datiem.",
+    "deviceApprovedBanner": "Šī ierīce ir apstiprināta! Notiek jūsu mājsaimniecības šifrēšanas atslēgu iegūšana...",
+    "missingKeysBanner": "Ierīce apstiprināta, taču trūkst šifrēšanas atslēgu. Pārliecinieties, vai cita ierīce ir atvērta sinhronizēšanai.",
+    "checkStatus": "Pārbaudiet statusu",
+    "checkAndKeys": "Sinhronizācijas atslēgas",
+    "pendingDeviceCount": "{{count}} ierīce(-es) gaida apstiprinājumu",
+    "approveNow": "Apstipriniet tūlīt"
   }
 }

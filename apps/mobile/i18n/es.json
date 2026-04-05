@@ -288,6 +288,13 @@
     "encryptionDesc": "Sus datos están protegidos con cifrado de extremo a extremo.",
     "e2ee": "Todos los datos del hogar se cifran antes de salir de su dispositivo",
     "deviceApproval": "Los nuevos dispositivos deben ser aprobados por un miembro existente",
-    "contactSupport": "Contactar con soporte"
+    "contactSupport": "Contactar con soporte",
+    "devicePendingBanner": "Este dispositivo está pendiente de aprobación. Aprovéchelo en su otro dispositivo para acceder a los datos compartidos.",
+    "deviceApprovedBanner": "¡Este dispositivo está aprobado! Recuperando las claves de cifrado de su hogar...",
+    "missingKeysBanner": "Dispositivo aprobado, pero faltan claves de cifrado. Asegúrese de que haya otro dispositivo abierto para sincronizar.",
+    "checkStatus": "Verificar estado",
+    "checkAndKeys": "Teclas de sincronización",
+    "pendingDeviceCount": "{{count}} dispositivo(s) esperando aprobación",
+    "approveNow": "Aprobar ahora"
   }
 }

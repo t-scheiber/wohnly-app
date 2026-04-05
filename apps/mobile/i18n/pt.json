@@ -288,6 +288,13 @@
     "encryptionDesc": "Seus dados são protegidos com criptografia ponta a ponta.",
     "e2ee": "Todos os dados domésticos são criptografados antes de sair do seu dispositivo",
     "deviceApproval": "Novos dispositivos devem ser aprovados por um membro existente",
-    "contactSupport": "Contate o suporte"
+    "contactSupport": "Contate o suporte",
+    "devicePendingBanner": "Este dispositivo está pendente de aprovação. Aprove-o em seu outro dispositivo para acessar dados compartilhados.",
+    "deviceApprovedBanner": "Este dispositivo está aprovado! Buscando suas chaves de criptografia domésticas...",
+    "missingKeysBanner": "Dispositivo aprovado, mas faltam chaves de criptografia. Certifique-se de que outro dispositivo esteja aberto para sincronização.",
+    "checkStatus": "Verifique o status",
+    "checkAndKeys": "Chaves de sincronização",
+    "pendingDeviceCount": "{{count}} dispositivos aguardando aprovação",
+    "approveNow": "Aprovar agora"
   }
 }

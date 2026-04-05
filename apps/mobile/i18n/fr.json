@@ -288,6 +288,13 @@
     "encryptionDesc": "Vos données sont protégées par un cryptage de bout en bout.",
     "e2ee": "Toutes les données du foyer sont cryptées avant de quitter votre appareil",
     "deviceApproval": "Les nouveaux appareils doivent être approuvés par un membre existant",
-    "contactSupport": "Contacter l'assistance"
+    "contactSupport": "Contacter l'assistance",
+    "devicePendingBanner": "Cet appareil est en attente d'approbation. Veuillez l'approuver sur votre autre appareil pour accéder aux données partagées.",
+    "deviceApprovedBanner": "Cet appareil est homologué ! Récupération des clés de cryptage de votre foyer...",
+    "missingKeysBanner": "Appareil approuvé, mais clés de cryptage manquantes. Assurez-vous qu'un autre appareil est ouvert pour la synchronisation.",
+    "checkStatus": "Vérifier l'état",
+    "checkAndKeys": "Clés de synchronisation",
+    "pendingDeviceCount": "{{count}} appareil(s) en attente d'approbation",
+    "approveNow": "Approuver maintenant"
   }
 }

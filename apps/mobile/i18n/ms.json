@@ -288,6 +288,13 @@
     "encryptionDesc": "Data anda dilindungi dengan penyulitan hujung ke hujung.",
     "e2ee": "Semua data isi rumah disulitkan sebelum meninggalkan peranti anda",
     "deviceApproval": "Peranti baharu mesti diluluskan oleh ahli sedia ada",
-    "contactSupport": "Hubungi Sokongan"
+    "contactSupport": "Hubungi Sokongan",
+    "devicePendingBanner": "Peranti ini menunggu kelulusan. Sila luluskan pada peranti anda yang lain untuk mengakses data yang dikongsi.",
+    "deviceApprovedBanner": "Peranti ini diluluskan! Mengambil kunci penyulitan isi rumah anda...",
+    "missingKeysBanner": "Peranti diluluskan, tetapi tiada kunci penyulitan. Pastikan peranti lain dibuka untuk disegerakkan.",
+    "checkStatus": "Semak Status",
+    "checkAndKeys": "Kekunci Segerak",
+    "pendingDeviceCount": "{{count}} peranti menunggu kelulusan",
+    "approveNow": "Luluskan Sekarang"
   }
 }

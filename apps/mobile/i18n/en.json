@@ -278,6 +278,13 @@
     "encryptionDesc": "Your data is protected with end-to-end encryption.",
     "e2ee": "All household data is encrypted before leaving your device",
     "deviceApproval": "New devices must be approved by an existing member",
+    "devicePendingBanner": "This device is pending approval. Please approve it on your other device to access shared data.",
+    "deviceApprovedBanner": "This device is approved! Fetching your household encryption keys...",
+    "missingKeysBanner": "Device approved, but missing encryption keys. Ensure another device is open to sync.",
+    "checkStatus": "Check Status",
+    "checkAndKeys": "Sync Keys",
+    "pendingDeviceCount": "{{count}} device(s) waiting for approval",
+    "approveNow": "Approve Now",
     "contactSupport": "Contact Support"
   },
   "widgets": {

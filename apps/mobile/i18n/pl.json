@@ -288,6 +288,13 @@
     "encryptionDesc": "Twoje dane są chronione kompleksowym szyfrowaniem.",
     "e2ee": "Wszystkie dane gospodarstwa domowego są szyfrowane przed opuszczeniem urządzenia",
     "deviceApproval": "Nowe urządzenia muszą zostać zatwierdzone przez istniejącego członka",
-    "contactSupport": "Skontaktuj się z pomocą techniczną"
+    "contactSupport": "Skontaktuj się z pomocą techniczną",
+    "devicePendingBanner": "To urządzenie oczekuje na zatwierdzenie. Aby uzyskać dostęp do udostępnionych danych, zatwierdź je na drugim urządzeniu.",
+    "deviceApprovedBanner": "To urządzenie zostało zatwierdzone! Pobieram domowe klucze szyfrujące...",
+    "missingKeysBanner": "Urządzenie zatwierdzone, ale brakuje kluczy szyfrujących. Upewnij się, że inne urządzenie jest otwarte do synchronizacji.",
+    "checkStatus": "Sprawdź stan",
+    "checkAndKeys": "Synchronizuj klucze",
+    "pendingDeviceCount": "Urządzenia ({{count}}) czekają na zatwierdzenie",
+    "approveNow": "Zatwierdź teraz"
   }
 }
