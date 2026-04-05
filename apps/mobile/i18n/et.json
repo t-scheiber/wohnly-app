@@ -55,7 +55,10 @@
     "members": "Liikmed",
     "inviteMembers": "Kutsu liikmeid",
     "leaveHousehold": "Lahku majapidamisest",
-    "deleteHousehold": "Kustuta majapidamine"
+    "deleteHousehold": "Kustuta majapidamine",
+    "linkDevice": "Linkige see seade",
+    "detectedHousehold": "Leidsime teie leibkonna: {{name}}",
+    "linkDeviceDescription": "Olete juba liige! Puudutage allpool, et registreerida see seade ja pääseda juurde oma jagatud andmetele."
   },
   "todos": {
     "title": "Ülesanded",

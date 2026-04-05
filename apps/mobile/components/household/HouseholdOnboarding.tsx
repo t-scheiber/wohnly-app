@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Alert, Share, Clipboard, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { Home, UserPlus, ArrowLeft, Copy, Check, Users } from "lucide-react-native";
+import { Home, UserPlus, ArrowLeft, Copy, Check, Users, Link } from "lucide-react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Card } from "../ui/Card";
-import { apiPost } from "@/lib/api/client";
+import { api, apiPost } from "@/lib/api/client";
 import { createHouseholdWithE2EE, ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
-type Step = "choose" | "create" | "join" | "success";
+type Step = "choose" | "create" | "join" | "success" | "detected";
 
 interface HouseholdOnboardingProps {
   userName?: string;
@@ -31,6 +31,25 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   const [loading, setLoading] = useState(false);
   const [createdCode, setCreatedCode] = useState("");
   const [copied, setCopied] = useState(false);
+  const [detectedHousehold, setDetectedHousehold] = useState<{ id: string; name: string } | null>(null);
+
+  // Check if user is already in a household but hasn't linked this device
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await api<{
+          members: { householdId: string }[];
+          household?: { id: string; name: string };
+        }>("/api/members/list");
+        if (data.members.length > 0 && data.household) {
+          setDetectedHousehold(data.household);
+          setStep("detected");
+        }
+      } catch {
+        // Not in a household yet, stay on "choose"
+      }
+    })();
+  }, []);
 
   const showError = (title: string, message: string) => {
     if (Platform.OS === "web") {
@@ -82,6 +101,29 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     }
   };
 
+  const handleLinkDevice = async () => {
+    setLoading(true);
+    try {
+      // 1. Ensure device is registered (generates local keys)
+      await ensureDeviceRegistered();
+      
+      // 2. Try to fetch existing keys (if another member already distributed them)
+      if (detectedHousehold) {
+        const { fetchAndCacheHouseholdKey } = await import("@/lib/crypto/e2ee-setup");
+        await fetchAndCacheHouseholdKey(detectedHousehold.id);
+      }
+
+      // 3. Move to dashboard
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+      queryClient.invalidateQueries({ queryKey: ["balances"] });
+      queryClient.invalidateQueries({ queryKey: ["household"] });
+    } catch (err: unknown) {
+      showError(t("common.error"), err instanceof Error ? err.message : "Failed to link device");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCopy = () => {
     if (Platform.OS === "web") {
       navigator.clipboard?.writeText(createdCode);
@@ -105,6 +147,34 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     queryClient.invalidateQueries({ queryKey: ["balances"] });
     queryClient.invalidateQueries({ queryKey: ["household"] });
   };
+
+  // ── Step: Detected Household (Second Device Flow) ──
+  if (step === "detected" && detectedHousehold) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
+        <View style={{ alignItems: "center", marginBottom: 32 }}>
+          <View style={{ width: 80, height: 80, borderRadius: 24, backgroundColor: colors.primary + "15", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+            <Link size={40} color={colors.primary} />
+          </View>
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text, textAlign: "center" }}>
+            {t("household.detectedHousehold", { name: detectedHousehold.name })}
+          </Text>
+          <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginTop: 12, lineHeight: 22 }}>
+            {t("household.linkDeviceDescription")}
+          </Text>
+        </View>
+
+        <View style={{ gap: 12 }}>
+          <Button onPress={handleLinkDevice} loading={loading}>
+            {t("household.linkDevice")}
+          </Button>
+          <Button variant="ghost" onPress={() => setStep("choose")}>
+            {t("common.back")}
+          </Button>
+        </View>
+      </View>
+    );
+  }
 
   // ── Step: Choose ──
   if (step === "choose") {
@@ -291,3 +361,4 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     </View>
   );
 }
+

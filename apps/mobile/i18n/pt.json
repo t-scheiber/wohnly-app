@@ -55,7 +55,10 @@
     "members": "Membros",
     "inviteMembers": "Convidar membros",
     "leaveHousehold": "Sair da casa",
-    "deleteHousehold": "Apagar casa"
+    "deleteHousehold": "Apagar casa",
+    "linkDevice": "Vincular este dispositivo",
+    "detectedHousehold": "Encontramos sua família: {{name}}",
+    "linkDeviceDescription": "Você já é membro! Toque abaixo para registrar este dispositivo e acessar seus dados compartilhados."
   },
   "todos": {
     "title": "Tarefas",

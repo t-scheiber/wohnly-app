@@ -55,7 +55,10 @@
     "members": "Ahli",
     "inviteMembers": "Jemput Ahli",
     "leaveHousehold": "Tinggalkan Rumah",
-    "deleteHousehold": "Padam Rumah"
+    "deleteHousehold": "Padam Rumah",
+    "linkDevice": "Pautkan Peranti Ini",
+    "detectedHousehold": "Kami menemui isi rumah anda: {{name}}",
+    "linkDeviceDescription": "Anda sudah menjadi ahli! Ketik di bawah untuk mendaftarkan peranti ini dan mengakses data kongsi anda."
   },
   "todos": {
     "title": "Tugasan",

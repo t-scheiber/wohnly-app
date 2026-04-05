@@ -55,7 +55,10 @@
     "members": "Jäsenet",
     "inviteMembers": "Kutsu jäseniä",
     "leaveHousehold": "Poistu taloudesta",
-    "deleteHousehold": "Poista talous"
+    "deleteHousehold": "Poista talous",
+    "linkDevice": "Linkitä tämä laite",
+    "detectedHousehold": "Löysimme kotitaloutesi: {{name}}",
+    "linkDeviceDescription": "Olet jo jäsen! Napauta alla rekisteröidäksesi tämän laitteen ja käyttääksesi jaettuja tietojasi."
   },
   "todos": {
     "title": "Tehtävät",

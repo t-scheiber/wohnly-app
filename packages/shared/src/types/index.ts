@@ -140,7 +140,7 @@ export interface Expense {
   splits?: ExpenseSplit[];
 }
 
-export type SplitType = "equal" | "percentage" | "fixed";
+export type SplitType = "equal" | "percentage" | "fixed" | "shares";
 
 export interface ExpenseSplit {
   id: string;
@@ -148,6 +148,7 @@ export interface ExpenseSplit {
   memberId: string;
   amount: string; // Decimal as string
   percentage?: number | null;
+  shares?: number | null;
   isPaid: boolean;
 }
 

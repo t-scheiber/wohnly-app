@@ -55,7 +55,10 @@
     "members": "Nariai",
     "inviteMembers": "Pakviesti narius",
     "leaveHousehold": "Palikti namų ūkį",
-    "deleteHousehold": "Ištrinti namų ūkį"
+    "deleteHousehold": "Ištrinti namų ūkį",
+    "linkDevice": "Susieti šį įrenginį",
+    "detectedHousehold": "Mes radome jūsų namų ūkį: {{name}}",
+    "linkDeviceDescription": "Jūs jau narys! Norėdami užregistruoti šį įrenginį ir pasiekti bendrinamus duomenis, bakstelėkite toliau."
   },
   "todos": {
     "title": "Užduotys",

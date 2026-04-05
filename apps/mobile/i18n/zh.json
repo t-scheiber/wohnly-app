@@ -55,7 +55,10 @@
     "members": "成员",
     "inviteMembers": "邀请成员",
     "leaveHousehold": "离开家庭",
-    "deleteHousehold": "删除家庭"
+    "deleteHousehold": "删除家庭",
+    "linkDevice": "链接该设备",
+    "detectedHousehold": "我们找到了您的家庭：{{name}}",
+    "linkDeviceDescription": "您已经是会员了！点击下方可注册此设备并访问您的共享数据。"
   },
   "todos": {
     "title": "待办事项",
