@@ -10,22 +10,30 @@ interface HouseholdInfo {
 
 /**
  * Hook to check if the current user has a household.
- * Returns the household info or null.
+ * Returns the household info (including inviteCode) or null.
  */
 export function useHousehold() {
   return useQuery({
     queryKey: ["household"],
     queryFn: async () => {
       try {
-        const data = await api<{ members: { householdId: string }[]; currentUserId: string }>(
-          "/api/members/list"
-        );
-        if (data.members.length > 0) {
-          return { hasHousehold: true, householdId: data.members[0].householdId };
+        const data = await api<{
+          members: { householdId: string }[];
+          currentUserId: string;
+          household?: HouseholdInfo;
+        }>("/api/members/list");
+        if (data.members.length > 0 && data.household) {
+          return {
+            hasHousehold: true,
+            householdId: data.members[0].householdId,
+            inviteCode: data.household.inviteCode,
+            name: data.household.name,
+            trackExpenses: data.household.trackExpenses,
+          };
         }
-        return { hasHousehold: false, householdId: null };
+        return { hasHousehold: false, householdId: null, inviteCode: null, name: null, trackExpenses: false };
       } catch {
-        return { hasHousehold: false, householdId: null };
+        return { hasHousehold: false, householdId: null, inviteCode: null, name: null, trackExpenses: false };
       }
     },
     staleTime: 5 * 60 * 1000,
