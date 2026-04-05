@@ -55,7 +55,10 @@
     "members": "सदस्य",
     "inviteMembers": "सदस्यांना बोलवा",
     "leaveHousehold": "घर सोडा",
-    "deleteHousehold": "घर हटवा"
+    "deleteHousehold": "घर हटवा",
+    "linkDevice": "या डिव्हाइसला लिंक करा",
+    "detectedHousehold": "आम्हाला तुमचे कुटुंब सापडले: {{name}}",
+    "linkDeviceDescription": "तुम्ही आधीच सदस्य आहात! या डिव्हाइसची नोंदणी करण्यासाठी आणि तुमच्या शेअर केलेल्या डेटामध्ये प्रवेश करण्यासाठी खाली टॅप करा."
   },
   "todos": {
     "title": "करायच्या गोष्टी",

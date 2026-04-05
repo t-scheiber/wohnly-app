@@ -55,7 +55,10 @@
     "members": "Članovi",
     "inviteMembers": "Pozovi članove",
     "leaveHousehold": "Napusti kućanstvo",
-    "deleteHousehold": "Obriši kućanstvo"
+    "deleteHousehold": "Obriši kućanstvo",
+    "linkDevice": "Povežite ovaj uređaj",
+    "detectedHousehold": "Pronašli smo vaše kućanstvo: {{name}}",
+    "linkDeviceDescription": "Već ste član! Dodirnite ispod za registraciju ovog uređaja i pristup vašim dijeljenim podacima."
   },
   "todos": {
     "title": "Zadaci",

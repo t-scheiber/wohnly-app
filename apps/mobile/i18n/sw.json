@@ -55,7 +55,10 @@
     "members": "Wanachama",
     "inviteMembers": "Alika Wanachama",
     "leaveHousehold": "Ondoka kwenye Nyumba",
-    "deleteHousehold": "Futa Nyumba"
+    "deleteHousehold": "Futa Nyumba",
+    "linkDevice": "Unganisha Kifaa Hiki",
+    "detectedHousehold": "Tumepata familia yako: {{name}}",
+    "linkDeviceDescription": "Tayari wewe ni mwanachama! Gusa hapa chini ili kusajili kifaa hiki na kufikia data yako iliyoshirikiwa."
   },
   "todos": {
     "title": "Mambo ya Kufanya",

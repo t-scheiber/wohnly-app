@@ -55,7 +55,10 @@
     "members": "Üyeler",
     "inviteMembers": "Üye Davet Et",
     "leaveHousehold": "Evden Ayrıl",
-    "deleteHousehold": "Evi Sil"
+    "deleteHousehold": "Evi Sil",
+    "linkDevice": "Bu Cihazı Bağla",
+    "detectedHousehold": "Hanenizi bulduk: {{name}}",
+    "linkDeviceDescription": "Zaten üyesiniz! Bu cihazı kaydetmek ve paylaşılan verilerinize erişmek için aşağıya dokunun."
   },
   "todos": {
     "title": "Yapılacaklar",

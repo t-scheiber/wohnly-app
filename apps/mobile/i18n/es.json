@@ -55,7 +55,10 @@
     "members": "Miembros",
     "inviteMembers": "Invitar miembros",
     "leaveHousehold": "Abandonar hogar",
-    "deleteHousehold": "Eliminar hogar"
+    "deleteHousehold": "Eliminar hogar",
+    "linkDevice": "Vincular este dispositivo",
+    "detectedHousehold": "Encontramos su hogar: {{name}}",
+    "linkDeviceDescription": "¡Ya eres miembro! Toque a continuación para registrar este dispositivo y acceder a sus datos compartidos."
   },
   "todos": {
     "title": "Tareas",

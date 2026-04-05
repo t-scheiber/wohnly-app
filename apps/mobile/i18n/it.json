@@ -55,7 +55,10 @@
     "members": "Membri",
     "inviteMembers": "Invita membri",
     "leaveHousehold": "Lascia la casa",
-    "deleteHousehold": "Elimina casa"
+    "deleteHousehold": "Elimina casa",
+    "linkDevice": "Collega questo dispositivo",
+    "detectedHousehold": "Abbiamo trovato il tuo nucleo familiare: {{name}}",
+    "linkDeviceDescription": "Sei già un membro! Tocca di seguito per registrare questo dispositivo e accedere ai tuoi dati condivisi."
   },
   "todos": {
     "title": "Cose da fare",

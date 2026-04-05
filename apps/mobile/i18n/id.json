@@ -55,7 +55,10 @@
     "members": "Anggota",
     "inviteMembers": "Undang Anggota",
     "leaveHousehold": "Keluar dari Rumah Tangga",
-    "deleteHousehold": "Hapus Rumah Tangga"
+    "deleteHousehold": "Hapus Rumah Tangga",
+    "linkDevice": "Tautkan Perangkat Ini",
+    "detectedHousehold": "Kami menemukan rumah tangga Anda: {{name}}",
+    "linkDeviceDescription": "Anda sudah menjadi anggota! Ketuk di bawah untuk mendaftarkan perangkat ini dan mengakses data yang Anda bagikan."
   },
   "todos": {
     "title": "To-do",

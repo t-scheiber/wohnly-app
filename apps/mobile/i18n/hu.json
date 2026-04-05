@@ -55,7 +55,10 @@
     "members": "Tagok",
     "inviteMembers": "Tagok meghívása",
     "leaveHousehold": "Háztartás elhagyása",
-    "deleteHousehold": "Háztartás törlése"
+    "deleteHousehold": "Háztartás törlése",
+    "linkDevice": "Kapcsolja össze ezt az eszközt",
+    "detectedHousehold": "Megtaláltuk az Ön háztartását: {{name}}",
+    "linkDeviceDescription": "Már tag vagy! Koppintson az alábbi gombra az eszköz regisztrálásához és a megosztott adatok eléréséhez."
   },
   "todos": {
     "title": "Teendők",

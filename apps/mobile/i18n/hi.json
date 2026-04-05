@@ -55,7 +55,10 @@
     "members": "मेंबर्स",
     "inviteMembers": "मेंबर्स को इनवाइट करो",
     "leaveHousehold": "हाउसहोल्ड छोड़ो",
-    "deleteHousehold": "हाउसहोल्ड डिलीट करो"
+    "deleteHousehold": "हाउसहोल्ड डिलीट करो",
+    "linkDevice": "इस डिवाइस को लिंक करें",
+    "detectedHousehold": "हमें आपका घर मिल गया: {{नाम}}",
+    "linkDeviceDescription": "आप पहले से ही सदस्य हैं! इस डिवाइस को पंजीकृत करने और अपने साझा किए गए डेटा तक पहुंचने के लिए नीचे टैप करें।"
   },
   "todos": {
     "title": "टू-डू",

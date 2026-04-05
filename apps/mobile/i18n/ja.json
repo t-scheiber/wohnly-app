@@ -55,7 +55,10 @@
     "members": "メンバー",
     "inviteMembers": "メンバーを招待",
     "leaveHousehold": "ハウスホールドを離れる",
-    "deleteHousehold": "ハウスホールドを削除"
+    "deleteHousehold": "ハウスホールドを削除",
+    "linkDevice": "このデバイスをリンクする",
+    "detectedHousehold": "あなたの世帯を見つけました: {{name}}",
+    "linkDeviceDescription": "あなたはすでにメンバーです!以下をタップしてこのデバイスを登録し、共有データにアクセスします。"
   },
   "todos": {
     "title": "やること",

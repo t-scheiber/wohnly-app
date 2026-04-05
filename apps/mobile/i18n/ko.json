@@ -55,7 +55,10 @@
     "members": "멤버",
     "inviteMembers": "멤버 초대",
     "leaveHousehold": "하우스홀드 나가기",
-    "deleteHousehold": "하우스홀드 삭제"
+    "deleteHousehold": "하우스홀드 삭제",
+    "linkDevice": "이 장치 연결",
+    "detectedHousehold": "귀하의 가족을 찾았습니다: {{name}}",
+    "linkDeviceDescription": "당신은 이미 회원입니다! 이 기기를 등록하고 공유 데이터에 액세스하려면 아래를 탭하세요."
   },
   "todos": {
     "title": "할 일",

@@ -55,7 +55,10 @@
     "members": "Medlemmer",
     "inviteMembers": "Inviter medlemmer",
     "leaveHousehold": "Forlad husstand",
-    "deleteHousehold": "Slet husstand"
+    "deleteHousehold": "Slet husstand",
+    "linkDevice": "Link denne enhed",
+    "detectedHousehold": "Vi fandt din husstand: {{name}}",
+    "linkDeviceDescription": "Du er allerede medlem! Tryk nedenfor for at registrere denne enhed og få adgang til dine delte data."
   },
   "todos": {
     "title": "Opgaver",

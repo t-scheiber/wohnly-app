@@ -55,7 +55,10 @@
     "members": "Membri",
     "inviteMembers": "Invită membri",
     "leaveHousehold": "Părăsește locuința",
-    "deleteHousehold": "Șterge locuința"
+    "deleteHousehold": "Șterge locuința",
+    "linkDevice": "Conectați acest dispozitiv",
+    "detectedHousehold": "Am găsit gospodăria dvs.: {{name}}",
+    "linkDeviceDescription": "Ești deja membru! Atingeți mai jos pentru a înregistra acest dispozitiv și pentru a accesa datele dvs. partajate."
   },
   "todos": {
     "title": "De făcut",
