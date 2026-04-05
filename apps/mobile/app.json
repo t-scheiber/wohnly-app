@@ -12,13 +12,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "app.wohnly",
       "usesAppleSignIn": true,
+      "appleTeamId": "8RSPLFN63L",
       "infoPlist": {
         "NSCalendarsUsageDescription": "Wohnly needs calendar access to sync your household events.",
         "NSCalendarsFullAccessUsageDescription": "Wohnly needs calendar access to sync your household events.",
         "ITSAppUsesNonExemptEncryption": false,
         "UIRequiredDeviceCapabilities": []
       },
-      "supportsMultipleInterfaceOrientations": true,
       "buildNumber": "3",
       "entitlements": {
         "com.apple.security.application-groups": ["group.app.wohnly"]
