@@ -55,7 +55,10 @@
     "members": "Medlemmar",
     "inviteMembers": "Bjud in medlemmar",
     "leaveHousehold": "Lämna hushåll",
-    "deleteHousehold": "Radera hushåll"
+    "deleteHousehold": "Radera hushåll",
+    "linkDevice": "Länka den här enheten",
+    "detectedHousehold": "Vi hittade ditt hushåll: {{name}}",
+    "linkDeviceDescription": "Du är redan medlem! Tryck nedan för att registrera den här enheten och komma åt dina delade data."
   },
   "todos": {
     "title": "Att göra",

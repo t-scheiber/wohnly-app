@@ -55,7 +55,10 @@
     "members": "Leden",
     "inviteMembers": "Leden uitnodigen",
     "leaveHousehold": "Huishouden verlaten",
-    "deleteHousehold": "Huishouden verwijderen"
+    "deleteHousehold": "Huishouden verwijderen",
+    "linkDevice": "Koppel dit apparaat",
+    "detectedHousehold": "We hebben uw huishouden gevonden: {{name}}",
+    "linkDeviceDescription": "Je bent al lid! Tik hieronder om dit apparaat te registreren en toegang te krijgen tot uw gedeelde gegevens."
   },
   "todos": {
     "title": "Taken",

@@ -55,7 +55,10 @@
     "members": "Członkowie",
     "inviteMembers": "Zaproś członków",
     "leaveHousehold": "Opuść gospodarstwo",
-    "deleteHousehold": "Usuń gospodarstwo"
+    "deleteHousehold": "Usuń gospodarstwo",
+    "linkDevice": "Połącz to urządzenie",
+    "detectedHousehold": "Znaleźliśmy Twoje gospodarstwo domowe: {{name}}",
+    "linkDeviceDescription": "Jesteś już członkiem! Kliknij poniżej, aby zarejestrować to urządzenie i uzyskać dostęp do udostępnionych danych."
   },
   "todos": {
     "title": "Zadania",

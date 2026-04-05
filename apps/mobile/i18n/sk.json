@@ -55,7 +55,10 @@
     "members": "Členovia",
     "inviteMembers": "Pozvať členov",
     "leaveHousehold": "Opustiť domácnosť",
-    "deleteHousehold": "Zmazať domácnosť"
+    "deleteHousehold": "Zmazať domácnosť",
+    "linkDevice": "Prepojiť toto zariadenie",
+    "detectedHousehold": "Našli sme vašu domácnosť: {{name}}",
+    "linkDeviceDescription": "Už ste členom! Klepnutím nižšie zaregistrujte toto zariadenie a získajte prístup k svojim zdieľaným údajom."
   },
   "todos": {
     "title": "Úlohy",

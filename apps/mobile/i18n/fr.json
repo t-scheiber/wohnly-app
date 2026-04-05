@@ -55,7 +55,10 @@
     "members": "Membres",
     "inviteMembers": "Inviter des membres",
     "leaveHousehold": "Quitter le foyer",
-    "deleteHousehold": "Supprimer le foyer"
+    "deleteHousehold": "Supprimer le foyer",
+    "linkDevice": "Associer cet appareil",
+    "detectedHousehold": "Nous avons trouvé votre foyer : {{name}}",
+    "linkDeviceDescription": "Vous êtes déjà membre ! Appuyez ci-dessous pour enregistrer cet appareil et accéder à vos données partagées."
   },
   "todos": {
     "title": "Tâches",

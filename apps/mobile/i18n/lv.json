@@ -55,7 +55,10 @@
     "members": "Dalībnieki",
     "inviteMembers": "Uzaicināt dalībniekus",
     "leaveHousehold": "Pamest mājsaimniecību",
-    "deleteHousehold": "Dzēst mājsaimniecību"
+    "deleteHousehold": "Dzēst mājsaimniecību",
+    "linkDevice": "Saistiet šo ierīci",
+    "detectedHousehold": "Mēs atradām jūsu mājsaimniecību: {{name}}",
+    "linkDeviceDescription": "Jūs jau esat dalībnieks! Pieskarieties tālāk, lai reģistrētu šo ierīci un piekļūtu saviem koplietotajiem datiem."
   },
   "todos": {
     "title": "Uzdevumi",

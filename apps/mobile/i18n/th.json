@@ -55,7 +55,10 @@
     "members": "สมาชิก",
     "inviteMembers": "เชิญสมาชิก",
     "leaveHousehold": "ออกจากครัวเรือน",
-    "deleteHousehold": "ลบครัวเรือน"
+    "deleteHousehold": "ลบครัวเรือน",
+    "linkDevice": "เชื่อมโยงอุปกรณ์นี้",
+    "detectedHousehold": "เราพบครัวเรือนของคุณ: {{name}}",
+    "linkDeviceDescription": "คุณเป็นสมาชิกอยู่แล้ว! แตะด้านล่างเพื่อลงทะเบียนอุปกรณ์นี้และเข้าถึงข้อมูลที่แชร์ของคุณ"
   },
   "todos": {
     "title": "สิ่งที่ต้องทำ",
