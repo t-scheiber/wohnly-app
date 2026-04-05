@@ -3,11 +3,12 @@ import { View, Text, ScrollView, Alert, TouchableOpacity, Modal, Pressable, Text
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { DatePicker } from "../ui/DatePicker";
-import { useCreateExpense, useHouseholdMembers } from "@/lib/api/queries";
+import { useCreateExpense, useUpdateExpense, useHouseholdMembers } from "@/lib/api/queries";
 import { authClient } from "@/lib/auth/client";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import type { Expense } from "@wohnly/shared";
 
 const CURRENCIES = [
   { code: "EUR", symbol: "\u20ac", name: "Euro" },
@@ -53,27 +54,32 @@ interface MemberSplit {
 interface AddExpenseFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  editItem?: Expense;
 }
 
-export function AddExpenseForm({ onSuccess, onCancel }: AddExpenseFormProps) {
+export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseFormProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
   const { data: session } = authClient.useSession();
+  const isEditing = !!editItem;
 
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [currency, setCurrency] = useState("EUR");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState<Date>(new Date());
-  const [paidByMemberId, setPaidByMemberId] = useState<string | null>(null);
+  const [title, setTitle] = useState(editItem?.title ?? "");
+  const [amount, setAmount] = useState(editItem ? String(editItem.amount) : "");
+  const [currency, setCurrency] = useState(editItem?.currency ?? "EUR");
+  const [category, setCategory] = useState(editItem?.category ?? "");
+  const [description, setDescription] = useState(editItem?.description ?? "");
+  const [date, setDate] = useState<Date>(editItem?.date ? new Date(editItem.date) : new Date());
+  const [paidByMemberId, setPaidByMemberId] = useState<string | null>(editItem?.paidById ?? null);
   const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false);
   const [currencySearch, setCurrencySearch] = useState("");
-  const [splitMode, setSplitMode] = useState<SplitMode>("equal");
+  const [splitMode, setSplitMode] = useState<SplitMode>(
+    editItem?.splitType && editItem.splitType !== "equal" ? "custom" : "equal"
+  );
   const [memberSplits, setMemberSplits] = useState<MemberSplit[]>([]);
 
   const createExpense = useCreateExpense();
+  const updateExpense = useUpdateExpense();
   const { data: membersData } = useHouseholdMembers();
 
   const currentMember = membersData?.members?.find((m) => m.isCurrentUser);
@@ -148,7 +154,7 @@ export function AddExpenseForm({ onSuccess, onCancel }: AddExpenseFormProps) {
     const paidByUserId = membersData?.members?.find((m) => m.id === selectedPaidBy)?.userId ?? session?.user?.id;
 
     try {
-      await createExpense.mutateAsync({
+      const payload = {
         title: title.trim(),
         amount: numAmount,
         currency,
@@ -165,17 +171,22 @@ export function AddExpenseForm({ onSuccess, onCancel }: AddExpenseFormProps) {
               amount: parseFloat(s.amount.replace(",", ".")),
             })),
         }),
-      });
+      };
+      if (isEditing) {
+        await updateExpense.mutateAsync({ id: editItem.id, ...payload });
+      } else {
+        await createExpense.mutateAsync(payload);
+      }
       onSuccess?.();
     } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : "Failed to create expense");
+      Alert.alert("Error", err instanceof Error ? err.message : `Failed to ${isEditing ? "update" : "create"} expense`);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
-        {t("expenses.addExpense")}
+        {isEditing ? t("expenses.editExpense", "Edit Expense") : t("expenses.addExpense")}
       </Text>
 
       {/* Amount + Currency */}
@@ -386,11 +397,11 @@ export function AddExpenseForm({ onSuccess, onCancel }: AddExpenseFormProps) {
         )}
         <Button
           onPress={handleSubmit}
-          loading={createExpense.isPending}
+          loading={isEditing ? updateExpense.isPending : createExpense.isPending}
           disabled={!title.trim() || !amount}
           style={{ flex: 2 }}
         >
-          {t("expenses.addExpense")}
+          {isEditing ? t("common.save", "Save") : t("expenses.addExpense")}
         </Button>
       </View>
 

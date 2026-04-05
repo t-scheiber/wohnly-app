@@ -7,12 +7,16 @@ import { Settings2 } from "lucide-react-native";
 import { startOfMonth, endOfMonth } from "date-fns";
 import { CalendarMonthView } from "@/components/calendar/CalendarMonthView";
 import { CalendarDayAgenda } from "@/components/calendar/CalendarDayAgenda";
+import type { CalendarItem } from "@/components/calendar/CalendarDayAgenda";
 import { AddEventForm } from "@/components/forms/AddEventForm";
 import { useCalendarData } from "@/lib/hooks/useCalendarData";
 import { useDeviceCalendars } from "@/lib/hooks/useDeviceCalendars";
+import { useDeleteEvent, useEvents } from "@/lib/api/queries";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AdBanner } from "@/components/common/AdBanner";
+import { confirmAction } from "@/lib/utils/confirm";
+import type { Event } from "@wohnly/shared";
 
 type FilterKey = "events" | "chores" | "subscriptions" | "device";
 
@@ -25,6 +29,7 @@ export default function CalendarScreen() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showForm, setShowForm] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [filters, setFilters] = useState({
     events: true,
     chores: true,
@@ -33,6 +38,12 @@ export default function CalendarScreen() {
   });
 
   const deviceCal = useDeviceCalendars();
+  const deleteEvent = useDeleteEvent();
+
+  // Fetch events for the current month to find full event data for editing
+  const startDate = startOfMonth(currentMonth).toISOString();
+  const endDate = endOfMonth(currentMonth).toISOString();
+  const { data: eventsData } = useEvents(startDate, endDate);
 
   // Auto-enable device filter when permission granted and calendars selected
   useEffect(() => {
@@ -74,7 +85,6 @@ export default function CalendarScreen() {
 
   const toggleFilter = async (key: FilterKey) => {
     if (key === "device" && !filters.device) {
-      // First time enabling device calendar — request permission and load
       if (deviceCal.hasPermission === null || deviceCal.hasPermission === false) {
         const granted = await deviceCal.requestPermission();
         if (granted) {
@@ -83,12 +93,28 @@ export default function CalendarScreen() {
         if (!granted) return;
       }
       if (deviceCal.selectedIds.length === 0 && Platform.OS !== "web") {
-        // No calendars selected yet — go to settings
         router.push("/(app)/(events)/calendar-settings");
         return;
       }
     }
     setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleEditItem = (item: CalendarItem) => {
+    // Find the full event data from the events query
+    const fullEvent = eventsData?.events?.find((e: Event) => e.id === item.id);
+    if (fullEvent) {
+      setEditingEvent(fullEvent);
+    }
+  };
+
+  const handleDeleteItem = (item: CalendarItem) => {
+    deleteEvent.mutate(item.id);
+  };
+
+  const handleCloseModal = () => {
+    setShowForm(false);
+    setEditingEvent(null);
   };
 
   const filterButtons: { key: FilterKey; label: string; color: string }[] = [
@@ -167,20 +193,31 @@ export default function CalendarScreen() {
           markedDates={markedDates}
         />
 
-        {/* Day agenda */}
+        {/* Day agenda — event items are tappable for edit and swipeable for delete */}
         <View style={{ marginTop: 8, minHeight: 200 }}>
-          <CalendarDayAgenda date={selectedDate} items={dayItems} />
+          <CalendarDayAgenda
+            date={selectedDate}
+            items={dayItems}
+            onEditItem={handleEditItem}
+            onDeleteItem={handleDeleteItem}
+          />
         </View>
       </ScrollView>
 
-      {/* Add Event Modal */}
       <AdBanner />
 
-      <Modal visible={showForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowForm(false)}>
+      {/* Add/Edit Event Modal */}
+      <Modal
+        visible={showForm || !!editingEvent}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={handleCloseModal}
+      >
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddEventForm
-            onSuccess={() => setShowForm(false)}
-            onCancel={() => setShowForm(false)}
+            editItem={editingEvent ?? undefined}
+            onSuccess={handleCloseModal}
+            onCancel={handleCloseModal}
           />
         </View>
       </Modal>
