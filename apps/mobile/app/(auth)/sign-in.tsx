@@ -6,7 +6,6 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
-  Alert,
   Image,
   StyleSheet,
 } from "react-native";
@@ -43,46 +42,25 @@ function AppleLogo({ size = 20, color = "#fff" }: { size?: number; color?: strin
 }
 
 const CALLBACK_URL = Platform.OS === "web" ? "https://wohnly.app" : Linking.createURL("/");
+const HANDLED_KEY = "wohnly_deeplink_handled";
 
 export default function SignInScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
-  const [debugLog, setDebugLog] = useState<string[]>([]);
-
-  const dbg = (msg: string) => {
-    setDebugLog((prev) => [...prev, msg]);
-    if (typeof document !== "undefined") document.title = "DBG: " + msg;
-  };
 
   // Handle deep link callback from system browser (Tauri only)
   useEffect(() => {
-    if (!isTauri()) {
-      dbg("NOT Tauri");
-      return;
-    }
+    if (!isTauri()) return;
 
-    // Check if we already handled a deep link (prevent infinite reload loop)
-    const HANDLED_KEY = "wohnly_deeplink_handled";
-    const alreadyHandled = localStorage.getItem(HANDLED_KEY);
-
-    // Show stored cookie state for debugging
-    const storedCookie = localStorage.getItem("wohnly_cookie");
-    dbg("Stored cookie: " + (storedCookie ? storedCookie.substring(0, 80) + "..." : "none"));
-
-    if (alreadyHandled) {
-      dbg("Deep link already handled, checking session...");
-      // Clear the flag so future logins work
+    // Prevent infinite reload loop after handling deep link
+    if (localStorage.getItem(HANDLED_KEY)) {
       localStorage.removeItem(HANDLED_KEY);
       return;
     }
 
-    dbg("Tauri detected, listening...");
-
-    // Listen for deep link events
     const cleanup = onDeepLink((url) => {
-      dbg("onDeepLink: " + url.substring(0, 150));
       processDeepLink(url);
     });
 
@@ -92,23 +70,16 @@ export default function SignInScreen() {
         const { getCurrent } = await import("@tauri-apps/plugin-deep-link");
         const urls = await getCurrent();
         if (urls && urls.length > 0 && urls[0].includes("callback")) {
-          dbg("getCurrent: " + urls[0].substring(0, 150));
           processDeepLink(urls[0]);
         }
-      } catch (e) {
-        dbg("getCurrent error: " + (e instanceof Error ? e.message : String(e)));
-      }
+      } catch { /* ignore */ }
     })();
 
     function processDeepLink(url: string) {
       const stored = handleTauriDeepLink(url);
-      dbg("Cookie stored: " + stored);
       if (stored) {
-        // Set flag to prevent infinite reload
         localStorage.setItem(HANDLED_KEY, "1");
         window.location.reload();
-      } else {
-        dbg("No cookie in URL. URL: " + url.substring(0, 200));
       }
     }
 
@@ -120,17 +91,16 @@ export default function SignInScreen() {
     setLoading(true);
     try {
       if (isTauri()) {
-        dbg("Starting tauriSignIn(" + provider + ")");
         await tauriSignIn(provider);
-        dbg("tauriSignIn done, browser should be open");
       } else {
         await authClient.signIn.social({
           provider,
           callbackURL: CALLBACK_URL,
         });
       }
-    } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : `${provider} sign in failed`);
+    } catch {
+      // Error handling: on Tauri, Alert.alert doesn't work,
+      // so we just reset the loading state
     } finally {
       setLoading(false);
     }
@@ -188,16 +158,6 @@ export default function SignInScreen() {
             )}
           </View>
         </TouchableOpacity>
-
-        {debugLog.length > 0 && (
-          <View style={{ backgroundColor: "#f0f0f0", padding: 8, borderRadius: 8, marginBottom: 16 }}>
-            {debugLog.map((msg, i) => (
-              <Text key={i} style={{ fontSize: 11, fontFamily: "monospace", color: "#333" }}>
-                {msg}
-              </Text>
-            ))}
-          </View>
-        )}
 
         <Link href="/privacy-policy" style={styles.privacyLink}>
           <Text style={[styles.privacyText, { color: colors.textSecondary }]}>Privacy Policy</Text>

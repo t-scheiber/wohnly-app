@@ -28,6 +28,9 @@
       "desktop": {
         "schemes": ["wohnly"]
       }
+    },
+    "shell": {
+      "open": "^https?://.+"
     }
   },
   "bundle": {
