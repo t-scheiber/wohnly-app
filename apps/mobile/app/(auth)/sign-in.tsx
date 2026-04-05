@@ -49,17 +49,69 @@ export default function SignInScreen() {
   const colors = Colors[colorScheme];
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
+  const [debugLog, setDebugLog] = useState<string[]>([]);
 
-  // Listen for deep link callback from system browser (Tauri only)
+  const dbg = (msg: string) => {
+    setDebugLog((prev) => [...prev, msg]);
+    if (typeof document !== "undefined") document.title = "DBG: " + msg;
+  };
+
+  // Handle deep link callback from system browser (Tauri only)
   useEffect(() => {
-    if (!isTauri()) return;
+    if (!isTauri()) {
+      dbg("NOT Tauri");
+      return;
+    }
+
+    // Check if we already handled a deep link (prevent infinite reload loop)
+    const HANDLED_KEY = "wohnly_deeplink_handled";
+    const alreadyHandled = localStorage.getItem(HANDLED_KEY);
+
+    // Show stored cookie state for debugging
+    const storedCookie = localStorage.getItem("wohnly_cookie");
+    dbg("Stored cookie: " + (storedCookie ? storedCookie.substring(0, 80) + "..." : "none"));
+
+    if (alreadyHandled) {
+      dbg("Deep link already handled, checking session...");
+      // Clear the flag so future logins work
+      localStorage.removeItem(HANDLED_KEY);
+      return;
+    }
+
+    dbg("Tauri detected, listening...");
+
+    // Listen for deep link events
     const cleanup = onDeepLink((url) => {
-      const stored = handleTauriDeepLink(url);
-      if (stored) {
-        // Session cookie stored — reload to pick up the session
-        window.location.reload();
-      }
+      dbg("onDeepLink: " + url.substring(0, 150));
+      processDeepLink(url);
     });
+
+    // Also check getCurrent() for deep links received during app launch
+    (async () => {
+      try {
+        const { getCurrent } = await import("@tauri-apps/plugin-deep-link");
+        const urls = await getCurrent();
+        if (urls && urls.length > 0 && urls[0].includes("callback")) {
+          dbg("getCurrent: " + urls[0].substring(0, 150));
+          processDeepLink(urls[0]);
+        }
+      } catch (e) {
+        dbg("getCurrent error: " + (e instanceof Error ? e.message : String(e)));
+      }
+    })();
+
+    function processDeepLink(url: string) {
+      const stored = handleTauriDeepLink(url);
+      dbg("Cookie stored: " + stored);
+      if (stored) {
+        // Set flag to prevent infinite reload
+        localStorage.setItem(HANDLED_KEY, "1");
+        window.location.reload();
+      } else {
+        dbg("No cookie in URL. URL: " + url.substring(0, 200));
+      }
+    }
+
     return cleanup;
   }, []);
 
@@ -68,8 +120,9 @@ export default function SignInScreen() {
     setLoading(true);
     try {
       if (isTauri()) {
-        // Open system browser for OAuth to avoid webview cookie issues
+        dbg("Starting tauriSignIn(" + provider + ")");
         await tauriSignIn(provider);
+        dbg("tauriSignIn done, browser should be open");
       } else {
         await authClient.signIn.social({
           provider,
@@ -135,6 +188,16 @@ export default function SignInScreen() {
             )}
           </View>
         </TouchableOpacity>
+
+        {debugLog.length > 0 && (
+          <View style={{ backgroundColor: "#f0f0f0", padding: 8, borderRadius: 8, marginBottom: 16 }}>
+            {debugLog.map((msg, i) => (
+              <Text key={i} style={{ fontSize: 11, fontFamily: "monospace", color: "#333" }}>
+                {msg}
+              </Text>
+            ))}
+          </View>
+        )}
 
         <Link href="/privacy-policy" style={styles.privacyLink}>
           <Text style={[styles.privacyText, { color: colors.textSecondary }]}>Privacy Policy</Text>
