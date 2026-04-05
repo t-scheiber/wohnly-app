@@ -22,6 +22,7 @@ import pushRouter from "./routes/push.js";
 import userRouter from "./routes/user.js";
 import webhooksRouter from "./routes/webhooks.js";
 import widgetsRouter from "./routes/widgets.js";
+import mealsRouter from "./routes/meals.js";
 
 const app = new Hono<AppEnv>();
 
@@ -120,6 +121,7 @@ app.route("/api/push", pushRouter);
 app.route("/api/user", userRouter);
 app.route("/api/webhooks", webhooksRouter);
 app.route("/api/widgets", widgetsRouter);
+app.route("/api/meals", mealsRouter);
 
 // Health check
 app.get("/api/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));

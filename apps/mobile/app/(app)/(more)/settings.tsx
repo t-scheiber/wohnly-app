@@ -528,6 +528,40 @@ export default function SettingsScreen() {
           />
         </SettingsSection>
 
+        <SettingsSection title="Data" colors={colors}>
+          <SettingsRow
+            colors={colors}
+            label={t("export.fullExport", "Export All Data")}
+            onPress={async () => {
+              try {
+                if (Platform.OS === "web") {
+                  const res = await fetch("/api/households/export?format=json", { credentials: "include" });
+                  const blob = await res.blob();
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `wohnly-export-${new Date().toISOString().split("T")[0]}.json`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                } else {
+                  const { api } = require("@/lib/api/client");
+                  const FileSystem = require("expo-file-system");
+                  const Sharing = require("expo-sharing");
+                  const data = await api("/api/households/export?format=json");
+                  const fileUri = `${FileSystem.cacheDirectory}wohnly-export-${new Date().toISOString().split("T")[0]}.json`;
+                  await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data, null, 2));
+                  if (await Sharing.isAvailableAsync()) {
+                    await Sharing.shareAsync(fileUri, { mimeType: "application/json" });
+                  }
+                }
+              } catch (err) {
+                Alert.alert(t("common.error"), err instanceof Error ? err.message : "Export failed");
+              }
+            }}
+            isLast
+          />
+        </SettingsSection>
+
         <SettingsSection title={t("settings.dangerZone")} colors={colors}>
           <SettingsRow colors={colors} label={t("settings.signOut")} onPress={handleSignOut} destructive />
           <SettingsRow colors={colors} label={t("household.leaveHousehold")} onPress={handleLeaveHousehold} destructive />

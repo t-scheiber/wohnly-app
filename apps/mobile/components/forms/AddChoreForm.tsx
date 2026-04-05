@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Alert, Switch } from "react-native";
+import { View, Text, ScrollView, Alert, Switch, TouchableOpacity } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { MemberPicker } from "../common/MemberPicker";
@@ -48,6 +48,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
     editItem?.assignments?.map((a) => a.memberId) ?? []
   );
   const [rotate, setRotate] = useState((editItem as any)?.rotate ?? false);
+  const [effortWeight, setEffortWeight] = useState(editItem?.effortWeight ?? 2);
 
   const createChore = useCreateChore();
   const updateChore = useUpdateChore();
@@ -70,6 +71,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
         dayOfWeek: showDayOfWeek ? dayOfWeek ?? undefined : undefined,
         dayOfMonth: showDayOfMonth ? dayOfMonth ?? undefined : undefined,
         rotate: rotate && assigneeIds.length > 1 ? true : undefined,
+        effortWeight,
         assigneeIds: assigneeIds.length > 0 ? assigneeIds : undefined,
       };
       if (isEditing) {
@@ -215,6 +217,42 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
           />
         </View>
       )}
+
+      {/* Effort Weight */}
+      <View style={{ marginBottom: 12 }}>
+        <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
+          Effort Level
+        </Text>
+        <View style={{ flexDirection: "row", gap: 6 }}>
+          {[
+            { value: 1, label: "Trivial" },
+            { value: 2, label: "Light" },
+            { value: 3, label: "Medium" },
+            { value: 4, label: "Heavy" },
+            { value: 5, label: "Major" },
+          ].map((level) => (
+            <TouchableOpacity
+              key={level.value}
+              onPress={() => setEffortWeight(level.value)}
+              style={{
+                flex: 1,
+                paddingVertical: 8,
+                borderRadius: 8,
+                backgroundColor: effortWeight === level.value ? colors.primary : colors.muted,
+                alignItems: "center",
+              }}
+            >
+              <Text style={{
+                fontSize: 11,
+                fontWeight: "600",
+                color: effortWeight === level.value ? colors.primaryForeground : colors.textSecondary,
+              }}>
+                {level.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
 
       <View style={{ flexDirection: "row", gap: 12, marginTop: 8 }}>
         {onCancel && (
