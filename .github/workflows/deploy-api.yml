@@ -23,8 +23,7 @@ jobs:
             export GIT_SSH_COMMAND="ssh -i /root/.ssh/wohnly_deploy -o StrictHostKeyChecking=no"
             cd /var/www/wohnly
             git pull origin main
-            cd apps/api
-            npm ci --omit=dev
-            npx prisma generate
-            npx prisma db push
-            pm2 restart wohnly-api
+            npm ci
+            npx prisma generate --schema=apps/api/prisma/schema.prisma
+            npx prisma db push --schema=apps/api/prisma/schema.prisma
+            pm2 restart wohnly-api || cd apps/api && pm2 start 'node --env-file=.env --import tsx/esm src/index.ts' --name wohnly-api
