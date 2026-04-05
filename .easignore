@@ -1,0 +1,16 @@
+# Tauri desktop build artifacts (several GB)
+apps/desktop/tauri/target
+apps/desktop/tauri/gen
+
+# Git and CI
+.git
+.github
+.claude
+
+# Build outputs
+apps/mobile/dist
+apps/mobile/.expo
+
+# Docs
+*.md
+LICENSE
