@@ -163,6 +163,11 @@ app.post("/leave", async (c) => {
 
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
+  // Remove any existing pending leave request for this member
+  await prisma.leaveConfirmation.deleteMany({
+    where: { memberId: member.id },
+  });
+
   const confirmation = await prisma.leaveConfirmation.create({
     data: {
       householdId: member.householdId,
