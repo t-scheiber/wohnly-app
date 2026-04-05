@@ -3,10 +3,11 @@ import { View, Text, ScrollView, Alert } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { DatePicker } from "../ui/DatePicker";
-import { useCreateSubscription } from "@/lib/api/queries";
+import { useCreateSubscription, useUpdateSubscription } from "@/lib/api/queries";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import type { Subscription } from "@wohnly/shared";
 
 const frequencies = [
   { label: "Weekly", value: "weekly" },
@@ -18,20 +19,26 @@ const frequencies = [
 interface AddSubscriptionFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  editItem?: Subscription;
 }
 
-export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionFormProps) {
+export function AddSubscriptionForm({ onSuccess, onCancel, editItem }: AddSubscriptionFormProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
 
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("");
-  const [frequency, setFrequency] = useState("monthly");
-  const [billingDate, setBillingDate] = useState<Date | undefined>(undefined);
+  const isEditing = !!editItem;
+
+  const [name, setName] = useState(editItem?.name ?? "");
+  const [amount, setAmount] = useState(editItem ? String(editItem.amount) : "");
+  const [category, setCategory] = useState(editItem?.category ?? "");
+  const [frequency, setFrequency] = useState(editItem?.frequency ?? "monthly");
+  const [billingDate, setBillingDate] = useState<Date | undefined>(
+    editItem?.billingDate ? new Date(editItem.billingDate) : undefined
+  );
 
   const createSubscription = useCreateSubscription();
+  const updateSubscription = useUpdateSubscription();
 
   const handleSubmit = async () => {
     if (!name.trim() || !amount || !category.trim()) {
@@ -46,23 +53,28 @@ export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionForm
     }
 
     try {
-      await createSubscription.mutateAsync({
+      const payload = {
         name: name.trim(),
         amount: numAmount,
         frequency,
         category: category.trim(),
         billingDate: billingDate ? billingDate.toISOString() : undefined,
-      });
+      };
+      if (isEditing) {
+        await updateSubscription.mutateAsync({ id: editItem.id, ...payload });
+      } else {
+        await createSubscription.mutateAsync(payload);
+      }
       onSuccess?.();
     } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : "Failed to add subscription");
+      Alert.alert("Error", err instanceof Error ? err.message : `Failed to ${isEditing ? "update" : "add"} subscription`);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
-        {t("subscriptions.addSubscription")}
+        {isEditing ? t("subscriptions.editSubscription", "Edit Subscription") : t("subscriptions.addSubscription")}
       </Text>
 
       <Input label={t("subscriptions.title") || "Name"} placeholder="e.g., Netflix" value={name} onChangeText={setName} />
@@ -99,8 +111,8 @@ export function AddSubscriptionForm({ onSuccess, onCancel }: AddSubscriptionForm
 
       <View style={{ flexDirection: "row", gap: 12, marginTop: 8 }}>
         {onCancel && <Button variant="ghost" onPress={onCancel} style={{ flex: 1 }}>{t("common.cancel")}</Button>}
-        <Button onPress={handleSubmit} loading={createSubscription.isPending} disabled={!name.trim() || !amount || !category.trim()} style={{ flex: 2 }}>
-          {t("subscriptions.addSubscription")}
+        <Button onPress={handleSubmit} loading={isEditing ? updateSubscription.isPending : createSubscription.isPending} disabled={!name.trim() || !amount || !category.trim()} style={{ flex: 2 }}>
+          {isEditing ? t("common.save", "Save") : t("subscriptions.addSubscription")}
         </Button>
       </View>
     </ScrollView>

@@ -1,9 +1,10 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { format } from "date-fns";
 import { de, enUS } from "date-fns/locale";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import SwipeableListItem from "@/components/list/SwipeableListItem";
 
 export type CalendarItemType = "event" | "chore" | "subscription" | "device";
 
@@ -21,6 +22,10 @@ export interface CalendarItem {
 interface CalendarDayAgendaProps {
   date: Date;
   items: CalendarItem[];
+  /** Called when an event item is tapped for editing (event type only) */
+  onEditItem?: (item: CalendarItem) => void;
+  /** Called when an event item is swiped to delete (event type only) */
+  onDeleteItem?: (item: CalendarItem) => void;
 }
 
 const TYPE_LABELS: Record<CalendarItemType, { en: string; de: string }> = {
@@ -30,7 +35,7 @@ const TYPE_LABELS: Record<CalendarItemType, { en: string; de: string }> = {
   device: { en: "Calendar", de: "Kalender" },
 };
 
-export function CalendarDayAgenda({ date, items }: CalendarDayAgendaProps) {
+export function CalendarDayAgenda({ date, items, onEditItem, onDeleteItem }: CalendarDayAgendaProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t, i18n } = useTranslation();
@@ -45,6 +50,74 @@ export function CalendarDayAgenda({ date, items }: CalendarDayAgendaProps) {
     }
   };
 
+  const renderItem = (item: CalendarItem) => {
+    const itemContent = (
+      <View
+        style={{
+          backgroundColor: colors.card,
+          borderRadius: 10,
+          padding: 14,
+          marginBottom: 8,
+          borderWidth: 1,
+          borderColor: colors.border,
+          borderLeftWidth: 4,
+          borderLeftColor: item.done ? colors.success : (item.color || colorForType(item.type)),
+          opacity: item.done ? 0.7 : 1,
+        }}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <Text style={{
+            fontSize: 15,
+            fontWeight: "600",
+            color: item.done ? colors.textSecondary : colors.text,
+            flex: 1,
+            textDecorationLine: item.done ? "line-through" : "none",
+          }}>
+            {item.done ? "✓ " : ""}{item.title}
+          </Text>
+          <View style={{
+            backgroundColor: item.done ? colors.success + "20" : colorForType(item.type) + "20",
+            paddingHorizontal: 8,
+            paddingVertical: 2,
+            borderRadius: 6,
+          }}>
+            <Text style={{ fontSize: 11, fontWeight: "600", color: item.done ? colors.success : colorForType(item.type) }}>
+              {item.done ? (i18n.language === "de" ? "Erledigt" : "Done") : (TYPE_LABELS[item.type][i18n.language as "en" | "de"] ?? TYPE_LABELS[item.type].en)}
+            </Text>
+          </View>
+        </View>
+        {(item.time || item.subtitle) && (
+          <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 4 }}>
+            {item.allDay ? (i18n.language === "de" ? "Ganztägig" : "All day") : item.time}
+            {item.subtitle ? (item.time ? ` · ${item.subtitle}` : item.subtitle) : ""}
+          </Text>
+        )}
+      </View>
+    );
+
+    // Only event-type items are editable/deletable from calendar
+    if (item.type === "event") {
+      return (
+        <SwipeableListItem
+          key={`${item.type}-${item.id}`}
+          onDelete={() => onDeleteItem?.(item)}
+          onPress={() => onEditItem?.(item)}
+          deleteConfirmTitle={t("common.delete") || "Delete"}
+          deleteConfirmMessage={`${t("common.deleteConfirm") || "Delete"} "${item.title}"?`}
+          enabled={!!onDeleteItem}
+        >
+          {itemContent}
+        </SwipeableListItem>
+      );
+    }
+
+    return (
+      <View key={`${item.type}-${item.id}`}>
+        {itemContent}
+      </View>
+    );
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Text style={{ fontSize: 15, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 16, paddingVertical: 10 }}>
@@ -57,50 +130,7 @@ export function CalendarDayAgenda({ date, items }: CalendarDayAgendaProps) {
         </View>
       ) : (
         <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-          {items.map((item) => (
-            <View
-              key={`${item.type}-${item.id}`}
-              style={{
-                backgroundColor: colors.card,
-                borderRadius: 10,
-                padding: 14,
-                marginBottom: 8,
-                borderWidth: 1,
-                borderColor: colors.border,
-                borderLeftWidth: 4,
-                borderLeftColor: item.done ? colors.success : (item.color || colorForType(item.type)),
-                opacity: item.done ? 0.7 : 1,
-              }}
-            >
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                <Text style={{
-                  fontSize: 15,
-                  fontWeight: "600",
-                  color: item.done ? colors.textSecondary : colors.text,
-                  flex: 1,
-                  textDecorationLine: item.done ? "line-through" : "none",
-                }}>
-                  {item.done ? "✓ " : ""}{item.title}
-                </Text>
-                <View style={{
-                  backgroundColor: item.done ? colors.success + "20" : colorForType(item.type) + "20",
-                  paddingHorizontal: 8,
-                  paddingVertical: 2,
-                  borderRadius: 6,
-                }}>
-                  <Text style={{ fontSize: 11, fontWeight: "600", color: item.done ? colors.success : colorForType(item.type) }}>
-                    {item.done ? (i18n.language === "de" ? "Erledigt" : "Done") : (TYPE_LABELS[item.type][i18n.language as "en" | "de"] ?? TYPE_LABELS[item.type].en)}
-                  </Text>
-                </View>
-              </View>
-              {(item.time || item.subtitle) && (
-                <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 4 }}>
-                  {item.allDay ? (i18n.language === "de" ? "Ganztägig" : "All day") : item.time}
-                  {item.subtitle ? (item.time ? ` · ${item.subtitle}` : item.subtitle) : ""}
-                </Text>
-              )}
-            </View>
-          ))}
+          {items.map(renderItem)}
         </ScrollView>
       )}
     </View>
