@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 import Constants from "expo-constants";
 
-const COOKIE_STORAGE_KEY = "wohnly_cookie";
+export const COOKIE_STORAGE_KEY = "wohnly_cookie";
 
 /** Check if running inside a Tauri desktop webview */
 export function isTauri(): boolean {
@@ -165,4 +165,26 @@ function safeJsonParse(str: string): Record<string, { value: string; expires: st
   } catch {
     return {};
   }
+}
+
+/**
+ * Get the stored session cookie as a Cookie header string.
+ * Returns empty string if no cookie is stored or all are expired.
+ */
+export function getTauriCookieHeader(): string {
+  if (!isTauri()) return "";
+  const raw = localStorage.getItem(COOKIE_STORAGE_KEY);
+  if (!raw) return "";
+  const cookies = safeJsonParse(raw);
+  return Object.entries(cookies)
+    .filter(([, { expires }]) => !expires || new Date(expires) > new Date())
+    .map(([name, { value }]) => `${name}=${value}`)
+    .join("; ");
+}
+
+/**
+ * Clear the stored Tauri session cookie (for sign-out).
+ */
+export function clearTauriCookie(): void {
+  localStorage.removeItem(COOKIE_STORAGE_KEY);
 }
