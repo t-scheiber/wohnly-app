@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, Alert, Share, Switch, Modal, Pressable, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { Check } from "lucide-react-native";
+import { Check, HelpCircle } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
 import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences, useHouseholdDevices, usePendingDevices, useApproveDevice, useRejectDevice } from "@/lib/api/queries";
 import { apiPatch } from "@/lib/api/client";
@@ -517,6 +517,15 @@ export default function SettingsScreen() {
           {!entitlements?.premium && Platform.OS !== "web" && (
             <SettingsRow colors={colors} label={t("settings.restorePurchases")} onPress={handleRestore} isLast />
           )}
+        </SettingsSection>
+
+        <SettingsSection title={t("help.helpAndTips")} colors={colors}>
+          <SettingsRow
+            colors={colors}
+            label={t("help.helpAndTips")}
+            onPress={() => router.push("/(app)/(more)/help" as any)}
+            isLast
+          />
         </SettingsSection>
 
         <SettingsSection title={t("settings.dangerZone")} colors={colors}>
