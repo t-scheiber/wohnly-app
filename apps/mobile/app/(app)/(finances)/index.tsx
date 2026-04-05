@@ -1,11 +1,14 @@
-import { useState, useCallback, useRef } from "react";
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal, Alert } from "react-native";
+import { useState, useCallback } from "react";
+import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
-import * as Haptics from "expo-haptics";
 import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription } from "@/lib/api/queries";
 import { AddExpenseForm } from "@/components/forms/AddExpenseForm";
 import { AddSubscriptionForm } from "@/components/forms/AddSubscriptionForm";
+import SwipeableListItem from "@/components/list/SwipeableListItem";
+import SelectModeBar from "@/components/list/SelectModeBar";
+import { useSelectMode } from "@/hooks/useSelectMode";
+import { confirmAction } from "@/lib/utils/confirm";
+import { notifyWarning } from "@/lib/utils/haptics";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { formatCurrency, formatDate } from "@wohnly/shared";
@@ -27,7 +30,11 @@ export default function FinancesScreen() {
   const [tab, setTab] = useState<"expenses" | "subscriptions">("expenses");
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showSubForm, setShowSubForm] = useState(false);
-  const swipeableRefs = useRef<Map<string, any>>(new Map());
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
+
+  const expenseSelectMode = useSelectMode();
+  const subscriptionSelectMode = useSelectMode();
 
   const { data: expData, refetch: refetchExp } = useExpenses();
   const { data: subData, refetch: refetchSub } = useSubscriptions();
@@ -64,55 +71,56 @@ export default function FinancesScreen() {
     }, {});
 
   const handleDeleteExpense = (id: string) => {
-    Alert.alert("Delete Expense", "Are you sure?", [
-      { text: "Cancel", style: "cancel", onPress: () => swipeableRefs.current.get(id)?.close() },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          deleteExpense.mutate(id);
-        },
-      },
-    ]);
+    confirmAction("Delete Expense", "Are you sure?", () => {
+      notifyWarning();
+      deleteExpense.mutate(id);
+    });
   };
 
   const handleDeleteSubscription = (id: string) => {
-    Alert.alert("Delete Subscription", "Are you sure?", [
-      { text: "Cancel", style: "cancel", onPress: () => swipeableRefs.current.get(id)?.close() },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          deleteSubscription.mutate(id);
-        },
-      },
-    ]);
+    confirmAction("Delete Subscription", "Are you sure?", () => {
+      notifyWarning();
+      deleteSubscription.mutate(id);
+    });
   };
 
-  const renderRightActions = (id: string, onDelete: (id: string) => void) => () => (
-    <TouchableOpacity
-      onPress={() => onDelete(id)}
-      style={{
-        backgroundColor: colors.destructive,
-        justifyContent: "center",
-        alignItems: "center",
-        width: 80,
-        borderRadius: 12,
-        marginBottom: 8,
-        marginLeft: 8,
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "700", fontSize: 14 }}>Delete</Text>
-    </TouchableOpacity>
-  );
+  const handleTapExpense = (expense: Expense) => {
+    if (expenseSelectMode.isSelectMode) {
+      expenseSelectMode.toggleItem(expense.id);
+      return;
+    }
+    setEditingExpense(expense);
+  };
+
+  const handleTapSubscription = (subscription: Subscription) => {
+    if (subscriptionSelectMode.isSelectMode) {
+      subscriptionSelectMode.toggleItem(subscription.id);
+      return;
+    }
+    setEditingSubscription(subscription);
+  };
+
+  const handleCloseExpenseModal = () => {
+    setShowExpenseForm(false);
+    setEditingExpense(null);
+  };
+
+  const handleCloseSubModal = () => {
+    setShowSubForm(false);
+    setEditingSubscription(null);
+  };
+
+  const isExpenseModalVisible = showExpenseForm || editingExpense !== null;
+  const isSubModalVisible = showSubForm || editingSubscription !== null;
+
+  const activeSelectMode = tab === "expenses" ? expenseSelectMode : subscriptionSelectMode;
 
   const renderExpense = ({ item }: { item: Expense }) => (
-    <Swipeable
-      ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id, ref); }}
-      renderRightActions={renderRightActions(item.id, handleDeleteExpense)}
-      overshootRight={false}
+    <SwipeableListItem
+      onDelete={() => handleDeleteExpense(item.id)}
+      onPress={() => handleTapExpense(item)}
+      deleteConfirmTitle="Delete Expense"
+      deleteConfirmMessage="Are you sure you want to delete this expense?"
     >
       <View
         style={{
@@ -135,14 +143,15 @@ export default function FinancesScreen() {
           <Text style={{ fontSize: 13, color: colors.textSecondary }}>{formatDate(item.date)}</Text>
         </View>
       </View>
-    </Swipeable>
+    </SwipeableListItem>
   );
 
   const renderSubscription = ({ item }: { item: Subscription }) => (
-    <Swipeable
-      ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id, ref); }}
-      renderRightActions={renderRightActions(item.id, handleDeleteSubscription)}
-      overshootRight={false}
+    <SwipeableListItem
+      onDelete={() => handleDeleteSubscription(item.id)}
+      onPress={() => handleTapSubscription(item)}
+      deleteConfirmTitle="Delete Subscription"
+      deleteConfirmMessage="Are you sure you want to delete this subscription?"
     >
       <View
         style={{
@@ -170,7 +179,7 @@ export default function FinancesScreen() {
           )}
         </View>
       </View>
-    </Swipeable>
+    </SwipeableListItem>
   );
 
   return (
@@ -216,6 +225,28 @@ export default function FinancesScreen() {
           </TouchableOpacity>
         ))}
       </View>
+
+      <SelectModeBar
+        isSelectMode={activeSelectMode.isSelectMode}
+        selectedCount={activeSelectMode.selectedCount}
+        onToggleSelectMode={activeSelectMode.toggleSelectMode}
+        onSelectAll={() =>
+          activeSelectMode.selectAll(
+            tab === "expenses"
+              ? expenses.map((e) => e.id)
+              : subscriptions.map((s) => s.id)
+          )
+        }
+        onDeleteSelected={() =>
+          activeSelectMode.deleteSelected((id) =>
+            tab === "expenses"
+              ? deleteExpense.mutate(id)
+              : deleteSubscription.mutate(id)
+          )
+        }
+        onCancel={activeSelectMode.clearSelection}
+        totalCount={tab === "expenses" ? expenses.length : subscriptions.length}
+      />
 
       {/* Summary card */}
       {tab === "expenses" ? (
@@ -281,17 +312,25 @@ export default function FinancesScreen() {
 
       <AdBanner />
 
-      {/* Add Expense Modal */}
-      <Modal visible={showExpenseForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowExpenseForm(false)}>
+      {/* Expense Modal (create + edit) */}
+      <Modal visible={isExpenseModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseExpenseModal}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
-          <AddExpenseForm onSuccess={() => setShowExpenseForm(false)} onCancel={() => setShowExpenseForm(false)} />
+          <AddExpenseForm
+            editItem={editingExpense ?? undefined}
+            onSuccess={handleCloseExpenseModal}
+            onCancel={handleCloseExpenseModal}
+          />
         </View>
       </Modal>
 
-      {/* Add Subscription Modal */}
-      <Modal visible={showSubForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowSubForm(false)}>
+      {/* Subscription Modal (create + edit) */}
+      <Modal visible={isSubModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseSubModal}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
-          <AddSubscriptionForm onSuccess={() => setShowSubForm(false)} onCancel={() => setShowSubForm(false)} />
+          <AddSubscriptionForm
+            editItem={editingSubscription ?? undefined}
+            onSuccess={handleCloseSubModal}
+            onCancel={handleCloseSubModal}
+          />
         </View>
       </Modal>
     </SafeAreaView>

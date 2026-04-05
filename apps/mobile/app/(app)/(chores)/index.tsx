@@ -1,11 +1,14 @@
-import { useState, useCallback, useRef, useMemo } from "react";
-import { View, Text, SectionList, TouchableOpacity, RefreshControl, Alert, Modal } from "react-native";
+import { useState, useCallback, useMemo } from "react";
+import { View, Text, SectionList, TouchableOpacity, RefreshControl, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
-import * as Haptics from "expo-haptics";
-import { startOfDay, isSameDay, isAfter } from "date-fns";
+import { startOfDay, isSameDay } from "date-fns";
 import { useChores, useCompleteChore, useDeleteChore } from "@/lib/api/queries";
 import { AddChoreForm } from "@/components/forms/AddChoreForm";
+import SwipeableListItem from "@/components/list/SwipeableListItem";
+import SelectModeBar from "@/components/list/SelectModeBar";
+import { useSelectMode } from "@/hooks/useSelectMode";
+import { confirmAction } from "@/lib/utils/confirm";
+import { notifySuccess, notifyWarning } from "@/lib/utils/haptics";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AdBanner } from "@/components/common/AdBanner";
@@ -65,7 +68,9 @@ export default function ChoresScreen() {
   const completeChore = useCompleteChore();
   const deleteChore = useDeleteChore();
   const [showForm, setShowForm] = useState(false);
-  const swipeableRefs = useRef<Map<string, any>>(new Map());
+  const [editingChore, setEditingChore] = useState<Chore | null>(null);
+
+  const selectMode = useSelectMode();
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
@@ -74,63 +79,56 @@ export default function ChoresScreen() {
     setRefreshing(false);
   }, [refetch]);
 
+  const allChores = data?.chores ?? [];
+
   const sections = useMemo(() => {
     const chores = data?.chores ?? [];
     const dueToday = chores.filter((c) => isDueToday(c));
-    const allChores = chores;
 
     const result = [];
     if (dueToday.length > 0) {
       result.push({ title: "Due Today", data: dueToday });
     }
-    result.push({ title: "All Chores", data: allChores });
+    result.push({ title: "All Chores", data: chores });
     return result;
   }, [data?.chores]);
 
   const handleComplete = async (id: string) => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    notifySuccess();
     completeChore.mutate(id);
   };
 
   const handleDelete = (id: string) => {
-    Alert.alert("Delete Chore", "Are you sure?", [
-      { text: "Cancel", style: "cancel", onPress: () => swipeableRefs.current.get(id)?.close() },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          deleteChore.mutate(id);
-        },
-      },
-    ]);
+    confirmAction("Delete Chore", "Are you sure?", () => {
+      notifyWarning();
+      deleteChore.mutate(id);
+    });
   };
 
-  const renderRightActions = (id: string) => () => (
-    <TouchableOpacity
-      onPress={() => handleDelete(id)}
-      style={{
-        backgroundColor: colors.destructive,
-        justifyContent: "center",
-        alignItems: "center",
-        width: 80,
-        borderRadius: 16,
-        marginBottom: 12,
-        marginLeft: 8,
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "700", fontSize: 14 }}>Delete</Text>
-    </TouchableOpacity>
-  );
+  const handleTapChore = (chore: Chore) => {
+    if (selectMode.isSelectMode) {
+      selectMode.toggleItem(chore.id);
+      return;
+    }
+    setEditingChore(chore);
+  };
+
+  const handleCloseModal = () => {
+    setShowForm(false);
+    setEditingChore(null);
+  };
+
+  const isModalVisible = showForm || editingChore !== null;
 
   const renderItem = ({ item, section }: { item: Chore; section: { title: string } }) => {
     const isToday = section.title === "Due Today";
 
     return (
-      <Swipeable
-        ref={(ref: any) => { if (ref) swipeableRefs.current.set(item.id + section.title, ref); }}
-        renderRightActions={renderRightActions(item.id)}
-        overshootRight={false}
+      <SwipeableListItem
+        onDelete={() => handleDelete(item.id)}
+        onPress={() => handleTapChore(item)}
+        deleteConfirmTitle="Delete Chore"
+        deleteConfirmMessage="Are you sure you want to delete this chore?"
       >
         <View
           style={{
@@ -201,7 +199,7 @@ export default function ChoresScreen() {
             </TouchableOpacity>
           )}
         </View>
-      </Swipeable>
+      </SwipeableListItem>
     );
   };
 
@@ -221,6 +219,17 @@ export default function ChoresScreen() {
           <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ Add</Text>
         </TouchableOpacity>
       </View>
+
+      <SelectModeBar
+        isSelectMode={selectMode.isSelectMode}
+        selectedCount={selectMode.selectedCount}
+        onToggleSelectMode={selectMode.toggleSelectMode}
+        onSelectAll={() => selectMode.selectAll(allChores.map((c) => c.id))}
+        onDeleteSelected={() => selectMode.deleteSelected((id) => deleteChore.mutate(id))}
+        onCancel={selectMode.clearSelection}
+        totalCount={allChores.length}
+      />
+
       <SectionList
         sections={sections}
         renderItem={renderItem}
@@ -248,11 +257,12 @@ export default function ChoresScreen() {
       />
       <AdBanner />
 
-      <Modal visible={showForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowForm(false)}>
+      <Modal visible={isModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseModal}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddChoreForm
-            onSuccess={() => setShowForm(false)}
-            onCancel={() => setShowForm(false)}
+            editItem={editingChore ?? undefined}
+            onSuccess={handleCloseModal}
+            onCancel={handleCloseModal}
           />
         </View>
       </Modal>
