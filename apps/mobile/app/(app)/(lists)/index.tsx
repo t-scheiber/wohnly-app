@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CheckSquare, ShoppingCart, ChevronRight } from "lucide-react-native";
+import { CheckSquare, ShoppingCart, ChevronRight, UtensilsCrossed } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AdBanner } from "@/components/common/AdBanner";
@@ -25,6 +25,13 @@ export default function ListsScreen() {
       sublabel: "Collaborative shopping",
       route: "/(app)/(lists)/shopping" as const,
       bg: "#3b82f6",
+    },
+    {
+      icon: <UtensilsCrossed size={22} color="#f59e0b" />,
+      label: "Meal Plan",
+      sublabel: "Plan meals & add ingredients to shopping",
+      route: "/(app)/(lists)/meals" as const,
+      bg: "#f59e0b",
     },
   ];
 

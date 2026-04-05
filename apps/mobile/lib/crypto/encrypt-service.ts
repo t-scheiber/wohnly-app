@@ -132,6 +132,26 @@ export async function decryptExpense<T extends { title: string; description?: st
   return { ...expense, title: parsed.title, description: parsed.description };
 }
 
+// ── Expense Attachments ──
+// Encrypts the entire content (note text or base64 photo) as one blob
+
+export async function encryptAttachment(
+  content: string,
+  hk: Uint8Array
+): Promise<{ content: string; nonce: string; encrypted: true }> {
+  const { cipher, nonce } = await encryptData(content, hk);
+  return { content: cipher, nonce, encrypted: true };
+}
+
+export async function decryptAttachment<T extends { content: string; encrypted?: boolean; nonce?: string | null }>(
+  attachment: T,
+  hk: Uint8Array
+): Promise<T> {
+  if (!attachment.encrypted || !attachment.nonce) return attachment;
+  const decrypted = await decryptData(attachment.content, attachment.nonce, hk);
+  return { ...attachment, content: decrypted };
+}
+
 // ── Subscriptions ──
 // Note: amount stays plaintext for server-side balance computation
 

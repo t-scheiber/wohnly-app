@@ -218,4 +218,63 @@ app.delete("/:id", async (c) => {
   return c.json({ success: true });
 });
 
+// ── Calendar Sync ──
+
+// POST /api/events/sync/google — Trigger Google Calendar sync (pull)
+app.post("/sync/google", async (c) => {
+  const userId = c.get("userId") as string;
+
+  const member = await prisma.householdMember.findFirst({ where: { userId } });
+  if (!member) return c.json({ error: "No household" }, 400);
+
+  const sync = await prisma.calendarSync.findFirst({
+    where: { householdId: member.householdId, provider: "google", userId },
+  });
+  if (!sync) return c.json({ error: "No Google Calendar connected. Connect in Settings." }, 400);
+
+  try {
+    const { pullEventsFromGoogle } = await import("../lib/calendar-sync/google.js");
+    const result = await pullEventsFromGoogle(sync.id, member.householdId, userId);
+    return c.json({ success: true, ...result });
+  } catch (err: unknown) {
+    return c.json({ error: err instanceof Error ? err.message : "Sync failed" }, 500);
+  }
+});
+
+// POST /api/events/:id/push-google — Push a single event to Google
+app.post("/:id/push-google", async (c) => {
+  const userId = c.get("userId") as string;
+  const eventId = c.req.param("id");
+
+  const member = await prisma.householdMember.findFirst({ where: { userId } });
+  if (!member) return c.json({ error: "No household" }, 400);
+
+  const event = await prisma.event.findFirst({
+    where: { id: eventId, householdId: member.householdId },
+  });
+  if (!event) return c.json({ error: "Event not found" }, 404);
+
+  const sync = await prisma.calendarSync.findFirst({
+    where: { householdId: member.householdId, provider: "google", userId },
+  });
+  if (!sync) return c.json({ error: "No Google Calendar connected" }, 400);
+
+  try {
+    const { pushEventToGoogle } = await import("../lib/calendar-sync/google.js");
+    const externalId = await pushEventToGoogle(sync.id, event);
+
+    // Store the Google event ID
+    if (!event.externalId) {
+      await prisma.event.update({
+        where: { id: eventId },
+        data: { externalId, calendarSyncId: sync.id },
+      });
+    }
+
+    return c.json({ success: true, externalId });
+  } catch (err: unknown) {
+    return c.json({ error: err instanceof Error ? err.message : "Push failed" }, 500);
+  }
+});
+
 export default app;

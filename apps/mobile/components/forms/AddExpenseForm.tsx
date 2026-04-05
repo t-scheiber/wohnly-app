@@ -8,47 +8,28 @@ import { authClient } from "@/lib/auth/client";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import { EXPENSE_CATEGORIES, getCategory, CURRENCIES } from "@wohnly/shared";
+import * as LucideIcons from "lucide-react-native";
+import { Camera, Image as ImageIcon } from "lucide-react-native";
+import { ExpenseAttachments } from "../finances/ExpenseAttachments";
+import { isScanAvailable, scanReceipt } from "@/lib/ocr/receipt-scanner";
+import { ItemizedSplitForm, type LineItem } from "./ItemizedSplitForm";
 import type { Expense } from "@wohnly/shared";
 
-const CURRENCIES = [
-  { code: "EUR", symbol: "\u20ac", name: "Euro" },
-  { code: "USD", symbol: "$", name: "US Dollar" },
-  { code: "GBP", symbol: "\u00a3", name: "British Pound" },
-  { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
-  { code: "SEK", symbol: "kr", name: "Swedish Krona" },
-  { code: "NOK", symbol: "kr", name: "Norwegian Krone" },
-  { code: "DKK", symbol: "kr", name: "Danish Krone" },
-  { code: "PLN", symbol: "z\u0142", name: "Polish Zloty" },
-  { code: "CZK", symbol: "K\u010d", name: "Czech Koruna" },
-  { code: "HUF", symbol: "Ft", name: "Hungarian Forint" },
-  { code: "RON", symbol: "lei", name: "Romanian Leu" },
-  { code: "BGN", symbol: "\u043b\u0432", name: "Bulgarian Lev" },
-  { code: "HRK", symbol: "kn", name: "Croatian Kuna" },
-  { code: "ISK", symbol: "kr", name: "Icelandic Krona" },
-  { code: "TRY", symbol: "\u20ba", name: "Turkish Lira" },
-  { code: "RUB", symbol: "\u20bd", name: "Russian Ruble" },
-  { code: "UAH", symbol: "\u20b4", name: "Ukrainian Hryvnia" },
-  { code: "JPY", symbol: "\u00a5", name: "Japanese Yen" },
-  { code: "CNY", symbol: "\u00a5", name: "Chinese Yuan" },
-  { code: "KRW", symbol: "\u20a9", name: "South Korean Won" },
-  { code: "INR", symbol: "\u20b9", name: "Indian Rupee" },
-  { code: "THB", symbol: "\u0e3f", name: "Thai Baht" },
-  { code: "IDR", symbol: "Rp", name: "Indonesian Rupiah" },
-  { code: "MYR", symbol: "RM", name: "Malaysian Ringgit" },
-  { code: "PHP", symbol: "\u20b1", name: "Philippine Peso" },
-  { code: "VND", symbol: "\u20ab", name: "Vietnamese Dong" },
-  { code: "BRL", symbol: "R$", name: "Brazilian Real" },
-  { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
-  { code: "AUD", symbol: "A$", name: "Australian Dollar" },
-  { code: "NZD", symbol: "NZ$", name: "New Zealand Dollar" },
-];
+// CURRENCIES is now imported from @wohnly/shared
 
-type SplitMode = "equal" | "custom";
+type SplitMode = "equal" | "custom" | "shares" | "itemized";
 
 interface MemberSplit {
   memberId: string;
   name: string;
   amount: string;
+}
+
+interface MemberShares {
+  memberId: string;
+  name: string;
+  shares: number;
 }
 
 interface AddExpenseFormProps {
@@ -74,13 +55,41 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
   const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false);
   const [currencySearch, setCurrencySearch] = useState("");
   const [splitMode, setSplitMode] = useState<SplitMode>(
-    editItem?.splitType && editItem.splitType !== "equal" ? "custom" : "equal"
+    editItem?.splitType === "shares" ? "shares" : editItem?.splitType && editItem.splitType !== "equal" ? "custom" : "equal"
   );
   const [memberSplits, setMemberSplits] = useState<MemberSplit[]>([]);
+  const [memberShares, setMemberShares] = useState<MemberShares[]>([]);
+  const [showItemizedForm, setShowItemizedForm] = useState(false);
+  const [itemizedLineItems, setItemizedLineItems] = useState<LineItem[]>([]);
+  const [scannedLineItems, setScannedLineItems] = useState<{ name: string; amount: number }[]>([]);
+
+  const [scanning, setScanning] = useState(false);
+  const scanAvailable = !isEditing && isScanAvailable();
 
   const createExpense = useCreateExpense();
   const updateExpense = useUpdateExpense();
   const { data: membersData } = useHouseholdMembers();
+
+  const handleScan = async (source: "camera" | "gallery") => {
+    setScanning(true);
+    try {
+      const result = await scanReceipt(source);
+      if (!result) return;
+
+      const { receipt } = result;
+      if (receipt.total) setAmount(String(receipt.total));
+      if (receipt.merchant) setTitle(receipt.merchant);
+      if (receipt.currency) setCurrency(receipt.currency);
+      if (receipt.date) setDate(new Date(receipt.date));
+      if (receipt.lineItems.length > 0) {
+        setScannedLineItems(receipt.lineItems);
+      }
+    } catch {
+      Alert.alert("Error", "Failed to scan receipt");
+    } finally {
+      setScanning(false);
+    }
+  };
 
   const currentMember = membersData?.members?.find((m) => m.isCurrentUser);
   const selectedPaidBy = paidByMemberId ?? currentMember?.id;
@@ -107,6 +116,29 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
       );
     }
   };
+
+  // Initialize member shares when switching to shares mode
+  const initShares = () => {
+    if (membersData?.members) {
+      setMemberShares(
+        membersData.members.map((m) => ({
+          memberId: m.id,
+          name: m.nickname || m.displayName || (m as any).email || "Member",
+          shares: 1,
+        }))
+      );
+    }
+  };
+
+  // Calculate per-person amounts for shares mode
+  const sharesTotal = useMemo(() => memberShares.reduce((s, m) => s + m.shares, 0), [memberShares]);
+  const sharesPerPerson = useMemo(() => {
+    const total = parseFloat(amount.replace(",", ".")) || 0;
+    if (sharesTotal === 0 || total === 0) return new Map<string, number>();
+    const map = new Map<string, number>();
+    memberShares.forEach((m) => map.set(m.memberId, Math.round((total * m.shares / sharesTotal) * 100) / 100));
+    return map;
+  }, [amount, memberShares, sharesTotal]);
 
   // Calculate remaining amount for custom splits
   const totalSplit = useMemo(() => {
@@ -162,7 +194,7 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
         description: description.trim() || undefined,
         date: date.toISOString(),
         paidById: paidByUserId,
-        splitType: splitMode === "custom" ? "custom" : "equal",
+        splitType: splitMode === "itemized" ? "itemized" : splitMode === "shares" ? "shares" : splitMode === "custom" ? "custom" : "equal",
         ...(splitMode === "custom" && {
           splits: memberSplits
             .filter((s) => parseFloat(s.amount.replace(",", ".")) > 0)
@@ -170,6 +202,21 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
               memberId: s.memberId,
               amount: parseFloat(s.amount.replace(",", ".")),
             })),
+        }),
+        ...(splitMode === "shares" && {
+          splits: memberShares
+            .filter((s) => s.shares > 0)
+            .map((s) => ({
+              memberId: s.memberId,
+              shares: s.shares,
+            })),
+        }),
+        ...(splitMode === "itemized" && {
+          lineItems: itemizedLineItems.map((item) => ({
+            name: item.name.trim(),
+            amount: parseFloat(item.amount.replace(",", ".")),
+            assigneeIds: item.assigneeIds,
+          })),
         }),
       };
       if (isEditing) {
@@ -188,6 +235,57 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
         {isEditing ? t("expenses.editExpense", "Edit Expense") : t("expenses.addExpense")}
       </Text>
+
+      {/* Scan Receipt */}
+      {scanAvailable && (
+        <View style={{
+          flexDirection: "row",
+          gap: 8,
+          marginBottom: 12,
+          padding: 12,
+          backgroundColor: colors.primary + "08",
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: colors.primary + "30",
+          borderStyle: "dashed",
+        }}>
+          <TouchableOpacity
+            onPress={() => handleScan("camera")}
+            disabled={scanning}
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              backgroundColor: colors.primary,
+              paddingVertical: 10,
+              borderRadius: 8,
+            }}
+          >
+            <Camera size={18} color={colors.primaryForeground} />
+            <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 14 }}>
+              {scanning ? "Scanning..." : "Scan Receipt"}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleScan("gallery")}
+            disabled={scanning}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 6,
+              backgroundColor: colors.muted,
+              paddingVertical: 10,
+              paddingHorizontal: 14,
+              borderRadius: 8,
+            }}
+          >
+            <ImageIcon size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Amount + Currency */}
       <View style={{ flexDirection: "row", gap: 8, alignItems: "flex-end" }}>
@@ -226,12 +324,40 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
         onChangeText={setTitle}
       />
 
-      <Input
-        label={`${t("expenses.category")} (optional)`}
-        placeholder="e.g., Food, Utilities, Rent"
-        value={category}
-        onChangeText={setCategory}
-      />
+      {/* Category Chips */}
+      <View style={{ marginBottom: 4 }}>
+        <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
+          {t("expenses.category")}
+        </Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingRight: 8 }}>
+          {EXPENSE_CATEGORIES.map((cat) => {
+            const isSelected = category === cat.id;
+            const IconComponent = (LucideIcons as Record<string, any>)[cat.icon];
+            return (
+              <TouchableOpacity
+                key={cat.id}
+                onPress={() => setCategory(isSelected ? "" : cat.id)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 6,
+                  paddingVertical: 8,
+                  paddingHorizontal: 12,
+                  borderRadius: 20,
+                  backgroundColor: isSelected ? cat.color + "20" : colors.muted,
+                  borderWidth: 1.5,
+                  borderColor: isSelected ? cat.color : colors.border,
+                }}
+              >
+                {IconComponent && <IconComponent size={16} color={isSelected ? cat.color : colors.textSecondary} />}
+                <Text style={{ fontSize: 13, fontWeight: "600", color: isSelected ? cat.color : colors.textSecondary }}>
+                  {t(`expenses.categories.${cat.id}`, cat.id)}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
 
       <DatePicker
         label={t("expenses.date")}
@@ -278,35 +404,35 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
           <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
             {t("expenses.splitType")}
           </Text>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            <TouchableOpacity
-              onPress={() => setSplitMode("equal")}
-              style={{
-                flex: 1,
-                paddingVertical: 10,
-                borderRadius: 8,
-                backgroundColor: splitMode === "equal" ? colors.primary : colors.muted,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: splitMode === "equal" ? colors.primaryForeground : colors.text, fontWeight: "600" }}>
-                {t("expenses.equal")}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => { setSplitMode("custom"); initCustomSplits(); }}
-              style={{
-                flex: 1,
-                paddingVertical: 10,
-                borderRadius: 8,
-                backgroundColor: splitMode === "custom" ? colors.primary : colors.muted,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: splitMode === "custom" ? colors.primaryForeground : colors.text, fontWeight: "600" }}>
-                Custom
-              </Text>
-            </TouchableOpacity>
+          <View style={{ flexDirection: "row", gap: 6 }}>
+            {(["equal", "custom", "shares", "itemized"] as const).map((mode) => (
+              <TouchableOpacity
+                key={mode}
+                onPress={() => {
+                  if (mode === "itemized") {
+                    setShowItemizedForm(true);
+                    return;
+                  }
+                  setSplitMode(mode);
+                  if (mode === "custom") initCustomSplits();
+                  if (mode === "shares") initShares();
+                }}
+                style={{
+                  flex: 1,
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  backgroundColor: splitMode === mode ? colors.primary : colors.muted,
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: splitMode === mode ? colors.primaryForeground : colors.text, fontWeight: "600", fontSize: 12 }}>
+                  {mode === "equal" ? t("expenses.equal")
+                    : mode === "shares" ? t("expenses.shares", "Shares")
+                    : mode === "itemized" ? "Items"
+                    : "Custom"}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
       )}
@@ -380,6 +506,52 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
         </View>
       )}
 
+      {/* Shares Split */}
+      {splitMode === "shares" && memberShares.length > 0 && (
+        <View style={{
+          backgroundColor: colors.card,
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: colors.border,
+          padding: 14,
+          marginBottom: 12,
+        }}>
+          <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text, marginBottom: 10 }}>
+            {t("expenses.shares", "Shares")}
+          </Text>
+          {memberShares.map((ms) => {
+            const perPerson = sharesPerPerson.get(ms.memberId) ?? 0;
+            return (
+              <View key={ms.memberId} style={{ flexDirection: "row", alignItems: "center", marginBottom: 8, gap: 10 }}>
+                <Text style={{ flex: 1, fontSize: 15, color: colors.text }} numberOfLines={1}>
+                  {ms.name}
+                </Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                  <TouchableOpacity
+                    onPress={() => setMemberShares((prev) => prev.map((s) => s.memberId === ms.memberId ? { ...s, shares: Math.max(0, s.shares - 1) } : s))}
+                    style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: colors.muted, alignItems: "center", justifyContent: "center" }}
+                  >
+                    <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text }}>-</Text>
+                  </TouchableOpacity>
+                  <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text, minWidth: 24, textAlign: "center" }}>
+                    {ms.shares}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setMemberShares((prev) => prev.map((s) => s.memberId === ms.memberId ? { ...s, shares: s.shares + 1 } : s))}
+                    style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: colors.muted, alignItems: "center", justifyContent: "center" }}
+                  >
+                    <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text }}>+</Text>
+                  </TouchableOpacity>
+                  <Text style={{ fontSize: 13, color: colors.textSecondary, minWidth: 60, textAlign: "right" }}>
+                    {selectedCurrency.symbol}{perPerson.toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      )}
+
       <Input
         label="Description (optional)"
         placeholder="Add a note..."
@@ -388,6 +560,16 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
         multiline
         numberOfLines={2}
       />
+
+      {/* Attachments (only when editing an existing expense) */}
+      {isEditing && editItem?.id && (
+        <View style={{ marginTop: 8 }}>
+          <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 8 }}>
+            Attachments
+          </Text>
+          <ExpenseAttachments expenseId={editItem.id} />
+        </View>
+      )}
 
       <View style={{ flexDirection: "row", gap: 12, marginTop: 8 }}>
         {onCancel && (
@@ -456,6 +638,26 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
             />
           </Pressable>
         </Pressable>
+      </Modal>
+
+      {/* Itemized Split Modal */}
+      <Modal visible={showItemizedForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowItemizedForm(false)}>
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
+          <ItemizedSplitForm
+            currency={currency}
+            initialItems={scannedLineItems.length > 0 ? scannedLineItems : undefined}
+            onConfirm={(items, total) => {
+              setItemizedLineItems(items);
+              setAmount(String(total));
+              setSplitMode("itemized");
+              setShowItemizedForm(false);
+              setScannedLineItems([]);
+            }}
+            onCancel={() => {
+              setShowItemizedForm(false);
+            }}
+          />
+        </View>
       </Modal>
     </ScrollView>
   );

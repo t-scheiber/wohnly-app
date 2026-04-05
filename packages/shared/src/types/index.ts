@@ -5,6 +5,7 @@ export interface Household {
   id: string;
   name: string;
   inviteCode: string;
+  baseCurrency: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -14,8 +15,12 @@ export interface HouseholdMember {
   userId: string;
   householdId: string;
   displayName: string | null;
+  role: MemberRole;
+  points: number;
   joinedAt: Date;
 }
+
+export type MemberRole = "admin" | "member" | "limited";
 
 export interface MemberNickname {
   id: string;
@@ -66,6 +71,7 @@ export interface Chore {
   description?: string | null;
   frequency: ChoreFrequency;
   dayOfWeek?: number | null;
+  effortWeight: number; // 1-5
   lastDone?: Date | null;
   lastDoneBy?: string | null;
   encrypted?: boolean;
@@ -73,6 +79,26 @@ export interface Chore {
   createdAt: Date;
   updatedAt: Date;
   assignments?: ChoreAssignment[];
+}
+
+export interface ChoreCompletion {
+  id: string;
+  choreId: string;
+  memberId: string;
+  effortWeight: number;
+  completedAt: Date;
+}
+
+export interface ChoreAnalytics {
+  members: {
+    memberId: string;
+    displayName: string;
+    completions: number;
+    effortPoints: number;
+    percentage: number;
+  }[];
+  period: string;
+  totalEffort: number;
 }
 
 export type ChoreFrequency = "daily" | "weekly" | "biweekly" | "monthly";
@@ -138,9 +164,11 @@ export interface Expense {
   createdAt: Date;
   updatedAt: Date;
   splits?: ExpenseSplit[];
+  attachments?: ExpenseAttachment[];
+  lineItems?: ExpenseLineItem[];
 }
 
-export type SplitType = "equal" | "percentage" | "fixed" | "shares";
+export type SplitType = "equal" | "percentage" | "fixed" | "shares" | "itemized";
 
 export interface ExpenseSplit {
   id: string;
@@ -150,6 +178,28 @@ export interface ExpenseSplit {
   percentage?: number | null;
   shares?: number | null;
   isPaid: boolean;
+}
+
+export interface ExpenseLineItem {
+  id: string;
+  expenseId: string;
+  name: string;
+  amount: string; // Decimal as string
+  encrypted?: boolean;
+  nonce?: string | null;
+  assignments?: { id: string; lineItemId: string; memberId: string }[];
+}
+
+export interface ExpenseAttachment {
+  id: string;
+  expenseId: string;
+  type: "note" | "photo";
+  content: string; // note text or base64 image
+  mimeType?: string | null;
+  fileName?: string | null;
+  encrypted?: boolean;
+  nonce?: string | null;
+  createdAt: Date;
 }
 
 export interface Subscription {
@@ -185,6 +235,28 @@ export interface SubscriptionSplit {
   memberId: string;
   amount: string; // Decimal as string
   percentage?: number | null;
+}
+
+export type MealType = "breakfast" | "lunch" | "dinner" | "snack";
+
+export interface MealPlanIngredient {
+  name: string;
+  quantity?: string;
+  unit?: string;
+}
+
+export interface MealPlan {
+  id: string;
+  householdId: string;
+  date: Date;
+  mealType: MealType;
+  title: string;
+  recipe?: string | null;
+  ingredients?: MealPlanIngredient[] | null;
+  encrypted?: boolean;
+  nonce?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface HouseholdInvitation {

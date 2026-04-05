@@ -8,7 +8,8 @@ import {
   RefreshControl,
   Modal,
 } from "react-native";
-import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem, useUpdateShoppingItem, useClearCheckedShopping } from "@/lib/api/queries";
+import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem, useUpdateShoppingItem, useClearCheckedShopping, useShoppingSuggestions } from "@/lib/api/queries";
+import { ScrollView } from "react-native";
 import { AdBanner } from "@/components/common/AdBanner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -40,6 +41,9 @@ export default function ShoppingScreen() {
   const deleteItem = useDeleteShoppingItem();
   const updateItem = useUpdateShoppingItem();
   const clearChecked = useClearCheckedShopping();
+
+  const { data: suggestionsData } = useShoppingSuggestions();
+  const suggestions = suggestionsData?.suggestions ?? [];
 
   const data = tab === "household" ? householdList : personalList;
   const items = data.data?.items ?? [];
@@ -233,6 +237,37 @@ export default function ShoppingScreen() {
         onCancel={selectMode.clearSelection}
         totalCount={allItems.length}
       />
+
+      {/* Smart suggestions */}
+      {tab === "household" && suggestions.length > 0 && (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16, gap: 6, paddingBottom: 8 }}
+        >
+          {suggestions.map((s) => (
+            <TouchableOpacity
+              key={s.name}
+              onPress={async () => {
+                await createItem.mutateAsync({ name: s.name, isPersonal: false });
+                notifySuccess();
+              }}
+              style={{
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderRadius: 16,
+                backgroundColor: colors.muted,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <Text style={{ fontSize: 13, color: colors.textSecondary, fontWeight: "500" }}>
+                + {s.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )}
 
       <FlatList
         data={allItems}
