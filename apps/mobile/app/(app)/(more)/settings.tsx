@@ -302,10 +302,19 @@ export default function SettingsScreen() {
 
   const handleShareInvite = async () => {
     if (!household?.inviteCode) return;
+    const message = `${t("household.shareCode")} ${household.inviteCode}\n\nhttps://wohnly.app/join?code=${household.inviteCode}`;
     try {
-      await Share.share({
-        message: `${t("household.shareCode")} ${household.inviteCode}\n\nhttps://wohnly.app/join?code=${household.inviteCode}`,
-      });
+      if (Platform.OS === "web") {
+        // Web Share API or clipboard fallback
+        if (typeof navigator !== "undefined" && navigator.share) {
+          await navigator.share({ text: message });
+        } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+          await navigator.clipboard.writeText(message);
+          alert(t("common.copied") || "Invite link copied to clipboard!");
+        }
+      } else {
+        await Share.share({ message });
+      }
     } catch (_) {}
   };
 
