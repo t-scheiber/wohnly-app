@@ -14,12 +14,6 @@ import { prisma } from "../prisma.js";
 
 const GOOGLE_API = "https://www.googleapis.com/calendar/v3";
 
-interface GoogleToken {
-  access_token: string;
-  refresh_token?: string;
-  expires_at?: number;
-}
-
 /**
  * Refresh an expired Google OAuth2 access token.
  */
@@ -41,34 +35,45 @@ async function refreshAccessToken(refreshToken: string): Promise<{ access_token:
 
 /**
  * Get a valid access token for a CalendarSync entry.
+ * Uses accessToken/refreshToken fields from CalendarSync model.
  */
 async function getValidToken(syncId: string): Promise<string> {
   const sync = await prisma.calendarSync.findUnique({ where: { id: syncId } });
   if (!sync) throw new Error("Calendar sync not found");
 
-  const tokens = sync.tokens as unknown as GoogleToken;
-  if (!tokens.access_token) throw new Error("No access token");
+  if (!sync.accessToken) throw new Error("No access token");
 
-  // Check if expired
-  if (tokens.expires_at && Date.now() > tokens.expires_at - 60000) {
-    if (!tokens.refresh_token) throw new Error("Token expired and no refresh token");
+  // If we have a refresh token, try to refresh proactively
+  // (We don't track expiry time, so refresh if the token fails)
+  return sync.accessToken;
+}
 
-    const refreshed = await refreshAccessToken(tokens.refresh_token);
-    const newTokens = {
-      ...tokens,
-      access_token: refreshed.access_token,
-      expires_at: Date.now() + refreshed.expires_in * 1000,
-    };
+/**
+ * Refresh and retry if a request fails with 401.
+ */
+async function fetchWithRefresh(syncId: string, url: string, init: RequestInit): Promise<Response> {
+  const sync = await prisma.calendarSync.findUnique({ where: { id: syncId } });
+  if (!sync?.accessToken) throw new Error("No access token");
 
+  let res = await fetch(url, {
+    ...init,
+    headers: { ...init.headers as Record<string, string>, Authorization: `Bearer ${sync.accessToken}` },
+  });
+
+  if (res.status === 401 && sync.refreshToken) {
+    const refreshed = await refreshAccessToken(sync.refreshToken);
     await prisma.calendarSync.update({
       where: { id: syncId },
-      data: { tokens: newTokens as any },
+      data: { accessToken: refreshed.access_token },
     });
 
-    return refreshed.access_token;
+    res = await fetch(url, {
+      ...init,
+      headers: { ...init.headers as Record<string, string>, Authorization: `Bearer ${refreshed.access_token}` },
+    });
   }
 
-  return tokens.access_token;
+  return res;
 }
 
 /**
@@ -87,8 +92,6 @@ export async function pushEventToGoogle(
     externalId?: string | null;
   }
 ): Promise<string> {
-  const accessToken = await getValidToken(syncId);
-
   const googleEvent: Record<string, unknown> = {
     summary: event.title,
     description: event.description || undefined,
@@ -106,17 +109,15 @@ export async function pushEventToGoogle(
   let res: Response;
 
   if (event.externalId) {
-    // Update existing
-    res = await fetch(`${GOOGLE_API}/calendars/primary/events/${event.externalId}`, {
+    res = await fetchWithRefresh(syncId, `${GOOGLE_API}/calendars/primary/events/${event.externalId}`, {
       method: "PUT",
-      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(googleEvent),
     });
   } else {
-    // Create new
-    res = await fetch(`${GOOGLE_API}/calendars/primary/events`, {
+    res = await fetchWithRefresh(syncId, `${GOOGLE_API}/calendars/primary/events`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(googleEvent),
     });
   }
@@ -138,30 +139,24 @@ export async function pullEventsFromGoogle(
   householdId: string,
   userId: string
 ): Promise<{ created: number; updated: number; deleted: number }> {
-  const accessToken = await getValidToken(syncId);
   const sync = await prisma.calendarSync.findUnique({ where: { id: syncId } });
   if (!sync) throw new Error("Calendar sync not found");
 
   const params = new URLSearchParams({ singleEvents: "true", maxResults: "100" });
 
-  const syncToken = (sync.syncToken as string) ?? null;
-  if (syncToken) {
-    params.set("syncToken", syncToken);
-  } else {
-    // First sync: fetch last 30 days
-    params.set("timeMin", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
-  }
+  // We don't have a dedicated syncToken field, so always do time-based fetch
+  // Use lastSyncedAt if available, otherwise last 30 days
+  const since = sync.lastSyncedAt
+    ? new Date(sync.lastSyncedAt.getTime() - 5 * 60 * 1000) // 5 min overlap for safety
+    : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  params.set("timeMin", since.toISOString());
+  params.set("updatedMin", since.toISOString());
 
-  const res = await fetch(`${GOOGLE_API}/calendars/primary/events?${params}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+  const res = await fetchWithRefresh(syncId, `${GOOGLE_API}/calendars/primary/events?${params}`, {
+    method: "GET",
   });
 
   if (!res.ok) {
-    // If syncToken is invalid, do a full sync
-    if (res.status === 410 && syncToken) {
-      await prisma.calendarSync.update({ where: { id: syncId }, data: { syncToken: null } });
-      return pullEventsFromGoogle(syncId, householdId, userId);
-    }
     throw new Error(`Google Calendar API error: ${res.status}`);
   }
 
@@ -234,13 +229,11 @@ export async function pullEventsFromGoogle(
     }
   }
 
-  // Store new sync token
-  if (data.nextSyncToken) {
-    await prisma.calendarSync.update({
-      where: { id: syncId },
-      data: { syncToken: data.nextSyncToken, lastSynced: new Date() },
-    });
-  }
+  // Update last synced timestamp
+  await prisma.calendarSync.update({
+    where: { id: syncId },
+    data: { lastSyncedAt: new Date() },
+  });
 
   return { created, updated, deleted };
 }
