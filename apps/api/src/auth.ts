@@ -36,6 +36,8 @@ export const auth = betterAuth({
     "https://wohnly.app",
     "http://localhost:8081",
     "http://localhost:19006",
+    "tauri://localhost",
+    "https://tauri.localhost",
   ],
 
   user: {
