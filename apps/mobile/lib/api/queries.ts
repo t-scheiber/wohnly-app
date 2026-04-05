@@ -204,6 +204,37 @@ export function useDeleteTodo() {
   });
 }
 
+export function useUpdateTodo() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, isPersonal, ...data }: { id: string; isPersonal?: boolean; title?: string; description?: string; dueDate?: string | null; assigneeIds?: string[] }) => {
+      const hk = getEncryptionKey();
+      if (hk && !isPersonal && data.title) {
+        const enc = await encryptTodo(data as { title: string; description?: string }, hk);
+        return apiPatch(isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`, { ...data, ...enc });
+      }
+      return apiPatch(isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`, data);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["todos"] });
+      qc.invalidateQueries({ queryKey: ["personal-todos"] });
+    },
+  });
+}
+
+export function useClearCompletedTodos() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ ids, isPersonal }: { ids: string[]; isPersonal?: boolean }) => {
+      await Promise.all(ids.map((id) => apiDelete(isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`)));
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["todos"] });
+      qc.invalidateQueries({ queryKey: ["personal-todos"] });
+    },
+  });
+}
+
 // ── Shopping ──
 
 export function useShoppingList() {
@@ -282,6 +313,37 @@ export function useDeleteShoppingItem() {
   });
 }
 
+export function useUpdateShoppingItem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...data }: { id: string; name?: string; quantity?: string }) => {
+      const hk = getEncryptionKey();
+      if (hk && data.name) {
+        const enc = await encryptShoppingItem(data as { name: string; quantity?: string }, hk);
+        return apiPatch(`/api/shopping/${id}`, { ...data, ...enc });
+      }
+      return apiPatch(`/api/shopping/${id}`, data);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["shopping"] });
+      qc.invalidateQueries({ queryKey: ["personal-shopping"] });
+    },
+  });
+}
+
+export function useClearCheckedShopping() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (ids: string[]) => {
+      await Promise.all(ids.map((id) => apiDelete(`/api/shopping/${id}`)));
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["shopping"] });
+      qc.invalidateQueries({ queryKey: ["personal-shopping"] });
+    },
+  });
+}
+
 // ── Chores ──
 
 export function useChores() {
@@ -339,6 +401,21 @@ export function useDeleteChore() {
   });
 }
 
+export function useUpdateChore() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...data }: { id: string; title?: string; description?: string; frequency?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
+      const hk = getEncryptionKey();
+      if (hk && data.title) {
+        const enc = await encryptChore(data as { title: string; description?: string }, hk);
+        return apiPatch(`/api/chores/${id}`, { ...data, ...enc });
+      }
+      return apiPatch(`/api/chores/${id}`, data);
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["chores"] }),
+  });
+}
+
 // ── Events ──
 
 export function useEvents(startDate?: string, endDate?: string) {
@@ -381,6 +458,24 @@ export function useDeleteEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => apiDelete(`/api/events/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
+  });
+}
+
+export function useUpdateEvent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
+      const hk = getEncryptionKey();
+      if (hk && data.title) {
+        const enc = await encryptEvent(
+          { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
+          hk
+        );
+        return apiPatch(`/api/events/${id}`, { ...data, ...enc });
+      }
+      return apiPatch(`/api/events/${id}`, data);
+    },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
   });
 }
@@ -432,6 +527,27 @@ export function useDeleteExpense() {
   });
 }
 
+export function useUpdateExpense() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
+      const hk = getEncryptionKey();
+      if (hk && data.title) {
+        const enc = await encryptExpense(
+          { title: data.title as string, description: data.description as string | null },
+          hk
+        );
+        return apiPatch(`/api/expenses/${id}`, { ...data, ...enc });
+      }
+      return apiPatch(`/api/expenses/${id}`, data);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["expenses"] });
+      qc.invalidateQueries({ queryKey: ["balances"] });
+    },
+  });
+}
+
 // ── Subscriptions ──
 
 export function useSubscriptions() {
@@ -472,6 +588,27 @@ export function useDeleteSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => apiDelete(`/api/subscriptions/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["subscriptions"] });
+      qc.invalidateQueries({ queryKey: ["balances"] });
+    },
+  });
+}
+
+export function useUpdateSubscription() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
+      const hk = getEncryptionKey();
+      if (hk && data.name) {
+        const enc = await encryptSubscription(
+          { name: data.name as string, description: data.description as string | null },
+          hk
+        );
+        return apiPatch(`/api/subscriptions/${id}`, { ...data, ...enc });
+      }
+      return apiPatch(`/api/subscriptions/${id}`, data);
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["subscriptions"] });
       qc.invalidateQueries({ queryKey: ["balances"] });
