@@ -208,7 +208,8 @@
     "clickEdit": "Click any item to edit its details",
     "selectMode": "Select multiple items for bulk actions",
     "clearCompleted": "Clear all completed items at once",
-    "inviteShare": "Share your invite code to add household members"
+    "inviteShare": "Share your invite code to add household members",
+    "financesBalance": "Expenses you add affect the household balances shown on the Dashboard"
   },
   "onboarding": {
     "step1Title": "Create & Manage Lists",
@@ -223,6 +224,8 @@
     "step3DescWeb": "Click any item to open it and edit its details, due dates, or assignments.",
     "step4Title": "Invite Your Household",
     "step4Desc": "Share your invite code with family or roommates so everyone can collaborate on lists and tasks.",
+    "step5Title": "Everywhere You Are",
+    "step5Desc": "Wohnly is available on Android, iOS, Web, and Desktop. Your data stays in sync across all your devices.",
     "skip": "Skip",
     "next": "Next",
     "done": "Get Started"

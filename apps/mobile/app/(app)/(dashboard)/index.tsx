@@ -5,10 +5,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { CheckSquare, ShoppingCart, Sparkles, DollarSign } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
-import { useMemberBalances, useHouseholdMembers } from "@/lib/api/queries";
+import { useMemberBalances, useHouseholdMembers, useShoppingList, useTodos, useChores } from "@/lib/api/queries";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useKeyDistribution } from "@/lib/hooks/useKeyDistribution";
 import { HouseholdOnboarding } from "@/components/household/HouseholdOnboarding";
+import { GettingStartedCard } from "@/components/dashboard/GettingStartedCard";
 import { AdBanner } from "@/components/common/AdBanner";
 import { Spinner } from "@/components/ui/Spinner";
 import { Colors } from "@/constants/Colors";
@@ -25,6 +26,12 @@ export default function DashboardScreen() {
   useKeyDistribution(); // Auto-distribute E2EE keys to new devices
   const { data: balances, refetch } = useMemberBalances();
   const { data: membersData, refetch: refetchMembers } = useHouseholdMembers();
+  
+  // Data for GettingStartedCard
+  const { data: shoppingData } = useShoppingList();
+  const { data: todosData } = useTodos();
+  const { data: choresData } = useChores();
+
   const [refreshing, setRefreshing] = useState(false);
 
   // Build a map of memberId -> display name (nickname > displayName) + isCurrentUser
@@ -77,17 +84,28 @@ export default function DashboardScreen() {
         }
       >
         {/* Welcome */}
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text, marginBottom: 4 }}>
-          {t("dashboard.welcome")}{firstName ? `, ${firstName}` : ""}
-        </Text>
-        {balances?.householdName && (
-          <Text style={{ fontSize: 16, color: colors.textSecondary, marginBottom: 24 }}>
-            {balances.householdName}
+        <View style={{ marginBottom: 24 }}>
+          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text, marginBottom: 4 }}>
+            {t("dashboard.welcome")}{firstName ? `, ${firstName}` : ""}
           </Text>
-        )}
+          {balances?.householdName && (
+            <Text style={{ fontSize: 16, color: colors.textSecondary }}>
+              {balances.householdName}
+            </Text>
+          )}
+        </View>
+
+        {/* Getting Started for new households/members */}
+        <GettingStartedCard
+          memberCount={membersData?.members?.length ?? 0}
+          hasShoppingItems={(shoppingData?.items?.length ?? 0) > 0}
+          hasTodos={(todosData?.todos?.length ?? 0) > 0}
+          hasChores={(choresData?.chores?.length ?? 0) > 0}
+          inviteCode={household?.inviteCode}
+        />
 
         {/* Quick Actions */}
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12, marginBottom: 32 }}>
           {quickActions.map((action) => (
             <TouchableOpacity
               key={action.title}
@@ -113,9 +131,14 @@ export default function DashboardScreen() {
         {/* Balances */}
         {balances?.members && balances.members.length > 0 && (
           <View>
-            <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 12 }}>
-              {t("balances.totalBalance")}
-            </Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text }}>
+                {t("balances.totalBalance")}
+              </Text>
+              <TouchableOpacity onPress={() => router.push("/(app)/(finances)")}>
+                <Text style={{ fontSize: 14, color: colors.primary, fontWeight: "600" }}>{t("common.seeAll")}</Text>
+              </TouchableOpacity>
+            </View>
             {balances.members.map((member) => (
               <View
                 key={member.memberId}
@@ -154,3 +177,4 @@ export default function DashboardScreen() {
     </SafeAreaView>
   );
 }
+

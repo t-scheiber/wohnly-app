@@ -52,5 +52,18 @@ export function ListGuideTooltips({ feature, hasItems }: ListGuideTooltipsProps)
     );
   }
 
+  // Show "Expenses affect balances" on finances screen
+  if (feature === "expenses" && hasItems && shouldShow("finances_balance")) {
+    return (
+      <Tooltip
+        visible
+        message={t("guide.financesBalance")}
+        position="bottom"
+        onDismiss={() => dismiss("finances_balance")}
+      />
+    );
+  }
+
   return null;
 }
+

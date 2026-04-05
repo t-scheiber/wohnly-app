@@ -8,7 +8,8 @@ export type TooltipKey =
   | "tap_edit"
   | "clear_completed"
   | "select_mode"
-  | "invite_share";
+  | "invite_share"
+  | "finances_balance";
 
 export function useGuideTooltips() {
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
