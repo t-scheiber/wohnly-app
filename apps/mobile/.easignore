@@ -1,11 +1,17 @@
-# Tauri desktop build artifacts (huge)
-../desktop/tauri/target/
-../desktop/tauri/gen/
+# Tauri desktop build artifacts (can be several GB)
+apps/desktop/tauri/target
+apps/desktop/tauri/gen
 
-# Node modules are reinstalled on EAS
-node_modules/
+# Git and CI
+.git
+.github
+.claude
 
-# Other large/unnecessary files
-.expo/
-dist/
+# Build outputs
+apps/mobile/dist
+apps/mobile/.expo
 *.tsbuildinfo
+
+# Documentation
+*.md
+LICENSE
