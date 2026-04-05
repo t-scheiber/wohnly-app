@@ -28,9 +28,11 @@ export function onDeepLink(
   let unlisten: (() => void) | undefined;
 
   (async () => {
-    const { listen } = await import("@tauri-apps/api/event");
-    unlisten = await listen<string>("deep-link", (event) => {
-      callback(event.payload);
+    const { onOpenUrl } = await import("@tauri-apps/plugin-deep-link");
+    unlisten = await onOpenUrl((urls: string[]) => {
+      if (urls.length > 0) {
+        callback(urls[0]);
+      }
     });
   })();
 
@@ -180,6 +182,24 @@ export function getTauriCookieHeader(): string {
     .filter(([, { expires }]) => !expires || new Date(expires) > new Date())
     .map(([name, { value }]) => `${name}=${value}`)
     .join("; ");
+}
+
+/**
+ * Get just the session token value (without cookie name).
+ * Used for the x-session-token header since browsers forbid
+ * setting the Cookie header in fetch().
+ */
+export function getTauriSessionToken(): string {
+  if (!isTauri()) return "";
+  const raw = localStorage.getItem(COOKIE_STORAGE_KEY);
+  if (!raw) return "";
+  const cookies = safeJsonParse(raw);
+  // Look for the session token cookie by common Better Auth names
+  for (const [name, { value, expires }] of Object.entries(cookies)) {
+    if (expires && new Date(expires) < new Date()) continue;
+    if (name.includes("session_token")) return value;
+  }
+  return "";
 }
 
 /**
