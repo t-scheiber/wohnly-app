@@ -177,9 +177,9 @@ app.post("/leave", async (c) => {
     },
   });
 
-  const appUrl = process.env.APP_URL || "http://localhost:3000";
-  const confirmUrl = `${appUrl}/api/members/confirm-leave?token=${confirmation.confirmToken}`;
-  const cancelUrl = `${appUrl}/api/members/cancel-leave?token=${confirmation.confirmToken}`;
+  const apiUrl = process.env.BETTER_AUTH_URL || "http://localhost:3001";
+  const confirmUrl = `${apiUrl}/api/members/confirm-leave?token=${confirmation.confirmToken}`;
+  const cancelUrl = `${apiUrl}/api/members/cancel-leave?token=${confirmation.confirmToken}`;
   const locale = (user as { language?: string }).language === "de" ? "de" : "en";
 
   await sendLeaveConfirmationEmail(
@@ -193,21 +193,25 @@ app.post("/leave", async (c) => {
   return c.json({ success: true, message: "Confirmation created", token: confirmation.confirmToken }, 201);
 });
 
-// POST /api/members/confirm-leave - Confirm leave
-app.post("/confirm-leave", async (c) => {
-  const { token } = await c.req.json();
+// GET /api/members/confirm-leave - Confirm leave (from email link)
+app.get("/confirm-leave", async (c) => {
+  const token = c.req.query("token");
+  const appUrl = process.env.APP_URL || "https://wohnly.app";
 
-  if (!token) return c.json({ error: "Token is required" }, 400);
+  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
 
   const confirmation = await prisma.leaveConfirmation.findUnique({
     where: { confirmToken: token },
-    include: { member: true },
+    include: { member: { include: { household: { include: { members: true } } } } },
   });
 
-  if (!confirmation) return c.json({ error: "Invalid token" }, 404);
-  if (confirmation.confirmedAt) return c.json({ error: "Already confirmed" }, 400);
-  if (confirmation.cancelledAt) return c.json({ error: "Cancelled" }, 400);
-  if (confirmation.expiresAt < new Date()) return c.json({ error: "Token expired" }, 400);
+  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
+  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
+  if (confirmation.cancelledAt) return c.redirect(`${appUrl}?error=cancelled`);
+  if (confirmation.expiresAt < new Date()) return c.redirect(`${appUrl}?error=expired`);
+
+  const householdId = confirmation.member.householdId;
+  const memberCount = confirmation.member.household.members.length;
 
   await prisma.$transaction(async (tx) => {
     await tx.leaveConfirmation.update({
@@ -218,9 +222,103 @@ app.post("/confirm-leave", async (c) => {
     await tx.householdMember.delete({
       where: { id: confirmation.memberId },
     });
+
+    // If last member, delete the household entirely
+    if (memberCount <= 1) {
+      // Clean up all household data
+      await tx.householdKeyEnvelope.deleteMany({ where: { householdId } });
+      await tx.todo.deleteMany({ where: { householdId } });
+      await tx.shoppingItem.deleteMany({ where: { householdId } });
+      await tx.choreAssignment.deleteMany({ where: { chore: { householdId } } });
+      await tx.chore.deleteMany({ where: { householdId } });
+      await tx.eventAttendee.deleteMany({ where: { event: { householdId } } });
+      await tx.event.deleteMany({ where: { householdId } });
+      await tx.expenseSplit.deleteMany({ where: { expense: { householdId } } });
+      await tx.expense.deleteMany({ where: { householdId } });
+      await tx.subscriptionSplit.deleteMany({ where: { subscription: { householdId } } });
+      await tx.subscription.deleteMany({ where: { householdId } });
+      await tx.encryptedItem.deleteMany({ where: { householdId } });
+      await tx.householdInvitation.deleteMany({ where: { householdId } });
+      await tx.leaveConfirmation.deleteMany({ where: { householdId, id: { not: confirmation.id } } });
+      await tx.household.delete({ where: { id: householdId } });
+    }
+  });
+
+  return c.redirect(`${appUrl}?left=true`);
+});
+
+// POST /api/members/confirm-leave - Confirm leave (from app)
+app.post("/confirm-leave", async (c) => {
+  const { token } = await c.req.json();
+
+  if (!token) return c.json({ error: "Token is required" }, 400);
+
+  const confirmation = await prisma.leaveConfirmation.findUnique({
+    where: { confirmToken: token },
+    include: { member: { include: { household: { include: { members: true } } } } },
+  });
+
+  if (!confirmation) return c.json({ error: "Invalid token" }, 404);
+  if (confirmation.confirmedAt) return c.json({ error: "Already confirmed" }, 400);
+  if (confirmation.cancelledAt) return c.json({ error: "Cancelled" }, 400);
+  if (confirmation.expiresAt < new Date()) return c.json({ error: "Token expired" }, 400);
+
+  const householdId = confirmation.member.householdId;
+  const memberCount = confirmation.member.household.members.length;
+
+  await prisma.$transaction(async (tx) => {
+    await tx.leaveConfirmation.update({
+      where: { id: confirmation.id },
+      data: { confirmedAt: new Date() },
+    });
+
+    await tx.householdMember.delete({
+      where: { id: confirmation.memberId },
+    });
+
+    // If last member, delete the household entirely
+    if (memberCount <= 1) {
+      await tx.householdKeyEnvelope.deleteMany({ where: { householdId } });
+      await tx.todo.deleteMany({ where: { householdId } });
+      await tx.shoppingItem.deleteMany({ where: { householdId } });
+      await tx.choreAssignment.deleteMany({ where: { chore: { householdId } } });
+      await tx.chore.deleteMany({ where: { householdId } });
+      await tx.eventAttendee.deleteMany({ where: { event: { householdId } } });
+      await tx.event.deleteMany({ where: { householdId } });
+      await tx.expenseSplit.deleteMany({ where: { expense: { householdId } } });
+      await tx.expense.deleteMany({ where: { householdId } });
+      await tx.subscriptionSplit.deleteMany({ where: { subscription: { householdId } } });
+      await tx.subscription.deleteMany({ where: { householdId } });
+      await tx.encryptedItem.deleteMany({ where: { householdId } });
+      await tx.householdInvitation.deleteMany({ where: { householdId } });
+      await tx.leaveConfirmation.deleteMany({ where: { householdId, id: { not: confirmation.id } } });
+      await tx.household.delete({ where: { id: householdId } });
+    }
   });
 
   return c.json({ success: true, message: "Successfully left household" });
+});
+
+// GET /api/members/cancel-leave - Cancel leave request (from email link)
+app.get("/cancel-leave", async (c) => {
+  const token = c.req.query("token");
+  const appUrl = process.env.APP_URL || "https://wohnly.app";
+
+  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
+
+  const confirmation = await prisma.leaveConfirmation.findUnique({
+    where: { confirmToken: token },
+  });
+
+  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
+  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
+
+  await prisma.leaveConfirmation.update({
+    where: { id: confirmation.id },
+    data: { cancelledAt: new Date() },
+  });
+
+  return c.redirect(`${appUrl}?cancelled=true`);
 });
 
 export default app;
