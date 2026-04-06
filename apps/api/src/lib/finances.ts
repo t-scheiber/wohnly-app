@@ -108,11 +108,12 @@ export async function getBudgetRecommendations(householdId: string) {
   // Group by category
   const categorySpending: Record<string, { total: number; count: number }> = {};
   expenses.forEach((exp) => {
-    if (!categorySpending[exp.category]) {
-      categorySpending[exp.category] = { total: 0, count: 0 };
+    const cat = exp.category ?? "uncategorized";
+    if (!categorySpending[cat]) {
+      categorySpending[cat] = { total: 0, count: 0 };
     }
-    categorySpending[exp.category].total += Number(exp.amount);
-    categorySpending[exp.category].count += 1;
+    categorySpending[cat].total += Number(exp.amount);
+    categorySpending[cat].count += 1;
   });
 
   subscriptions.forEach((sub) => {
@@ -184,10 +185,11 @@ export async function getSpendingAlerts(householdId: string) {
   // Category-specific alerts
   const categorySpending: Record<string, number[]> = {};
   expenses.forEach((exp) => {
-    if (!categorySpending[exp.category]) {
-      categorySpending[exp.category] = [];
+    const cat = exp.category ?? "uncategorized";
+    if (!categorySpending[cat]) {
+      categorySpending[cat] = [];
     }
-    categorySpending[exp.category].push(Number(exp.amount));
+    categorySpending[cat].push(Number(exp.amount));
   });
 
   for (const [category, amounts] of Object.entries(categorySpending)) {
@@ -316,9 +318,10 @@ export async function getCostBreakdownByPaymentMethod(householdId: string) {
       };
     }
 
+    const cat = exp.category ?? "uncategorized";
     breakdown[exp.paidFromAccount!].total += Number(exp.amount);
-    breakdown[exp.paidFromAccount!].categories[exp.category] =
-      (breakdown[exp.paidFromAccount!].categories[exp.category] || 0) +
+    breakdown[exp.paidFromAccount!].categories[cat] =
+      (breakdown[exp.paidFromAccount!].categories[cat] || 0) +
       Number(exp.amount);
     breakdown[exp.paidFromAccount!].transactionCount += 1;
   });

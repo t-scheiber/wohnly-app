@@ -122,10 +122,12 @@ export async function predictCategory(
       }
     });
 
-    categoryKeywords[cat.category] = {
-      keywords: Array.from(keywords),
-      count: recentExpenses.length,
-    };
+    if (cat.category) {
+      categoryKeywords[cat.category] = {
+        keywords: Array.from(keywords),
+        count: recentExpenses.length,
+      };
+    }
   }
 
   // Score each category based on keyword matches
@@ -281,7 +283,8 @@ export async function getSpendingInsights(householdId: string) {
   // Spending by category (30 days)
   const categoryBreakdown: Record<string, number> = {};
   recentExpenses.forEach((exp) => {
-    categoryBreakdown[exp.category] = (categoryBreakdown[exp.category] || 0) + Number(exp.amount);
+    const cat = exp.category ?? "uncategorized";
+    categoryBreakdown[cat] = (categoryBreakdown[cat] || 0) + Number(exp.amount);
   });
 
   // Most used payment accounts

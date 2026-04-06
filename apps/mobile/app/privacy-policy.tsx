@@ -65,10 +65,10 @@ export default function PrivacyPolicyScreen() {
         </Text>
 
         <Paragraph colors={colors}>
-          Wohnly ("we", "us", or "our") is a household management application that helps
+          Wohnly (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) is a household management application that helps
           roommates and families coordinate shared expenses, chores, events, and tasks.
           This Privacy Policy explains how we collect, use, and protect your personal
-          information when you use the Wohnly mobile app and website (collectively, the "Service").
+          information when you use the Wohnly mobile app and website (collectively, the &ldquo;Service&rdquo;).
         </Paragraph>
 
         <Section title="1. Information We Collect" colors={colors}>

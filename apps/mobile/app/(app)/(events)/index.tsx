@@ -1,22 +1,29 @@
-import { useState, useCallback, useEffect } from "react";
-import { View, Text, TouchableOpacity, RefreshControl, ScrollView, Modal, Platform } from "react-native";
-import { ScreenView } from "@/components/ui/ScreenView";
-import { useRouter } from "expo-router";
-import { useTranslation } from "react-i18next";
-import { Settings2 } from "lucide-react-native";
-import { startOfMonth, endOfMonth } from "date-fns";
-import { CalendarMonthView } from "@/components/calendar/CalendarMonthView";
-import { CalendarDayAgenda } from "@/components/calendar/CalendarDayAgenda";
 import type { CalendarItem } from "@/components/calendar/CalendarDayAgenda";
+import { CalendarDayAgenda } from "@/components/calendar/CalendarDayAgenda";
+import { CalendarMonthView } from "@/components/calendar/CalendarMonthView";
+import { AdBanner } from "@/components/common/AdBanner";
 import { AddEventForm } from "@/components/forms/AddEventForm";
-import { useCalendarData } from "@/lib/hooks/useCalendarData";
-import { useDeviceCalendars } from "@/lib/hooks/useDeviceCalendars";
-import { useDeleteEvent, useEvents } from "@/lib/api/queries";
+import { ScreenView } from "@/components/ui/ScreenView";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { AdBanner } from "@/components/common/AdBanner";
-import { confirmAction } from "@/lib/utils/confirm";
+import { useDeleteEvent, useEvents } from "@/lib/api/queries";
+import { useCalendarData } from "@/lib/hooks/useCalendarData";
+import { useDeviceCalendars } from "@/lib/hooks/useDeviceCalendars";
 import type { Event } from "@wohnly/shared";
+import { endOfMonth, startOfMonth } from "date-fns";
+import { useRouter } from "expo-router";
+import { Settings2 } from "lucide-react-native";
+import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Modal,
+  Platform,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 type FilterKey = "events" | "chores" | "subscriptions" | "device";
 
@@ -47,29 +54,48 @@ export default function CalendarScreen() {
 
   // Auto-enable device filter when permission granted and calendars selected
   useEffect(() => {
-    if (deviceCal.hasPermission && deviceCal.selectedIds.length > 0 && !filters.device) {
+    if (
+      deviceCal.hasPermission &&
+      deviceCal.selectedIds.length > 0 &&
+      !filters.device
+    ) {
       setFilters((prev) => ({ ...prev, device: true }));
     }
   }, [deviceCal.hasPermission, deviceCal.selectedIds.length]);
 
   // Load device calendars on mount if permission exists
   useEffect(() => {
-    if (deviceCal.hasPermission && deviceCal.calendars.length === 0) {
+    if (
+      deviceCal.hasPermission &&
+      (!deviceCal.calendars || deviceCal.calendars.length === 0)
+    ) {
       deviceCal.loadCalendars();
     }
-  }, [deviceCal.hasPermission]);
+  }, [deviceCal.hasPermission, deviceCal.calendars]);
 
   // Fetch device events when month changes and device filter is on
   useEffect(() => {
-    if (filters.device && deviceCal.hasPermission && deviceCal.selectedIds.length > 0) {
-      deviceCal.fetchEvents(startOfMonth(currentMonth), endOfMonth(currentMonth));
+    if (
+      filters.device &&
+      deviceCal.hasPermission &&
+      deviceCal.selectedIds?.length > 0
+    ) {
+      (deviceCal as any).fetchEvents?.(
+        startOfMonth(currentMonth),
+        endOfMonth(currentMonth),
+      );
     }
-  }, [currentMonth, filters.device, deviceCal.selectedIds.length, deviceCal.hasPermission]);
+  }, [
+    currentMonth,
+    filters.device,
+    deviceCal.selectedIds?.length,
+    deviceCal.hasPermission,
+  ]);
 
   const { markedDates, getItemsForDate, isLoading, refetch } = useCalendarData(
     currentMonth,
     filters,
-    filters.device ? deviceCal.deviceEvents : undefined
+    filters.device ? (deviceCal as any).deviceEvents : undefined,
   );
   const dayItems = getItemsForDate(selectedDate);
 
@@ -78,21 +104,27 @@ export default function CalendarScreen() {
     setRefreshing(true);
     await refetch();
     if (filters.device) {
-      await deviceCal.fetchEvents(startOfMonth(currentMonth), endOfMonth(currentMonth));
+      await (deviceCal as any).fetchEvents?.(
+        startOfMonth(currentMonth),
+        endOfMonth(currentMonth),
+      );
     }
     setRefreshing(false);
-  }, [refetch, filters.device, currentMonth]);
+  }, [refetch, filters.device, currentMonth, deviceCal]);
 
   const toggleFilter = async (key: FilterKey) => {
     if (key === "device" && !filters.device) {
-      if (deviceCal.hasPermission === null || deviceCal.hasPermission === false) {
+      if (
+        deviceCal.hasPermission === null ||
+        deviceCal.hasPermission === false
+      ) {
         const granted = await deviceCal.requestPermission();
         if (granted) {
           await deviceCal.loadCalendars();
         }
         if (!granted) return;
       }
-      if (deviceCal.selectedIds.length === 0 && Platform.OS !== "web") {
+      if (deviceCal.selectedIds?.length === 0 && Platform.OS !== "web") {
         router.push("/(app)/(events)/calendar-settings" as any);
         return;
       }
@@ -102,7 +134,10 @@ export default function CalendarScreen() {
 
   const handleEditItem = (item: CalendarItem) => {
     // Find the full event data from the events query
-    const fullEvent = eventsData?.events?.find((e: Event) => e.id === item.id);
+    const eventsList = Array.isArray(eventsData)
+      ? eventsData
+      : eventsData?.events;
+    const fullEvent = eventsList?.find((e: any) => e.id === item.id);
     if (fullEvent) {
       setEditingEvent(fullEvent);
     }
@@ -118,36 +153,93 @@ export default function CalendarScreen() {
   };
 
   const filterButtons: { key: FilterKey; label: string; color: string }[] = [
-    { key: "events", label: t("events.filterEvents"), color: colors.calendarEvent },
-    { key: "chores", label: t("events.filterChores"), color: colors.calendarChore },
-    { key: "subscriptions", label: t("events.filterSubscriptions"), color: colors.calendarSubscription },
+    {
+      key: "events",
+      label: t("events.filterEvents"),
+      color: (colors as any).calendarEvent || colors.primary,
+    },
+    {
+      key: "chores",
+      label: t("events.filterChores"),
+      color: (colors as any).calendarChore || colors.textSecondary,
+    },
+    {
+      key: "subscriptions",
+      label: t("events.filterSubscriptions"),
+      color: (colors as any).calendarSubscription || colors.destructive,
+    },
     ...(Platform.OS !== "web"
-      ? [{ key: "device" as FilterKey, label: t("events.filterDevice"), color: colors.calendarDevice }]
+      ? [
+          {
+            key: "device" as FilterKey,
+            label: t("events.filterDevice"),
+            color: (colors as any).calendarDevice || colors.text,
+          },
+        ]
       : []),
   ];
 
   return (
-    <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
+    <ScreenView
+      style={{ flex: 1, backgroundColor: colors.background }}
+      edges={["top"]}
+    >
       {/* Header */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 16, paddingVertical: 8 }}>
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("events.title")}</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          paddingVertical: 8,
+        }}
+      >
+        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>
+          {t("events.title")}
+        </Text>
         <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
           {Platform.OS !== "web" && (
-            <TouchableOpacity onPress={() => router.push("/(app)/(events)/calendar-settings" as any)} hitSlop={8}>
+            <TouchableOpacity
+              onPress={() =>
+                router.push("/(app)/(events)/calendar-settings" as any)
+              }
+              hitSlop={8}
+            >
               <Settings2 size={22} color={colors.textSecondary} />
             </TouchableOpacity>
           )}
           <TouchableOpacity
             onPress={() => setShowForm(true)}
-            style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 8 }}
+            style={{
+              backgroundColor: colors.primary,
+              borderRadius: 10,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+            }}
           >
-            <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
+            <Text
+              style={{
+                color: colors.primaryForeground,
+                fontWeight: "600",
+                fontSize: 15,
+              }}
+            >
+              + {t("common.add")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Filter pills */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 8 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          gap: 8,
+          paddingBottom: 8,
+        }}
+      >
         {filterButtons.map((fb) => (
           <TouchableOpacity
             key={fb.key}
@@ -164,17 +256,23 @@ export default function CalendarScreen() {
               borderColor: filters[fb.key] ? fb.color : colors.border,
             }}
           >
-            <View style={{
-              width: 8,
-              height: 8,
-              borderRadius: 4,
-              backgroundColor: filters[fb.key] ? fb.color : colors.textSecondary,
-            }} />
-            <Text style={{
-              fontSize: 13,
-              fontWeight: "600",
-              color: filters[fb.key] ? fb.color : colors.textSecondary,
-            }}>
+            <View
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: filters[fb.key]
+                  ? fb.color
+                  : colors.textSecondary,
+              }}
+            />
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: "600",
+                color: filters[fb.key] ? fb.color : colors.textSecondary,
+              }}
+            >
               {fb.label}
             </Text>
           </TouchableOpacity>
@@ -182,7 +280,15 @@ export default function CalendarScreen() {
       </ScrollView>
 
       <ScrollView
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 24 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={colors.primary}
+          />
+        }
       >
         {/* Month calendar */}
         <CalendarMonthView

@@ -41,6 +41,32 @@ function AppleLogo({ size = 20, color = "#fff" }: { size?: number; color?: strin
   );
 }
 
+function WindowsLogo({ size = 16, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <Path d="M3 5.548l7.065-.966v6.822H3V5.548zm0 12.904l7.065.966v-6.822H3v5.856zm7.865 1.074L21 21v-7.404H10.865v5.93zm0-14.052v6.93H21V3L10.865 5.474z" />
+    </Svg>
+  );
+}
+
+function MacLogo({ size = 16, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <Path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+    </Svg>
+  );
+}
+
+const DOWNLOAD_BASE = "https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest";
+
+function getDesktopOS(): "windows" | "mac" | null {
+  if (Platform.OS !== "web" || typeof navigator === "undefined") return null;
+  const ua = navigator.userAgent.toLowerCase();
+  if (ua.includes("win")) return "windows";
+  if (ua.includes("mac")) return "mac";
+  return null;
+}
+
 const CALLBACK_URL = Platform.OS === "web" ? "https://wohnly.app" : Linking.createURL("/");
 const HANDLED_KEY = "wohnly_deeplink_handled";
 
@@ -167,6 +193,32 @@ export default function SignInScreen() {
         <Link href="/privacy-policy" style={styles.privacyLink}>
           <Text style={[styles.privacyText, { color: colors.textSecondary }]}>Privacy Policy</Text>
         </Link>
+
+        {Platform.OS === "web" && (() => {
+          const os = getDesktopOS();
+          if (!os) return null;
+          const url = os === "windows"
+            ? `${DOWNLOAD_BASE}/Wohnly-Windows-Setup.exe`
+            : `${DOWNLOAD_BASE}/Wohnly-macOS.dmg`;
+          const label = os === "windows" ? "Download for Windows" : "Download for macOS";
+          const Logo = os === "windows" ? WindowsLogo : MacLogo;
+          return (
+            <View style={styles.downloadSection}>
+              <View style={[styles.downloadDivider, { backgroundColor: colors.border }]} />
+              <Text style={[styles.downloadLabel, { color: colors.textSecondary }]}>
+                Get the desktop app
+              </Text>
+              <TouchableOpacity
+                onPress={() => { if (typeof window !== "undefined") window.open(url, "_blank"); }}
+                activeOpacity={0.7}
+                style={[styles.downloadBtn, { borderColor: colors.border }]}
+              >
+                <Logo size={16} color={colors.text} />
+                <Text style={[styles.downloadBtnText, { color: colors.text }]}>{label}</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        })()}
       </View>
     </ScrollView>
   );
@@ -242,5 +294,32 @@ const styles = StyleSheet.create({
   },
   privacyText: {
     fontSize: 13,
+  },
+  downloadSection: {
+    marginTop: 32,
+    alignItems: "center",
+  },
+  downloadDivider: {
+    height: 1,
+    width: "100%",
+    marginBottom: 20,
+  },
+  downloadLabel: {
+    fontSize: 13,
+    marginBottom: 12,
+  },
+  downloadBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  downloadBtnText: {
+    fontSize: 14,
+    fontWeight: "500",
   },
 });

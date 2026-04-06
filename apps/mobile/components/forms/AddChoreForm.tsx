@@ -206,7 +206,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
               Rotate Assignees
             </Text>
             <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
-              Automatically alternate who does this chore each time it's completed
+              Automatically alternate who does this chore each time it&apos;s completed
             </Text>
           </View>
           <Switch

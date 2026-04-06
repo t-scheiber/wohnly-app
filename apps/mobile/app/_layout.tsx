@@ -49,7 +49,7 @@ function NamePromptModal({ colorScheme, onComplete }: { colorScheme: "light" | "
       <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" }}>
         <View style={{ backgroundColor: colors.card, borderRadius: 20, width: "85%", maxWidth: 380, padding: 24 }}>
           <Text style={{ fontSize: 22, fontWeight: "800", color: colors.text, textAlign: "center", marginBottom: 8 }}>
-            What's your name?
+            What&apos;s your name?
           </Text>
           <Text style={{ fontSize: 15, color: colors.textSecondary, textAlign: "center", marginBottom: 20 }}>
             Your household members will see this name so they can identify you.
