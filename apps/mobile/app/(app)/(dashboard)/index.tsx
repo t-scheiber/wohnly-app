@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { useState, useCallback } from "react";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useTranslation } from "react-i18next";
 import { CheckSquare, ShoppingCart, Sparkles, DollarSign } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
@@ -62,9 +62,9 @@ export default function DashboardScreen() {
   // No household — show onboarding
   if (!household?.hasHousehold) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <HouseholdOnboarding userName={firstName} />
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -77,9 +77,10 @@ export default function DashboardScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
-        contentContainerStyle={{ padding: 16 }}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 16, flexGrow: 1 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
         }
@@ -177,7 +178,7 @@ export default function DashboardScreen() {
         )}
       </ScrollView>
       <AdBanner />
-    </SafeAreaView>
+    </View>
   );
 }
 
