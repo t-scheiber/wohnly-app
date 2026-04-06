@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { View, Text, SectionList, TouchableOpacity, RefreshControl, Modal } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenView } from "@/components/ui/ScreenView";
 import { startOfDay, isSameDay } from "date-fns";
 import { useChores, useCompleteChore, useDeleteChore, useBreakMode, useNudgeChore } from "@/lib/api/queries";
 import { AddChoreForm } from "@/components/forms/AddChoreForm";
@@ -228,7 +228,7 @@ export default function ChoresScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
+    <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>Chores</Text>
         <TouchableOpacity
@@ -349,6 +349,6 @@ export default function ChoresScreen() {
           />
         </View>
       </Modal>
-    </SafeAreaView>
+    </ScreenView>
   );
 }
