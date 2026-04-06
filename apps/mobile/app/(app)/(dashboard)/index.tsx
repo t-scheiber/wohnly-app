@@ -113,7 +113,7 @@ export default function DashboardScreen() {
           {quickActions.map((action) => (
             <TouchableOpacity
               key={action.title}
-              onPress={() => router.push(action.route)}
+              onPress={() => router.push(action.route as any)}
               activeOpacity={0.8}
               style={{
                 flex: 1,
@@ -139,7 +139,7 @@ export default function DashboardScreen() {
               <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text }}>
                 {t("balances.totalBalance")}
               </Text>
-              <TouchableOpacity onPress={() => router.push("/(app)/(finances)")}>
+              <TouchableOpacity onPress={() => router.push("/(app)/(finances)" as any)}>
                 <Text style={{ fontSize: 14, color: colors.primary, fontWeight: "600" }}>{t("common.seeAll")}</Text>
               </TouchableOpacity>
             </View>
