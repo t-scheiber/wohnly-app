@@ -1,13 +1,6 @@
 name: Build & Deploy Desktop (macOS + Windows)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'apps/mobile/**'
-      - 'apps/desktop/**'
-      - 'packages/shared/**'
-      - '.github/workflows/deploy-desktop.yml'
   workflow_dispatch:
     inputs:
       platform:
