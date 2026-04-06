@@ -119,7 +119,7 @@
     "deviceCalendars": "Koledarji naprave",
     "noCalendars": "Ni najdenih koledarjev",
     "grantAccess": "Dovoli dostop do koledarja za prikaz dogodkov z naprave",
-    "openSettings": "Open Settings"
+    "openSettings": "Odpri nastavitve"
   },
   "expenses": {
     "title": "Stroški",
@@ -230,10 +230,10 @@
     "devicePending": "Čakanje na odobritev",
     "encryptedData": "Šifrirano — odpri na svoji napravi za ogled",
     "manageDevices": "Upravljanje naprav",
-    "weekStartsOn": "Week Starts On",
-    "monday": "Monday",
-    "sunday": "Sunday",
-    "timeFormat": "Time Format"
+    "weekStartsOn": "Teden se začne v",
+    "monday": "Ponedeljek",
+    "sunday": "Nedelja",
+    "timeFormat": "Oblika časa"
   },
   "balances": {
     "owedToYou": "Dolgujejo ti",

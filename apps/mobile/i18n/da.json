@@ -119,7 +119,7 @@
     "deviceCalendars": "Enhedskalendere",
     "noCalendars": "Ingen kalendere fundet",
     "grantAccess": "Giv kalenderadgang for at se dine enhedsbegivenheder",
-    "openSettings": "Open Settings"
+    "openSettings": "Åbn indstillinger"
   },
   "expenses": {
     "title": "Udgifter",
@@ -230,10 +230,10 @@
     "devicePending": "Afventer godkendelse",
     "encryptedData": "Krypteret — åbn på din enhed for at se",
     "manageDevices": "Administrer enheder",
-    "weekStartsOn": "Week Starts On",
-    "monday": "Monday",
-    "sunday": "Sunday",
-    "timeFormat": "Time Format"
+    "weekStartsOn": "Ugen starter",
+    "monday": "Mandag",
+    "sunday": "Søndag",
+    "timeFormat": "Tidsformat"
   },
   "balances": {
     "owedToYou": "Skylder dig",
