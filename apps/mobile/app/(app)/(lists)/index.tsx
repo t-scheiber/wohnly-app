@@ -46,7 +46,7 @@ export default function ListsScreen() {
           {items.map((item) => (
             <TouchableOpacity
               key={item.label}
-              onPress={() => router.push(item.route)}
+              onPress={() => router.push(item.route as any)}
               activeOpacity={0.7}
               style={{
                 flexDirection: "row",

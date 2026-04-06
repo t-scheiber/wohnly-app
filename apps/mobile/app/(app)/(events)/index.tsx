@@ -93,7 +93,7 @@ export default function CalendarScreen() {
         if (!granted) return;
       }
       if (deviceCal.selectedIds.length === 0 && Platform.OS !== "web") {
-        router.push("/(app)/(events)/calendar-settings");
+        router.push("/(app)/(events)/calendar-settings" as any);
         return;
       }
     }
@@ -133,7 +133,7 @@ export default function CalendarScreen() {
         <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("events.title")}</Text>
         <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
           {Platform.OS !== "web" && (
-            <TouchableOpacity onPress={() => router.push("/(app)/(events)/calendar-settings")} hitSlop={8}>
+            <TouchableOpacity onPress={() => router.push("/(app)/(events)/calendar-settings" as any)} hitSlop={8}>
               <Settings2 size={22} color={colors.textSecondary} />
             </TouchableOpacity>
           )}

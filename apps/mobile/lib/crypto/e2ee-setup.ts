@@ -26,7 +26,7 @@ export async function ensureDeviceRegistered(): Promise<{
   const { publicKey, privateKey } = await generateDeviceKeys();
 
   // Build a descriptive device name
-  let deviceName = Platform.OS;
+  let deviceName: string = Platform.OS;
   if (Platform.OS === "web" && typeof navigator !== "undefined") {
     const ua = navigator.userAgent;
     if (ua.includes("Macintosh")) deviceName = "macOS Web";
