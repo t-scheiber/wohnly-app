@@ -9,12 +9,30 @@ api.wohnly.app {
 # Wohnly Web - serve Expo static build
 wohnly.app, www.wohnly.app {
     root * /var/www/wohnly-web
+    encode gzip zstd
     file_server
 
     # SPA fallback
     try_files {path} /index.html
 
-    # Cache static assets
+    # Security headers (all responses)
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    }
+
+    # HTML - short cache so updates propagate quickly
+    @html path / *.html
+    header @html Cache-Control "public, max-age=600, must-revalidate"
+
+    # Static assets - long immutable cache (hashed filenames)
     @static path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2
     header @static Cache-Control "public, max-age=31536000, immutable"
+
+    # SEO files - moderate cache
+    @seo path /robots.txt /sitemap.xml /manifest.json
+    header @seo Cache-Control "public, max-age=86400"
 }

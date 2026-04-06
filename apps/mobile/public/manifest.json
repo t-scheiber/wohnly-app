@@ -1,0 +1,19 @@
+{
+  "name": "Wohnly — Household Management",
+  "short_name": "Wohnly",
+  "description": "Manage shared expenses, chores, events, and shopping lists together. One app for your entire household.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6db5a8",
+  "orientation": "any",
+  "categories": ["lifestyle", "productivity", "finance"],
+  "icons": [
+    {
+      "src": "/assets/images/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
