@@ -26,11 +26,11 @@ export default function SelectModeBar({
   onCancel,
   totalCount,
 }: Props) {
-  // Only render on web
-  if (Platform.OS !== "web") return null;
-
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+
+  // Only render on web
+  if (Platform.OS !== "web") return null;
 
   if (!isSelectMode) {
     return (

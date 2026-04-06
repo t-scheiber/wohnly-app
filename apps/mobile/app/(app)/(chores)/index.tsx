@@ -173,7 +173,7 @@ export default function ChoresScreen() {
                   <Text style={{ fontSize: 14, color: colors.primary, fontWeight: "600" }}>
                     {(item as any).currentAssignee.displayName ?? "Member"}
                   </Text>
-                  <Text style={{ fontSize: 14, color: colors.textSecondary }}>'s turn</Text>
+                  <Text style={{ fontSize: 14, color: colors.textSecondary }}>&apos;s turn</Text>
                   <Text style={{ fontSize: 12, color: colors.textSecondary, marginLeft: 6 }}>
                     (rotating)
                   </Text>
