@@ -15,34 +15,30 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /var/www/wohnly
-
-            echo "=== CHECK DEPLOY DIR ==="
-            ls -la deploy/ 2>&1 || echo "deploy/ directory missing"
-            ls -la apps/api/ | head -5
-
-            echo ""
-            echo "=== GIT STATUS ==="
-            git log --oneline -3
-            git status --short | head -10
-
-            echo ""
-            echo "=== TRY GIT PULL ==="
             export GIT_SSH_COMMAND="ssh -i /root/.ssh/wohnly_deploy -o StrictHostKeyChecking=no"
-            git pull origin main
+
+            echo "=== FORCE PULL ==="
+            git stash
+            git fetch origin main
+            git reset --hard origin/main
+            git log --oneline -3
 
             echo ""
-            echo "=== CHECK DEPLOY DIR AGAIN ==="
-            ls -la deploy/ 2>&1 || echo "deploy/ still missing"
+            echo "=== INSTALL DEPS ==="
+            npm ci
+
+            echo ""
+            echo "=== PRISMA ==="
+            cd apps/api
+            npx prisma generate
+            npx prisma db push --accept-data-loss
+            cd ../..
 
             echo ""
             echo "=== START API ==="
-            npm ci
-            npx prisma generate --schema=apps/api/prisma/schema.prisma
-            npx prisma db push --schema=apps/api/prisma/schema.prisma --accept-data-loss
             pm2 delete wohnly-api 2>/dev/null || true
             pm2 start deploy/pm2.api.config.cjs --only wohnly-api --update-env
             pm2 save
-
             sleep 5
 
             echo ""
