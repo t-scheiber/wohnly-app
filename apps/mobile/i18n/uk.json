@@ -119,7 +119,7 @@
     "deviceCalendars": "Календарі пристрою",
     "noCalendars": "Календарів не знайдено",
     "grantAccess": "Надай доступ до календаря, щоб бачити події з твого пристрою",
-    "openSettings": "Open Settings"
+    "openSettings": "Відкрити налаштування"
   },
   "expenses": {
     "title": "Витрати",
@@ -230,10 +230,10 @@
     "devicePending": "Очікує схвалення",
     "encryptedData": "Зашифровано — відкрий на своєму пристрої для перегляду",
     "manageDevices": "Керувати пристроями",
-    "weekStartsOn": "Week Starts On",
-    "monday": "Monday",
-    "sunday": "Sunday",
-    "timeFormat": "Time Format"
+    "weekStartsOn": "Тиждень починається з",
+    "monday": "Понеділок",
+    "sunday": "Неділя",
+    "timeFormat": "Формат часу"
   },
   "balances": {
     "owedToYou": "Тобі винні",

@@ -119,7 +119,7 @@
     "deviceCalendars": "Cihaz Takvimleri",
     "noCalendars": "Takvim bulunamadı",
     "grantAccess": "Cihaz etkinliklerini görmek için takvim erişimi ver",
-    "openSettings": "Open Settings"
+    "openSettings": "Ayarları aç"
   },
   "expenses": {
     "title": "Harcamalar",
@@ -230,10 +230,10 @@
     "devicePending": "Onay bekleniyor",
     "encryptedData": "Şifreli — görmek için cihazında aç",
     "manageDevices": "Cihazları yönet",
-    "weekStartsOn": "Week Starts On",
-    "monday": "Monday",
-    "sunday": "Sunday",
-    "timeFormat": "Time Format"
+    "weekStartsOn": "Hafta başlangıcı",
+    "monday": "Pazartesi",
+    "sunday": "Pazar",
+    "timeFormat": "Saat biçimi"
   },
   "balances": {
     "owedToYou": "Sana borçlu",
