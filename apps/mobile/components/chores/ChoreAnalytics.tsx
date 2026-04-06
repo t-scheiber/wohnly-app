@@ -4,8 +4,12 @@ import { useChoreAnalytics } from "@/lib/api/queries";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import { BarChart3 } from "lucide-react-native";
 
 const PERIODS = ["week", "month", "all"] as const;
+
+// Harmonious palette that works with teal primary
+const MEMBER_COLORS = ["#6db5a8", "#e8836a", "#6366f1", "#f59e0b", "#ec4899", "#3b82f6"];
 
 export function ChoreAnalytics() {
   const colorScheme = useColorScheme() ?? "light";
@@ -16,115 +20,135 @@ export function ChoreAnalytics() {
   const { data } = useChoreAnalytics(period);
 
   const members = data?.members ?? [];
-  const totalEffort = data?.totalEffort ?? 0;
 
   if (members.length === 0) {
     return (
-      <View style={{ padding: 20, alignItems: "center" }}>
-        <Text style={{ color: colors.textSecondary, fontSize: 14 }}>
-          {t("chores.noAnalytics", "No chore completions yet. Start completing chores to see analytics.")}
+      <View style={{
+        marginHorizontal: 16,
+        marginBottom: 12,
+        padding: 24,
+        borderRadius: 20,
+        backgroundColor: colors.card,
+        borderWidth: 1,
+        borderColor: colors.border,
+        alignItems: "center",
+      }}>
+        <BarChart3 size={32} color={colors.textSecondary} style={{ opacity: 0.4, marginBottom: 8 }} />
+        <Text style={{ color: colors.textSecondary, fontSize: 14, textAlign: "center" }}>
+          {t("chores.noAnalytics", "Complete some chores to see your fair share analytics here.")}
         </Text>
       </View>
     );
   }
 
-  // Colors for the bar segments
-  const barColors = ["#6db5a8", "#6366f1", "#f59e0b", "#ec4899", "#3b82f6", "#ef4444"];
+  const maxEffort = Math.max(...members.map((m) => m.effortPoints), 1);
 
   return (
     <View style={{
-      backgroundColor: colors.card,
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: colors.border,
-      padding: 16,
       marginHorizontal: 16,
       marginBottom: 12,
+      borderRadius: 20,
+      overflow: "hidden",
     }}>
-      <Text style={{ fontSize: 16, fontWeight: "700", color: colors.text, marginBottom: 12 }}>
-        {t("chores.fairShare", "Fair Share")}
-      </Text>
-
-      {/* Period toggle */}
-      <View style={{ flexDirection: "row", gap: 6, marginBottom: 16 }}>
-        {PERIODS.map((p) => (
-          <TouchableOpacity
-            key={p}
-            onPress={() => setPeriod(p)}
-            style={{
-              paddingVertical: 6,
-              paddingHorizontal: 12,
-              borderRadius: 16,
-              backgroundColor: period === p ? colors.primary : colors.muted,
-            }}
-          >
-            <Text style={{
-              fontSize: 12,
-              fontWeight: "600",
-              color: period === p ? colors.primaryForeground : colors.textSecondary,
-            }}>
-              {p === "week" ? t("chores.thisWeek", "This Week")
-                : p === "month" ? t("chores.thisMonth", "This Month")
-                : t("chores.allTime", "All Time")}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Horizontal stacked bar */}
+      {/* Header */}
       <View style={{
+        backgroundColor: colors.calendarChore,
+        paddingHorizontal: 20,
+        paddingVertical: 14,
         flexDirection: "row",
-        height: 24,
-        borderRadius: 12,
-        overflow: "hidden",
-        marginBottom: 16,
+        alignItems: "center",
+        justifyContent: "space-between",
       }}>
-        {members.map((m, i) => (
-          <View
-            key={m.memberId}
-            style={{
-              flex: m.percentage,
-              backgroundColor: barColors[i % barColors.length],
-              minWidth: m.percentage > 0 ? 4 : 0,
-            }}
-          />
-        ))}
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <BarChart3 size={20} color="#fff" />
+          <Text style={{ fontSize: 17, fontWeight: "700", color: "#fff" }}>
+            {t("chores.fairShare", "Fair Share")}
+          </Text>
+        </View>
+
+        {/* Period pills */}
+        <View style={{ flexDirection: "row", gap: 4 }}>
+          {PERIODS.map((p) => (
+            <TouchableOpacity
+              key={p}
+              onPress={() => setPeriod(p)}
+              style={{
+                paddingVertical: 4,
+                paddingHorizontal: 10,
+                borderRadius: 12,
+                backgroundColor: period === p ? "rgba(255,255,255,0.25)" : "transparent",
+              }}
+            >
+              <Text style={{
+                fontSize: 11,
+                fontWeight: "700",
+                color: period === p ? "#fff" : "rgba(255,255,255,0.6)",
+              }}>
+                {p === "week" ? "W" : p === "month" ? "M" : "All"}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
 
-      {/* Member breakdown */}
-      {members.map((m, i) => (
-        <View
-          key={m.memberId}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingVertical: 8,
-            borderTopWidth: i > 0 ? 1 : 0,
-            borderTopColor: colors.border,
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <View style={{
-              width: 12,
-              height: 12,
-              borderRadius: 3,
-              backgroundColor: barColors[i % barColors.length],
-            }} />
-            <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text }}>
-              {m.displayName}
-            </Text>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-            <Text style={{ fontSize: 13, color: colors.textSecondary }}>
-              {m.completions} {t("chores.tasks", "tasks")}
-            </Text>
-            <Text style={{ fontSize: 14, fontWeight: "700", color: colors.text }}>
-              {m.percentage}%
-            </Text>
-          </View>
-        </View>
-      ))}
+      {/* Body */}
+      <View style={{
+        backgroundColor: colors.card,
+        borderWidth: 1,
+        borderTopWidth: 0,
+        borderColor: colors.border,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        padding: 20,
+        gap: 14,
+      }}>
+        {/* Horizontal bar chart per member */}
+        {members.map((m, i) => {
+          const barColor = MEMBER_COLORS[i % MEMBER_COLORS.length];
+          const barWidth = (m.effortPoints / maxEffort) * 100;
+
+          return (
+            <View key={m.memberId} style={{ gap: 6 }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                  <View style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    backgroundColor: barColor,
+                  }} />
+                  <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text }}>
+                    {m.displayName}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row", alignItems: "baseline", gap: 6 }}>
+                  <Text style={{ fontSize: 12, color: colors.textSecondary }}>
+                    {m.completions} done
+                  </Text>
+                  <Text style={{ fontSize: 16, fontWeight: "800", color: colors.text }}>
+                    {m.percentage}%
+                  </Text>
+                </View>
+              </View>
+
+              {/* Animated-style bar */}
+              <View style={{
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: colors.muted,
+                overflow: "hidden",
+              }}>
+                <View style={{
+                  height: "100%",
+                  width: `${Math.max(barWidth, 2)}%`,
+                  borderRadius: 4,
+                  backgroundColor: barColor,
+                }} />
+              </View>
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 }
