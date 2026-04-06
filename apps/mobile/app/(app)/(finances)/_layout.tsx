@@ -14,6 +14,7 @@ export default function FinancesLayout() {
         headerShadowVisible: false,
         headerTitleStyle: { fontWeight: "700" },
         headerShown: false,
+        contentStyle: { flex: 1 },
       }}
     >
       <Stack.Screen name="index" />

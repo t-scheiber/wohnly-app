@@ -13,6 +13,7 @@ export default function ListsLayout() {
         headerTintColor: colors.text,
         headerShadowVisible: false,
         headerTitleStyle: { fontWeight: "700" },
+        contentStyle: { flex: 1 },
       }}
     >
       <Stack.Screen name="index" options={{ title: "Lists" }} />
