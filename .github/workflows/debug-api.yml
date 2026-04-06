@@ -1,0 +1,27 @@
+name: Debug API
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check API logs on VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            echo "=== PM2 STATUS ==="
+            pm2 status
+            echo ""
+            echo "=== PM2 LOGS (last 50 lines) ==="
+            pm2 logs wohnly-api --lines 50 --nostream
+            echo ""
+            echo "=== NODE VERSION ==="
+            node --version
+            echo ""
+            echo "=== CHECK PORT 3001 ==="
+            ss -tlnp | grep 3001 || echo "Nothing on port 3001"
