@@ -7,7 +7,7 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - name: Restart API and check logs
+      - name: Fix and restart API
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -16,13 +16,33 @@ jobs:
           script: |
             cd /var/www/wohnly
 
-            echo "=== ATTEMPTING PM2 START ==="
+            echo "=== CHECK DEPLOY DIR ==="
+            ls -la deploy/ 2>&1 || echo "deploy/ directory missing"
+            ls -la apps/api/ | head -5
+
+            echo ""
+            echo "=== GIT STATUS ==="
+            git log --oneline -3
+            git status --short | head -10
+
+            echo ""
+            echo "=== TRY GIT PULL ==="
+            export GIT_SSH_COMMAND="ssh -i /root/.ssh/wohnly_deploy -o StrictHostKeyChecking=no"
+            git pull origin main
+
+            echo ""
+            echo "=== CHECK DEPLOY DIR AGAIN ==="
+            ls -la deploy/ 2>&1 || echo "deploy/ still missing"
+
+            echo ""
+            echo "=== START API ==="
+            npm ci
+            npx prisma generate --schema=apps/api/prisma/schema.prisma
+            npx prisma db push --schema=apps/api/prisma/schema.prisma --accept-data-loss
             pm2 delete wohnly-api 2>/dev/null || true
             pm2 start deploy/pm2.api.config.cjs --only wohnly-api --update-env
             pm2 save
 
-            echo ""
-            echo "=== WAIT 5s FOR STARTUP ==="
             sleep 5
 
             echo ""
@@ -30,9 +50,9 @@ jobs:
             pm2 status
 
             echo ""
-            echo "=== PM2 LOGS (last 80 lines) ==="
-            pm2 logs wohnly-api --lines 80 --nostream
+            echo "=== PM2 LOGS ==="
+            pm2 logs wohnly-api --lines 30 --nostream
 
             echo ""
-            echo "=== CHECK PORT 3001 ==="
+            echo "=== PORT CHECK ==="
             ss -tlnp | grep 3001 || echo "Nothing on port 3001"
