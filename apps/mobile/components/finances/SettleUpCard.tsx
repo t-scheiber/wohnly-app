@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import { formatCurrency } from "@wohnly/shared";
-import { ArrowRight, Check } from "lucide-react-native";
+import { ArrowRight, Check, Handshake } from "lucide-react-native";
 
 export function SettleUpCard() {
   const colorScheme = useColorScheme() ?? "light";
@@ -36,60 +36,129 @@ export function SettleUpCard() {
     });
   };
 
+  const totalToSettle = settlements.reduce((sum, s) => sum + s.amount, 0);
+
   return (
     <View
       style={{
-        backgroundColor: colors.card,
-        borderRadius: 16,
-        borderWidth: 1,
-        borderColor: colors.border,
-        padding: 16,
         marginHorizontal: 16,
-        marginBottom: 8,
+        marginBottom: 12,
+        borderRadius: 20,
+        overflow: "hidden",
       }}
     >
-      <Text style={{ fontSize: 16, fontWeight: "700", color: colors.text, marginBottom: 4 }}>
-        {t("expenses.settleUp", "Settle Up")}
-      </Text>
-      <Text style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 12 }}>
-        {t("expenses.settleUpDescription", "Minimal payments to settle all debts")}
-      </Text>
-
-      {settlements.map((s, i) => (
-        <View
-          key={i}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingVertical: 10,
-            borderTopWidth: i > 0 ? 1 : 0,
-            borderTopColor: colors.border,
-          }}
-        >
-          <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Text style={{ fontSize: 14, fontWeight: "600", color: colors.destructive }}>{s.fromName}</Text>
-            <ArrowRight size={14} color={colors.textSecondary} />
-            <Text style={{ fontSize: 14, fontWeight: "600", color: colors.success }}>{s.toName}</Text>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Text style={{ fontSize: 15, fontWeight: "700", color: colors.text }}>
-              {formatCurrency(s.amount, currency)}
-            </Text>
-            <TouchableOpacity
-              onPress={() => handleMarkAsPaid(s)}
-              disabled={createExpense.isPending}
-              style={{
-                backgroundColor: colors.success + "15",
-                borderRadius: 6,
-                padding: 6,
-              }}
-            >
-              <Check size={16} color={colors.success} />
-            </TouchableOpacity>
-          </View>
+      {/* Header with gradient-like feel */}
+      <View style={{
+        backgroundColor: colors.accent,
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 12,
+      }}>
+        <View style={{
+          width: 40,
+          height: 40,
+          borderRadius: 12,
+          backgroundColor: "rgba(255,255,255,0.2)",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          <Handshake size={22} color="#fff" />
         </View>
-      ))}
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 17, fontWeight: "700", color: "#fff" }}>
+            {t("expenses.settleUp", "Settle Up")}
+          </Text>
+          <Text style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginTop: 1 }}>
+            {settlements.length} payment{settlements.length !== 1 ? "s" : ""} to settle {formatCurrency(totalToSettle, currency)}
+          </Text>
+        </View>
+      </View>
+
+      {/* Settlement rows */}
+      <View style={{
+        backgroundColor: colors.card,
+        borderWidth: 1,
+        borderTopWidth: 0,
+        borderColor: colors.border,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+      }}>
+        {settlements.map((s, i) => (
+          <View
+            key={i}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              paddingVertical: 14,
+              paddingHorizontal: 20,
+              borderTopWidth: i > 0 ? 1 : 0,
+              borderTopColor: colors.border,
+            }}
+          >
+            {/* Flow: from → to */}
+            <View style={{ flex: 1, gap: 4 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                <View style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 14,
+                  backgroundColor: colors.accent + "15",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  <Text style={{ fontSize: 12, fontWeight: "800", color: colors.accent }}>
+                    {(s.fromName ?? "?")[0]?.toUpperCase()}
+                  </Text>
+                </View>
+                <ArrowRight size={12} color={colors.textSecondary} />
+                <View style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 14,
+                  backgroundColor: colors.success + "15",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  <Text style={{ fontSize: 12, fontWeight: "800", color: colors.success }}>
+                    {(s.toName ?? "?")[0]?.toUpperCase()}
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 13, color: colors.textSecondary, marginLeft: 4 }}>
+                  {s.fromName} pays {s.toName}
+                </Text>
+              </View>
+            </View>
+
+            {/* Amount + action */}
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <Text style={{ fontSize: 17, fontWeight: "800", color: colors.text, letterSpacing: -0.5 }}>
+                {formatCurrency(s.amount, currency)}
+              </Text>
+              <TouchableOpacity
+                onPress={() => handleMarkAsPaid(s)}
+                disabled={createExpense.isPending}
+                activeOpacity={0.7}
+                style={{
+                  backgroundColor: colors.success,
+                  borderRadius: 10,
+                  paddingHorizontal: 10,
+                  paddingVertical: 6,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 4,
+                }}
+              >
+                <Check size={14} color="#fff" strokeWidth={3} />
+                <Text style={{ fontSize: 12, fontWeight: "700", color: "#fff" }}>
+                  {t("expenses.markAsPaid", "Paid")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
