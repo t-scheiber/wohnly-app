@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenView } from "@/components/ui/ScreenView";
 import { CheckSquare, ShoppingCart, ChevronRight, UtensilsCrossed } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -36,7 +36,7 @@ export default function ListsScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
+    <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView>
         <View style={{ padding: 20, paddingBottom: 16 }}>
           <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>Lists</Text>
@@ -71,6 +71,6 @@ export default function ListsScreen() {
         </View>
       </ScrollView>
       <AdBanner />
-    </SafeAreaView>
+    </ScreenView>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenView } from "@/components/ui/ScreenView";
 import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription, useMemberBalances, useHouseholdMembers } from "@/lib/api/queries";
 import { AddExpenseForm } from "@/components/forms/AddExpenseForm";
 import { SettleUpCard } from "@/components/finances/SettleUpCard";
@@ -219,7 +219,7 @@ export default function FinancesScreen() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
+    <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("finances.title")}</Text>
@@ -537,7 +537,7 @@ export default function FinancesScreen() {
           />
         </View>
       </Modal>
-    </SafeAreaView>
+    </ScreenView>
   );
 }
 

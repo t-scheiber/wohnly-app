@@ -1,7 +1,7 @@
-import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, RefreshControl, TouchableOpacity, Platform } from "react-native";
 import { useState, useCallback } from "react";
 import { useRouter } from "expo-router";
-
+import { ScreenView } from "@/components/ui/ScreenView";
 import { useTranslation } from "react-i18next";
 import { CheckSquare, ShoppingCart, Sparkles, DollarSign } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
@@ -62,9 +62,9 @@ export default function DashboardScreen() {
   // No household — show onboarding
   if (!household?.hasHousehold) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <ScreenView style={{ backgroundColor: colors.background }} edges={["top"]}>
         <HouseholdOnboarding userName={firstName} />
-      </View>
+      </ScreenView>
     );
   }
 
@@ -77,7 +77,7 @@ export default function DashboardScreen() {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <ScreenView style={{ backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ padding: 16, flexGrow: 1 }}
@@ -178,7 +178,7 @@ export default function DashboardScreen() {
         )}
       </ScrollView>
       <AdBanner />
-    </View>
+    </ScreenView>
   );
 }
 

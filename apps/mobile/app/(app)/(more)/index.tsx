@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView, Share, Platform } from "react-native";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenView } from "@/components/ui/ScreenView";
 import { useTranslation } from "react-i18next";
 import { Calendar, Settings, HelpCircle, ChevronRight, Users, UserPlus } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
@@ -68,7 +68,7 @@ export default function MoreScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
+    <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView>
         {/* Header */}
         <View style={{ padding: 20, paddingBottom: 12 }}>
@@ -136,7 +136,7 @@ export default function MoreScreen() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenView>
   );
 }
 

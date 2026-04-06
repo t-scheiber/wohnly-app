@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { View, Text, TouchableOpacity, RefreshControl, ScrollView, Modal, Platform } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenView } from "@/components/ui/ScreenView";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Settings2 } from "lucide-react-native";
@@ -127,7 +127,7 @@ export default function CalendarScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
+    <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       {/* Header */}
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 16, paddingVertical: 8 }}>
         <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("events.title")}</Text>
@@ -221,6 +221,6 @@ export default function CalendarScreen() {
           />
         </View>
       </Modal>
-    </SafeAreaView>
+    </ScreenView>
   );
 }
