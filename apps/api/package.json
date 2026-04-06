@@ -13,17 +13,17 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@better-auth/expo": "^1.2.0",
-    "@hono/node-server": "^1.14.0",
-    "@prisma/client": "^6.9.0",
-    "better-auth": "^1.2.0",
+    "@better-auth/expo": "^1.5.6",
+    "@hono/node-server": "^1.19.12",
+    "@prisma/client": "^6.19.3",
+    "better-auth": "^1.5.6",
     "date-fns": "^4.1.0",
-    "expo-server-sdk": "^3.13.0",
-    "hono": "^4.7.0",
-    "nodemailer": "^7.0.0",
-    "prisma": "^6.9.0",
+    "expo-server-sdk": "^3.15.0",
+    "hono": "^4.12.10",
+    "nodemailer": "^7.0.13",
+    "prisma": "^6.19.3",
     "stripe": "^21.0.1",
-    "zod": "^3.24.0"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
