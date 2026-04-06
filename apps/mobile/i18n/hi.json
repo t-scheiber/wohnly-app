@@ -13,7 +13,8 @@
     "confirm": "पक्का करो",
     "search": "खोजो",
     "noResults": "कुछ नहीं मिला",
-    "pullToRefresh": "रिफ्रेश के लिए नीचे खींचो"
+    "pullToRefresh": "रिफ्रेश के लिए नीचे खींचो",
+    "seeAll": "सभी देखें"
   },
   "auth": {
     "signIn": "साइन इन",

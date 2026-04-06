@@ -13,7 +13,8 @@
     "confirm": "Apstiprināt",
     "search": "Meklēt",
     "noResults": "Nav rezultātu",
-    "pullToRefresh": "Velc uz leju, lai atjauninātu"
+    "pullToRefresh": "Velc uz leju, lai atjauninātu",
+    "seeAll": "Skatīt visu"
   },
   "auth": {
     "signIn": "Pieslēgties",

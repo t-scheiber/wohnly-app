@@ -13,7 +13,8 @@
     "confirm": "Megerősítés",
     "search": "Keresés",
     "noResults": "Nincs találat",
-    "pullToRefresh": "Húzd le a frissítéshez"
+    "pullToRefresh": "Húzd le a frissítéshez",
+    "seeAll": "Összes megtekintése"
   },
   "auth": {
     "signIn": "Bejelentkezés",

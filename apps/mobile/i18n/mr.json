@@ -13,7 +13,8 @@
     "confirm": "पक्कं करा",
     "search": "शोधा",
     "noResults": "काही सापडलं नाही",
-    "pullToRefresh": "रिफ्रेश करायला खेचा"
+    "pullToRefresh": "रिफ्रेश करायला खेचा",
+    "seeAll": "सर्व पहा"
   },
   "auth": {
     "signIn": "साइन इन",

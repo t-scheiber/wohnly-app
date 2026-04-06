@@ -13,7 +13,8 @@
     "confirm": "확인",
     "search": "검색",
     "noResults": "결과를 찾지 못했어",
-    "pullToRefresh": "당겨서 새로고침"
+    "pullToRefresh": "당겨서 새로고침",
+    "seeAll": "모두 보기"
   },
   "auth": {
     "signIn": "로그인",

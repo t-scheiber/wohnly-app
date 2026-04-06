@@ -13,7 +13,8 @@
     "confirm": "Patvirtinti",
     "search": "Ieškoti",
     "noResults": "Rezultatų nerasta",
-    "pullToRefresh": "Patrauk žemyn, kad atnaujintum"
+    "pullToRefresh": "Patrauk žemyn, kad atnaujintum",
+    "seeAll": "Žiūrėti viską"
   },
   "auth": {
     "signIn": "Prisijungti",

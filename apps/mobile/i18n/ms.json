@@ -13,7 +13,8 @@
     "confirm": "Sahkan",
     "search": "Cari",
     "noResults": "Tiada hasil dijumpai",
-    "pullToRefresh": "Tarik untuk muat semula"
+    "pullToRefresh": "Tarik untuk muat semula",
+    "seeAll": "Lihat semua"
   },
   "auth": {
     "signIn": "Log Masuk",

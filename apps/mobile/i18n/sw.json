@@ -13,7 +13,8 @@
     "confirm": "Thibitisha",
     "search": "Tafuta",
     "noResults": "Hakuna matokeo",
-    "pullToRefresh": "Vuta ili upakie upya"
+    "pullToRefresh": "Vuta ili upakie upya",
+    "seeAll": "Ona zote"
   },
   "auth": {
     "signIn": "Ingia",

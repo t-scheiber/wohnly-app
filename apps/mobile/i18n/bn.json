@@ -13,7 +13,8 @@
     "confirm": "নিশ্চিত করো",
     "search": "খোঁজো",
     "noResults": "কিছু পাওয়া যায়নি",
-    "pullToRefresh": "রিফ্রেশ করতে টানো"
+    "pullToRefresh": "রিফ্রেশ করতে টানো",
+    "seeAll": "সব দেখুন"
   },
   "auth": {
     "signIn": "সাইন ইন",

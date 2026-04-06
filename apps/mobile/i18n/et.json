@@ -13,7 +13,8 @@
     "confirm": "Kinnita",
     "search": "Otsi",
     "noResults": "Tulemusi ei leitud",
-    "pullToRefresh": "Tõmba alla, et värskendada"
+    "pullToRefresh": "Tõmba alla, et värskendada",
+    "seeAll": "Vaata kõiki"
   },
   "auth": {
     "signIn": "Logi sisse",

@@ -13,7 +13,8 @@
     "confirm": "ยืนยัน",
     "search": "ค้นหา",
     "noResults": "ไม่พบผลลัพธ์",
-    "pullToRefresh": "ดึงลงเพื่อรีเฟรช"
+    "pullToRefresh": "ดึงลงเพื่อรีเฟรช",
+    "seeAll": "ดูทั้งหมด"
   },
   "auth": {
     "signIn": "เข้าสู่ระบบ",

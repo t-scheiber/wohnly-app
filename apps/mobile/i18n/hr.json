@@ -13,7 +13,8 @@
     "confirm": "Potvrdi",
     "search": "Pretraži",
     "noResults": "Nema rezultata",
-    "pullToRefresh": "Povuci za osvježavanje"
+    "pullToRefresh": "Povuci za osvježavanje",
+    "seeAll": "Prikaži sve"
   },
   "auth": {
     "signIn": "Prijavi se",

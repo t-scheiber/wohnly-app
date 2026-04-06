@@ -13,7 +13,8 @@
     "confirm": "Staðfesta",
     "search": "Leita",
     "noResults": "Engar niðurstöður fundust",
-    "pullToRefresh": "Dragðu niður til að uppfæra"
+    "pullToRefresh": "Dragðu niður til að uppfæra",
+    "seeAll": "Sjá allt"
   },
   "auth": {
     "signIn": "Skrá inn",

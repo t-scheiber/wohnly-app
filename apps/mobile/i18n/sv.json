@@ -13,7 +13,8 @@
     "confirm": "Bekräfta",
     "search": "Sök",
     "noResults": "Inga resultat hittades",
-    "pullToRefresh": "Dra ner för att uppdatera"
+    "pullToRefresh": "Dra ner för att uppdatera",
+    "seeAll": "Visa alla"
   },
   "auth": {
     "signIn": "Logga in",
