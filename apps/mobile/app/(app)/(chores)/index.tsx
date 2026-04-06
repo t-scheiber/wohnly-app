@@ -259,20 +259,27 @@ export default function ChoresScreen() {
         <View style={{
           flexDirection: "row",
           alignItems: "center",
-          gap: 8,
-          backgroundColor: "#f59e0b20",
-          borderWidth: 1,
-          borderColor: "#f59e0b",
-          borderRadius: 12,
-          padding: 12,
+          gap: 12,
+          backgroundColor: colors.calendarChore + "12",
+          borderRadius: 16,
+          padding: 16,
           marginHorizontal: 16,
           marginBottom: 8,
         }}>
-          <PauseCircle size={20} color="#f59e0b" />
+          <View style={{
+            width: 40,
+            height: 40,
+            borderRadius: 12,
+            backgroundColor: colors.calendarChore + "20",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            <PauseCircle size={22} color={colors.calendarChore} />
+          </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 14, fontWeight: "600", color: "#f59e0b" }}>Break Mode Active</Text>
-            <Text style={{ fontSize: 12, color: colors.textSecondary }}>
-              Chores are paused{breakModeData?.breakMode?.end ? ` until ${new Date(breakModeData.breakMode.end).toLocaleDateString()}` : ""}
+            <Text style={{ fontSize: 15, fontWeight: "700", color: colors.calendarChore }}>Break Mode</Text>
+            <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 1 }}>
+              Chores are paused{breakModeData?.breakMode?.end ? ` until ${new Date(breakModeData.breakMode.end).toLocaleDateString()}` : " indefinitely"}
             </Text>
           </View>
         </View>
@@ -281,9 +288,20 @@ export default function ChoresScreen() {
       {/* Analytics toggle */}
       <TouchableOpacity
         onPress={() => setShowAnalytics(!showAnalytics)}
-        style={{ paddingHorizontal: 16, paddingBottom: 8 }}
+        activeOpacity={0.7}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 6,
+          marginHorizontal: 16,
+          marginBottom: 8,
+          paddingVertical: 10,
+          borderRadius: 12,
+          backgroundColor: showAnalytics ? colors.primary + "10" : colors.muted,
+        }}
       >
-        <Text style={{ fontSize: 13, color: colors.primary, fontWeight: "600" }}>
+        <Text style={{ fontSize: 13, color: showAnalytics ? colors.primary : colors.textSecondary, fontWeight: "600" }}>
           {showAnalytics ? "Hide Analytics" : "Show Fair Share Analytics"}
         </Text>
       </TouchableOpacity>
