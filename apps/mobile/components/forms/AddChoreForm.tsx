@@ -218,39 +218,49 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
         </View>
       )}
 
-      {/* Effort Weight */}
+      {/* Effort Weight — visual scale */}
       <View style={{ marginBottom: 12 }}>
-        <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
+        <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 8 }}>
           Effort Level
         </Text>
         <View style={{ flexDirection: "row", gap: 6 }}>
           {[
-            { value: 1, label: "Trivial" },
-            { value: 2, label: "Light" },
-            { value: 3, label: "Medium" },
-            { value: 4, label: "Heavy" },
-            { value: 5, label: "Major" },
-          ].map((level) => (
-            <TouchableOpacity
-              key={level.value}
-              onPress={() => setEffortWeight(level.value)}
-              style={{
-                flex: 1,
-                paddingVertical: 8,
-                borderRadius: 8,
-                backgroundColor: effortWeight === level.value ? colors.primary : colors.muted,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{
-                fontSize: 11,
-                fontWeight: "600",
-                color: effortWeight === level.value ? colors.primaryForeground : colors.textSecondary,
-              }}>
-                {level.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+            { value: 1, label: "Trivial", emoji: "1", color: "#22c55e" },
+            { value: 2, label: "Light", emoji: "2", color: "#6db5a8" },
+            { value: 3, label: "Medium", emoji: "3", color: "#f59e0b" },
+            { value: 4, label: "Heavy", emoji: "4", color: "#f97316" },
+            { value: 5, label: "Major", emoji: "5", color: "#ef4444" },
+          ].map((level) => {
+            const isSelected = effortWeight === level.value;
+            return (
+              <TouchableOpacity
+                key={level.value}
+                onPress={() => setEffortWeight(level.value)}
+                activeOpacity={0.7}
+                style={{
+                  flex: 1,
+                  paddingVertical: 10,
+                  borderRadius: 12,
+                  backgroundColor: isSelected ? level.color + "18" : colors.muted,
+                  borderWidth: isSelected ? 1.5 : 1,
+                  borderColor: isSelected ? level.color : colors.border,
+                  alignItems: "center",
+                  gap: 3,
+                }}
+              >
+                <Text style={{ fontSize: 16, fontWeight: "800", color: isSelected ? level.color : colors.textSecondary }}>
+                  {level.emoji}
+                </Text>
+                <Text style={{
+                  fontSize: 10,
+                  fontWeight: "600",
+                  color: isSelected ? level.color : colors.textSecondary,
+                }}>
+                  {level.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </View>
 
