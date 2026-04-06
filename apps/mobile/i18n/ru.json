@@ -13,7 +13,8 @@
     "confirm": "Подтвердить",
     "search": "Поиск",
     "noResults": "Ничего не найдено",
-    "pullToRefresh": "Потяни для обновления"
+    "pullToRefresh": "Потяни для обновления",
+    "seeAll": "Смотреть все"
   },
   "auth": {
     "signIn": "Войти",

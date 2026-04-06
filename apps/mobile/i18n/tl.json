@@ -13,7 +13,8 @@
     "confirm": "Kumpirmahin",
     "search": "Maghanap",
     "noResults": "Walang resulta",
-    "pullToRefresh": "Hilahin para i-refresh"
+    "pullToRefresh": "Hilahin para i-refresh",
+    "seeAll": "Tingnan lahat"
   },
   "auth": {
     "signIn": "Mag-sign In",

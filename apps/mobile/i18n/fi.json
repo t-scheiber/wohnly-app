@@ -13,7 +13,8 @@
     "confirm": "Vahvista",
     "search": "Hae",
     "noResults": "Tuloksia ei löytynyt",
-    "pullToRefresh": "Vedä päivittääksesi"
+    "pullToRefresh": "Vedä päivittääksesi",
+    "seeAll": "Näytä kaikki"
   },
   "auth": {
     "signIn": "Kirjaudu sisään",

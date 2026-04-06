@@ -13,7 +13,8 @@
     "confirm": "Confirmă",
     "search": "Caută",
     "noResults": "Niciun rezultat găsit",
-    "pullToRefresh": "Trage pentru a reîmprospăta"
+    "pullToRefresh": "Trage pentru a reîmprospăta",
+    "seeAll": "Vezi tot"
   },
   "auth": {
     "signIn": "Autentificare",

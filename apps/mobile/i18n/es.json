@@ -13,7 +13,8 @@
     "confirm": "Confirmar",
     "search": "Buscar",
     "noResults": "No se encontraron resultados",
-    "pullToRefresh": "Tira para actualizar"
+    "pullToRefresh": "Tira para actualizar",
+    "seeAll": "Ver todo"
   },
   "auth": {
     "signIn": "Iniciar sesión",

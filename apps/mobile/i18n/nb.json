@@ -13,7 +13,8 @@
     "confirm": "Bekreft",
     "search": "Søk",
     "noResults": "Ingen resultater funnet",
-    "pullToRefresh": "Dra ned for å oppdatere"
+    "pullToRefresh": "Dra ned for å oppdatere",
+    "seeAll": "Se alle"
   },
   "auth": {
     "signIn": "Logg inn",

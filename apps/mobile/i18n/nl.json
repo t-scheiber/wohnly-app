@@ -13,7 +13,8 @@
     "confirm": "Bevestigen",
     "search": "Zoeken",
     "noResults": "Geen resultaten gevonden",
-    "pullToRefresh": "Trek om te vernieuwen"
+    "pullToRefresh": "Trek om te vernieuwen",
+    "seeAll": "Alles bekijken"
   },
   "auth": {
     "signIn": "Inloggen",

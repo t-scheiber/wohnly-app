@@ -13,7 +13,8 @@
     "confirm": "Onayla",
     "search": "Ara",
     "noResults": "Sonuç bulunamadı",
-    "pullToRefresh": "Yenilemek için aşağı çek"
+    "pullToRefresh": "Yenilemek için aşağı çek",
+    "seeAll": "Tümünü gör"
   },
   "auth": {
     "signIn": "Giriş Yap",

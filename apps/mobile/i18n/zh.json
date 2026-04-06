@@ -13,7 +13,8 @@
     "confirm": "确认",
     "search": "搜索",
     "noResults": "没有找到结果",
-    "pullToRefresh": "下拉刷新"
+    "pullToRefresh": "下拉刷新",
+    "seeAll": "查看全部"
   },
   "auth": {
     "signIn": "登录",

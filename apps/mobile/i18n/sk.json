@@ -13,7 +13,8 @@
     "confirm": "Potvrdiť",
     "search": "Hľadať",
     "noResults": "Nič sme nenašli",
-    "pullToRefresh": "Potiahni pre obnovenie"
+    "pullToRefresh": "Potiahni pre obnovenie",
+    "seeAll": "Zobraziť všetko"
   },
   "auth": {
     "signIn": "Prihlásiť sa",

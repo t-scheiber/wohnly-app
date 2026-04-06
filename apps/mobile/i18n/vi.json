@@ -13,7 +13,8 @@
     "confirm": "Xác nhận",
     "search": "Tìm kiếm",
     "noResults": "Không tìm thấy kết quả",
-    "pullToRefresh": "Kéo xuống để làm mới"
+    "pullToRefresh": "Kéo xuống để làm mới",
+    "seeAll": "Xem tất cả"
   },
   "auth": {
     "signIn": "Đăng nhập",
