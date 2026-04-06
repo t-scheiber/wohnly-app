@@ -85,7 +85,17 @@
     "daily": "毎日",
     "weekly": "毎週",
     "biweekly": "隔週",
-    "monthly": "毎月"
+    "monthly": "毎月",
+    "fairShare": "公平な分担",
+    "thisWeek": "今週",
+    "thisMonth": "今月",
+    "allTime": "全期間",
+    "tasks": "タスク",
+    "noAnalytics": "まだ完了した家事はありません。家事を完了して分析を確認しましょう。",
+    "effortLevel": "労力レベル",
+    "breakMode": "休憩モード",
+    "breakModeActive": "家事は一時停止中",
+    "breakModeUntil": "{{date}}まで"
   },
   "events": {
     "title": "カレンダー",
@@ -108,7 +118,8 @@
     "calendarSettings": "カレンダー設定",
     "deviceCalendars": "デバイスのカレンダー",
     "noCalendars": "カレンダーが見つからないよ",
-    "grantAccess": "デバイスのイベントを表示するにはカレンダーへのアクセスを許可してね"
+    "grantAccess": "デバイスのイベントを表示するにはカレンダーへのアクセスを許可してね",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "支出",
@@ -123,7 +134,42 @@
     "percentage": "割合",
     "fixed": "固定額",
     "date": "日付",
-    "selectDate": "日付を選択"
+    "selectDate": "日付を選択",
+    "editExpense": "支出を編集",
+    "shares": "分担",
+    "splitPerPerson": "一人当たりの分割",
+    "balanced": "均衡",
+    "remaining": "残り {{amount}}",
+    "overBudget": "{{amount}} 超過",
+    "categories": {
+      "groceries": "食料品",
+      "dining": "外食",
+      "rent": "家賃",
+      "utilities": "光熱費",
+      "transport": "交通費",
+      "entertainment": "娯楽",
+      "health": "健康",
+      "travel": "旅行",
+      "shopping": "買い物",
+      "subscriptions": "サブスクリプション",
+      "education": "教育",
+      "pets": "ペット",
+      "gifts": "ギフト",
+      "household": "家庭",
+      "other": "その他"
+    },
+    "allCategories": "すべて",
+    "settleUp": "精算",
+    "settleUpDescription": "すべての負債を精算するための最小支払い",
+    "noDebts": "すべて精算済み！",
+    "markAsPaid": "支払い済みにする",
+    "export": "エクスポート",
+    "exportExpenses": "支出をエクスポート",
+    "exportFormat": "フォーマット",
+    "exportDateRange": "期間",
+    "exportFrom": "開始日",
+    "exportTo": "終了日",
+    "exportAll": "全期間"
   },
   "subscriptions": {
     "title": "サブスクリプション",
@@ -183,7 +229,11 @@
     "noDevices": "まだデバイスが登録されていません",
     "devicePending": "承認待ち",
     "encryptedData": "暗号化済み — デバイスで開いて確認してね",
-    "manageDevices": "デバイス管理"
+    "manageDevices": "デバイス管理",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "もらえるお金",
@@ -298,6 +348,56 @@
     "checkStatus": "ステータスの確認",
     "checkAndKeys": "同期キー",
     "pendingDeviceCount": "{{count}} 台のデバイスが承認を待っています",
-    "approveNow": "今すぐ承認"
+    "approveNow": "今すぐ承認",
+    "enableNotificationsBanner": "このデバイスが承認されたときに通知を受け取るには、通知を有効にしてください。"
+  },
+  "finances": {
+    "title": "家計",
+    "analytics": "支出分析"
+  },
+  "tabs": {
+    "home": "ホーム",
+    "lists": "リスト",
+    "chores": "家事",
+    "finances": "家計",
+    "more": "その他"
+  },
+  "meals": {
+    "title": "食事プラン",
+    "addMeal": "食事を計画",
+    "empty": "食事の計画はありません",
+    "breakfast": "朝食",
+    "lunch": "昼食",
+    "dinner": "夕食",
+    "snack": "おやつ",
+    "ingredients": "材料",
+    "addToShopping": "買い物リストに追加",
+    "noIngredients": "追加する材料はありません",
+    "addedToShopping": "材料を買い物リストに追加しました"
+  },
+  "leaderboard": {
+    "title": "リーダーボード",
+    "points": "pt",
+    "you": "あなた"
+  },
+  "roles": {
+    "admin": "管理者",
+    "member": "メンバー",
+    "limited": "制限付き",
+    "changeRole": "役割を変更",
+    "onlyAdmins": "管理者のみが役割を変更できます",
+    "lastAdmin": "最後の管理者は削除できません"
+  },
+  "export": {
+    "fullExport": "すべてのデータをエクスポート",
+    "fullExportDesc": "すべての世帯データをJSONでダウンロード",
+    "exporting": "エクスポート中..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Googleカレンダーを接続",
+    "syncNow": "今すぐ同期",
+    "lastSynced": "最終同期",
+    "syncing": "同期中...",
+    "syncSuccess": "カレンダーの同期に成功しました"
   }
 }

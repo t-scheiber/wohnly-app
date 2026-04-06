@@ -28,7 +28,7 @@ app.patch("/preferences", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { language, theme, pushEnabled, choreReminders, expenseAlerts, defaultCurrency } = body;
+  const { language, theme, pushEnabled, choreReminders, expenseAlerts, defaultCurrency, weekStartsOn, timeFormat } = body;
 
   const prefs = await prisma.userPreferences.upsert({
     where: { userId },
@@ -40,6 +40,8 @@ app.patch("/preferences", async (c) => {
       ...(choreReminders !== undefined && { choreReminders }),
       ...(expenseAlerts !== undefined && { expenseAlerts }),
       ...(defaultCurrency !== undefined && { defaultCurrency }),
+      ...(weekStartsOn !== undefined && { weekStartsOn }),
+      ...(timeFormat !== undefined && { timeFormat }),
     },
     update: {
       ...(language !== undefined && { language }),
@@ -48,6 +50,8 @@ app.patch("/preferences", async (c) => {
       ...(choreReminders !== undefined && { choreReminders }),
       ...(expenseAlerts !== undefined && { expenseAlerts }),
       ...(defaultCurrency !== undefined && { defaultCurrency }),
+      ...(weekStartsOn !== undefined && { weekStartsOn }),
+      ...(timeFormat !== undefined && { timeFormat }),
     },
   });
 

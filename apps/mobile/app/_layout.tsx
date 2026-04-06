@@ -12,6 +12,7 @@ import { initRevenueCat } from "@/lib/payments/setup";
 import { useConsent } from "@/lib/hooks/useConsent";
 import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
 import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
+import { registerForPushNotifications, addNotificationListeners } from "@/lib/notifications/setup";
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
 
@@ -133,7 +134,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     }
   }, [session, isPending, segments]);
 
-  // Register device for E2EE on all platforms
+  // Register device for E2EE and push notifications on all platforms
   useEffect(() => {
     if (!session?.user?.id) return;
 
@@ -143,7 +144,28 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       } catch {
         // Silent fail — device registration is best-effort
       }
+
+      // Register push token so device approval notifications work
+      if (Platform.OS !== "web") {
+        try {
+          await registerForPushNotifications();
+        } catch {
+          // Best-effort — user can enable later in settings
+        }
+      }
     })();
+  }, [session?.user?.id]);
+
+  // Handle notification taps — navigate to settings for device approvals
+  useEffect(() => {
+    if (Platform.OS === "web" || !session?.user?.id) return;
+
+    return addNotificationListeners(undefined, (response) => {
+      const data = response.notification.request.content.data;
+      if (data?.type === "device_approval" && data?.url) {
+        router.push(data.url as any);
+      }
+    });
   }, [session?.user?.id]);
 
   // Reset dismissal when session changes (new login)

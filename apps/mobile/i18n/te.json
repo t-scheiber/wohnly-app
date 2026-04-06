@@ -85,7 +85,17 @@
     "daily": "రోజూ",
     "weekly": "వారానికి ఒకసారి",
     "biweekly": "రెండు వారాలకోసారి",
-    "monthly": "నెలకోసారి"
+    "monthly": "నెలకోసారి",
+    "fairShare": "న్యాయమైన వాటా",
+    "thisWeek": "ఈ వారం",
+    "thisMonth": "ఈ నెల",
+    "allTime": "మొత్తం సమయం",
+    "tasks": "పనులు",
+    "noAnalytics": "ఇంకా ఏ పనులూ పూర్తి కాలేదు. విశ్లేషణలు చూడటానికి పనులను పూర్తి చేయడం ప్రారంభించండి.",
+    "effortLevel": "ప్రయత్న స్థాయి",
+    "breakMode": "విరామ మోడ్",
+    "breakModeActive": "పనులు విరమించబడ్డాయి",
+    "breakModeUntil": "{{date}} వరకు"
   },
   "events": {
     "title": "క్యాలెండర్",
@@ -108,7 +118,8 @@
     "calendarSettings": "క్యాలెండర్ సెట్టింగ్స్",
     "deviceCalendars": "డివైస్ క్యాలెండర్‌లు",
     "noCalendars": "క్యాలెండర్‌లు దొరకలేదు",
-    "grantAccess": "డివైస్ ఈవెంట్‌లు చూడటానికి క్యాలెండర్ యాక్సెస్ ఇవ్వు"
+    "grantAccess": "డివైస్ ఈవెంట్‌లు చూడటానికి క్యాలెండర్ యాక్సెస్ ఇవ్వు",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "ఖర్చులు",
@@ -123,7 +134,42 @@
     "percentage": "శాతం",
     "fixed": "స్థిరం",
     "date": "తేదీ",
-    "selectDate": "తేదీ ఎంచుకో"
+    "selectDate": "తేదీ ఎంచుకో",
+    "editExpense": "ఖర్చును సవరించు",
+    "shares": "వాటాలు",
+    "splitPerPerson": "ఒక్కరికి విభజన",
+    "balanced": "సమతుల్యం",
+    "remaining": "{{amount}} మిగిలింది",
+    "overBudget": "{{amount}} ఎక్కువ",
+    "categories": {
+      "groceries": "కిరాణా",
+      "dining": "భోజనం",
+      "rent": "అద్దె",
+      "utilities": "యుటిలిటీలు",
+      "transport": "రవాణా",
+      "entertainment": "వినోదం",
+      "health": "ఆరోగ్యం",
+      "travel": "ప్రయాణం",
+      "shopping": "షాపింగ్",
+      "subscriptions": "సబ్‌స్క్రిప్షన్లు",
+      "education": "విద్య",
+      "pets": "పెంపుడు జంతువులు",
+      "gifts": "బహుమతులు",
+      "household": "ఇంటి సామాను",
+      "other": "ఇతరం"
+    },
+    "allCategories": "అన్నీ",
+    "settleUp": "సెటిల్ చేయండి",
+    "settleUpDescription": "అన్ని అప్పులు తీర్చడానికి కనీస చెల్లింపులు",
+    "noDebts": "అన్నీ సెటిల్ అయ్యాయి!",
+    "markAsPaid": "చెల్లించినట్లు గుర్తించండి",
+    "export": "ఎగుమతి",
+    "exportExpenses": "ఖర్చులను ఎగుమతి చేయండి",
+    "exportFormat": "ఫార్మాట్",
+    "exportDateRange": "తేదీ పరిధి",
+    "exportFrom": "నుండి",
+    "exportTo": "వరకు",
+    "exportAll": "మొత్తం సమయం"
   },
   "subscriptions": {
     "title": "సబ్‌స్క్రిప్షన్‌లు",
@@ -183,7 +229,11 @@
     "noDevices": "ఇంకా డివైస్‌లు ఏవీ నమోదు కాలేదు",
     "devicePending": "ఆమోదం కోసం వేచి ఉంది",
     "encryptedData": "ఎన్‌క్రిప్ట్ చేయబడింది — చూడటానికి నీ డివైస్‌లో తెరువు",
-    "manageDevices": "పరికరాలను నిర్వహించండి"
+    "manageDevices": "పరికరాలను నిర్వహించండి",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "నీకు ఇవ్వాల్సింది",
@@ -298,6 +348,56 @@
     "checkStatus": "స్థితిని తనిఖీ చేయండి",
     "checkAndKeys": "కీలను సమకాలీకరించండి",
     "pendingDeviceCount": "{{count}} పరికరం(లు) ఆమోదం కోసం వేచి ఉన్నాయి",
-    "approveNow": "ఇప్పుడే ఆమోదించండి"
+    "approveNow": "ఇప్పుడే ఆమోదించండి",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "భోజన ప్రణాళిక",
+    "addMeal": "భోజనం ప్లాన్ చేయండి",
+    "empty": "ప్లాన్ చేసిన భోజనాలు లేవు",
+    "breakfast": "అల్పాహారం",
+    "lunch": "మధ్యాహ్న భోజనం",
+    "dinner": "రాత్రి భోజనం",
+    "snack": "స్నాక్",
+    "ingredients": "పదార్థాలు",
+    "addToShopping": "షాపింగ్ జాబితాకు జోడించండి",
+    "noIngredients": "జోడించడానికి పదార్థాలు లేవు",
+    "addedToShopping": "పదార్థాలు షాపింగ్ జాబితాకు జోడించబడ్డాయి"
+  },
+  "leaderboard": {
+    "title": "లీడర్‌బోర్డ్",
+    "points": "పాయింట్లు",
+    "you": "మీరు"
+  },
+  "roles": {
+    "admin": "అడ్మిన్",
+    "member": "సభ్యుడు",
+    "limited": "పరిమితం",
+    "changeRole": "పాత్ర మార్చండి",
+    "onlyAdmins": "అడ్మిన్‌లు మాత్రమే పాత్రలను మార్చగలరు",
+    "lastAdmin": "చివరి అడ్మిన్‌ను తీసివేయలేరు"
+  },
+  "export": {
+    "fullExport": "మొత్తం డేటాను ఎగుమతి చేయండి",
+    "fullExportDesc": "మొత్తం ఇంటి డేటాను JSON గా డౌన్‌లోడ్ చేయండి",
+    "exporting": "ఎగుమతి చేస్తోంది..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google Calendar ను కనెక్ట్ చేయండి",
+    "syncNow": "ఇప్పుడు సింక్ చేయండి",
+    "lastSynced": "చివరిగా సింక్ చేయబడింది",
+    "syncing": "సింక్ చేస్తోంది...",
+    "syncSuccess": "క్యాలెండర్ విజయవంతంగా సింక్ చేయబడింది"
   }
 }

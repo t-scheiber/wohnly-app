@@ -85,7 +85,17 @@
     "daily": "每天",
     "weekly": "每周",
     "biweekly": "每两周",
-    "monthly": "每月"
+    "monthly": "每月",
+    "fairShare": "公平分配",
+    "thisWeek": "本周",
+    "thisMonth": "本月",
+    "allTime": "所有时间",
+    "tasks": "任务",
+    "noAnalytics": "还没有完成的家务。开始完成家务以查看分析。",
+    "effortLevel": "努力程度",
+    "breakMode": "休息模式",
+    "breakModeActive": "家务已暂停",
+    "breakModeUntil": "直到 {{date}}"
   },
   "events": {
     "title": "日历",
@@ -108,7 +118,8 @@
     "calendarSettings": "日历设置",
     "deviceCalendars": "设备日历",
     "noCalendars": "未找到日历",
-    "grantAccess": "授权访问日历以查看设备上的事件"
+    "grantAccess": "授权访问日历以查看设备上的事件",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "支出",
@@ -123,7 +134,42 @@
     "percentage": "按比例",
     "fixed": "固定金额",
     "date": "日期",
-    "selectDate": "选择日期"
+    "selectDate": "选择日期",
+    "editExpense": "编辑支出",
+    "shares": "份额",
+    "splitPerPerson": "每人分摊",
+    "balanced": "已平衡",
+    "remaining": "剩余 {{amount}}",
+    "overBudget": "超出 {{amount}}",
+    "categories": {
+      "groceries": "杂货",
+      "dining": "餐饮",
+      "rent": "房租",
+      "utilities": "水电费",
+      "transport": "交通",
+      "entertainment": "娱乐",
+      "health": "健康",
+      "travel": "旅行",
+      "shopping": "购物",
+      "subscriptions": "订阅",
+      "education": "教育",
+      "pets": "宠物",
+      "gifts": "礼物",
+      "household": "家居",
+      "other": "其他"
+    },
+    "allCategories": "全部",
+    "settleUp": "结清",
+    "settleUpDescription": "以最少的付款结清所有债务",
+    "noDebts": "全部结清！",
+    "markAsPaid": "标记为已付",
+    "export": "导出",
+    "exportExpenses": "导出支出",
+    "exportFormat": "格式",
+    "exportDateRange": "日期范围",
+    "exportFrom": "从",
+    "exportTo": "到",
+    "exportAll": "所有时间"
   },
   "subscriptions": {
     "title": "订阅",
@@ -183,7 +229,11 @@
     "noDevices": "还没有注册的设备",
     "devicePending": "等待审核",
     "encryptedData": "已加密 — 在你的设备上打开查看",
-    "manageDevices": "管理设备"
+    "manageDevices": "管理设备",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "别人欠你的",
@@ -298,6 +348,56 @@
     "checkStatus": "检查状态",
     "checkAndKeys": "同步键",
     "pendingDeviceCount": "{{count}} 台设备等待批准",
-    "approveNow": "立即批准"
+    "approveNow": "立即批准",
+    "enableNotificationsBanner": "启用通知以便在此设备获批时收到提醒。"
+  },
+  "finances": {
+    "title": "财务",
+    "analytics": "支出分析"
+  },
+  "tabs": {
+    "home": "首页",
+    "lists": "列表",
+    "chores": "家务",
+    "finances": "财务",
+    "more": "更多"
+  },
+  "meals": {
+    "title": "膳食计划",
+    "addMeal": "计划一餐",
+    "empty": "没有计划的膳食",
+    "breakfast": "早餐",
+    "lunch": "午餐",
+    "dinner": "晚餐",
+    "snack": "零食",
+    "ingredients": "食材",
+    "addToShopping": "添加到购物清单",
+    "noIngredients": "没有要添加的食材",
+    "addedToShopping": "食材已添加到购物清单"
+  },
+  "leaderboard": {
+    "title": "排行榜",
+    "points": "分",
+    "you": "你"
+  },
+  "roles": {
+    "admin": "管理员",
+    "member": "成员",
+    "limited": "受限",
+    "changeRole": "更改角色",
+    "onlyAdmins": "只有管理员可以更改角色",
+    "lastAdmin": "无法移除最后一个管理员"
+  },
+  "export": {
+    "fullExport": "导出所有数据",
+    "fullExportDesc": "以JSON格式下载所有家庭数据",
+    "exporting": "导出中..."
+  },
+  "calendarSync": {
+    "connectGoogle": "连接 Google 日历",
+    "syncNow": "立即同步",
+    "lastSynced": "上次同步",
+    "syncing": "同步中...",
+    "syncSuccess": "日历同步成功"
   }
 }

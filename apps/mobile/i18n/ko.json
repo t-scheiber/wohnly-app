@@ -85,7 +85,17 @@
     "daily": "매일",
     "weekly": "매주",
     "biweekly": "격주",
-    "monthly": "매월"
+    "monthly": "매월",
+    "fairShare": "공정한 분담",
+    "thisWeek": "이번 주",
+    "thisMonth": "이번 달",
+    "allTime": "전체 기간",
+    "tasks": "작업",
+    "noAnalytics": "아직 완료된 집안일이 없습니다. 집안일을 완료하면 분석을 볼 수 있습니다.",
+    "effortLevel": "노력 수준",
+    "breakMode": "휴식 모드",
+    "breakModeActive": "집안일이 일시 중지됨",
+    "breakModeUntil": "{{date}}까지"
   },
   "events": {
     "title": "캘린더",
@@ -108,7 +118,8 @@
     "calendarSettings": "캘린더 설정",
     "deviceCalendars": "기기 캘린더",
     "noCalendars": "캘린더를 찾지 못했어",
-    "grantAccess": "기기 일정을 보려면 캘린더 접근 권한을 허용해줘"
+    "grantAccess": "기기 일정을 보려면 캘린더 접근 권한을 허용해줘",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "지출",
@@ -123,7 +134,42 @@
     "percentage": "비율",
     "fixed": "고정 금액",
     "date": "날짜",
-    "selectDate": "날짜 선택"
+    "selectDate": "날짜 선택",
+    "editExpense": "지출 수정",
+    "shares": "지분",
+    "splitPerPerson": "1인당 분할",
+    "balanced": "균형",
+    "remaining": "{{amount}} 남음",
+    "overBudget": "{{amount}} 초과",
+    "categories": {
+      "groceries": "식료품",
+      "dining": "외식",
+      "rent": "임대료",
+      "utilities": "공과금",
+      "transport": "교통",
+      "entertainment": "오락",
+      "health": "건강",
+      "travel": "여행",
+      "shopping": "쇼핑",
+      "subscriptions": "구독",
+      "education": "교육",
+      "pets": "반려동물",
+      "gifts": "선물",
+      "household": "가정",
+      "other": "기타"
+    },
+    "allCategories": "전체",
+    "settleUp": "정산",
+    "settleUpDescription": "모든 빚을 정산하기 위한 최소 결제",
+    "noDebts": "모두 정산 완료!",
+    "markAsPaid": "지불 완료로 표시",
+    "export": "내보내기",
+    "exportExpenses": "지출 내보내기",
+    "exportFormat": "형식",
+    "exportDateRange": "기간",
+    "exportFrom": "시작",
+    "exportTo": "종료",
+    "exportAll": "전체 기간"
   },
   "subscriptions": {
     "title": "구독",
@@ -183,7 +229,11 @@
     "noDevices": "아직 등록된 기기가 없어",
     "devicePending": "승인 대기 중",
     "encryptedData": "암호화됨 — 기기에서 열어서 확인해",
-    "manageDevices": "기기 관리"
+    "manageDevices": "기기 관리",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "받을 돈",
@@ -298,6 +348,56 @@
     "checkStatus": "상태 확인",
     "checkAndKeys": "동기화 키",
     "pendingDeviceCount": "승인 대기 중인 기기 {{count}}대",
-    "approveNow": "지금 승인"
+    "approveNow": "지금 승인",
+    "enableNotificationsBanner": "이 기기가 승인되면 알림을 받을 수 있도록 알림을 활성화하세요."
+  },
+  "finances": {
+    "title": "가계부",
+    "analytics": "지출 분석"
+  },
+  "tabs": {
+    "home": "홈",
+    "lists": "목록",
+    "chores": "집안일",
+    "finances": "가계부",
+    "more": "더보기"
+  },
+  "meals": {
+    "title": "식단",
+    "addMeal": "식사 계획하기",
+    "empty": "계획된 식사 없음",
+    "breakfast": "아침",
+    "lunch": "점심",
+    "dinner": "저녁",
+    "snack": "간식",
+    "ingredients": "재료",
+    "addToShopping": "장보기 목록에 추가",
+    "noIngredients": "추가할 재료 없음",
+    "addedToShopping": "재료가 장보기 목록에 추가됨"
+  },
+  "leaderboard": {
+    "title": "리더보드",
+    "points": "점",
+    "you": "나"
+  },
+  "roles": {
+    "admin": "관리자",
+    "member": "멤버",
+    "limited": "제한됨",
+    "changeRole": "역할 변경",
+    "onlyAdmins": "관리자만 역할을 변경할 수 있습니다",
+    "lastAdmin": "마지막 관리자는 제거할 수 없습니다"
+  },
+  "export": {
+    "fullExport": "모든 데이터 내보내기",
+    "fullExportDesc": "모든 가구 데이터를 JSON으로 다운로드",
+    "exporting": "내보내는 중..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google 캘린더 연결",
+    "syncNow": "지금 동기화",
+    "lastSynced": "마지막 동기화",
+    "syncing": "동기화 중...",
+    "syncSuccess": "캘린더가 동기화되었습니다"
   }
 }

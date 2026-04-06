@@ -85,7 +85,17 @@
     "daily": "Ежедневно",
     "weekly": "Еженедельно",
     "biweekly": "Раз в две недели",
-    "monthly": "Ежемесячно"
+    "monthly": "Ежемесячно",
+    "fairShare": "Справедливая доля",
+    "thisWeek": "Эта неделя",
+    "thisMonth": "Этот месяц",
+    "allTime": "За всё время",
+    "tasks": "задачи",
+    "noAnalytics": "Пока нет выполненных дел. Начните выполнять обязанности, чтобы увидеть аналитику.",
+    "effortLevel": "Уровень усилий",
+    "breakMode": "Режим паузы",
+    "breakModeActive": "Обязанности приостановлены",
+    "breakModeUntil": "до {{date}}"
   },
   "events": {
     "title": "Календарь",
@@ -108,7 +118,8 @@
     "calendarSettings": "Настройки календаря",
     "deviceCalendars": "Календари устройства",
     "noCalendars": "Календари не найдены",
-    "grantAccess": "Разреши доступ к календарю, чтобы видеть события с твоего устройства"
+    "grantAccess": "Разреши доступ к календарю, чтобы видеть события с твоего устройства",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Расходы",
@@ -123,7 +134,42 @@
     "percentage": "Процентный",
     "fixed": "Фиксированный",
     "date": "Дата",
-    "selectDate": "Выбрать дату"
+    "selectDate": "Выбрать дату",
+    "editExpense": "Редактировать расход",
+    "shares": "Доли",
+    "splitPerPerson": "Раздел на человека",
+    "balanced": "Сбалансировано",
+    "remaining": "осталось {{amount}}",
+    "overBudget": "{{amount}} сверх бюджета",
+    "categories": {
+      "groceries": "Продукты",
+      "dining": "Рестораны",
+      "rent": "Аренда",
+      "utilities": "Коммунальные услуги",
+      "transport": "Транспорт",
+      "entertainment": "Развлечения",
+      "health": "Здоровье",
+      "travel": "Путешествия",
+      "shopping": "Покупки",
+      "subscriptions": "Подписки",
+      "education": "Образование",
+      "pets": "Питомцы",
+      "gifts": "Подарки",
+      "household": "Домашнее хозяйство",
+      "other": "Другое"
+    },
+    "allCategories": "Все",
+    "settleUp": "Рассчитаться",
+    "settleUpDescription": "Минимальные платежи для погашения всех долгов",
+    "noDebts": "Всё рассчитано!",
+    "markAsPaid": "Отметить как оплачено",
+    "export": "Экспорт",
+    "exportExpenses": "Экспорт расходов",
+    "exportFormat": "Формат",
+    "exportDateRange": "Период",
+    "exportFrom": "С",
+    "exportTo": "По",
+    "exportAll": "За всё время"
   },
   "subscriptions": {
     "title": "Подписки",
@@ -183,7 +229,11 @@
     "noDevices": "Устройства ещё не зарегистрированы",
     "devicePending": "Ожидание одобрения",
     "encryptedData": "Зашифровано — откройте на своём устройстве для просмотра",
-    "manageDevices": "Управление устройствами"
+    "manageDevices": "Управление устройствами",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Тебе должны",
@@ -298,6 +348,56 @@
     "checkStatus": "Проверить статус",
     "checkAndKeys": "Синхронизировать ключи",
     "pendingDeviceCount": "Устройства ({{count}}) ожидают одобрения",
-    "approveNow": "Утвердить сейчас"
+    "approveNow": "Утвердить сейчас",
+    "enableNotificationsBanner": "Включите уведомления, чтобы получить оповещение, когда это устройство будет одобрено."
+  },
+  "finances": {
+    "title": "Финансы",
+    "analytics": "Анализ расходов"
+  },
+  "tabs": {
+    "home": "Главная",
+    "lists": "Списки",
+    "chores": "Дела",
+    "finances": "Финансы",
+    "more": "Ещё"
+  },
+  "meals": {
+    "title": "План питания",
+    "addMeal": "Запланировать приём пищи",
+    "empty": "Нет запланированных приёмов пищи",
+    "breakfast": "Завтрак",
+    "lunch": "Обед",
+    "dinner": "Ужин",
+    "snack": "Перекус",
+    "ingredients": "Ингредиенты",
+    "addToShopping": "Добавить в список покупок",
+    "noIngredients": "Нет ингредиентов для добавления",
+    "addedToShopping": "ингредиенты добавлены в список покупок"
+  },
+  "leaderboard": {
+    "title": "Рейтинг",
+    "points": "очк.",
+    "you": "вы"
+  },
+  "roles": {
+    "admin": "Администратор",
+    "member": "Участник",
+    "limited": "Ограниченный",
+    "changeRole": "Изменить роль",
+    "onlyAdmins": "Только администраторы могут изменять роли",
+    "lastAdmin": "Невозможно удалить последнего администратора"
+  },
+  "export": {
+    "fullExport": "Экспорт всех данных",
+    "fullExportDesc": "Скачать все данные домохозяйства в формате JSON",
+    "exporting": "Экспорт..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Подключить Google Календарь",
+    "syncNow": "Синхронизировать сейчас",
+    "lastSynced": "Последняя синхронизация",
+    "syncing": "Синхронизация...",
+    "syncSuccess": "Календарь успешно синхронизирован"
   }
 }

@@ -278,6 +278,8 @@ export interface UserPreferences {
   language: string;
   theme: "light" | "dark" | "system";
   defaultCurrency?: string | null;
+  weekStartsOn?: "monday" | "sunday";
+  timeFormat?: "24h" | "12h";
   pushEnabled: boolean;
   choreReminders: boolean;
   expenseAlerts: boolean;

@@ -71,18 +71,18 @@ export default function MealsScreen() {
   const handleAddToShopping = (meal: MealPlan) => {
     const count = (meal.ingredients as any[])?.length ?? 0;
     if (count === 0) {
-      Alert.alert("No ingredients", "This meal has no ingredients to add.");
+      Alert.alert(t("meals.title"), t("meals.noIngredients"));
       return;
     }
     addToShopping.mutate(meal.id);
-    Alert.alert("Added!", `${count} ingredient(s) added to shopping list.`);
+    Alert.alert(t("meals.title"), `${count} ${t("meals.addedToShopping")}`);
   };
 
   const renderMeal = ({ item }: { item: MealPlan & { _empty?: boolean } }) => {
     if ((item as any)._empty) {
       return (
         <View style={{ paddingVertical: 12, paddingHorizontal: 16, opacity: 0.5 }}>
-          <Text style={{ fontSize: 14, color: colors.textSecondary, fontStyle: "italic" }}>No meals planned</Text>
+          <Text style={{ fontSize: 14, color: colors.textSecondary, fontStyle: "italic" }}>{t("meals.empty")}</Text>
         </View>
       );
     }
@@ -90,8 +90,8 @@ export default function MealsScreen() {
     return (
       <SwipeableListItem
         onDelete={() => deleteMeal.mutate(item.id)}
-        deleteConfirmTitle="Delete Meal"
-        deleteConfirmMessage={`Delete "${item.title}"?`}
+        deleteConfirmTitle={t("common.delete")}
+        deleteConfirmMessage={`${t("todos.deleteConfirm")} "${item.title}"?`}
       >
         <View style={{
           backgroundColor: colors.card,
@@ -106,9 +106,9 @@ export default function MealsScreen() {
               <Text style={{ fontSize: 20 }}>{MEAL_EMOJI[item.mealType] ?? "🍽️"}</Text>
               <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>{item.title}</Text>
-                <Text style={{ fontSize: 12, color: colors.textSecondary, textTransform: "capitalize" }}>
-                  {item.mealType}
-                  {(item.ingredients as any[])?.length ? ` · ${(item.ingredients as any[]).length} ingredients` : ""}
+                <Text style={{ fontSize: 12, color: colors.textSecondary }}>
+                  {t(`meals.${item.mealType}`, item.mealType)}
+                  {(item.ingredients as any[])?.length ? ` · ${(item.ingredients as any[]).length} ${t("meals.ingredients").toLowerCase()}` : ""}
                 </Text>
               </View>
             </View>
@@ -133,12 +133,12 @@ export default function MealsScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>Meal Plan</Text>
+        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("meals.title")}</Text>
         <TouchableOpacity
           onPress={() => setShowForm(true)}
           style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 8 }}
         >
-          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ Add</Text>
+          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
         </TouchableOpacity>
       </View>
 

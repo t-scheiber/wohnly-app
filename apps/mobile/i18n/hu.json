@@ -85,7 +85,17 @@
     "daily": "Napi",
     "weekly": "Heti",
     "biweekly": "Kétheti",
-    "monthly": "Havi"
+    "monthly": "Havi",
+    "fairShare": "Igazságos elosztás",
+    "thisWeek": "Ez a hét",
+    "thisMonth": "Ez a hónap",
+    "allTime": "Összesen",
+    "tasks": "feladatok",
+    "noAnalytics": "Még nincs befejezett házimunka. Kezdj el feladatokat teljesíteni az analitika megtekintéséhez.",
+    "effortLevel": "Erőfeszítés szintje",
+    "breakMode": "Szünet mód",
+    "breakModeActive": "A házimunkák szünetelnek",
+    "breakModeUntil": "{{date}}-ig"
   },
   "events": {
     "title": "Naptár",
@@ -108,7 +118,8 @@
     "calendarSettings": "Naptár beállítások",
     "deviceCalendars": "Eszköz naptárak",
     "noCalendars": "Nem található naptár",
-    "grantAccess": "Engedélyezd a naptár hozzáférést az eszközöd eseményeinek megtekintéséhez"
+    "grantAccess": "Engedélyezd a naptár hozzáférést az eszközöd eseményeinek megtekintéséhez",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Kiadások",
@@ -123,7 +134,42 @@
     "percentage": "Százalékos",
     "fixed": "Fix",
     "date": "Dátum",
-    "selectDate": "Dátum kiválasztása"
+    "selectDate": "Dátum kiválasztása",
+    "editExpense": "Kiadás szerkesztése",
+    "shares": "Részesedések",
+    "splitPerPerson": "Felosztás személyenként",
+    "balanced": "Kiegyenlített",
+    "remaining": "{{amount}} maradt",
+    "overBudget": "{{amount}} túllépés",
+    "categories": {
+      "groceries": "Élelmiszer",
+      "dining": "Étterem",
+      "rent": "Bérleti díj",
+      "utilities": "Közüzemi díjak",
+      "transport": "Közlekedés",
+      "entertainment": "Szórakozás",
+      "health": "Egészség",
+      "travel": "Utazás",
+      "shopping": "Vásárlás",
+      "subscriptions": "Előfizetések",
+      "education": "Oktatás",
+      "pets": "Háziállatok",
+      "gifts": "Ajándékok",
+      "household": "Háztartás",
+      "other": "Egyéb"
+    },
+    "allCategories": "Mind",
+    "settleUp": "Elszámolás",
+    "settleUpDescription": "Minimális fizetések az összes tartozás rendezéséhez",
+    "noDebts": "Minden rendezve!",
+    "markAsPaid": "Jelölés fizetettként",
+    "export": "Exportálás",
+    "exportExpenses": "Kiadások exportálása",
+    "exportFormat": "Formátum",
+    "exportDateRange": "Időszak",
+    "exportFrom": "Ettől",
+    "exportTo": "Eddig",
+    "exportAll": "Összesen"
   },
   "subscriptions": {
     "title": "Előfizetések",
@@ -183,7 +229,11 @@
     "noDevices": "Még nincs regisztrált eszköz",
     "devicePending": "Jóváhagyásra vár",
     "encryptedData": "Titkosított — nyisd meg az eszközödön a megtekintéshez",
-    "manageDevices": "Eszközök kezelése"
+    "manageDevices": "Eszközök kezelése",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Neked tartoznak",
@@ -298,6 +348,56 @@
     "checkStatus": "Állapot ellenőrzése",
     "checkAndKeys": "Szinkronbillentyűk",
     "pendingDeviceCount": "{{count}} eszköz vár jóváhagyásra",
-    "approveNow": "Jóváhagyás most"
+    "approveNow": "Jóváhagyás most",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Étkezési terv",
+    "addMeal": "Étkezés tervezése",
+    "empty": "Nincsenek tervezett étkezések",
+    "breakfast": "Reggeli",
+    "lunch": "Ebéd",
+    "dinner": "Vacsora",
+    "snack": "Snack",
+    "ingredients": "Hozzávalók",
+    "addToShopping": "Hozzáadás a bevásárlólistához",
+    "noIngredients": "Nincsenek hozzáadható hozzávalók",
+    "addedToShopping": "hozzávalók hozzáadva a bevásárlólistához"
+  },
+  "leaderboard": {
+    "title": "Ranglista",
+    "points": "pont",
+    "you": "te"
+  },
+  "roles": {
+    "admin": "Adminisztrátor",
+    "member": "Tag",
+    "limited": "Korlátozott",
+    "changeRole": "Szerep módosítása",
+    "onlyAdmins": "Csak adminisztrátorok változtathatnak szerepet",
+    "lastAdmin": "Az utolsó adminisztrátor nem távolítható el"
+  },
+  "export": {
+    "fullExport": "Összes adat exportálása",
+    "fullExportDesc": "Az összes háztartási adat letöltése JSON-ként",
+    "exporting": "Exportálás..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google Naptár csatlakoztatása",
+    "syncNow": "Szinkronizálás most",
+    "lastSynced": "Utolsó szinkronizálás",
+    "syncing": "Szinkronizálás...",
+    "syncSuccess": "Naptár sikeresen szinkronizálva"
   }
 }

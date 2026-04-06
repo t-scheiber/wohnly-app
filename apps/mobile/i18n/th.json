@@ -85,7 +85,17 @@
     "daily": "ทุกวัน",
     "weekly": "ทุกสัปดาห์",
     "biweekly": "ทุกสองสัปดาห์",
-    "monthly": "ทุกเดือน"
+    "monthly": "ทุกเดือน",
+    "fairShare": "ส่วนแบ่งที่ยุติธรรม",
+    "thisWeek": "สัปดาห์นี้",
+    "thisMonth": "เดือนนี้",
+    "allTime": "ตลอดเวลา",
+    "tasks": "งาน",
+    "noAnalytics": "ยังไม่มีงานบ้านที่เสร็จสิ้น เริ่มทำงานบ้านเพื่อดูการวิเคราะห์",
+    "effortLevel": "ระดับความพยายาม",
+    "breakMode": "โหมดพัก",
+    "breakModeActive": "งานบ้านถูกหยุดชั่วคราว",
+    "breakModeUntil": "จนถึง {{date}}"
   },
   "events": {
     "title": "ปฏิทิน",
@@ -108,7 +118,8 @@
     "calendarSettings": "ตั้งค่าปฏิทิน",
     "deviceCalendars": "ปฏิทินอุปกรณ์",
     "noCalendars": "ไม่พบปฏิทิน",
-    "grantAccess": "ให้สิทธิ์เข้าถึงปฏิทินเพื่อดูกิจกรรมจากอุปกรณ์ของคุณ"
+    "grantAccess": "ให้สิทธิ์เข้าถึงปฏิทินเพื่อดูกิจกรรมจากอุปกรณ์ของคุณ",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "ค่าใช้จ่าย",
@@ -123,7 +134,42 @@
     "percentage": "เปอร์เซ็นต์",
     "fixed": "จำนวนคงที่",
     "date": "วันที่",
-    "selectDate": "เลือกวันที่"
+    "selectDate": "เลือกวันที่",
+    "editExpense": "แก้ไขรายจ่าย",
+    "shares": "ส่วนแบ่ง",
+    "splitPerPerson": "แบ่งต่อคน",
+    "balanced": "สมดุล",
+    "remaining": "เหลือ {{amount}}",
+    "overBudget": "เกิน {{amount}}",
+    "categories": {
+      "groceries": "ของชำ",
+      "dining": "อาหาร",
+      "rent": "ค่าเช่า",
+      "utilities": "สาธารณูปโภค",
+      "transport": "การเดินทาง",
+      "entertainment": "ความบันเทิง",
+      "health": "สุขภาพ",
+      "travel": "ท่องเที่ยว",
+      "shopping": "ช้อปปิ้ง",
+      "subscriptions": "สมัครสมาชิก",
+      "education": "การศึกษา",
+      "pets": "สัตว์เลี้ยง",
+      "gifts": "ของขวัญ",
+      "household": "ของใช้ในบ้าน",
+      "other": "อื่นๆ"
+    },
+    "allCategories": "ทั้งหมด",
+    "settleUp": "ชำระบัญชี",
+    "settleUpDescription": "การชำระขั้นต่ำเพื่อชำระหนี้ทั้งหมด",
+    "noDebts": "ชำระหมดแล้ว!",
+    "markAsPaid": "ทำเครื่องหมายว่าชำระแล้ว",
+    "export": "ส่งออก",
+    "exportExpenses": "ส่งออกรายจ่าย",
+    "exportFormat": "รูปแบบ",
+    "exportDateRange": "ช่วงวันที่",
+    "exportFrom": "จาก",
+    "exportTo": "ถึง",
+    "exportAll": "ตลอดเวลา"
   },
   "subscriptions": {
     "title": "การสมัครสมาชิก",
@@ -183,7 +229,11 @@
     "noDevices": "ยังไม่มีอุปกรณ์ที่ลงทะเบียน",
     "devicePending": "รอการอนุมัติ",
     "encryptedData": "เข้ารหัสแล้ว — เปิดบนอุปกรณ์ของคุณเพื่อดู",
-    "manageDevices": "จัดการอุปกรณ์"
+    "manageDevices": "จัดการอุปกรณ์",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "เขาเป็นหนี้คุณ",
@@ -298,6 +348,56 @@
     "checkStatus": "ตรวจสอบสถานะ",
     "checkAndKeys": "คีย์การซิงค์",
     "pendingDeviceCount": "อุปกรณ์ {{count}} เครื่องกำลังรอการอนุมัติ",
-    "approveNow": "อนุมัติทันที"
+    "approveNow": "อนุมัติทันที",
+    "enableNotificationsBanner": "เปิดการแจ้งเตือนเพื่อรับแจ้งเมื่ออุปกรณ์นี้ได้รับการอนุมัติ"
+  },
+  "finances": {
+    "title": "การเงิน",
+    "analytics": "วิเคราะห์การใช้จ่าย"
+  },
+  "tabs": {
+    "home": "หน้าแรก",
+    "lists": "รายการ",
+    "chores": "งานบ้าน",
+    "finances": "การเงิน",
+    "more": "เพิ่มเติม"
+  },
+  "meals": {
+    "title": "แผนอาหาร",
+    "addMeal": "วางแผนอาหาร",
+    "empty": "ไม่มีแผนอาหาร",
+    "breakfast": "อาหารเช้า",
+    "lunch": "อาหารกลางวัน",
+    "dinner": "อาหารเย็น",
+    "snack": "ของว่าง",
+    "ingredients": "ส่วนผสม",
+    "addToShopping": "เพิ่มในรายการซื้อของ",
+    "noIngredients": "ไม่มีส่วนผสมที่จะเพิ่ม",
+    "addedToShopping": "เพิ่มส่วนผสมในรายการซื้อของแล้ว"
+  },
+  "leaderboard": {
+    "title": "กระดานผู้นำ",
+    "points": "คะแนน",
+    "you": "คุณ"
+  },
+  "roles": {
+    "admin": "ผู้ดูแล",
+    "member": "สมาชิก",
+    "limited": "จำกัด",
+    "changeRole": "เปลี่ยนบทบาท",
+    "onlyAdmins": "เฉพาะผู้ดูแลเท่านั้นที่สามารถเปลี่ยนบทบาท",
+    "lastAdmin": "ไม่สามารถลบผู้ดูแลคนสุดท้ายได้"
+  },
+  "export": {
+    "fullExport": "ส่งออกข้อมูลทั้งหมด",
+    "fullExportDesc": "ดาวน์โหลดข้อมูลครัวเรือนทั้งหมดเป็น JSON",
+    "exporting": "กำลังส่งออก..."
+  },
+  "calendarSync": {
+    "connectGoogle": "เชื่อมต่อ Google Calendar",
+    "syncNow": "ซิงค์ตอนนี้",
+    "lastSynced": "ซิงค์ล่าสุด",
+    "syncing": "กำลังซิงค์...",
+    "syncSuccess": "ซิงค์ปฏิทินสำเร็จ"
   }
 }

@@ -85,7 +85,17 @@
     "daily": "Quotidien",
     "weekly": "Hebdomadaire",
     "biweekly": "Bihebdomadaire",
-    "monthly": "Mensuel"
+    "monthly": "Mensuel",
+    "fairShare": "Répartition équitable",
+    "thisWeek": "Cette semaine",
+    "thisMonth": "Ce mois",
+    "allTime": "Depuis toujours",
+    "tasks": "tâches",
+    "noAnalytics": "Aucune corvée terminée pour l'instant. Commence à terminer des corvées pour voir les statistiques.",
+    "effortLevel": "Niveau d'effort",
+    "breakMode": "Mode pause",
+    "breakModeActive": "Les corvées sont en pause",
+    "breakModeUntil": "jusqu'au {{date}}"
   },
   "events": {
     "title": "Calendrier",
@@ -108,7 +118,8 @@
     "calendarSettings": "Paramètres du calendrier",
     "deviceCalendars": "Calendriers de l'appareil",
     "noCalendars": "Aucun calendrier trouvé",
-    "grantAccess": "Autorise l'accès au calendrier pour voir les événements de ton appareil"
+    "grantAccess": "Autorise l'accès au calendrier pour voir les événements de ton appareil",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Dépenses",
@@ -123,7 +134,42 @@
     "percentage": "Pourcentage",
     "fixed": "Fixe",
     "date": "Date",
-    "selectDate": "Sélectionner une date"
+    "selectDate": "Sélectionner une date",
+    "editExpense": "Modifier la dépense",
+    "shares": "Parts",
+    "splitPerPerson": "Répartition par personne",
+    "balanced": "Équilibré",
+    "remaining": "{{amount}} restant",
+    "overBudget": "{{amount}} de trop",
+    "categories": {
+      "groceries": "Courses",
+      "dining": "Restaurant",
+      "rent": "Loyer",
+      "utilities": "Charges",
+      "transport": "Transport",
+      "entertainment": "Divertissement",
+      "health": "Santé",
+      "travel": "Voyage",
+      "shopping": "Shopping",
+      "subscriptions": "Abonnements",
+      "education": "Éducation",
+      "pets": "Animaux",
+      "gifts": "Cadeaux",
+      "household": "Ménage",
+      "other": "Autre"
+    },
+    "allCategories": "Tous",
+    "settleUp": "Solder",
+    "settleUpDescription": "Paiements minimaux pour solder toutes les dettes",
+    "noDebts": "Tout est réglé !",
+    "markAsPaid": "Marquer comme payé",
+    "export": "Exporter",
+    "exportExpenses": "Exporter les dépenses",
+    "exportFormat": "Format",
+    "exportDateRange": "Période",
+    "exportFrom": "Du",
+    "exportTo": "Au",
+    "exportAll": "Depuis toujours"
   },
   "subscriptions": {
     "title": "Abonnements",
@@ -183,7 +229,11 @@
     "noDevices": "Aucun appareil enregistré pour l'instant",
     "devicePending": "En attente d'approbation",
     "encryptedData": "Chiffré — ouvre sur ton appareil pour voir",
-    "manageDevices": "Gérer les appareils"
+    "manageDevices": "Gérer les appareils",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "On te doit",
@@ -298,6 +348,56 @@
     "checkStatus": "Vérifier l'état",
     "checkAndKeys": "Clés de synchronisation",
     "pendingDeviceCount": "{{count}} appareil(s) en attente d'approbation",
-    "approveNow": "Approuver maintenant"
+    "approveNow": "Approuver maintenant",
+    "enableNotificationsBanner": "Active les notifications pour être averti(e) quand cet appareil est approuvé."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Analyse des dépenses"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "lists": "Listes",
+    "chores": "Corvées",
+    "finances": "Finances",
+    "more": "Plus"
+  },
+  "meals": {
+    "title": "Menu de la semaine",
+    "addMeal": "Planifier un repas",
+    "empty": "Aucun repas prévu",
+    "breakfast": "Petit-déjeuner",
+    "lunch": "Déjeuner",
+    "dinner": "Dîner",
+    "snack": "Goûter",
+    "ingredients": "Ingrédients",
+    "addToShopping": "Ajouter à la liste de courses",
+    "noIngredients": "Aucun ingrédient à ajouter",
+    "addedToShopping": "ingrédients ajoutés à la liste de courses"
+  },
+  "leaderboard": {
+    "title": "Classement",
+    "points": "pts",
+    "you": "toi"
+  },
+  "roles": {
+    "admin": "Administrateur",
+    "member": "Membre",
+    "limited": "Limité",
+    "changeRole": "Changer le rôle",
+    "onlyAdmins": "Seuls les administrateurs peuvent changer les rôles",
+    "lastAdmin": "Impossible de supprimer le dernier administrateur"
+  },
+  "export": {
+    "fullExport": "Exporter toutes les données",
+    "fullExportDesc": "Télécharger toutes les données du foyer au format JSON",
+    "exporting": "Exportation..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Connecter Google Agenda",
+    "syncNow": "Synchroniser maintenant",
+    "lastSynced": "Dernière synchronisation",
+    "syncing": "Synchronisation...",
+    "syncSuccess": "Calendrier synchronisé avec succès"
   }
 }

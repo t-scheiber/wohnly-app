@@ -118,7 +118,8 @@
     "calendarSettings": "Calendar Settings",
     "deviceCalendars": "Device Calendars",
     "noCalendars": "No calendars found",
-    "grantAccess": "Grant calendar access to see your device events"
+    "grantAccess": "Grant calendar access to see your device events",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Expenses",
@@ -197,6 +198,10 @@
     "language": "Language",
     "theme": "Theme",
     "notifications": "Notifications",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format",
     "subscription": "Subscription",
     "signOut": "Sign Out",
     "signOutConfirm": "Are you sure you want to sign out?",
@@ -333,6 +338,7 @@
     "checkAndKeys": "Sync Keys",
     "pendingDeviceCount": "{{count}} device(s) waiting for approval",
     "approveNow": "Approve Now",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved.",
     "contactSupport": "Contact Support"
   },
   "meals": {
@@ -372,6 +378,17 @@
     "lastSynced": "Last synced",
     "syncing": "Syncing...",
     "syncSuccess": "Calendar synced successfully"
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
   },
   "widgets": {
     "todosTitle": "Todos",

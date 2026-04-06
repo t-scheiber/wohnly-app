@@ -85,7 +85,17 @@
     "daily": "Щоденно",
     "weekly": "Щотижня",
     "biweekly": "Раз на два тижні",
-    "monthly": "Щомісяця"
+    "monthly": "Щомісяця",
+    "fairShare": "Справедлива частка",
+    "thisWeek": "Цей тиждень",
+    "thisMonth": "Цей місяць",
+    "allTime": "За весь час",
+    "tasks": "завдання",
+    "noAnalytics": "Ще немає виконаних обов'язків. Почніть виконувати обов'язки, щоб побачити аналітику.",
+    "effortLevel": "Рівень зусиль",
+    "breakMode": "Режим паузи",
+    "breakModeActive": "Обов'язки призупинено",
+    "breakModeUntil": "до {{date}}"
   },
   "events": {
     "title": "Календар",
@@ -108,7 +118,8 @@
     "calendarSettings": "Налаштування календаря",
     "deviceCalendars": "Календарі пристрою",
     "noCalendars": "Календарів не знайдено",
-    "grantAccess": "Надай доступ до календаря, щоб бачити події з твого пристрою"
+    "grantAccess": "Надай доступ до календаря, щоб бачити події з твого пристрою",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Витрати",
@@ -123,7 +134,42 @@
     "percentage": "Відсотковий",
     "fixed": "Фіксований",
     "date": "Дата",
-    "selectDate": "Обрати дату"
+    "selectDate": "Обрати дату",
+    "editExpense": "Редагувати витрату",
+    "shares": "Частки",
+    "splitPerPerson": "Поділ на особу",
+    "balanced": "Збалансовано",
+    "remaining": "{{amount}} залишилось",
+    "overBudget": "{{amount}} понад бюджет",
+    "categories": {
+      "groceries": "Продукти",
+      "dining": "Ресторани",
+      "rent": "Оренда",
+      "utilities": "Комунальні послуги",
+      "transport": "Транспорт",
+      "entertainment": "Розваги",
+      "health": "Здоров'я",
+      "travel": "Подорожі",
+      "shopping": "Покупки",
+      "subscriptions": "Підписки",
+      "education": "Освіта",
+      "pets": "Домашні тварини",
+      "gifts": "Подарунки",
+      "household": "Господарство",
+      "other": "Інше"
+    },
+    "allCategories": "Усі",
+    "settleUp": "Розрахуватися",
+    "settleUpDescription": "Мінімальні платежі для погашення всіх боргів",
+    "noDebts": "Все розраховано!",
+    "markAsPaid": "Позначити як оплачено",
+    "export": "Експорт",
+    "exportExpenses": "Експорт витрат",
+    "exportFormat": "Формат",
+    "exportDateRange": "Діапазон дат",
+    "exportFrom": "Від",
+    "exportTo": "До",
+    "exportAll": "За весь час"
   },
   "subscriptions": {
     "title": "Підписки",
@@ -183,7 +229,11 @@
     "noDevices": "Ще немає зареєстрованих пристроїв",
     "devicePending": "Очікує схвалення",
     "encryptedData": "Зашифровано — відкрий на своєму пристрої для перегляду",
-    "manageDevices": "Керувати пристроями"
+    "manageDevices": "Керувати пристроями",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Тобі винні",
@@ -298,6 +348,56 @@
     "checkStatus": "Перевірте статус",
     "checkAndKeys": "Ключі синхронізації",
     "pendingDeviceCount": "Пристроїв, які очікують на підтвердження: {{count}}",
-    "approveNow": "Підтвердити зараз"
+    "approveNow": "Підтвердити зараз",
+    "enableNotificationsBanner": "Увімкніть сповіщення, щоб отримати повідомлення, коли цей пристрій буде схвалено."
+  },
+  "finances": {
+    "title": "Фінанси",
+    "analytics": "Аналіз витрат"
+  },
+  "tabs": {
+    "home": "Головна",
+    "lists": "Списки",
+    "chores": "Справи",
+    "finances": "Фінанси",
+    "more": "Ще"
+  },
+  "meals": {
+    "title": "План харчування",
+    "addMeal": "Спланувати прийом їжі",
+    "empty": "Немає запланованих прийомів їжі",
+    "breakfast": "Сніданок",
+    "lunch": "Обід",
+    "dinner": "Вечеря",
+    "snack": "Перекус",
+    "ingredients": "Інгредієнти",
+    "addToShopping": "Додати до списку покупок",
+    "noIngredients": "Немає інгредієнтів для додавання",
+    "addedToShopping": "інгредієнти додано до списку покупок"
+  },
+  "leaderboard": {
+    "title": "Рейтинг",
+    "points": "очк.",
+    "you": "ви"
+  },
+  "roles": {
+    "admin": "Адміністратор",
+    "member": "Учасник",
+    "limited": "Обмежений",
+    "changeRole": "Змінити роль",
+    "onlyAdmins": "Тільки адміністратори можуть змінювати ролі",
+    "lastAdmin": "Не можна видалити останнього адміністратора"
+  },
+  "export": {
+    "fullExport": "Експорт усіх даних",
+    "fullExportDesc": "Завантажити всі дані домогосподарства у форматі JSON",
+    "exporting": "Експортування..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Підключити Google Календар",
+    "syncNow": "Синхронізувати зараз",
+    "lastSynced": "Остання синхронізація",
+    "syncing": "Синхронізація...",
+    "syncSuccess": "Календар успішно синхронізовано"
   }
 }

@@ -85,7 +85,17 @@
     "daily": "Iga päev",
     "weekly": "Iga nädal",
     "biweekly": "Iga kahe nädala tagant",
-    "monthly": "Iga kuu"
+    "monthly": "Iga kuu",
+    "fairShare": "Õiglane jaotus",
+    "thisWeek": "See nädal",
+    "thisMonth": "See kuu",
+    "allTime": "Kogu aeg",
+    "tasks": "ülesanded",
+    "noAnalytics": "Veel pole ühtegi majapidamistööd lõpetatud. Alustage tööde täitmist, et näha analüütikat.",
+    "effortLevel": "Pingutuse tase",
+    "breakMode": "Puhkerežiim",
+    "breakModeActive": "Majapidamistööd on peatatud",
+    "breakModeUntil": "kuni {{date}}"
   },
   "events": {
     "title": "Kalender",
@@ -108,7 +118,8 @@
     "calendarSettings": "Kalendri seaded",
     "deviceCalendars": "Seadme kalendrid",
     "noCalendars": "Kalendreid ei leitud",
-    "grantAccess": "Anna kalendrile ligipääs, et näha seadme sündmusi"
+    "grantAccess": "Anna kalendrile ligipääs, et näha seadme sündmusi",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Kulud",
@@ -123,7 +134,42 @@
     "percentage": "Protsentidega",
     "fixed": "Fikseeritud",
     "date": "Kuupäev",
-    "selectDate": "Vali kuupäev"
+    "selectDate": "Vali kuupäev",
+    "editExpense": "Muuda kulu",
+    "shares": "Osad",
+    "splitPerPerson": "Jaotus inimese kohta",
+    "balanced": "Tasakaalus",
+    "remaining": "{{amount}} jäänud",
+    "overBudget": "{{amount}} üle",
+    "categories": {
+      "groceries": "Toidukaubad",
+      "dining": "Söök väljas",
+      "rent": "Üür",
+      "utilities": "Kommunaalkulud",
+      "transport": "Transport",
+      "entertainment": "Meelelahutus",
+      "health": "Tervis",
+      "travel": "Reisimine",
+      "shopping": "Ostud",
+      "subscriptions": "Tellimused",
+      "education": "Haridus",
+      "pets": "Lemmikloomad",
+      "gifts": "Kingitused",
+      "household": "Majapidamine",
+      "other": "Muu"
+    },
+    "allCategories": "Kõik",
+    "settleUp": "Arveldamine",
+    "settleUpDescription": "Minimaalsed maksed kõigi võlgade tasumiseks",
+    "noDebts": "Kõik arveldatud!",
+    "markAsPaid": "Märgi makstuks",
+    "export": "Ekspordi",
+    "exportExpenses": "Ekspordi kulud",
+    "exportFormat": "Formaat",
+    "exportDateRange": "Kuupäevavahemik",
+    "exportFrom": "Alates",
+    "exportTo": "Kuni",
+    "exportAll": "Kogu aeg"
   },
   "subscriptions": {
     "title": "Tellimused",
@@ -183,7 +229,11 @@
     "noDevices": "Seadmeid pole veel registreeritud",
     "devicePending": "Ootab kinnitust",
     "encryptedData": "Krüpteeritud — ava oma seadmes, et vaadata",
-    "manageDevices": "Halda seadmeid"
+    "manageDevices": "Halda seadmeid",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Sulle võlgu",
@@ -298,6 +348,56 @@
     "checkStatus": "Kontrolli olekut",
     "checkAndKeys": "Sünkroonimisklahvid",
     "pendingDeviceCount": "{{count}} seadet ootab kinnitamist",
-    "approveNow": "Kinnita kohe"
+    "approveNow": "Kinnita kohe",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Toiduplaan",
+    "addMeal": "Planeeri eine",
+    "empty": "Ühtegi einet pole planeeritud",
+    "breakfast": "Hommikusöök",
+    "lunch": "Lõunasöök",
+    "dinner": "Õhtusöök",
+    "snack": "Suupiste",
+    "ingredients": "Koostisosad",
+    "addToShopping": "Lisa ostunimekirja",
+    "noIngredients": "Pole koostisosi lisamiseks",
+    "addedToShopping": "koostisosad lisatud ostunimekirja"
+  },
+  "leaderboard": {
+    "title": "Edetabel",
+    "points": "p",
+    "you": "sina"
+  },
+  "roles": {
+    "admin": "Administraator",
+    "member": "Liige",
+    "limited": "Piiratud",
+    "changeRole": "Muuda rolli",
+    "onlyAdmins": "Ainult administraatorid saavad rolle muuta",
+    "lastAdmin": "Viimast administraatorit ei saa eemaldada"
+  },
+  "export": {
+    "fullExport": "Ekspordi kõik andmed",
+    "fullExportDesc": "Laadige alla kõik majapidamise andmed JSON-vormingus",
+    "exporting": "Eksportimine..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Ühenda Google'i kalender",
+    "syncNow": "Sünkrooni kohe",
+    "lastSynced": "Viimati sünkroonitud",
+    "syncing": "Sünkroonimine...",
+    "syncSuccess": "Kalender edukalt sünkroonitud"
   }
 }

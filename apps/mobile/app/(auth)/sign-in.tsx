@@ -67,8 +67,8 @@ export default function SignInScreen() {
     // Also check getCurrent() for deep links received during app launch
     (async () => {
       try {
-        const { getCurrent } = await import("@tauri-apps/plugin-deep-link");
-        const urls = await getCurrent();
+        const mod = await (Function('return import("@tauri-apps/plugin-deep-link")')() as any);
+        const urls = await mod.getCurrent();
         if (urls && urls.length > 0 && urls[0].includes("callback")) {
           processDeepLink(urls[0]);
         }

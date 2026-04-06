@@ -85,7 +85,17 @@
     "daily": "প্রতিদিন",
     "weekly": "সাপ্তাহিক",
     "biweekly": "দুই সপ্তাহে একবার",
-    "monthly": "মাসিক"
+    "monthly": "মাসিক",
+    "fairShare": "ন্যায্য ভাগ",
+    "thisWeek": "এই সপ্তাহ",
+    "thisMonth": "এই মাস",
+    "allTime": "সর্বকালের",
+    "tasks": "কাজ",
+    "noAnalytics": "এখনো কোনো কাজ সম্পন্ন হয়নি। বিশ্লেষণ দেখতে কাজ সম্পন্ন করা শুরু করুন।",
+    "effortLevel": "প্রচেষ্টার মাত্রা",
+    "breakMode": "বিরতি মোড",
+    "breakModeActive": "কাজগুলি বিরতিতে আছে",
+    "breakModeUntil": "{{date}} পর্যন্ত"
   },
   "events": {
     "title": "ক্যালেন্ডার",
@@ -108,7 +118,8 @@
     "calendarSettings": "ক্যালেন্ডার সেটিংস",
     "deviceCalendars": "ডিভাইস ক্যালেন্ডার",
     "noCalendars": "কোনো ক্যালেন্ডার পাওয়া যায়নি",
-    "grantAccess": "ডিভাইসের ইভেন্ট দেখতে ক্যালেন্ডার অ্যাক্সেস দাও"
+    "grantAccess": "ডিভাইসের ইভেন্ট দেখতে ক্যালেন্ডার অ্যাক্সেস দাও",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "খরচ",
@@ -123,7 +134,42 @@
     "percentage": "শতাংশ",
     "fixed": "নির্দিষ্ট",
     "date": "তারিখ",
-    "selectDate": "তারিখ বেছে নাও"
+    "selectDate": "তারিখ বেছে নাও",
+    "editExpense": "খরচ সম্পাদনা করুন",
+    "shares": "শেয়ার",
+    "splitPerPerson": "প্রতি ব্যক্তি ভাগ",
+    "balanced": "সমতুল্য",
+    "remaining": "{{amount}} বাকি",
+    "overBudget": "{{amount}} বেশি",
+    "categories": {
+      "groceries": "মুদিখানা",
+      "dining": "রেস্তোরাঁ",
+      "rent": "ভাড়া",
+      "utilities": "ইউটিলিটি",
+      "transport": "পরিবহন",
+      "entertainment": "বিনোদন",
+      "health": "স্বাস্থ্য",
+      "travel": "ভ্রমণ",
+      "shopping": "কেনাকাটা",
+      "subscriptions": "সাবস্ক্রিপশন",
+      "education": "শিক্ষা",
+      "pets": "পোষা প্রাণী",
+      "gifts": "উপহার",
+      "household": "গৃহস্থালি",
+      "other": "অন্যান্য"
+    },
+    "allCategories": "সব",
+    "settleUp": "নিষ্পত্তি করুন",
+    "settleUpDescription": "সমস্ত ঋণ নিষ্পত্তি করতে ন্যূনতম অর্থপ্রদান",
+    "noDebts": "সব নিষ্পত্তি হয়েছে!",
+    "markAsPaid": "পরিশোধিত হিসেবে চিহ্নিত করুন",
+    "export": "রপ্তানি",
+    "exportExpenses": "খরচ রপ্তানি করুন",
+    "exportFormat": "ফরম্যাট",
+    "exportDateRange": "তারিখের পরিসীমা",
+    "exportFrom": "থেকে",
+    "exportTo": "পর্যন্ত",
+    "exportAll": "সর্বকালের"
   },
   "subscriptions": {
     "title": "সাবস্ক্রিপশন",
@@ -183,7 +229,11 @@
     "noDevices": "এখনো কোনো ডিভাইস নিবন্ধিত হয়নি",
     "devicePending": "অনুমোদনের জন্য অপেক্ষারত",
     "encryptedData": "এনক্রিপ্ট করা — দেখতে তোমার ডিভাইসে খোলো",
-    "manageDevices": "ডিভাইস পরিচালনা"
+    "manageDevices": "ডিভাইস পরিচালনা",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "তোমাকে দিতে হবে",
@@ -298,6 +348,56 @@
     "checkStatus": "স্থিতি পরীক্ষা করুন",
     "checkAndKeys": "সিঙ্ক কী",
     "pendingDeviceCount": "{{count}}টি ডিভাইস(গুলি) অনুমোদনের জন্য অপেক্ষা করছে৷",
-    "approveNow": "এখন অনুমোদন করুন"
+    "approveNow": "এখন অনুমোদন করুন",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "খাদ্য পরিকল্পনা",
+    "addMeal": "একটি খাবার পরিকল্পনা করুন",
+    "empty": "কোনো খাবার পরিকল্পিত নয়",
+    "breakfast": "সকালের নাস্তা",
+    "lunch": "দুপুরের খাবার",
+    "dinner": "রাতের খাবার",
+    "snack": "নাস্তা",
+    "ingredients": "উপকরণ",
+    "addToShopping": "কেনাকাটার তালিকায় যোগ করুন",
+    "noIngredients": "যোগ করার জন্য কোনো উপকরণ নেই",
+    "addedToShopping": "উপকরণ কেনাকাটার তালিকায় যোগ করা হয়েছে"
+  },
+  "leaderboard": {
+    "title": "লিডারবোর্ড",
+    "points": "পয়েন্ট",
+    "you": "আপনি"
+  },
+  "roles": {
+    "admin": "অ্যাডমিন",
+    "member": "সদস্য",
+    "limited": "সীমিত",
+    "changeRole": "ভূমিকা পরিবর্তন করুন",
+    "onlyAdmins": "শুধুমাত্র অ্যাডমিনরা ভূমিকা পরিবর্তন করতে পারেন",
+    "lastAdmin": "শেষ অ্যাডমিন সরানো যাবে না"
+  },
+  "export": {
+    "fullExport": "সমস্ত ডেটা রপ্তানি করুন",
+    "fullExportDesc": "সমস্ত গৃহস্থালি ডেটা JSON হিসেবে ডাউনলোড করুন",
+    "exporting": "রপ্তানি হচ্ছে..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google ক্যালেন্ডার সংযুক্ত করুন",
+    "syncNow": "এখনই সিঙ্ক করুন",
+    "lastSynced": "সর্বশেষ সিঙ্ক হয়েছে",
+    "syncing": "সিঙ্ক হচ্ছে...",
+    "syncSuccess": "ক্যালেন্ডার সফলভাবে সিঙ্ক হয়েছে"
   }
 }

@@ -85,7 +85,17 @@
     "daily": "Araw-araw",
     "weekly": "Lingguhan",
     "biweekly": "Tuwing Dalawang Linggo",
-    "monthly": "Buwanan"
+    "monthly": "Buwanan",
+    "fairShare": "Patas na bahagi",
+    "thisWeek": "Ngayong linggo",
+    "thisMonth": "Ngayong buwan",
+    "allTime": "Lahat ng oras",
+    "tasks": "mga gawain",
+    "noAnalytics": "Wala pang natapos na gawain. Simulan ang pagtapos ng mga gawain para makita ang analytics.",
+    "effortLevel": "Antas ng pagsisikap",
+    "breakMode": "Break mode",
+    "breakModeActive": "Ang mga gawain ay naka-pause",
+    "breakModeUntil": "hanggang {{date}}"
   },
   "events": {
     "title": "Kalendaryo",
@@ -108,7 +118,8 @@
     "calendarSettings": "Settings ng Kalendaryo",
     "deviceCalendars": "Mga Kalendaryo ng Device",
     "noCalendars": "Walang nakitang kalendaryo",
-    "grantAccess": "Bigyan ng access ang kalendaryo para makita ang mga event sa device"
+    "grantAccess": "Bigyan ng access ang kalendaryo para makita ang mga event sa device",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Mga Gastos",
@@ -123,7 +134,42 @@
     "percentage": "Porsyento",
     "fixed": "Fixed",
     "date": "Petsa",
-    "selectDate": "Pumili ng Petsa"
+    "selectDate": "Pumili ng Petsa",
+    "editExpense": "I-edit ang gastos",
+    "shares": "Mga bahagi",
+    "splitPerPerson": "Hatian bawat tao",
+    "balanced": "Balanse",
+    "remaining": "{{amount}} natitira",
+    "overBudget": "{{amount}} lampas",
+    "categories": {
+      "groceries": "Grocery",
+      "dining": "Kainan",
+      "rent": "Upa",
+      "utilities": "Utilities",
+      "transport": "Transportasyon",
+      "entertainment": "Aliwan",
+      "health": "Kalusugan",
+      "travel": "Paglalakbay",
+      "shopping": "Pamimili",
+      "subscriptions": "Mga subscription",
+      "education": "Edukasyon",
+      "pets": "Mga alagang hayop",
+      "gifts": "Mga regalo",
+      "household": "Sambahayan",
+      "other": "Iba pa"
+    },
+    "allCategories": "Lahat",
+    "settleUp": "Ayusin",
+    "settleUpDescription": "Kaunting bayad para ayusin lahat ng utang",
+    "noDebts": "Lahat ayos na!",
+    "markAsPaid": "Markahan bilang bayad na",
+    "export": "I-export",
+    "exportExpenses": "I-export ang mga gastos",
+    "exportFormat": "Format",
+    "exportDateRange": "Saklaw ng petsa",
+    "exportFrom": "Mula",
+    "exportTo": "Hanggang",
+    "exportAll": "Lahat ng oras"
   },
   "subscriptions": {
     "title": "Mga Subscription",
@@ -183,7 +229,11 @@
     "noDevices": "Wala pang nakarehistrong device",
     "devicePending": "Naghihintay ng approval",
     "encryptedData": "Naka-encrypt — buksan sa device mo para makita",
-    "manageDevices": "Pamahalaan ang mga device"
+    "manageDevices": "Pamahalaan ang mga device",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Utang sa'yo",
@@ -298,6 +348,56 @@
     "checkStatus": "Suriin ang Katayuan",
     "checkAndKeys": "Sync Keys",
     "pendingDeviceCount": "{{count}} (mga) device na naghihintay ng pag-apruba",
-    "approveNow": "Aprubahan Ngayon"
+    "approveNow": "Aprubahan Ngayon",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Plano ng pagkain",
+    "addMeal": "Magplano ng pagkain",
+    "empty": "Walang nakaplanong pagkain",
+    "breakfast": "Almusal",
+    "lunch": "Tanghalian",
+    "dinner": "Hapunan",
+    "snack": "Meryenda",
+    "ingredients": "Mga sangkap",
+    "addToShopping": "Idagdag sa listahan ng bilihin",
+    "noIngredients": "Walang sangkap na idadagdag",
+    "addedToShopping": "mga sangkap naidagdag sa listahan ng bilihin"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "points": "pts",
+    "you": "ikaw"
+  },
+  "roles": {
+    "admin": "Admin",
+    "member": "Miyembro",
+    "limited": "Limitado",
+    "changeRole": "Palitan ang tungkulin",
+    "onlyAdmins": "Mga admin lang ang maaaring magpalit ng tungkulin",
+    "lastAdmin": "Hindi maaaring alisin ang huling admin"
+  },
+  "export": {
+    "fullExport": "I-export lahat ng data",
+    "fullExportDesc": "I-download lahat ng data ng sambahayan bilang JSON",
+    "exporting": "Ine-export..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Ikonekta ang Google Calendar",
+    "syncNow": "I-sync ngayon",
+    "lastSynced": "Huling na-sync",
+    "syncing": "Nagsi-sync...",
+    "syncSuccess": "Na-sync ang kalendaryo"
   }
 }

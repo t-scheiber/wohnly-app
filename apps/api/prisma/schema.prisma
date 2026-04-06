@@ -642,6 +642,8 @@ model UserPreferences {
   choreReminders  Boolean @default(true)
   expenseAlerts   Boolean @default(true)
   defaultCurrency String  @default("EUR")
+  weekStartsOn    String  @default("monday") // "monday" | "sunday"
+  timeFormat      String  @default("24h")     // "24h" | "12h"
   onboardingDone  Boolean @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

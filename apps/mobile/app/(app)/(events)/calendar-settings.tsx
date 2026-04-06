@@ -13,9 +13,11 @@ export default function CalendarSettingsScreen() {
 
   const {
     hasPermission,
+    permissionDenied,
     calendars,
     selectedIds,
     requestPermission,
+    openSettings,
     loadCalendars,
     toggleCalendar,
   } = useDeviceCalendars();
@@ -44,14 +46,25 @@ export default function CalendarSettingsScreen() {
             <Text style={{ fontSize: 15, color: colors.textSecondary, marginBottom: 12 }}>
               {t("events.grantAccess")}
             </Text>
-            <TouchableOpacity
-              onPress={requestPermission}
-              style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 14, alignItems: "center" }}
-            >
-              <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>
-                Grant Access
-              </Text>
-            </TouchableOpacity>
+            {permissionDenied ? (
+              <TouchableOpacity
+                onPress={openSettings}
+                style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 14, alignItems: "center" }}
+              >
+                <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>
+                  {t("events.openSettings")}
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={requestPermission}
+                style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 14, alignItems: "center" }}
+              >
+                <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>
+                  {t("events.grantAccess")}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         )}
 

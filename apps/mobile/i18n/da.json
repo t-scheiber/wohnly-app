@@ -85,7 +85,17 @@
     "daily": "Dagligt",
     "weekly": "Ugentligt",
     "biweekly": "Hver anden uge",
-    "monthly": "Månedligt"
+    "monthly": "Månedligt",
+    "fairShare": "Retfærdig fordeling",
+    "thisWeek": "Denne uge",
+    "thisMonth": "Denne måned",
+    "allTime": "Alt tid",
+    "tasks": "opgaver",
+    "noAnalytics": "Ingen færdige pligter endnu. Begynd at fuldføre pligter for at se analyser.",
+    "effortLevel": "Indsatsniveau",
+    "breakMode": "Pausetilstand",
+    "breakModeActive": "Pligterne er sat på pause",
+    "breakModeUntil": "indtil {{date}}"
   },
   "events": {
     "title": "Kalender",
@@ -108,7 +118,8 @@
     "calendarSettings": "Kalenderindstillinger",
     "deviceCalendars": "Enhedskalendere",
     "noCalendars": "Ingen kalendere fundet",
-    "grantAccess": "Giv kalenderadgang for at se dine enhedsbegivenheder"
+    "grantAccess": "Giv kalenderadgang for at se dine enhedsbegivenheder",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Udgifter",
@@ -123,7 +134,42 @@
     "percentage": "Procent",
     "fixed": "Fast",
     "date": "Dato",
-    "selectDate": "Vælg dato"
+    "selectDate": "Vælg dato",
+    "editExpense": "Rediger udgift",
+    "shares": "Andele",
+    "splitPerPerson": "Opdeling per person",
+    "balanced": "Balanceret",
+    "remaining": "{{amount}} tilbage",
+    "overBudget": "{{amount}} over",
+    "categories": {
+      "groceries": "Dagligvarer",
+      "dining": "Restauranter",
+      "rent": "Husleje",
+      "utilities": "Forsyning",
+      "transport": "Transport",
+      "entertainment": "Underholdning",
+      "health": "Sundhed",
+      "travel": "Rejser",
+      "shopping": "Shopping",
+      "subscriptions": "Abonnementer",
+      "education": "Uddannelse",
+      "pets": "Kæledyr",
+      "gifts": "Gaver",
+      "household": "Husholdning",
+      "other": "Andet"
+    },
+    "allCategories": "Alle",
+    "settleUp": "Gør op",
+    "settleUpDescription": "Minimale betalinger for at udligne al gæld",
+    "noDebts": "Alt er udlignet!",
+    "markAsPaid": "Marker som betalt",
+    "export": "Eksporter",
+    "exportExpenses": "Eksporter udgifter",
+    "exportFormat": "Format",
+    "exportDateRange": "Datointerval",
+    "exportFrom": "Fra",
+    "exportTo": "Til",
+    "exportAll": "Alt tid"
   },
   "subscriptions": {
     "title": "Abonnementer",
@@ -183,7 +229,11 @@
     "noDevices": "Ingen enheder registreret endnu",
     "devicePending": "Afventer godkendelse",
     "encryptedData": "Krypteret — åbn på din enhed for at se",
-    "manageDevices": "Administrer enheder"
+    "manageDevices": "Administrer enheder",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Skylder dig",
@@ -298,6 +348,56 @@
     "checkStatus": "Tjek Status",
     "checkAndKeys": "Synkroniseringsnøgler",
     "pendingDeviceCount": "{{count}} enhed(er) venter på godkendelse",
-    "approveNow": "Godkend nu"
+    "approveNow": "Godkend nu",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Madplan",
+    "addMeal": "Planlæg et måltid",
+    "empty": "Ingen planlagte måltider",
+    "breakfast": "Morgenmad",
+    "lunch": "Frokost",
+    "dinner": "Aftensmad",
+    "snack": "Snack",
+    "ingredients": "Ingredienser",
+    "addToShopping": "Tilføj til indkøbsliste",
+    "noIngredients": "Ingen ingredienser at tilføje",
+    "addedToShopping": "ingredienser tilføjet til indkøbsliste"
+  },
+  "leaderboard": {
+    "title": "Rangliste",
+    "points": "point",
+    "you": "dig"
+  },
+  "roles": {
+    "admin": "Admin",
+    "member": "Medlem",
+    "limited": "Begrænset",
+    "changeRole": "Skift rolle",
+    "onlyAdmins": "Kun administratorer kan ændre roller",
+    "lastAdmin": "Kan ikke fjerne den sidste administrator"
+  },
+  "export": {
+    "fullExport": "Eksporter alle data",
+    "fullExportDesc": "Download alle husstandsdata som JSON",
+    "exporting": "Eksporterer..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Forbind Google Kalender",
+    "syncNow": "Synkroniser nu",
+    "lastSynced": "Sidst synkroniseret",
+    "syncing": "Synkroniserer...",
+    "syncSuccess": "Kalender synkroniseret"
   }
 }

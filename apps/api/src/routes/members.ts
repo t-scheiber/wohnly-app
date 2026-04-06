@@ -193,6 +193,62 @@ app.post("/leave", async (c) => {
   return c.json({ success: true, message: "Confirmation created", token: confirmation.confirmToken }, 201);
 });
 
+/** Shared transaction for both GET and POST confirm-leave handlers. */
+async function executeLeaveTransaction(
+  confirmation: { id: string; memberId: string; member: { userId: string; id: string } },
+  householdId: string,
+  memberCount: number,
+) {
+  await prisma.$transaction(async (tx) => {
+    await tx.leaveConfirmation.update({
+      where: { id: confirmation.id },
+      data: { confirmedAt: new Date() },
+    });
+
+    // Clean up the leaving member's nicknames (given and received)
+    await tx.memberNickname.deleteMany({
+      where: { OR: [{ giverId: confirmation.memberId }, { targetId: confirmation.memberId }] },
+    });
+
+    // Clean up the leaving member's devices and key envelopes
+    const userDevices = await tx.device.findMany({
+      where: { userId: confirmation.member.userId },
+      select: { id: true },
+    });
+    if (userDevices.length > 0) {
+      await tx.householdKeyEnvelope.deleteMany({
+        where: { householdId, deviceId: { in: userDevices.map((d) => d.id) } },
+      });
+    }
+
+    // Remove the member's push tokens so orphaned notifications don't send
+    await tx.pushToken.deleteMany({ where: { userId: confirmation.member.userId } });
+
+    await tx.householdMember.delete({
+      where: { id: confirmation.memberId },
+    });
+
+    // If last member, delete the household entirely
+    if (memberCount <= 1) {
+      await tx.householdKeyEnvelope.deleteMany({ where: { householdId } });
+      await tx.todo.deleteMany({ where: { householdId } });
+      await tx.shoppingItem.deleteMany({ where: { householdId } });
+      await tx.choreAssignment.deleteMany({ where: { chore: { householdId } } });
+      await tx.chore.deleteMany({ where: { householdId } });
+      await tx.eventAttendee.deleteMany({ where: { event: { householdId } } });
+      await tx.event.deleteMany({ where: { householdId } });
+      await tx.expenseSplit.deleteMany({ where: { expense: { householdId } } });
+      await tx.expense.deleteMany({ where: { householdId } });
+      await tx.subscriptionSplit.deleteMany({ where: { subscription: { householdId } } });
+      await tx.subscription.deleteMany({ where: { householdId } });
+      await tx.encryptedItem.deleteMany({ where: { householdId } });
+      await tx.householdInvitation.deleteMany({ where: { householdId } });
+      await tx.leaveConfirmation.deleteMany({ where: { householdId, id: { not: confirmation.id } } });
+      await tx.household.delete({ where: { id: householdId } });
+    }
+  });
+}
+
 // GET /api/members/confirm-leave - Confirm leave (from email link)
 app.get("/confirm-leave", async (c) => {
   const token = c.req.query("token");
@@ -213,36 +269,7 @@ app.get("/confirm-leave", async (c) => {
   const householdId = confirmation.member.householdId;
   const memberCount = confirmation.member.household.members.length;
 
-  await prisma.$transaction(async (tx) => {
-    await tx.leaveConfirmation.update({
-      where: { id: confirmation.id },
-      data: { confirmedAt: new Date() },
-    });
-
-    await tx.householdMember.delete({
-      where: { id: confirmation.memberId },
-    });
-
-    // If last member, delete the household entirely
-    if (memberCount <= 1) {
-      // Clean up all household data
-      await tx.householdKeyEnvelope.deleteMany({ where: { householdId } });
-      await tx.todo.deleteMany({ where: { householdId } });
-      await tx.shoppingItem.deleteMany({ where: { householdId } });
-      await tx.choreAssignment.deleteMany({ where: { chore: { householdId } } });
-      await tx.chore.deleteMany({ where: { householdId } });
-      await tx.eventAttendee.deleteMany({ where: { event: { householdId } } });
-      await tx.event.deleteMany({ where: { householdId } });
-      await tx.expenseSplit.deleteMany({ where: { expense: { householdId } } });
-      await tx.expense.deleteMany({ where: { householdId } });
-      await tx.subscriptionSplit.deleteMany({ where: { subscription: { householdId } } });
-      await tx.subscription.deleteMany({ where: { householdId } });
-      await tx.encryptedItem.deleteMany({ where: { householdId } });
-      await tx.householdInvitation.deleteMany({ where: { householdId } });
-      await tx.leaveConfirmation.deleteMany({ where: { householdId, id: { not: confirmation.id } } });
-      await tx.household.delete({ where: { id: householdId } });
-    }
-  });
+  await executeLeaveTransaction(confirmation, householdId, memberCount);
 
   return c.redirect(`${appUrl}?left=true`);
 });
@@ -266,35 +293,7 @@ app.post("/confirm-leave", async (c) => {
   const householdId = confirmation.member.householdId;
   const memberCount = confirmation.member.household.members.length;
 
-  await prisma.$transaction(async (tx) => {
-    await tx.leaveConfirmation.update({
-      where: { id: confirmation.id },
-      data: { confirmedAt: new Date() },
-    });
-
-    await tx.householdMember.delete({
-      where: { id: confirmation.memberId },
-    });
-
-    // If last member, delete the household entirely
-    if (memberCount <= 1) {
-      await tx.householdKeyEnvelope.deleteMany({ where: { householdId } });
-      await tx.todo.deleteMany({ where: { householdId } });
-      await tx.shoppingItem.deleteMany({ where: { householdId } });
-      await tx.choreAssignment.deleteMany({ where: { chore: { householdId } } });
-      await tx.chore.deleteMany({ where: { householdId } });
-      await tx.eventAttendee.deleteMany({ where: { event: { householdId } } });
-      await tx.event.deleteMany({ where: { householdId } });
-      await tx.expenseSplit.deleteMany({ where: { expense: { householdId } } });
-      await tx.expense.deleteMany({ where: { householdId } });
-      await tx.subscriptionSplit.deleteMany({ where: { subscription: { householdId } } });
-      await tx.subscription.deleteMany({ where: { householdId } });
-      await tx.encryptedItem.deleteMany({ where: { householdId } });
-      await tx.householdInvitation.deleteMany({ where: { householdId } });
-      await tx.leaveConfirmation.deleteMany({ where: { householdId, id: { not: confirmation.id } } });
-      await tx.household.delete({ where: { id: householdId } });
-    }
-  });
+  await executeLeaveTransaction(confirmation, householdId, memberCount);
 
   return c.json({ success: true, message: "Successfully left household" });
 });

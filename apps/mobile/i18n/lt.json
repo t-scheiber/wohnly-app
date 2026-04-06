@@ -85,7 +85,17 @@
     "daily": "Kasdien",
     "weekly": "Kas savaitę",
     "biweekly": "Kas dvi savaites",
-    "monthly": "Kas mėnesį"
+    "monthly": "Kas mėnesį",
+    "fairShare": "Teisingas paskirstymas",
+    "thisWeek": "Šią savaitę",
+    "thisMonth": "Šį mėnesį",
+    "allTime": "Visą laiką",
+    "tasks": "užduotys",
+    "noAnalytics": "Dar nėra atliktų namų ruošos darbų. Pradėkite atlikti darbus, kad matytumėte analitiką.",
+    "effortLevel": "Pastangų lygis",
+    "breakMode": "Pertraukos režimas",
+    "breakModeActive": "Namų ruošos darbai pristabdyti",
+    "breakModeUntil": "iki {{date}}"
   },
   "events": {
     "title": "Kalendorius",
@@ -108,7 +118,8 @@
     "calendarSettings": "Kalendoriaus nustatymai",
     "deviceCalendars": "Įrenginio kalendoriai",
     "noCalendars": "Kalendorių nerasta",
-    "grantAccess": "Suteik prieigą prie kalendoriaus, kad matytum savo įrenginio įvykius"
+    "grantAccess": "Suteik prieigą prie kalendoriaus, kad matytum savo įrenginio įvykius",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Išlaidos",
@@ -123,7 +134,42 @@
     "percentage": "Procentais",
     "fixed": "Fiksuota",
     "date": "Data",
-    "selectDate": "Pasirinkti datą"
+    "selectDate": "Pasirinkti datą",
+    "editExpense": "Redaguoti išlaidą",
+    "shares": "Dalys",
+    "splitPerPerson": "Padalijimas vienam asmeniui",
+    "balanced": "Subalansuota",
+    "remaining": "liko {{amount}}",
+    "overBudget": "{{amount}} viršyta",
+    "categories": {
+      "groceries": "Maisto prekės",
+      "dining": "Maitinimas",
+      "rent": "Nuoma",
+      "utilities": "Komunalinės paslaugos",
+      "transport": "Transportas",
+      "entertainment": "Pramogos",
+      "health": "Sveikata",
+      "travel": "Kelionės",
+      "shopping": "Apsipirkimas",
+      "subscriptions": "Prenumeratos",
+      "education": "Švietimas",
+      "pets": "Augintiniai",
+      "gifts": "Dovanos",
+      "household": "Namų ūkis",
+      "other": "Kita"
+    },
+    "allCategories": "Visi",
+    "settleUp": "Atsiskaityti",
+    "settleUpDescription": "Minimalūs mokėjimai visiems skoloms padengti",
+    "noDebts": "Viskas atsiskaityta!",
+    "markAsPaid": "Pažymėti kaip apmokėtą",
+    "export": "Eksportuoti",
+    "exportExpenses": "Eksportuoti išlaidas",
+    "exportFormat": "Formatas",
+    "exportDateRange": "Datų intervalas",
+    "exportFrom": "Nuo",
+    "exportTo": "Iki",
+    "exportAll": "Visą laiką"
   },
   "subscriptions": {
     "title": "Prenumeratos",
@@ -183,7 +229,11 @@
     "noDevices": "Dar nėra registruotų įrenginių",
     "devicePending": "Laukiama patvirtinimo",
     "encryptedData": "Užšifruota — atidaryk savo įrenginyje, kad pamatytum",
-    "manageDevices": "Tvarkyti įrenginius"
+    "manageDevices": "Tvarkyti įrenginius",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Skolingi tau",
@@ -298,6 +348,56 @@
     "checkStatus": "Patikrinkite būseną",
     "checkAndKeys": "Sinchronizavimo klavišai",
     "pendingDeviceCount": "{{count}} įrenginys (-iai) laukia patvirtinimo",
-    "approveNow": "Patvirtinti dabar"
+    "approveNow": "Patvirtinti dabar",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Valgiaraštis",
+    "addMeal": "Planuoti valgį",
+    "empty": "Nėra suplanuotų valgių",
+    "breakfast": "Pusryčiai",
+    "lunch": "Pietūs",
+    "dinner": "Vakarienė",
+    "snack": "Užkandis",
+    "ingredients": "Ingredientai",
+    "addToShopping": "Pridėti į pirkinių sąrašą",
+    "noIngredients": "Nėra ingredientų pridėti",
+    "addedToShopping": "ingredientai pridėti į pirkinių sąrašą"
+  },
+  "leaderboard": {
+    "title": "Lyderių lentelė",
+    "points": "tšk.",
+    "you": "tu"
+  },
+  "roles": {
+    "admin": "Administratorius",
+    "member": "Narys",
+    "limited": "Ribotas",
+    "changeRole": "Keisti vaidmenį",
+    "onlyAdmins": "Tik administratoriai gali keisti vaidmenis",
+    "lastAdmin": "Negalima pašalinti paskutinio administratoriaus"
+  },
+  "export": {
+    "fullExport": "Eksportuoti visus duomenis",
+    "fullExportDesc": "Atsisiųskite visus namų ūkio duomenis kaip JSON",
+    "exporting": "Eksportuojama..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Prijungti „Google“ kalendorių",
+    "syncNow": "Sinchronizuoti dabar",
+    "lastSynced": "Paskutinė sinchronizacija",
+    "syncing": "Sinchronizuojama...",
+    "syncSuccess": "Kalendorius sėkmingai sinchronizuotas"
   }
 }

@@ -85,7 +85,17 @@
     "daily": "Daglega",
     "weekly": "Vikulega",
     "biweekly": "Aðra hverja viku",
-    "monthly": "Mánaðarlega"
+    "monthly": "Mánaðarlega",
+    "fairShare": "Sanngjarn skipting",
+    "thisWeek": "Þessi vika",
+    "thisMonth": "Þessi mánuður",
+    "allTime": "Allan tíma",
+    "tasks": "verkefni",
+    "noAnalytics": "Engin heimilisverk lokið enn. Byrjaðu að ljúka verkum til að sjá greiningu.",
+    "effortLevel": "Áreynslustig",
+    "breakMode": "Hléshamur",
+    "breakModeActive": "Heimilisverk eru í bið",
+    "breakModeUntil": "til {{date}}"
   },
   "events": {
     "title": "Dagatal",
@@ -108,7 +118,8 @@
     "calendarSettings": "Dagatals stillingar",
     "deviceCalendars": "Tækjadagatöl",
     "noCalendars": "Engin dagatöl fundust",
-    "grantAccess": "Veittu dagatalsaðgang til að sjá viðburði tækisins"
+    "grantAccess": "Veittu dagatalsaðgang til að sjá viðburði tækisins",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Útgjöld",
@@ -123,7 +134,42 @@
     "percentage": "Hlutfall",
     "fixed": "Fast",
     "date": "Dagsetning",
-    "selectDate": "Velja dagsetningu"
+    "selectDate": "Velja dagsetningu",
+    "editExpense": "Breyta útgjaldi",
+    "shares": "Hlutir",
+    "splitPerPerson": "Skipting á mann",
+    "balanced": "Í jafnvægi",
+    "remaining": "{{amount}} eftir",
+    "overBudget": "{{amount}} yfir",
+    "categories": {
+      "groceries": "Matvörur",
+      "dining": "Veitingar",
+      "rent": "Leiga",
+      "utilities": "Veitur",
+      "transport": "Samgöngur",
+      "entertainment": "Afþreying",
+      "health": "Heilsa",
+      "travel": "Ferðalög",
+      "shopping": "Innkaup",
+      "subscriptions": "Áskriftir",
+      "education": "Menntun",
+      "pets": "Gæludýr",
+      "gifts": "Gjafir",
+      "household": "Heimili",
+      "other": "Annað"
+    },
+    "allCategories": "Allt",
+    "settleUp": "Gera upp",
+    "settleUpDescription": "Lágmarks greiðslur til að gera upp allar skuldir",
+    "noDebts": "Allt uppgert!",
+    "markAsPaid": "Merkja sem greitt",
+    "export": "Flytja út",
+    "exportExpenses": "Flytja út útgjöld",
+    "exportFormat": "Snið",
+    "exportDateRange": "Tímabil",
+    "exportFrom": "Frá",
+    "exportTo": "Til",
+    "exportAll": "Allan tíma"
   },
   "subscriptions": {
     "title": "Áskriftir",
@@ -183,7 +229,11 @@
     "noDevices": "Engin tæki skráð ennþá",
     "devicePending": "Bíður samþykktar",
     "encryptedData": "Dulkóðað — opnaðu á tækinu þínu til að sjá",
-    "manageDevices": "Stjórna tækjum"
+    "manageDevices": "Stjórna tækjum",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Skulda þér",
@@ -298,6 +348,56 @@
     "checkStatus": "Athugaðu stöðu",
     "checkAndKeys": "Samstillingarlyklar",
     "pendingDeviceCount": "{{count}} tæki/tæki bíða eftir samþykki",
-    "approveNow": "Samþykkja núna"
+    "approveNow": "Samþykkja núna",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Matseðill",
+    "addMeal": "Skipuleggja máltíð",
+    "empty": "Engar máltíðir skipulagðar",
+    "breakfast": "Morgunmatur",
+    "lunch": "Hádegismatur",
+    "dinner": "Kvöldmatur",
+    "snack": "Snarl",
+    "ingredients": "Hráefni",
+    "addToShopping": "Bæta á innkaupalista",
+    "noIngredients": "Engin hráefni til að bæta við",
+    "addedToShopping": "hráefni bætt á innkaupalista"
+  },
+  "leaderboard": {
+    "title": "Stigatafla",
+    "points": "stig",
+    "you": "þú"
+  },
+  "roles": {
+    "admin": "Stjórnandi",
+    "member": "Meðlimur",
+    "limited": "Takmarkaður",
+    "changeRole": "Breyta hlutverki",
+    "onlyAdmins": "Aðeins stjórnendur geta breytt hlutverkum",
+    "lastAdmin": "Get ekki fjarlægt síðasta stjórnandann"
+  },
+  "export": {
+    "fullExport": "Flytja út öll gögn",
+    "fullExportDesc": "Hala niður öllum heimilgögnum sem JSON",
+    "exporting": "Flytur út..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Tengja Google dagatal",
+    "syncNow": "Samstilla núna",
+    "lastSynced": "Síðast samstillt",
+    "syncing": "Samstilling...",
+    "syncSuccess": "Dagatal samstillt"
   }
 }

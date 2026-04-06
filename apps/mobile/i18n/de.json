@@ -118,7 +118,8 @@
     "calendarSettings": "Kalender-Einstellungen",
     "deviceCalendars": "Geräte-Kalender",
     "noCalendars": "Keine Kalender gefunden",
-    "grantAccess": "Kalenderzugriff gewähren, um Gerätetermine anzuzeigen"
+    "grantAccess": "Kalenderzugriff gewähren, um Gerätetermine anzuzeigen",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Ausgaben",
@@ -228,7 +229,11 @@
     "noDevices": "Noch keine Geräte registriert",
     "devicePending": "Wartet auf Genehmigung",
     "manageDevices": "Geräte verwalten",
-    "encryptedData": "Verschlüsselt — auf deinem Gerät öffnen"
+    "encryptedData": "Verschlüsselt — auf deinem Gerät öffnen",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "devices": {
     "approved": "Genehmigt",
@@ -333,7 +338,8 @@
     "checkAndKeys": "Synchronisieren",
     "pendingDeviceCount": "{{count}} Gerät(e) warten auf Genehmigung",
     "approveNow": "Jetzt prüfen",
-    "contactSupport": "Support kontaktieren"
+    "contactSupport": "Support kontaktieren",
+    "enableNotificationsBanner": "Aktiviere Benachrichtigungen, um informiert zu werden, wenn dieses Gerät genehmigt wird."
   },
   "meals": {
     "title": "Essensplan",
@@ -382,5 +388,16 @@
     "shoppingEmpty": "Einkaufsliste ist leer",
     "itemsLeft": "{{count}} übrig",
     "moreItems": "+{{count}} weitere"
+  },
+  "finances": {
+    "title": "Finanzen",
+    "analytics": "Ausgabenanalyse"
+  },
+  "tabs": {
+    "home": "Start",
+    "lists": "Listen",
+    "chores": "Aufgaben",
+    "finances": "Finanzen",
+    "more": "Mehr"
   }
 }
