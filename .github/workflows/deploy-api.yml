@@ -22,10 +22,14 @@ jobs:
           script: |
             export GIT_SSH_COMMAND="ssh -i /root/.ssh/wohnly_deploy -o StrictHostKeyChecking=no"
             cd /var/www/wohnly
-            git pull origin main
+            git stash 2>/dev/null || true
+            git fetch origin main
+            git reset --hard origin/main
             npm ci
-            npx prisma generate --schema=apps/api/prisma/schema.prisma
-            npx prisma db push --schema=apps/api/prisma/schema.prisma
-            pm2 delete wohnly-api || true
+            cd apps/api
+            npx prisma generate
+            npx prisma db push --accept-data-loss
+            cd ../..
+            pm2 delete wohnly-api 2>/dev/null || true
             pm2 start deploy/pm2.api.config.cjs --only wohnly-api --update-env
             pm2 save
