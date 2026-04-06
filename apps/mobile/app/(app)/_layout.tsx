@@ -13,6 +13,7 @@ export default function AppLayout() {
   return (
     <Tabs
       screenOptions={{
+        sceneStyle: { flex: 1 },
         tabBarActiveTintColor: colors.tabIconSelected,
         tabBarInactiveTintColor: colors.tabIconDefault,
         tabBarStyle: {
