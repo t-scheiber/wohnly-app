@@ -19,17 +19,35 @@ export function DeviceOnboardingBanners() {
   const { t } = useTranslation();
   const router = useRouter();
   const { data: household } = useHousehold();
-  const { data: pendingData, refetch: refetchPending } = usePendingDevices();
+  const { data: pendingData } = usePendingDevices();
   const { device: currentDevice, refetch: refetchCurrent, isLoading: deviceLoading } = useCurrentDevice();
   const notifications = useNotificationSettings();
   const [syncing, setSyncing] = useState(false);
+  const [keyChecked, setKeyChecked] = useState(false);
 
-  if (deviceLoading || !household?.householdId) return null;
+  const householdId = household?.householdId ?? null;
+  const hasKey = householdId ? hasHouseholdKey(householdId) : false;
 
-  const householdId = household.householdId;
-  const hasKey = hasHouseholdKey(householdId);
+  // Auto-fetch key when device is approved but key is missing (runs once)
+  useEffect(() => {
+    if (!householdId || hasKey || keyChecked) return;
+    if (currentDevice?.status !== "approved") return;
+    setKeyChecked(true);
+    fetchAndCacheHouseholdKey(householdId).then(() => refetchCurrent());
+  }, [householdId, hasKey, keyChecked, currentDevice?.status]);
+
+  if (deviceLoading || !householdId) return null;
+
+  // Don't show "pending" banner if there are no other approved devices
+  // in the household — nobody can approve, so it's not actionable
   const isPending = currentDevice?.status === "pending";
   const hasPendingOthers = (pendingData?.count ?? 0) > 0;
+
+  // If device is already approved and has the key, nothing to show
+  if (currentDevice?.status === "approved" && hasKey) {
+    // Only show if other devices need approval
+    if (!hasPendingOthers) return null;
+  }
 
   const handleSyncKeys = async () => {
     setSyncing(true);

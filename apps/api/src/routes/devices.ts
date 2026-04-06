@@ -15,6 +15,14 @@ app.post("/register", async (c) => {
 
   if (!publicKey) return c.json({ error: "publicKey is required" }, 400);
 
+  // Deduplicate: if a device with the same publicKey already exists for this user, return it
+  const existingDevice = await prisma.device.findFirst({
+    where: { userId, publicKey },
+  });
+  if (existingDevice) {
+    return c.json({ deviceId: existingDevice.id, status: existingDevice.status });
+  }
+
   // Check if user already has any approved device
   const existingApproved = await prisma.device.findFirst({
     where: { userId, status: "approved" },

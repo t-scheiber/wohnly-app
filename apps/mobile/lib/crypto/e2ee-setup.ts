@@ -25,10 +25,24 @@ export async function ensureDeviceRegistered(): Promise<{
   // Generate new keypair
   const { publicKey, privateKey } = await generateDeviceKeys();
 
-  // Register with server
+  // Build a descriptive device name
+  let deviceName = Platform.OS;
+  if (Platform.OS === "web" && typeof navigator !== "undefined") {
+    const ua = navigator.userAgent;
+    if (ua.includes("Macintosh")) deviceName = "macOS Web";
+    else if (ua.includes("Windows")) deviceName = "Windows Web";
+    else if (ua.includes("Linux")) deviceName = "Linux Web";
+    else deviceName = "Web Browser";
+  } else if (Platform.OS === "ios") {
+    deviceName = "iPhone";
+  } else if (Platform.OS === "android") {
+    deviceName = "Android";
+  }
+
+  // Register with server (deduplicates by publicKey)
   const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
     publicKey,
-    name: Platform.OS,
+    name: deviceName,
   });
 
   // Save to secure storage

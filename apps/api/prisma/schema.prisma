@@ -564,6 +564,7 @@ model Device {
   user      User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   envelopes HouseholdKeyEnvelope[]
 
+  @@unique([userId, publicKey])
   @@index([userId])
   @@index([userId, status])
 }
