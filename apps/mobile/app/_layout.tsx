@@ -206,22 +206,26 @@ export default function RootLayout() {
   return (
     <ThemeContext.Provider value={{ mode: theme.mode, colorScheme: theme.colorScheme, setMode: theme.setMode }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <SafeAreaProvider>
+        {Platform.OS === "web" ? (
           <QueryClientProvider client={queryClient}>
             <AuthGate>
-              <StatusBar style={theme.colorScheme === "dark" ? "light" : "dark"} />
-              {Platform.OS === "web" ? (
-                <View style={{ flex: 1, alignItems: "center", backgroundColor: Colors[theme.colorScheme].background }}>
-                  <View style={{ flex: 1, width: "100%", maxWidth: 600 }}>
-                    <Slot />
-                  </View>
+              <View style={{ flex: 1, alignItems: "center", backgroundColor: Colors[theme.colorScheme].background }}>
+                <View style={{ flex: 1, width: "100%", maxWidth: 600 }}>
+                  <Slot />
                 </View>
-              ) : (
-                <Slot />
-              )}
+              </View>
             </AuthGate>
           </QueryClientProvider>
-        </SafeAreaProvider>
+        ) : (
+          <SafeAreaProvider>
+            <QueryClientProvider client={queryClient}>
+              <AuthGate>
+                <StatusBar style={theme.colorScheme === "dark" ? "light" : "dark"} />
+                <Slot />
+              </AuthGate>
+            </QueryClientProvider>
+          </SafeAreaProvider>
+        )}
       </GestureHandlerRootView>
     </ThemeContext.Provider>
   );
