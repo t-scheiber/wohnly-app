@@ -85,7 +85,17 @@
     "daily": "Codziennie",
     "weekly": "Co tydzień",
     "biweekly": "Co dwa tygodnie",
-    "monthly": "Co miesiąc"
+    "monthly": "Co miesiąc",
+    "fairShare": "Sprawiedliwy podział",
+    "thisWeek": "Ten tydzień",
+    "thisMonth": "Ten miesiąc",
+    "allTime": "Cały czas",
+    "tasks": "zadania",
+    "noAnalytics": "Brak ukończonych obowiązków. Zacznij wykonywać obowiązki, aby zobaczyć analizy.",
+    "effortLevel": "Poziom wysiłku",
+    "breakMode": "Tryb przerwy",
+    "breakModeActive": "Obowiązki są wstrzymane",
+    "breakModeUntil": "do {{date}}"
   },
   "events": {
     "title": "Kalendarz",
@@ -108,7 +118,8 @@
     "calendarSettings": "Ustawienia kalendarza",
     "deviceCalendars": "Kalendarze urządzenia",
     "noCalendars": "Nie znaleziono kalendarzy",
-    "grantAccess": "Zezwól na dostęp do kalendarza, aby zobaczyć wydarzenia z twojego urządzenia"
+    "grantAccess": "Zezwól na dostęp do kalendarza, aby zobaczyć wydarzenia z twojego urządzenia",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Wydatki",
@@ -123,7 +134,42 @@
     "percentage": "Procentowy",
     "fixed": "Stały",
     "date": "Data",
-    "selectDate": "Wybierz datę"
+    "selectDate": "Wybierz datę",
+    "editExpense": "Edytuj wydatek",
+    "shares": "Udziały",
+    "splitPerPerson": "Podział na osobę",
+    "balanced": "Zbilansowane",
+    "remaining": "{{amount}} pozostało",
+    "overBudget": "{{amount}} ponad budżet",
+    "categories": {
+      "groceries": "Zakupy spożywcze",
+      "dining": "Jedzenie na mieście",
+      "rent": "Czynsz",
+      "utilities": "Rachunki",
+      "transport": "Transport",
+      "entertainment": "Rozrywka",
+      "health": "Zdrowie",
+      "travel": "Podróże",
+      "shopping": "Zakupy",
+      "subscriptions": "Subskrypcje",
+      "education": "Edukacja",
+      "pets": "Zwierzęta",
+      "gifts": "Prezenty",
+      "household": "Gospodarstwo domowe",
+      "other": "Inne"
+    },
+    "allCategories": "Wszystkie",
+    "settleUp": "Rozlicz",
+    "settleUpDescription": "Minimalne płatności do rozliczenia wszystkich długów",
+    "noDebts": "Wszystko rozliczone!",
+    "markAsPaid": "Oznacz jako zapłacone",
+    "export": "Eksportuj",
+    "exportExpenses": "Eksportuj wydatki",
+    "exportFormat": "Format",
+    "exportDateRange": "Zakres dat",
+    "exportFrom": "Od",
+    "exportTo": "Do",
+    "exportAll": "Cały czas"
   },
   "subscriptions": {
     "title": "Subskrypcje",
@@ -183,7 +229,11 @@
     "noDevices": "Brak zarejestrowanych urządzeń",
     "devicePending": "Oczekuje na zatwierdzenie",
     "encryptedData": "Zaszyfrowane — otwórz na swoim urządzeniu, aby zobaczyć",
-    "manageDevices": "Zarządzaj urządzeniami"
+    "manageDevices": "Zarządzaj urządzeniami",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Należne tobie",
@@ -298,6 +348,56 @@
     "checkStatus": "Sprawdź stan",
     "checkAndKeys": "Synchronizuj klucze",
     "pendingDeviceCount": "Urządzenia ({{count}}) czekają na zatwierdzenie",
-    "approveNow": "Zatwierdź teraz"
+    "approveNow": "Zatwierdź teraz",
+    "enableNotificationsBanner": "Włącz powiadomienia, aby otrzymać alert po zatwierdzeniu tego urządzenia."
+  },
+  "finances": {
+    "title": "Finanse",
+    "analytics": "Analiza wydatków"
+  },
+  "tabs": {
+    "home": "Główna",
+    "lists": "Listy",
+    "chores": "Obowiązki",
+    "finances": "Finanse",
+    "more": "Więcej"
+  },
+  "meals": {
+    "title": "Plan posiłków",
+    "addMeal": "Zaplanuj posiłek",
+    "empty": "Brak zaplanowanych posiłków",
+    "breakfast": "Śniadanie",
+    "lunch": "Obiad",
+    "dinner": "Kolacja",
+    "snack": "Przekąska",
+    "ingredients": "Składniki",
+    "addToShopping": "Dodaj do listy zakupów",
+    "noIngredients": "Brak składników do dodania",
+    "addedToShopping": "składniki dodane do listy zakupów"
+  },
+  "leaderboard": {
+    "title": "Ranking",
+    "points": "pkt",
+    "you": "ty"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "member": "Członek",
+    "limited": "Ograniczony",
+    "changeRole": "Zmień rolę",
+    "onlyAdmins": "Tylko administratorzy mogą zmieniać role",
+    "lastAdmin": "Nie można usunąć ostatniego administratora"
+  },
+  "export": {
+    "fullExport": "Eksportuj wszystkie dane",
+    "fullExportDesc": "Pobierz wszystkie dane gospodarstwa domowego jako JSON",
+    "exporting": "Eksportowanie..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Połącz z Kalendarzem Google",
+    "syncNow": "Synchronizuj teraz",
+    "lastSynced": "Ostatnia synchronizacja",
+    "syncing": "Synchronizowanie...",
+    "syncSuccess": "Kalendarz zsynchronizowany pomyślnie"
   }
 }

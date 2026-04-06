@@ -85,7 +85,17 @@
     "daily": "Diário",
     "weekly": "Semanal",
     "biweekly": "Quinzenal",
-    "monthly": "Mensal"
+    "monthly": "Mensal",
+    "fairShare": "Divisão justa",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mês",
+    "allTime": "Todo o período",
+    "tasks": "tarefas",
+    "noAnalytics": "Ainda não há tarefas concluídas. Comece a concluir tarefas para ver análises.",
+    "effortLevel": "Nível de esforço",
+    "breakMode": "Modo pausa",
+    "breakModeActive": "As tarefas estão pausadas",
+    "breakModeUntil": "até {{date}}"
   },
   "events": {
     "title": "Calendário",
@@ -108,7 +118,8 @@
     "calendarSettings": "Definições do calendário",
     "deviceCalendars": "Calendários do dispositivo",
     "noCalendars": "Nenhum calendário encontrado",
-    "grantAccess": "Permite o acesso ao calendário para veres os eventos do teu dispositivo"
+    "grantAccess": "Permite o acesso ao calendário para veres os eventos do teu dispositivo",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Despesas",
@@ -123,7 +134,42 @@
     "percentage": "Percentagem",
     "fixed": "Fixo",
     "date": "Data",
-    "selectDate": "Selecionar data"
+    "selectDate": "Selecionar data",
+    "editExpense": "Editar despesa",
+    "shares": "Partes",
+    "splitPerPerson": "Divisão por pessoa",
+    "balanced": "Equilibrado",
+    "remaining": "{{amount}} restante",
+    "overBudget": "{{amount}} acima",
+    "categories": {
+      "groceries": "Supermercado",
+      "dining": "Restaurantes",
+      "rent": "Aluguel",
+      "utilities": "Contas",
+      "transport": "Transporte",
+      "entertainment": "Entretenimento",
+      "health": "Saúde",
+      "travel": "Viagens",
+      "shopping": "Compras",
+      "subscriptions": "Assinaturas",
+      "education": "Educação",
+      "pets": "Animais",
+      "gifts": "Presentes",
+      "household": "Casa",
+      "other": "Outro"
+    },
+    "allCategories": "Todos",
+    "settleUp": "Acertar contas",
+    "settleUpDescription": "Pagamentos mínimos para quitar todas as dívidas",
+    "noDebts": "Tudo acertado!",
+    "markAsPaid": "Marcar como pago",
+    "export": "Exportar",
+    "exportExpenses": "Exportar despesas",
+    "exportFormat": "Formato",
+    "exportDateRange": "Período",
+    "exportFrom": "De",
+    "exportTo": "Até",
+    "exportAll": "Todo o período"
   },
   "subscriptions": {
     "title": "Subscrições",
@@ -183,7 +229,11 @@
     "noDevices": "Nenhum dispositivo registado ainda",
     "devicePending": "A aguardar aprovação",
     "encryptedData": "Encriptado — abre no teu dispositivo para ver",
-    "manageDevices": "Gerir dispositivos"
+    "manageDevices": "Gerir dispositivos",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Devem-te",
@@ -298,6 +348,56 @@
     "checkStatus": "Verifique o status",
     "checkAndKeys": "Chaves de sincronização",
     "pendingDeviceCount": "{{count}} dispositivos aguardando aprovação",
-    "approveNow": "Aprovar agora"
+    "approveNow": "Aprovar agora",
+    "enableNotificationsBanner": "Ativa as notificações para seres alertado quando este dispositivo for aprovado."
+  },
+  "finances": {
+    "title": "Finanças",
+    "analytics": "Análise de gastos"
+  },
+  "tabs": {
+    "home": "Início",
+    "lists": "Listas",
+    "chores": "Tarefas",
+    "finances": "Finanças",
+    "more": "Mais"
+  },
+  "meals": {
+    "title": "Plano de refeições",
+    "addMeal": "Planejar uma refeição",
+    "empty": "Nenhuma refeição planejada",
+    "breakfast": "Café da manhã",
+    "lunch": "Almoço",
+    "dinner": "Jantar",
+    "snack": "Lanche",
+    "ingredients": "Ingredientes",
+    "addToShopping": "Adicionar à lista de compras",
+    "noIngredients": "Sem ingredientes para adicionar",
+    "addedToShopping": "ingredientes adicionados à lista de compras"
+  },
+  "leaderboard": {
+    "title": "Classificação",
+    "points": "pts",
+    "you": "você"
+  },
+  "roles": {
+    "admin": "Administrador",
+    "member": "Membro",
+    "limited": "Limitado",
+    "changeRole": "Alterar função",
+    "onlyAdmins": "Apenas administradores podem alterar funções",
+    "lastAdmin": "Não é possível remover o último administrador"
+  },
+  "export": {
+    "fullExport": "Exportar todos os dados",
+    "fullExportDesc": "Baixar todos os dados da casa como JSON",
+    "exporting": "Exportando..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Conectar Google Agenda",
+    "syncNow": "Sincronizar agora",
+    "lastSynced": "Última sincronização",
+    "syncing": "Sincronizando...",
+    "syncSuccess": "Agenda sincronizada com sucesso"
   }
 }

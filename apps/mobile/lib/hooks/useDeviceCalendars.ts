@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Platform } from "react-native";
+import { Platform, Linking, AppState } from "react-native";
 import * as Calendar from "expo-calendar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -25,10 +25,18 @@ interface DeviceEvent {
 
 export function useDeviceCalendars() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [permissionDenied, setPermissionDenied] = useState(false);
   const [calendars, setCalendars] = useState<DeviceCalendar[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deviceEvents, setDeviceEvents] = useState<DeviceEvent[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const checkPermission = useCallback(async () => {
+    if (Platform.OS === "web") return;
+    const { status } = await Calendar.getCalendarPermissionsAsync();
+    setHasPermission(status === "granted");
+    setPermissionDenied(status === "denied");
+  }, []);
 
   // Load saved selection and check permission on mount
   useEffect(() => {
@@ -42,11 +50,17 @@ export function useDeviceCalendars() {
       }
     });
 
-    // Check existing permission status
-    Calendar.getCalendarPermissionsAsync().then(({ status }) => {
-      setHasPermission(status === "granted");
+    checkPermission();
+  }, [checkPermission]);
+
+  // Re-check permission when app comes back from Settings
+  useEffect(() => {
+    if (Platform.OS === "web") return;
+    const sub = AppState.addEventListener("change", (state) => {
+      if (state === "active") checkPermission();
     });
-  }, []);
+    return () => sub.remove();
+  }, [checkPermission]);
 
   // Save selection to storage when it changes
   useEffect(() => {
@@ -64,7 +78,13 @@ export function useDeviceCalendars() {
     const { status } = await Calendar.requestCalendarPermissionsAsync();
     const granted = status === "granted";
     setHasPermission(granted);
+    setPermissionDenied(status === "denied");
     return granted;
+  }, []);
+
+  /** Opens the app's system settings so the user can enable calendar access manually. */
+  const openSettings = useCallback(() => {
+    Linking.openSettings();
   }, []);
 
   const loadCalendars = useCallback(async () => {
@@ -128,11 +148,13 @@ export function useDeviceCalendars() {
 
   return {
     hasPermission,
+    permissionDenied,
     calendars,
     selectedIds,
     deviceEvents,
     loading,
     requestPermission,
+    openSettings,
     loadCalendars,
     toggleCalendar,
     fetchEvents,

@@ -85,7 +85,17 @@
     "daily": "Καθημερινά",
     "weekly": "Εβδομαδιαία",
     "biweekly": "Κάθε δύο εβδομάδες",
-    "monthly": "Μηνιαία"
+    "monthly": "Μηνιαία",
+    "fairShare": "Δίκαιη κατανομή",
+    "thisWeek": "Αυτή την εβδομάδα",
+    "thisMonth": "Αυτόν τον μήνα",
+    "allTime": "Συνολικά",
+    "tasks": "εργασίες",
+    "noAnalytics": "Δεν έχουν ολοκληρωθεί δουλειές ακόμα. Ξεκινήστε να ολοκληρώνετε δουλειές για να δείτε αναλύσεις.",
+    "effortLevel": "Επίπεδο προσπάθειας",
+    "breakMode": "Λειτουργία παύσης",
+    "breakModeActive": "Οι δουλειές είναι σε παύση",
+    "breakModeUntil": "μέχρι {{date}}"
   },
   "events": {
     "title": "Ημερολόγιο",
@@ -108,7 +118,8 @@
     "calendarSettings": "Ρυθμίσεις ημερολογίου",
     "deviceCalendars": "Ημερολόγια συσκευής",
     "noCalendars": "Δε βρέθηκαν ημερολόγια",
-    "grantAccess": "Δώσε πρόσβαση στο ημερολόγιο για να δεις τα γεγονότα της συσκευής σου"
+    "grantAccess": "Δώσε πρόσβαση στο ημερολόγιο για να δεις τα γεγονότα της συσκευής σου",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Έξοδα",
@@ -123,7 +134,42 @@
     "percentage": "Ποσοστό",
     "fixed": "Σταθερό ποσό",
     "date": "Ημερομηνία",
-    "selectDate": "Επιλογή ημερομηνίας"
+    "selectDate": "Επιλογή ημερομηνίας",
+    "editExpense": "Επεξεργασία εξόδου",
+    "shares": "Μερίδια",
+    "splitPerPerson": "Χωρισμός ανά άτομο",
+    "balanced": "Ισορροπημένο",
+    "remaining": "{{amount}} απομένουν",
+    "overBudget": "{{amount}} πάνω",
+    "categories": {
+      "groceries": "Τρόφιμα",
+      "dining": "Εστίαση",
+      "rent": "Ενοίκιο",
+      "utilities": "Λογαριασμοί",
+      "transport": "Μεταφορές",
+      "entertainment": "Ψυχαγωγία",
+      "health": "Υγεία",
+      "travel": "Ταξίδια",
+      "shopping": "Αγορές",
+      "subscriptions": "Συνδρομές",
+      "education": "Εκπαίδευση",
+      "pets": "Κατοικίδια",
+      "gifts": "Δώρα",
+      "household": "Νοικοκυριό",
+      "other": "Άλλο"
+    },
+    "allCategories": "Όλα",
+    "settleUp": "Τακτοποίηση",
+    "settleUpDescription": "Ελάχιστες πληρωμές για εξόφληση όλων των χρεών",
+    "noDebts": "Όλα τακτοποιήθηκαν!",
+    "markAsPaid": "Σημείωση ως πληρωμένο",
+    "export": "Εξαγωγή",
+    "exportExpenses": "Εξαγωγή εξόδων",
+    "exportFormat": "Μορφή",
+    "exportDateRange": "Εύρος ημερομηνιών",
+    "exportFrom": "Από",
+    "exportTo": "Έως",
+    "exportAll": "Συνολικά"
   },
   "subscriptions": {
     "title": "Συνδρομές",
@@ -183,7 +229,11 @@
     "noDevices": "Δεν υπάρχουν καταχωρημένες συσκευές ακόμα",
     "devicePending": "Αναμονή για έγκριση",
     "encryptedData": "Κρυπτογραφημένο — άνοιξε στη συσκευή σου για προβολή",
-    "manageDevices": "Διαχείριση συσκευών"
+    "manageDevices": "Διαχείριση συσκευών",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Σου χρωστάνε",
@@ -298,6 +348,56 @@
     "checkStatus": "Ελέγξτε την κατάσταση",
     "checkAndKeys": "Πλήκτρα συγχρονισμού",
     "pendingDeviceCount": "{{count}} συσκευές σε αναμονή για έγκριση",
-    "approveNow": "Έγκριση τώρα"
+    "approveNow": "Έγκριση τώρα",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Πλάνο γευμάτων",
+    "addMeal": "Σχεδιάστε ένα γεύμα",
+    "empty": "Δεν υπάρχουν προγραμματισμένα γεύματα",
+    "breakfast": "Πρωινό",
+    "lunch": "Μεσημεριανό",
+    "dinner": "Δείπνο",
+    "snack": "Σνακ",
+    "ingredients": "Υλικά",
+    "addToShopping": "Προσθήκη στη λίστα αγορών",
+    "noIngredients": "Δεν υπάρχουν υλικά προς προσθήκη",
+    "addedToShopping": "υλικά προστέθηκαν στη λίστα αγορών"
+  },
+  "leaderboard": {
+    "title": "Κατάταξη",
+    "points": "πόν.",
+    "you": "εσύ"
+  },
+  "roles": {
+    "admin": "Διαχειριστής",
+    "member": "Μέλος",
+    "limited": "Περιορισμένος",
+    "changeRole": "Αλλαγή ρόλου",
+    "onlyAdmins": "Μόνο οι διαχειριστές μπορούν να αλλάξουν ρόλους",
+    "lastAdmin": "Δεν είναι δυνατή η αφαίρεση του τελευταίου διαχειριστή"
+  },
+  "export": {
+    "fullExport": "Εξαγωγή όλων των δεδομένων",
+    "fullExportDesc": "Λήψη όλων των δεδομένων νοικοκυριού ως JSON",
+    "exporting": "Εξαγωγή..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Σύνδεση Ημερολογίου Google",
+    "syncNow": "Συγχρονισμός τώρα",
+    "lastSynced": "Τελευταίος συγχρονισμός",
+    "syncing": "Συγχρονισμός...",
+    "syncSuccess": "Το ημερολόγιο συγχρονίστηκε επιτυχώς"
   }
 }

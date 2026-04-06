@@ -85,7 +85,17 @@
     "daily": "Ежедневно",
     "weekly": "Ежеседмично",
     "biweekly": "На две седмици",
-    "monthly": "Ежемесечно"
+    "monthly": "Ежемесечно",
+    "fairShare": "Справедлив дял",
+    "thisWeek": "Тази седмица",
+    "thisMonth": "Този месец",
+    "allTime": "Всички времена",
+    "tasks": "задачи",
+    "noAnalytics": "Все още няма завършени задължения. Започнете да изпълнявате задължения, за да видите анализа.",
+    "effortLevel": "Ниво на усилие",
+    "breakMode": "Режим на почивка",
+    "breakModeActive": "Задълженията са на пауза",
+    "breakModeUntil": "до {{date}}"
   },
   "events": {
     "title": "Календар",
@@ -108,7 +118,8 @@
     "calendarSettings": "Настройки на календара",
     "deviceCalendars": "Календари на устройството",
     "noCalendars": "Няма намерени календари",
-    "grantAccess": "Разреши достъп до календара, за да виждаш събитията от устройството си"
+    "grantAccess": "Разреши достъп до календара, за да виждаш събитията от устройството си",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Разходи",
@@ -123,7 +134,42 @@
     "percentage": "Процентно",
     "fixed": "Фиксирано",
     "date": "Дата",
-    "selectDate": "Избери дата"
+    "selectDate": "Избери дата",
+    "editExpense": "Редактиране на разход",
+    "shares": "Дялове",
+    "splitPerPerson": "Разделение на човек",
+    "balanced": "Балансирано",
+    "remaining": "остават {{amount}}",
+    "overBudget": "{{amount}} над бюджета",
+    "categories": {
+      "groceries": "Хранителни стоки",
+      "dining": "Хранене навън",
+      "rent": "Наем",
+      "utilities": "Комунални услуги",
+      "transport": "Транспорт",
+      "entertainment": "Забавления",
+      "health": "Здраве",
+      "travel": "Пътуване",
+      "shopping": "Пазаруване",
+      "subscriptions": "Абонаменти",
+      "education": "Образование",
+      "pets": "Домашни любимци",
+      "gifts": "Подаръци",
+      "household": "Домакинство",
+      "other": "Друго"
+    },
+    "allCategories": "Всички",
+    "settleUp": "Разплащане",
+    "settleUpDescription": "Минимални плащания за уреждане на всички дългове",
+    "noDebts": "Всичко е уредено!",
+    "markAsPaid": "Маркирай като платено",
+    "export": "Експортиране",
+    "exportExpenses": "Експортиране на разходи",
+    "exportFormat": "Формат",
+    "exportDateRange": "Период",
+    "exportFrom": "От",
+    "exportTo": "До",
+    "exportAll": "Всички времена"
   },
   "subscriptions": {
     "title": "Абонаменти",
@@ -183,7 +229,11 @@
     "noDevices": "Все още няма регистрирани устройства",
     "devicePending": "Изчаква одобрение",
     "encryptedData": "Криптирано — отвори на устройството си, за да видиш",
-    "manageDevices": "Управление на устройства"
+    "manageDevices": "Управление на устройства",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Дължат ти",
@@ -298,6 +348,56 @@
     "checkStatus": "Проверка на състоянието",
     "checkAndKeys": "Ключове за синхронизиране",
     "pendingDeviceCount": "{{count}} устройство(а) чакат одобрение",
-    "approveNow": "Одобрете сега"
+    "approveNow": "Одобрете сега",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Хранителен план",
+    "addMeal": "Планирай ястие",
+    "empty": "Няма планирани ястия",
+    "breakfast": "Закуска",
+    "lunch": "Обяд",
+    "dinner": "Вечеря",
+    "snack": "Лека закуска",
+    "ingredients": "Съставки",
+    "addToShopping": "Добави в списъка за пазаруване",
+    "noIngredients": "Няма съставки за добавяне",
+    "addedToShopping": "съставки добавени в списъка за пазаруване"
+  },
+  "leaderboard": {
+    "title": "Класация",
+    "points": "т.",
+    "you": "ти"
+  },
+  "roles": {
+    "admin": "Администратор",
+    "member": "Член",
+    "limited": "Ограничен",
+    "changeRole": "Промяна на ролята",
+    "onlyAdmins": "Само администраторите могат да променят ролите",
+    "lastAdmin": "Не може да се премахне последният администратор"
+  },
+  "export": {
+    "fullExport": "Експортиране на всички данни",
+    "fullExportDesc": "Изтеглете всички данни на домакинството като JSON",
+    "exporting": "Експортиране..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Свържи Google Календар",
+    "syncNow": "Синхронизирай сега",
+    "lastSynced": "Последна синхронизация",
+    "syncing": "Синхронизиране...",
+    "syncSuccess": "Календарът е синхронизиран успешно"
   }
 }

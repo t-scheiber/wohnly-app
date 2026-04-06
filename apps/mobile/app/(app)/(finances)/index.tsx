@@ -270,26 +270,25 @@ export default function FinancesScreen() {
 
       {/* Tab switcher */}
       <View style={{ flexDirection: "row", paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
-        {(["expenses", "subscriptions"] as const).map((t) => (
+        {(["expenses", "subscriptions"] as const).map((tabKey) => (
           <TouchableOpacity
-            key={t}
-            onPress={() => setTab(t)}
+            key={tabKey}
+            onPress={() => setTab(tabKey)}
             style={{
               flex: 1,
               paddingVertical: 10,
               borderRadius: 8,
-              backgroundColor: tab === t ? colors.primary : colors.muted,
+              backgroundColor: tab === tabKey ? colors.primary : colors.muted,
               alignItems: "center",
             }}
           >
             <Text
               style={{
-                color: tab === t ? colors.primaryForeground : colors.text,
+                color: tab === tabKey ? colors.primaryForeground : colors.text,
                 fontWeight: "600",
-                textTransform: "capitalize",
               }}
             >
-              {t}
+              {tabKey === "expenses" ? t("expenses.title") : t("subscriptions.title")}
             </Text>
           </TouchableOpacity>
         ))}

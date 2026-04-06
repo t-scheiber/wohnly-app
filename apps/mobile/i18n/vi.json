@@ -85,7 +85,17 @@
     "daily": "Hàng ngày",
     "weekly": "Hàng tuần",
     "biweekly": "Hai tuần một lần",
-    "monthly": "Hàng tháng"
+    "monthly": "Hàng tháng",
+    "fairShare": "Chia đều",
+    "thisWeek": "Tuần này",
+    "thisMonth": "Tháng này",
+    "allTime": "Toàn bộ",
+    "tasks": "nhiệm vụ",
+    "noAnalytics": "Chưa có việc nhà nào hoàn thành. Bắt đầu hoàn thành việc nhà để xem phân tích.",
+    "effortLevel": "Mức độ nỗ lực",
+    "breakMode": "Chế độ nghỉ",
+    "breakModeActive": "Việc nhà đã tạm dừng",
+    "breakModeUntil": "đến {{date}}"
   },
   "events": {
     "title": "Lịch",
@@ -108,7 +118,8 @@
     "calendarSettings": "Cài đặt lịch",
     "deviceCalendars": "Lịch trên thiết bị",
     "noCalendars": "Không tìm thấy lịch nào",
-    "grantAccess": "Cấp quyền truy cập lịch để xem sự kiện từ thiết bị của bạn"
+    "grantAccess": "Cấp quyền truy cập lịch để xem sự kiện từ thiết bị của bạn",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Chi tiêu",
@@ -123,7 +134,42 @@
     "percentage": "Theo phần trăm",
     "fixed": "Cố định",
     "date": "Ngày",
-    "selectDate": "Chọn ngày"
+    "selectDate": "Chọn ngày",
+    "editExpense": "Chỉnh sửa chi phí",
+    "shares": "Phần",
+    "splitPerPerson": "Chia theo người",
+    "balanced": "Cân bằng",
+    "remaining": "Còn {{amount}}",
+    "overBudget": "Vượt {{amount}}",
+    "categories": {
+      "groceries": "Thực phẩm",
+      "dining": "Ăn uống",
+      "rent": "Tiền thuê",
+      "utilities": "Tiện ích",
+      "transport": "Giao thông",
+      "entertainment": "Giải trí",
+      "health": "Sức khỏe",
+      "travel": "Du lịch",
+      "shopping": "Mua sắm",
+      "subscriptions": "Đăng ký",
+      "education": "Giáo dục",
+      "pets": "Thú cưng",
+      "gifts": "Quà tặng",
+      "household": "Gia đình",
+      "other": "Khác"
+    },
+    "allCategories": "Tất cả",
+    "settleUp": "Thanh toán",
+    "settleUpDescription": "Thanh toán tối thiểu để trả hết nợ",
+    "noDebts": "Đã thanh toán hết!",
+    "markAsPaid": "Đánh dấu đã trả",
+    "export": "Xuất",
+    "exportExpenses": "Xuất chi phí",
+    "exportFormat": "Định dạng",
+    "exportDateRange": "Khoảng thời gian",
+    "exportFrom": "Từ",
+    "exportTo": "Đến",
+    "exportAll": "Toàn bộ"
   },
   "subscriptions": {
     "title": "Đăng ký dịch vụ",
@@ -183,7 +229,11 @@
     "noDevices": "Chưa có thiết bị nào được đăng ký",
     "devicePending": "Đang chờ duyệt",
     "encryptedData": "Đã mã hóa — mở trên thiết bị của bạn để xem",
-    "manageDevices": "Quản lý thiết bị"
+    "manageDevices": "Quản lý thiết bị",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Người khác nợ bạn",
@@ -298,6 +348,56 @@
     "checkStatus": "Kiểm tra trạng thái",
     "checkAndKeys": "Phím đồng bộ hóa",
     "pendingDeviceCount": "{{count}} thiết bị đang chờ phê duyệt",
-    "approveNow": "Phê duyệt ngay"
+    "approveNow": "Phê duyệt ngay",
+    "enableNotificationsBanner": "Bật thông báo để được cảnh báo khi thiết bị này được phê duyệt."
+  },
+  "finances": {
+    "title": "Tài chính",
+    "analytics": "Phân tích chi tiêu"
+  },
+  "tabs": {
+    "home": "Trang chủ",
+    "lists": "Danh sách",
+    "chores": "Việc nhà",
+    "finances": "Tài chính",
+    "more": "Thêm"
+  },
+  "meals": {
+    "title": "Kế hoạch bữa ăn",
+    "addMeal": "Lên kế hoạch bữa ăn",
+    "empty": "Chưa có bữa ăn nào được lên kế hoạch",
+    "breakfast": "Bữa sáng",
+    "lunch": "Bữa trưa",
+    "dinner": "Bữa tối",
+    "snack": "Bữa phụ",
+    "ingredients": "Nguyên liệu",
+    "addToShopping": "Thêm vào danh sách mua sắm",
+    "noIngredients": "Không có nguyên liệu để thêm",
+    "addedToShopping": "nguyên liệu đã thêm vào danh sách mua sắm"
+  },
+  "leaderboard": {
+    "title": "Bảng xếp hạng",
+    "points": "đ",
+    "you": "bạn"
+  },
+  "roles": {
+    "admin": "Quản trị viên",
+    "member": "Thành viên",
+    "limited": "Hạn chế",
+    "changeRole": "Thay đổi vai trò",
+    "onlyAdmins": "Chỉ quản trị viên mới có thể thay đổi vai trò",
+    "lastAdmin": "Không thể xóa quản trị viên cuối cùng"
+  },
+  "export": {
+    "fullExport": "Xuất tất cả dữ liệu",
+    "fullExportDesc": "Tải xuống tất cả dữ liệu gia đình dưới dạng JSON",
+    "exporting": "Đang xuất..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Kết nối Google Calendar",
+    "syncNow": "Đồng bộ ngay",
+    "lastSynced": "Đồng bộ lần cuối",
+    "syncing": "Đang đồng bộ...",
+    "syncSuccess": "Đồng bộ lịch thành công"
   }
 }

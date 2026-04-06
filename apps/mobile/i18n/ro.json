@@ -85,7 +85,17 @@
     "daily": "Zilnic",
     "weekly": "Săptămânal",
     "biweekly": "Bisăptămânal",
-    "monthly": "Lunar"
+    "monthly": "Lunar",
+    "fairShare": "Împărțire echitabilă",
+    "thisWeek": "Săptămâna aceasta",
+    "thisMonth": "Luna aceasta",
+    "allTime": "Tot timpul",
+    "tasks": "sarcini",
+    "noAnalytics": "Nicio treabă finalizată încă. Începe să finalizezi treburi pentru a vedea analizele.",
+    "effortLevel": "Nivel de efort",
+    "breakMode": "Mod pauză",
+    "breakModeActive": "Treburile sunt întrerupte",
+    "breakModeUntil": "până la {{date}}"
   },
   "events": {
     "title": "Calendar",
@@ -108,7 +118,8 @@
     "calendarSettings": "Setări calendar",
     "deviceCalendars": "Calendarele dispozitivului",
     "noCalendars": "Niciun calendar găsit",
-    "grantAccess": "Acordă acces la calendar pentru a vedea evenimentele dispozitivului tău"
+    "grantAccess": "Acordă acces la calendar pentru a vedea evenimentele dispozitivului tău",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Cheltuieli",
@@ -123,7 +134,42 @@
     "percentage": "Procentual",
     "fixed": "Fix",
     "date": "Dată",
-    "selectDate": "Selectează data"
+    "selectDate": "Selectează data",
+    "editExpense": "Editează cheltuiala",
+    "shares": "Cote",
+    "splitPerPerson": "Împărțire per persoană",
+    "balanced": "Echilibrat",
+    "remaining": "{{amount}} rămas",
+    "overBudget": "{{amount}} depășit",
+    "categories": {
+      "groceries": "Alimente",
+      "dining": "Restaurante",
+      "rent": "Chirie",
+      "utilities": "Utilități",
+      "transport": "Transport",
+      "entertainment": "Divertisment",
+      "health": "Sănătate",
+      "travel": "Călătorii",
+      "shopping": "Cumpărături",
+      "subscriptions": "Abonamente",
+      "education": "Educație",
+      "pets": "Animale",
+      "gifts": "Cadouri",
+      "household": "Gospodărie",
+      "other": "Altele"
+    },
+    "allCategories": "Toate",
+    "settleUp": "Decontare",
+    "settleUpDescription": "Plăți minime pentru achitarea tuturor datoriilor",
+    "noDebts": "Totul decontat!",
+    "markAsPaid": "Marchează ca plătit",
+    "export": "Exportă",
+    "exportExpenses": "Exportă cheltuielile",
+    "exportFormat": "Format",
+    "exportDateRange": "Interval de date",
+    "exportFrom": "De la",
+    "exportTo": "Până la",
+    "exportAll": "Tot timpul"
   },
   "subscriptions": {
     "title": "Abonamente",
@@ -183,7 +229,11 @@
     "noDevices": "Niciun dispozitiv înregistrat încă",
     "devicePending": "Se așteaptă aprobarea",
     "encryptedData": "Criptat — deschide pe dispozitivul tău pentru a vedea",
-    "manageDevices": "Gestionează dispozitivele"
+    "manageDevices": "Gestionează dispozitivele",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Ți se datorează",
@@ -298,6 +348,56 @@
     "checkStatus": "Verificați starea",
     "checkAndKeys": "Taste de sincronizare",
     "pendingDeviceCount": "{{count}} dispozitiv(e) așteaptă aprobare",
-    "approveNow": "Aprobați acum"
+    "approveNow": "Aprobați acum",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Plan de masă",
+    "addMeal": "Planifică o masă",
+    "empty": "Nicio masă planificată",
+    "breakfast": "Mic dejun",
+    "lunch": "Prânz",
+    "dinner": "Cină",
+    "snack": "Gustare",
+    "ingredients": "Ingrediente",
+    "addToShopping": "Adaugă pe lista de cumpărături",
+    "noIngredients": "Niciun ingredient de adăugat",
+    "addedToShopping": "ingrediente adăugate pe lista de cumpărături"
+  },
+  "leaderboard": {
+    "title": "Clasament",
+    "points": "pct",
+    "you": "tu"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "member": "Membru",
+    "limited": "Limitat",
+    "changeRole": "Schimbă rolul",
+    "onlyAdmins": "Doar administratorii pot schimba rolurile",
+    "lastAdmin": "Nu se poate elimina ultimul administrator"
+  },
+  "export": {
+    "fullExport": "Exportă toate datele",
+    "fullExportDesc": "Descarcă toate datele gospodăriei ca JSON",
+    "exporting": "Se exportă..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Conectează Google Calendar",
+    "syncNow": "Sincronizează acum",
+    "lastSynced": "Ultima sincronizare",
+    "syncing": "Se sincronizează...",
+    "syncSuccess": "Calendar sincronizat cu succes"
   }
 }

@@ -85,7 +85,17 @@
     "daily": "தினமும்",
     "weekly": "வாரம் ஒருமுறை",
     "biweekly": "இரண்டு வாரத்திற்கு ஒருமுறை",
-    "monthly": "மாதம் ஒருமுறை"
+    "monthly": "மாதம் ஒருமுறை",
+    "fairShare": "நியாயமான பங்கு",
+    "thisWeek": "இந்த வாரம்",
+    "thisMonth": "இந்த மாதம்",
+    "allTime": "எல்லா நேரமும்",
+    "tasks": "பணிகள்",
+    "noAnalytics": "இன்னும் வேலைகள் முடிக்கப்படவில்லை. பகுப்பாய்வைக் காண வேலைகளை முடிக்கத் தொடங்குங்கள்.",
+    "effortLevel": "முயற்சி நிலை",
+    "breakMode": "இடைவேளை முறை",
+    "breakModeActive": "வேலைகள் இடைநிறுத்தப்பட்டுள்ளன",
+    "breakModeUntil": "{{date}} வரை"
   },
   "events": {
     "title": "காலண்டர்",
@@ -108,7 +118,8 @@
     "calendarSettings": "காலண்டர் அமைப்புகள்",
     "deviceCalendars": "சாதன காலண்டர்கள்",
     "noCalendars": "காலண்டர்கள் எதுவும் இல்லை",
-    "grantAccess": "சாதன நிகழ்வுகளைப் பார்க்க காலண்டர் அணுகலை அனுமதி"
+    "grantAccess": "சாதன நிகழ்வுகளைப் பார்க்க காலண்டர் அணுகலை அனுமதி",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "செலவுகள்",
@@ -123,7 +134,42 @@
     "percentage": "சதவீதம்",
     "fixed": "நிலையானது",
     "date": "தேதி",
-    "selectDate": "தேதி தேர்வு செய்"
+    "selectDate": "தேதி தேர்வு செய்",
+    "editExpense": "செலவைத் திருத்து",
+    "shares": "பங்குகள்",
+    "splitPerPerson": "ஒருவருக்கான பிரிப்பு",
+    "balanced": "சமநிலை",
+    "remaining": "{{amount}} மீதம்",
+    "overBudget": "{{amount}} அதிகம்",
+    "categories": {
+      "groceries": "மளிகை",
+      "dining": "உணவகம்",
+      "rent": "வாடகை",
+      "utilities": "பயன்பாடுகள்",
+      "transport": "போக்குவரத்து",
+      "entertainment": "பொழுதுபோக்கு",
+      "health": "ஆரோக்கியம்",
+      "travel": "பயணம்",
+      "shopping": "ஷாப்பிங்",
+      "subscriptions": "சந்தா",
+      "education": "கல்வி",
+      "pets": "செல்லப்பிராணிகள்",
+      "gifts": "பரிசுகள்",
+      "household": "வீட்டுப்பொருள்",
+      "other": "மற்றவை"
+    },
+    "allCategories": "அனைத்தும்",
+    "settleUp": "தீர்க்கவும்",
+    "settleUpDescription": "அனைத்து கடன்களையும் தீர்க்க குறைந்தபட்ச கொடுப்பனவுகள்",
+    "noDebts": "அனைத்தும் தீர்க்கப்பட்டது!",
+    "markAsPaid": "செலுத்தியதாகக் குறிக்கவும்",
+    "export": "ஏற்றுமதி",
+    "exportExpenses": "செலவுகளை ஏற்றுமதி செய்",
+    "exportFormat": "வடிவம்",
+    "exportDateRange": "தேதி வரம்பு",
+    "exportFrom": "இருந்து",
+    "exportTo": "வரை",
+    "exportAll": "எல்லா நேரமும்"
   },
   "subscriptions": {
     "title": "சந்தாக்கள்",
@@ -183,7 +229,11 @@
     "noDevices": "இன்னும் சாதனங்கள் எதுவும் பதிவு செய்யப்படவில்லை",
     "devicePending": "அங்கீகாரத்திற்காக காத்திருக்கிறது",
     "encryptedData": "மறைகுறியாக்கப்பட்டது — பார்க்க உங்கள் சாதனத்தில் திற",
-    "manageDevices": "சாதனங்களை நிர்வகி"
+    "manageDevices": "சாதனங்களை நிர்வகி",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "உனக்கு கொடுக்க வேண்டியது",
@@ -298,6 +348,56 @@
     "checkStatus": "நிலையை சரிபார்க்கவும்",
     "checkAndKeys": "விசைகளை ஒத்திசைக்கவும்",
     "pendingDeviceCount": "{{count}} சாதனம்(கள்) ஒப்புதலுக்காகக் காத்திருக்கிறது",
-    "approveNow": "இப்போது ஒப்புதல்"
+    "approveNow": "இப்போது ஒப்புதல்",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "உணவுத் திட்டம்",
+    "addMeal": "உணவைத் திட்டமிடு",
+    "empty": "திட்டமிடப்பட்ட உணவுகள் இல்லை",
+    "breakfast": "காலை உணவு",
+    "lunch": "மதிய உணவு",
+    "dinner": "இரவு உணவு",
+    "snack": "சிற்றுண்டி",
+    "ingredients": "பொருட்கள்",
+    "addToShopping": "கடை பட்டியலில் சேர்",
+    "noIngredients": "சேர்க்க பொருட்கள் இல்லை",
+    "addedToShopping": "பொருட்கள் கடை பட்டியலில் சேர்க்கப்பட்டன"
+  },
+  "leaderboard": {
+    "title": "தரவரிசை",
+    "points": "புள்ளிகள்",
+    "you": "நீங்கள்"
+  },
+  "roles": {
+    "admin": "நிர்வாகி",
+    "member": "உறுப்பினர்",
+    "limited": "வரையறுக்கப்பட்ட",
+    "changeRole": "பங்கை மாற்று",
+    "onlyAdmins": "நிர்வாகிகள் மட்டுமே பங்குகளை மாற்ற முடியும்",
+    "lastAdmin": "கடைசி நிர்வாகியை நீக்க முடியாது"
+  },
+  "export": {
+    "fullExport": "அனைத்து தரவையும் ஏற்றுமதி செய்",
+    "fullExportDesc": "அனைத்து வீட்டு தரவையும் JSON ஆக பதிவிறக்கு",
+    "exporting": "ஏற்றுமதி செய்கிறது..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google Calendar ஐ இணைக்கவும்",
+    "syncNow": "இப்போது ஒத்திசை",
+    "lastSynced": "கடைசியாக ஒத்திசைக்கப்பட்டது",
+    "syncing": "ஒத்திசைக்கிறது...",
+    "syncSuccess": "காலெண்டர் வெற்றிகரமாக ஒத்திசைக்கப்பட்டது"
   }
 }

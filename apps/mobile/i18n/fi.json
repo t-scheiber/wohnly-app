@@ -85,7 +85,17 @@
     "daily": "Päivittäin",
     "weekly": "Viikoittain",
     "biweekly": "Joka toinen viikko",
-    "monthly": "Kuukausittain"
+    "monthly": "Kuukausittain",
+    "fairShare": "Reilu osuus",
+    "thisWeek": "Tämä viikko",
+    "thisMonth": "Tämä kuukausi",
+    "allTime": "Koko aika",
+    "tasks": "tehtävät",
+    "noAnalytics": "Ei vielä suoritettuja askareita. Aloita askareiden suorittaminen nähdäksesi analytiikan.",
+    "effortLevel": "Vaativuustaso",
+    "breakMode": "Taukotila",
+    "breakModeActive": "Askareet on tauolla",
+    "breakModeUntil": "{{date}} asti"
   },
   "events": {
     "title": "Kalenteri",
@@ -108,7 +118,8 @@
     "calendarSettings": "Kalenteriasetukset",
     "deviceCalendars": "Laitteen kalenterit",
     "noCalendars": "Kalentereita ei löytynyt",
-    "grantAccess": "Anna kalenterioikeudet nähdäksesi laitteesi tapahtumat"
+    "grantAccess": "Anna kalenterioikeudet nähdäksesi laitteesi tapahtumat",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Kulut",
@@ -123,7 +134,42 @@
     "percentage": "Prosentti",
     "fixed": "Kiinteä",
     "date": "Päivämäärä",
-    "selectDate": "Valitse päivämäärä"
+    "selectDate": "Valitse päivämäärä",
+    "editExpense": "Muokkaa kulua",
+    "shares": "Osuudet",
+    "splitPerPerson": "Jako henkilöä kohti",
+    "balanced": "Tasapainossa",
+    "remaining": "{{amount}} jäljellä",
+    "overBudget": "{{amount}} yli",
+    "categories": {
+      "groceries": "Ruokaostokset",
+      "dining": "Ravintolat",
+      "rent": "Vuokra",
+      "utilities": "Laskut",
+      "transport": "Liikenne",
+      "entertainment": "Viihde",
+      "health": "Terveys",
+      "travel": "Matkailu",
+      "shopping": "Ostokset",
+      "subscriptions": "Tilaukset",
+      "education": "Koulutus",
+      "pets": "Lemmikit",
+      "gifts": "Lahjat",
+      "household": "Kotitalous",
+      "other": "Muu"
+    },
+    "allCategories": "Kaikki",
+    "settleUp": "Selvitä",
+    "settleUpDescription": "Minimaaliset maksut kaikkien velkojen selvittämiseen",
+    "noDebts": "Kaikki selvitetty!",
+    "markAsPaid": "Merkitse maksetuksi",
+    "export": "Vie",
+    "exportExpenses": "Vie kulut",
+    "exportFormat": "Muoto",
+    "exportDateRange": "Ajanjakso",
+    "exportFrom": "Alkaen",
+    "exportTo": "Asti",
+    "exportAll": "Koko aika"
   },
   "subscriptions": {
     "title": "Tilaukset",
@@ -183,7 +229,11 @@
     "noDevices": "Ei rekisteröityjä laitteita vielä",
     "devicePending": "Odottaa hyväksyntää",
     "encryptedData": "Salattu — avaa laitteellasi nähdäksesi",
-    "manageDevices": "Hallinnoi laitteita"
+    "manageDevices": "Hallinnoi laitteita",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Sinulle velkaa",
@@ -298,6 +348,56 @@
     "checkStatus": "Tarkista tila",
     "checkAndKeys": "Synkronointinäppäimet",
     "pendingDeviceCount": "{{count}} laitetta odottaa hyväksyntää",
-    "approveNow": "Hyväksy nyt"
+    "approveNow": "Hyväksy nyt",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Ateriasuunnitelma",
+    "addMeal": "Suunnittele ateria",
+    "empty": "Ei suunniteltuja aterioita",
+    "breakfast": "Aamiainen",
+    "lunch": "Lounas",
+    "dinner": "Päivällinen",
+    "snack": "Välipala",
+    "ingredients": "Ainekset",
+    "addToShopping": "Lisää ostoslistaan",
+    "noIngredients": "Ei lisättäviä aineksia",
+    "addedToShopping": "ainekset lisätty ostoslistaan"
+  },
+  "leaderboard": {
+    "title": "Tulostaulukko",
+    "points": "pist.",
+    "you": "sinä"
+  },
+  "roles": {
+    "admin": "Ylläpitäjä",
+    "member": "Jäsen",
+    "limited": "Rajoitettu",
+    "changeRole": "Vaihda rooli",
+    "onlyAdmins": "Vain ylläpitäjät voivat muuttaa rooleja",
+    "lastAdmin": "Viimeistä ylläpitäjää ei voi poistaa"
+  },
+  "export": {
+    "fullExport": "Vie kaikki tiedot",
+    "fullExportDesc": "Lataa kaikki kotitalouden tiedot JSON-muodossa",
+    "exporting": "Viedään..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Yhdistä Google-kalenteri",
+    "syncNow": "Synkronoi nyt",
+    "lastSynced": "Viimeksi synkronoitu",
+    "syncing": "Synkronoidaan...",
+    "syncSuccess": "Kalenteri synkronoitu onnistuneesti"
   }
 }

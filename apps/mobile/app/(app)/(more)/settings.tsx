@@ -181,6 +181,8 @@ export default function SettingsScreen() {
   const [nicknameMemberId, setNicknameMemberId] = useState("");
   const [nicknameMemberName, setNicknameMemberName] = useState("");
   const [nicknameValue, setNicknameValue] = useState("");
+  const [weekStartPickerOpen, setWeekStartPickerOpen] = useState(false);
+  const [timeFormatPickerOpen, setTimeFormatPickerOpen] = useState(false);
 
   const handleSaveNickname = () => {
     setNickname.mutate(
@@ -234,6 +236,8 @@ export default function SettingsScreen() {
         onPress: () => {
           leaveHousehold.mutate(undefined, {
             onSuccess: () => {
+              clearHouseholdKeys();
+              try { clearDeviceKeys(); } catch {}
               router.replace("/(app)/(dashboard)");
             },
             onError: (err) => {
@@ -477,7 +481,9 @@ export default function SettingsScreen() {
         <SettingsSection title={t("settings.preferences")} colors={colors}>
           <SettingsRow colors={colors} label={t("settings.language")} value={currentLang.label} onPress={() => setLangPickerOpen(true)} />
           <SettingsRow colors={colors} label={t("settings.theme")} value={themeLabels[mode]} onPress={() => setThemePickerOpen(true)} />
-          <SettingsRow colors={colors} label="Currency" value={prefs?.defaultCurrency || "EUR"} onPress={() => setCurrencyPickerOpen(true)} isLast={Platform.OS === "web"} />
+          <SettingsRow colors={colors} label="Currency" value={prefs?.defaultCurrency || "EUR"} onPress={() => setCurrencyPickerOpen(true)} />
+          <SettingsRow colors={colors} label={t("settings.weekStartsOn")} value={prefs?.weekStartsOn === "sunday" ? t("settings.sunday") : t("settings.monday")} onPress={() => setWeekStartPickerOpen(true)} />
+          <SettingsRow colors={colors} label={t("settings.timeFormat")} value={prefs?.timeFormat === "12h" ? "12h (AM/PM)" : "24h"} onPress={() => setTimeFormatPickerOpen(true)} isLast={Platform.OS === "web"} />
           {Platform.OS !== "web" && (
             <SettingsRow
               colors={colors}
@@ -597,6 +603,36 @@ export default function SettingsScreen() {
         selected={(prefs?.defaultCurrency || "EUR") as string}
         onSelect={(code) => {
           apiPatch("/api/user/preferences", { defaultCurrency: code });
+        }}
+        colors={colors}
+      />
+
+      <PickerModal
+        visible={weekStartPickerOpen}
+        onClose={() => setWeekStartPickerOpen(false)}
+        title={t("settings.weekStartsOn")}
+        options={[
+          { value: "monday" as const, label: t("settings.monday") },
+          { value: "sunday" as const, label: t("settings.sunday") },
+        ]}
+        selected={(prefs?.weekStartsOn || "monday") as string}
+        onSelect={(val) => {
+          apiPatch("/api/user/preferences", { weekStartsOn: val });
+        }}
+        colors={colors}
+      />
+
+      <PickerModal
+        visible={timeFormatPickerOpen}
+        onClose={() => setTimeFormatPickerOpen(false)}
+        title={t("settings.timeFormat")}
+        options={[
+          { value: "24h" as const, label: "24h" },
+          { value: "12h" as const, label: "12h (AM/PM)" },
+        ]}
+        selected={(prefs?.timeFormat || "24h") as string}
+        onSelect={(val) => {
+          apiPatch("/api/user/preferences", { timeFormat: val });
         }}
         colors={colors}
       />

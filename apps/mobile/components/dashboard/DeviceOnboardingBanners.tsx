@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { ShieldAlert, ShieldCheck, RefreshCw, ChevronRight } from "lucide-react-native";
+import { ShieldAlert, ShieldCheck, RefreshCw, ChevronRight, Bell } from "lucide-react-native";
 import { usePendingDevices } from "@/lib/api/queries";
 import { useCurrentDevice } from "@/lib/hooks/useCurrentDevice";
 import { useHousehold } from "@/lib/hooks/useHousehold";
+import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { hasHouseholdKey } from "@/lib/crypto/household-key-cache";
 import { fetchAndCacheHouseholdKey } from "@/lib/crypto/e2ee-setup";
+import { registerForPushNotifications } from "@/lib/notifications/setup";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
 
@@ -19,6 +21,7 @@ export function DeviceOnboardingBanners() {
   const { data: household } = useHousehold();
   const { data: pendingData, refetch: refetchPending } = usePendingDevices();
   const { device: currentDevice, refetch: refetchCurrent, isLoading: deviceLoading } = useCurrentDevice();
+  const notifications = useNotificationSettings();
   const [syncing, setSyncing] = useState(false);
 
   if (deviceLoading || !household?.householdId) return null;
@@ -47,33 +50,63 @@ export function DeviceOnboardingBanners() {
     setSyncing(false);
   };
 
+  const handleEnableNotifications = async () => {
+    if (Platform.OS === "web") return;
+    try {
+      await registerForPushNotifications();
+      notifications.toggle();
+    } catch {}
+  };
+
   // 1. Current device is pending
   if (isPending) {
     return (
-      <View style={[styles.banner, { backgroundColor: "#fffbeb", borderColor: "#fef3c7" }]}>
-        <View style={styles.iconWrapper}>
-          <ShieldAlert size={20} color="#d97706" />
+      <>
+        <View style={[styles.banner, { backgroundColor: "#fffbeb", borderColor: "#fef3c7" }]}>
+          <View style={styles.iconWrapper}>
+            <ShieldAlert size={20} color="#d97706" />
+          </View>
+          <View style={styles.content}>
+            <Text style={[styles.title, { color: "#92400e" }]}>
+              {t("help.devicePendingBanner")}
+            </Text>
+            <TouchableOpacity
+              onPress={handleCheckStatus}
+              disabled={syncing}
+              style={[styles.button, { backgroundColor: "#f59e0b" }]}
+            >
+              {syncing ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <>
+                  <RefreshCw size={14} color="#fff" />
+                  <Text style={styles.buttonText}>{t("help.checkStatus")}</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.content}>
-          <Text style={[styles.title, { color: "#92400e" }]}>
-            {t("help.devicePendingBanner")}
-          </Text>
-          <TouchableOpacity 
-            onPress={handleCheckStatus} 
-            disabled={syncing}
-            style={[styles.button, { backgroundColor: "#f59e0b" }]}
-          >
-            {syncing ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <>
-                <RefreshCw size={14} color="#fff" />
-                <Text style={styles.buttonText}>{t("help.checkStatus")}</Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
+        {/* Prompt to enable notifications so user gets notified when approved */}
+        {Platform.OS !== "web" && !notifications.enabled && !notifications.loading && (
+          <View style={[styles.banner, { backgroundColor: "#eff6ff", borderColor: "#dbeafe" }]}>
+            <View style={styles.iconWrapper}>
+              <Bell size={20} color="#2563eb" />
+            </View>
+            <View style={styles.content}>
+              <Text style={[styles.title, { color: "#1e40af" }]}>
+                {t("help.enableNotificationsBanner")}
+              </Text>
+              <TouchableOpacity
+                onPress={handleEnableNotifications}
+                style={[styles.button, { backgroundColor: "#3b82f6" }]}
+              >
+                <Bell size={14} color="#fff" />
+                <Text style={styles.buttonText}>{t("settings.notifications")}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </>
     );
   }
 

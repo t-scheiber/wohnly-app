@@ -85,7 +85,17 @@
     "daily": "Dagligen",
     "weekly": "Veckovis",
     "biweekly": "Varannan vecka",
-    "monthly": "Månadsvis"
+    "monthly": "Månadsvis",
+    "fairShare": "Rättvis fördelning",
+    "thisWeek": "Denna vecka",
+    "thisMonth": "Denna månad",
+    "allTime": "Hela tiden",
+    "tasks": "uppgifter",
+    "noAnalytics": "Inga avklarade sysslor ännu. Börja slutföra sysslor för att se analyser.",
+    "effortLevel": "Ansträngningsnivå",
+    "breakMode": "Pausläge",
+    "breakModeActive": "Sysslorna är pausade",
+    "breakModeUntil": "till {{date}}"
   },
   "events": {
     "title": "Kalender",
@@ -108,7 +118,8 @@
     "calendarSettings": "Kalenderinställningar",
     "deviceCalendars": "Enhetskalendrar",
     "noCalendars": "Inga kalendrar hittades",
-    "grantAccess": "Ge kalenderåtkomst för att se dina enhetshändelser"
+    "grantAccess": "Ge kalenderåtkomst för att se dina enhetshändelser",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Utgifter",
@@ -123,7 +134,42 @@
     "percentage": "Procent",
     "fixed": "Fast",
     "date": "Datum",
-    "selectDate": "Välj datum"
+    "selectDate": "Välj datum",
+    "editExpense": "Redigera utgift",
+    "shares": "Andelar",
+    "splitPerPerson": "Uppdelning per person",
+    "balanced": "Balanserat",
+    "remaining": "{{amount}} kvar",
+    "overBudget": "{{amount}} över",
+    "categories": {
+      "groceries": "Livsmedel",
+      "dining": "Restaurang",
+      "rent": "Hyra",
+      "utilities": "Hushållskostnader",
+      "transport": "Transport",
+      "entertainment": "Underhållning",
+      "health": "Hälsa",
+      "travel": "Resor",
+      "shopping": "Shopping",
+      "subscriptions": "Prenumerationer",
+      "education": "Utbildning",
+      "pets": "Husdjur",
+      "gifts": "Gåvor",
+      "household": "Hushåll",
+      "other": "Övrigt"
+    },
+    "allCategories": "Alla",
+    "settleUp": "Gör upp",
+    "settleUpDescription": "Minimala betalningar för att reglera alla skulder",
+    "noDebts": "Allt uppgjort!",
+    "markAsPaid": "Markera som betald",
+    "export": "Exportera",
+    "exportExpenses": "Exportera utgifter",
+    "exportFormat": "Format",
+    "exportDateRange": "Datumintervall",
+    "exportFrom": "Från",
+    "exportTo": "Till",
+    "exportAll": "Hela tiden"
   },
   "subscriptions": {
     "title": "Prenumerationer",
@@ -183,7 +229,11 @@
     "noDevices": "Inga enheter registrerade ännu",
     "devicePending": "Väntar på godkännande",
     "encryptedData": "Krypterat — öppna på din enhet för att visa",
-    "manageDevices": "Hantera enheter"
+    "manageDevices": "Hantera enheter",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Skyldig dig",
@@ -298,6 +348,56 @@
     "checkStatus": "Kontrollera status",
     "checkAndKeys": "Synkronisera nycklar",
     "pendingDeviceCount": "{{count}} enhet(er) väntar på godkännande",
-    "approveNow": "Godkänn nu"
+    "approveNow": "Godkänn nu",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Måltidsplan",
+    "addMeal": "Planera en måltid",
+    "empty": "Inga planerade måltider",
+    "breakfast": "Frukost",
+    "lunch": "Lunch",
+    "dinner": "Middag",
+    "snack": "Mellanmål",
+    "ingredients": "Ingredienser",
+    "addToShopping": "Lägg till i inköpslista",
+    "noIngredients": "Inga ingredienser att lägga till",
+    "addedToShopping": "ingredienser tillagda i inköpslistan"
+  },
+  "leaderboard": {
+    "title": "Topplista",
+    "points": "poäng",
+    "you": "du"
+  },
+  "roles": {
+    "admin": "Administratör",
+    "member": "Medlem",
+    "limited": "Begränsad",
+    "changeRole": "Ändra roll",
+    "onlyAdmins": "Endast administratörer kan ändra roller",
+    "lastAdmin": "Kan inte ta bort den sista administratören"
+  },
+  "export": {
+    "fullExport": "Exportera all data",
+    "fullExportDesc": "Ladda ner alla hushållsdata som JSON",
+    "exporting": "Exporterar..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Anslut Google Kalender",
+    "syncNow": "Synkronisera nu",
+    "lastSynced": "Senast synkroniserad",
+    "syncing": "Synkroniserar...",
+    "syncSuccess": "Kalender synkroniserad"
   }
 }

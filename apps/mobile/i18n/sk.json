@@ -85,7 +85,17 @@
     "daily": "Denne",
     "weekly": "Týždenne",
     "biweekly": "Každé dva týždne",
-    "monthly": "Mesačne"
+    "monthly": "Mesačne",
+    "fairShare": "Spravodlivý podiel",
+    "thisWeek": "Tento týždeň",
+    "thisMonth": "Tento mesiac",
+    "allTime": "Celkovo",
+    "tasks": "úlohy",
+    "noAnalytics": "Zatiaľ žiadne splnené domáce práce. Začnite plniť úlohy a uvidíte analýzu.",
+    "effortLevel": "Úroveň námahy",
+    "breakMode": "Režim pauzy",
+    "breakModeActive": "Domáce práce sú pozastavené",
+    "breakModeUntil": "do {{date}}"
   },
   "events": {
     "title": "Kalendár",
@@ -108,7 +118,8 @@
     "calendarSettings": "Nastavenia kalendára",
     "deviceCalendars": "Kalendáre zariadenia",
     "noCalendars": "Žiadne kalendáre nenájdené",
-    "grantAccess": "Povoľ prístup ku kalendáru pre zobrazenie udalostí zo zariadenia"
+    "grantAccess": "Povoľ prístup ku kalendáru pre zobrazenie udalostí zo zariadenia",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Výdavky",
@@ -123,7 +134,42 @@
     "percentage": "Percentuálne",
     "fixed": "Pevná suma",
     "date": "Dátum",
-    "selectDate": "Vybrať dátum"
+    "selectDate": "Vybrať dátum",
+    "editExpense": "Upraviť výdavok",
+    "shares": "Podiely",
+    "splitPerPerson": "Podiel na osobu",
+    "balanced": "Vyrovnané",
+    "remaining": "{{amount}} zostáva",
+    "overBudget": "{{amount}} nad rozpočtom",
+    "categories": {
+      "groceries": "Potraviny",
+      "dining": "Stravovanie",
+      "rent": "Nájom",
+      "utilities": "Poplatky",
+      "transport": "Doprava",
+      "entertainment": "Zábava",
+      "health": "Zdravie",
+      "travel": "Cestovanie",
+      "shopping": "Nákupy",
+      "subscriptions": "Predplatné",
+      "education": "Vzdelávanie",
+      "pets": "Domáce zvieratá",
+      "gifts": "Darčeky",
+      "household": "Domácnosť",
+      "other": "Ostatné"
+    },
+    "allCategories": "Všetko",
+    "settleUp": "Vyrovnať",
+    "settleUpDescription": "Minimálne platby na vyrovnanie všetkých dlhov",
+    "noDebts": "Všetko vyrovnané!",
+    "markAsPaid": "Označiť ako zaplatené",
+    "export": "Export",
+    "exportExpenses": "Exportovať výdavky",
+    "exportFormat": "Formát",
+    "exportDateRange": "Obdobie",
+    "exportFrom": "Od",
+    "exportTo": "Do",
+    "exportAll": "Celkovo"
   },
   "subscriptions": {
     "title": "Predplatné",
@@ -183,7 +229,11 @@
     "noDevices": "Zatiaľ žiadne registrované zariadenia",
     "devicePending": "Čaká na schválenie",
     "encryptedData": "Zašifrované — otvor na svojom zariadení pre zobrazenie",
-    "manageDevices": "Spravovať zariadenia"
+    "manageDevices": "Spravovať zariadenia",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Dlhujú ti",
@@ -298,6 +348,56 @@
     "checkStatus": "Skontrolujte stav",
     "checkAndKeys": "Synchronizačné kľúče",
     "pendingDeviceCount": "{{count}} zariadení čaká na schválenie",
-    "approveNow": "Schváliť teraz"
+    "approveNow": "Schváliť teraz",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Jedálniček",
+    "addMeal": "Naplánovať jedlo",
+    "empty": "Žiadne naplánované jedlá",
+    "breakfast": "Raňajky",
+    "lunch": "Obed",
+    "dinner": "Večera",
+    "snack": "Občerstvenie",
+    "ingredients": "Ingrediencie",
+    "addToShopping": "Pridať do nákupného zoznamu",
+    "noIngredients": "Žiadne ingrediencie na pridanie",
+    "addedToShopping": "ingrediencie pridané do nákupného zoznamu"
+  },
+  "leaderboard": {
+    "title": "Rebríček",
+    "points": "b.",
+    "you": "ty"
+  },
+  "roles": {
+    "admin": "Správca",
+    "member": "Člen",
+    "limited": "Obmedzený",
+    "changeRole": "Zmeniť rolu",
+    "onlyAdmins": "Iba správcovia môžu meniť roly",
+    "lastAdmin": "Nie je možné odstrániť posledného správcu"
+  },
+  "export": {
+    "fullExport": "Exportovať všetky dáta",
+    "fullExportDesc": "Stiahnuť všetky údaje domácnosti ako JSON",
+    "exporting": "Exportovanie..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Pripojiť Kalendár Google",
+    "syncNow": "Synchronizovať teraz",
+    "lastSynced": "Naposledy synchronizované",
+    "syncing": "Synchronizácia...",
+    "syncSuccess": "Kalendár úspešne synchronizovaný"
   }
 }

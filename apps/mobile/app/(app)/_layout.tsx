@@ -2,11 +2,13 @@ import { Tabs } from "expo-router";
 import { Platform } from "react-native";
 import { Home, ListTodo, Sparkles, DollarSign, Menu } from "lucide-react-native";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
 
 export default function AppLayout() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -39,7 +41,7 @@ export default function AppLayout() {
       <Tabs.Screen
         name="(dashboard)"
         options={{
-          title: "Home",
+          title: t("tabs.home"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => <Home size={size} color={color} />,
         }}
@@ -47,7 +49,7 @@ export default function AppLayout() {
       <Tabs.Screen
         name="(lists)"
         options={{
-          title: "Lists",
+          title: t("tabs.lists"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => <ListTodo size={size} color={color} />,
         }}
@@ -55,7 +57,7 @@ export default function AppLayout() {
       <Tabs.Screen
         name="(chores)"
         options={{
-          title: "Chores",
+          title: t("tabs.chores"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => <Sparkles size={size} color={color} />,
         }}
@@ -63,7 +65,7 @@ export default function AppLayout() {
       <Tabs.Screen
         name="(finances)"
         options={{
-          title: "Finances",
+          title: t("tabs.finances"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => <DollarSign size={size} color={color} />,
         }}
@@ -78,7 +80,7 @@ export default function AppLayout() {
       <Tabs.Screen
         name="(more)"
         options={{
-          title: "More",
+          title: t("tabs.more"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => <Menu size={size} color={color} />,
         }}

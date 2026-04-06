@@ -85,7 +85,17 @@
     "daily": "Dagelijks",
     "weekly": "Wekelijks",
     "biweekly": "Tweewekelijks",
-    "monthly": "Maandelijks"
+    "monthly": "Maandelijks",
+    "fairShare": "Eerlijk aandeel",
+    "thisWeek": "Deze week",
+    "thisMonth": "Deze maand",
+    "allTime": "Altijd",
+    "tasks": "taken",
+    "noAnalytics": "Nog geen klusjes voltooid. Begin klusjes af te ronden om analyses te zien.",
+    "effortLevel": "Inspanningsniveau",
+    "breakMode": "Pauzemodus",
+    "breakModeActive": "Klusjes zijn gepauzeerd",
+    "breakModeUntil": "tot {{date}}"
   },
   "events": {
     "title": "Kalender",
@@ -108,7 +118,8 @@
     "calendarSettings": "Kalenderinstellingen",
     "deviceCalendars": "Apparaatkalenders",
     "noCalendars": "Geen kalenders gevonden",
-    "grantAccess": "Geef toegang tot de kalender om je apparaat-evenementen te zien"
+    "grantAccess": "Geef toegang tot de kalender om je apparaat-evenementen te zien",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Uitgaven",
@@ -123,7 +134,42 @@
     "percentage": "Percentage",
     "fixed": "Vast",
     "date": "Datum",
-    "selectDate": "Datum selecteren"
+    "selectDate": "Datum selecteren",
+    "editExpense": "Uitgave bewerken",
+    "shares": "Aandelen",
+    "splitPerPerson": "Verdeling per persoon",
+    "balanced": "In balans",
+    "remaining": "{{amount}} over",
+    "overBudget": "{{amount}} te veel",
+    "categories": {
+      "groceries": "Boodschappen",
+      "dining": "Uit eten",
+      "rent": "Huur",
+      "utilities": "Nutsvoorzieningen",
+      "transport": "Vervoer",
+      "entertainment": "Entertainment",
+      "health": "Gezondheid",
+      "travel": "Reizen",
+      "shopping": "Winkelen",
+      "subscriptions": "Abonnementen",
+      "education": "Onderwijs",
+      "pets": "Huisdieren",
+      "gifts": "Cadeaus",
+      "household": "Huishouden",
+      "other": "Overig"
+    },
+    "allCategories": "Alles",
+    "settleUp": "Vereffenen",
+    "settleUpDescription": "Minimale betalingen om alle schulden te vereffenen",
+    "noDebts": "Alles vereffend!",
+    "markAsPaid": "Markeer als betaald",
+    "export": "Exporteren",
+    "exportExpenses": "Uitgaven exporteren",
+    "exportFormat": "Formaat",
+    "exportDateRange": "Datumbereik",
+    "exportFrom": "Van",
+    "exportTo": "Tot",
+    "exportAll": "Altijd"
   },
   "subscriptions": {
     "title": "Abonnementen",
@@ -183,7 +229,11 @@
     "noDevices": "Nog geen apparaten geregistreerd",
     "devicePending": "Wachten op goedkeuring",
     "encryptedData": "Versleuteld — open op je apparaat om te bekijken",
-    "manageDevices": "Apparaten beheren"
+    "manageDevices": "Apparaten beheren",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Aan jou verschuldigd",
@@ -298,6 +348,56 @@
     "checkStatus": "Controleer status",
     "checkAndKeys": "Synchroniseer sleutels",
     "pendingDeviceCount": "{{count}} apparaat(en) wachten op goedkeuring",
-    "approveNow": "Nu goedkeuren"
+    "approveNow": "Nu goedkeuren",
+    "enableNotificationsBanner": "Schakel meldingen in om een melding te ontvangen wanneer dit apparaat is goedgekeurd."
+  },
+  "finances": {
+    "title": "Financiën",
+    "analytics": "Uitgavenanalyse"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lijsten",
+    "chores": "Taken",
+    "finances": "Financiën",
+    "more": "Meer"
+  },
+  "meals": {
+    "title": "Maaltijdplan",
+    "addMeal": "Maaltijd plannen",
+    "empty": "Geen maaltijden gepland",
+    "breakfast": "Ontbijt",
+    "lunch": "Lunch",
+    "dinner": "Diner",
+    "snack": "Tussendoortje",
+    "ingredients": "Ingrediënten",
+    "addToShopping": "Toevoegen aan boodschappenlijst",
+    "noIngredients": "Geen ingrediënten om toe te voegen",
+    "addedToShopping": "ingrediënten toegevoegd aan boodschappenlijst"
+  },
+  "leaderboard": {
+    "title": "Ranglijst",
+    "points": "ptn",
+    "you": "jij"
+  },
+  "roles": {
+    "admin": "Beheerder",
+    "member": "Lid",
+    "limited": "Beperkt",
+    "changeRole": "Rol wijzigen",
+    "onlyAdmins": "Alleen beheerders kunnen rollen wijzigen",
+    "lastAdmin": "De laatste beheerder kan niet worden verwijderd"
+  },
+  "export": {
+    "fullExport": "Alle gegevens exporteren",
+    "fullExportDesc": "Download alle huishoudgegevens als JSON",
+    "exporting": "Exporteren..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google Agenda verbinden",
+    "syncNow": "Nu synchroniseren",
+    "lastSynced": "Laatst gesynchroniseerd",
+    "syncing": "Synchroniseren...",
+    "syncSuccess": "Agenda succesvol gesynchroniseerd"
   }
 }

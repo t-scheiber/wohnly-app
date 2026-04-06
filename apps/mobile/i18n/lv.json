@@ -85,7 +85,17 @@
     "daily": "Katru dienu",
     "weekly": "Katru nedēļu",
     "biweekly": "Ik pa divām nedēļām",
-    "monthly": "Katru mēnesi"
+    "monthly": "Katru mēnesi",
+    "fairShare": "Taisnīgs sadalījums",
+    "thisWeek": "Šī nedēļa",
+    "thisMonth": "Šis mēnesis",
+    "allTime": "Visu laiku",
+    "tasks": "uzdevumi",
+    "noAnalytics": "Vēl nav neviena pabeigta mājas darba. Sāciet veikt darbus, lai redzētu analītiku.",
+    "effortLevel": "Piepūles līmenis",
+    "breakMode": "Pauzes režīms",
+    "breakModeActive": "Mājas darbi ir apturēti",
+    "breakModeUntil": "līdz {{date}}"
   },
   "events": {
     "title": "Kalendārs",
@@ -108,7 +118,8 @@
     "calendarSettings": "Kalendāra iestatījumi",
     "deviceCalendars": "Ierīces kalendāri",
     "noCalendars": "Kalendāri nav atrasti",
-    "grantAccess": "Piešķir piekļuvi kalendāram, lai redzētu ierīces notikumus"
+    "grantAccess": "Piešķir piekļuvi kalendāram, lai redzētu ierīces notikumus",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Izdevumi",
@@ -123,7 +134,42 @@
     "percentage": "Procenti",
     "fixed": "Fiksēts",
     "date": "Datums",
-    "selectDate": "Izvēlēties datumu"
+    "selectDate": "Izvēlēties datumu",
+    "editExpense": "Rediģēt izdevumu",
+    "shares": "Daļas",
+    "splitPerPerson": "Sadalījums uz personu",
+    "balanced": "Sabalansēts",
+    "remaining": "atlicis {{amount}}",
+    "overBudget": "{{amount}} pāri",
+    "categories": {
+      "groceries": "Pārtikas preces",
+      "dining": "Ēdināšana",
+      "rent": "Īre",
+      "utilities": "Komunālie maksājumi",
+      "transport": "Transports",
+      "entertainment": "Izklaide",
+      "health": "Veselība",
+      "travel": "Ceļojumi",
+      "shopping": "Iepirkšanās",
+      "subscriptions": "Abonementi",
+      "education": "Izglītība",
+      "pets": "Mājdzīvnieki",
+      "gifts": "Dāvanas",
+      "household": "Mājsaimniecība",
+      "other": "Cits"
+    },
+    "allCategories": "Visi",
+    "settleUp": "Norēķināties",
+    "settleUpDescription": "Minimāli maksājumi visu parādu segšanai",
+    "noDebts": "Viss nokārtots!",
+    "markAsPaid": "Atzīmēt kā samaksātu",
+    "export": "Eksportēt",
+    "exportExpenses": "Eksportēt izdevumus",
+    "exportFormat": "Formāts",
+    "exportDateRange": "Datumu diapazons",
+    "exportFrom": "No",
+    "exportTo": "Līdz",
+    "exportAll": "Visu laiku"
   },
   "subscriptions": {
     "title": "Abonementi",
@@ -183,7 +229,11 @@
     "noDevices": "Vēl nav reģistrētu ierīču",
     "devicePending": "Gaida apstiprinājumu",
     "encryptedData": "Šifrēts — atver savā ierīcē, lai apskatītu",
-    "manageDevices": "Pārvaldīt ierīces"
+    "manageDevices": "Pārvaldīt ierīces",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Parādā tev",
@@ -298,6 +348,56 @@
     "checkStatus": "Pārbaudiet statusu",
     "checkAndKeys": "Sinhronizācijas atslēgas",
     "pendingDeviceCount": "{{count}} ierīce(-es) gaida apstiprinājumu",
-    "approveNow": "Apstipriniet tūlīt"
+    "approveNow": "Apstipriniet tūlīt",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Ēdienplāns",
+    "addMeal": "Plānot maltīti",
+    "empty": "Nav plānotu maltīšu",
+    "breakfast": "Brokastis",
+    "lunch": "Pusdienas",
+    "dinner": "Vakariņas",
+    "snack": "Uzkoda",
+    "ingredients": "Sastāvdaļas",
+    "addToShopping": "Pievienot iepirkumu sarakstam",
+    "noIngredients": "Nav pievienojamu sastāvdaļu",
+    "addedToShopping": "sastāvdaļas pievienotas iepirkumu sarakstam"
+  },
+  "leaderboard": {
+    "title": "Līderu tabula",
+    "points": "pkt.",
+    "you": "tu"
+  },
+  "roles": {
+    "admin": "Administrators",
+    "member": "Dalībnieks",
+    "limited": "Ierobežots",
+    "changeRole": "Mainīt lomu",
+    "onlyAdmins": "Tikai administratori var mainīt lomas",
+    "lastAdmin": "Nevar noņemt pēdējo administratoru"
+  },
+  "export": {
+    "fullExport": "Eksportēt visus datus",
+    "fullExportDesc": "Lejupielādēt visus mājsaimniecības datus kā JSON",
+    "exporting": "Eksportē..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Savienot Google kalendāru",
+    "syncNow": "Sinhronizēt tagad",
+    "lastSynced": "Pēdējo reizi sinhronizēts",
+    "syncing": "Sinhronizē...",
+    "syncSuccess": "Kalendārs veiksmīgi sinhronizēts"
   }
 }

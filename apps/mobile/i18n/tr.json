@@ -85,7 +85,17 @@
     "daily": "Günlük",
     "weekly": "Haftalık",
     "biweekly": "İki haftada bir",
-    "monthly": "Aylık"
+    "monthly": "Aylık",
+    "fairShare": "Adil paylaşım",
+    "thisWeek": "Bu hafta",
+    "thisMonth": "Bu ay",
+    "allTime": "Tüm zamanlar",
+    "tasks": "görevler",
+    "noAnalytics": "Henüz tamamlanmış ev işi yok. Analizleri görmek için ev işlerini tamamlamaya başlayın.",
+    "effortLevel": "Zorluk seviyesi",
+    "breakMode": "Mola modu",
+    "breakModeActive": "Ev işleri duraklatıldı",
+    "breakModeUntil": "{{date}} tarihine kadar"
   },
   "events": {
     "title": "Takvim",
@@ -108,7 +118,8 @@
     "calendarSettings": "Takvim Ayarları",
     "deviceCalendars": "Cihaz Takvimleri",
     "noCalendars": "Takvim bulunamadı",
-    "grantAccess": "Cihaz etkinliklerini görmek için takvim erişimi ver"
+    "grantAccess": "Cihaz etkinliklerini görmek için takvim erişimi ver",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Harcamalar",
@@ -123,7 +134,42 @@
     "percentage": "Yüzde",
     "fixed": "Sabit",
     "date": "Tarih",
-    "selectDate": "Tarih Seç"
+    "selectDate": "Tarih Seç",
+    "editExpense": "Harcamayı düzenle",
+    "shares": "Paylar",
+    "splitPerPerson": "Kişi başı bölüşüm",
+    "balanced": "Dengeli",
+    "remaining": "{{amount}} kaldı",
+    "overBudget": "{{amount}} fazla",
+    "categories": {
+      "groceries": "Market",
+      "dining": "Yemek",
+      "rent": "Kira",
+      "utilities": "Faturalar",
+      "transport": "Ulaşım",
+      "entertainment": "Eğlence",
+      "health": "Sağlık",
+      "travel": "Seyahat",
+      "shopping": "Alışveriş",
+      "subscriptions": "Abonelikler",
+      "education": "Eğitim",
+      "pets": "Evcil hayvanlar",
+      "gifts": "Hediyeler",
+      "household": "Ev",
+      "other": "Diğer"
+    },
+    "allCategories": "Tümü",
+    "settleUp": "Hesaplaş",
+    "settleUpDescription": "Tüm borçları kapatmak için minimum ödemeler",
+    "noDebts": "Hepsi kapandı!",
+    "markAsPaid": "Ödendi olarak işaretle",
+    "export": "Dışa aktar",
+    "exportExpenses": "Harcamaları dışa aktar",
+    "exportFormat": "Biçim",
+    "exportDateRange": "Tarih aralığı",
+    "exportFrom": "Başlangıç",
+    "exportTo": "Bitiş",
+    "exportAll": "Tüm zamanlar"
   },
   "subscriptions": {
     "title": "Abonelikler",
@@ -183,7 +229,11 @@
     "noDevices": "Henüz kayıtlı cihaz yok",
     "devicePending": "Onay bekleniyor",
     "encryptedData": "Şifreli — görmek için cihazında aç",
-    "manageDevices": "Cihazları yönet"
+    "manageDevices": "Cihazları yönet",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Sana borçlu",
@@ -298,6 +348,56 @@
     "checkStatus": "Durumu Kontrol Et",
     "checkAndKeys": "Tuşları Senkronize Et",
     "pendingDeviceCount": "{{count}} cihaz onay bekliyor",
-    "approveNow": "Şimdi Onayla"
+    "approveNow": "Şimdi Onayla",
+    "enableNotificationsBanner": "Bu cihaz onaylandığında bildirim almak için bildirimleri etkinleştirin."
+  },
+  "finances": {
+    "title": "Finans",
+    "analytics": "Harcama analizi"
+  },
+  "tabs": {
+    "home": "Ana Sayfa",
+    "lists": "Listeler",
+    "chores": "İşler",
+    "finances": "Finans",
+    "more": "Daha Fazla"
+  },
+  "meals": {
+    "title": "Yemek planı",
+    "addMeal": "Yemek planla",
+    "empty": "Planlanmış yemek yok",
+    "breakfast": "Kahvaltı",
+    "lunch": "Öğle yemeği",
+    "dinner": "Akşam yemeği",
+    "snack": "Atıştırmalık",
+    "ingredients": "Malzemeler",
+    "addToShopping": "Alışveriş listesine ekle",
+    "noIngredients": "Eklenecek malzeme yok",
+    "addedToShopping": "malzemeler alışveriş listesine eklendi"
+  },
+  "leaderboard": {
+    "title": "Sıralama",
+    "points": "puan",
+    "you": "sen"
+  },
+  "roles": {
+    "admin": "Yönetici",
+    "member": "Üye",
+    "limited": "Sınırlı",
+    "changeRole": "Rolü değiştir",
+    "onlyAdmins": "Sadece yöneticiler rolleri değiştirebilir",
+    "lastAdmin": "Son yönetici kaldırılamaz"
+  },
+  "export": {
+    "fullExport": "Tüm verileri dışa aktar",
+    "fullExportDesc": "Tüm ev verilerini JSON olarak indir",
+    "exporting": "Dışa aktarılıyor..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google Takvim'i bağla",
+    "syncNow": "Şimdi senkronize et",
+    "lastSynced": "Son senkronizasyon",
+    "syncing": "Senkronize ediliyor...",
+    "syncSuccess": "Takvim başarıyla senkronize edildi"
   }
 }

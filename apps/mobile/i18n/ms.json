@@ -85,7 +85,17 @@
     "daily": "Setiap Hari",
     "weekly": "Setiap Minggu",
     "biweekly": "Dua Minggu Sekali",
-    "monthly": "Setiap Bulan"
+    "monthly": "Setiap Bulan",
+    "fairShare": "Bahagian saksama",
+    "thisWeek": "Minggu ini",
+    "thisMonth": "Bulan ini",
+    "allTime": "Sepanjang masa",
+    "tasks": "tugas",
+    "noAnalytics": "Belum ada tugasan yang selesai. Mula siapkan tugasan untuk melihat analitik.",
+    "effortLevel": "Tahap usaha",
+    "breakMode": "Mod rehat",
+    "breakModeActive": "Tugasan dijeda",
+    "breakModeUntil": "sehingga {{date}}"
   },
   "events": {
     "title": "Kalendar",
@@ -108,7 +118,8 @@
     "calendarSettings": "Tetapan Kalendar",
     "deviceCalendars": "Kalendar Peranti",
     "noCalendars": "Tiada kalendar dijumpai",
-    "grantAccess": "Beri akses kalendar untuk tengok acara peranti"
+    "grantAccess": "Beri akses kalendar untuk tengok acara peranti",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Perbelanjaan",
@@ -123,7 +134,42 @@
     "percentage": "Peratusan",
     "fixed": "Tetap",
     "date": "Tarikh",
-    "selectDate": "Pilih Tarikh"
+    "selectDate": "Pilih Tarikh",
+    "editExpense": "Edit perbelanjaan",
+    "shares": "Bahagian",
+    "splitPerPerson": "Bahagian setiap orang",
+    "balanced": "Seimbang",
+    "remaining": "{{amount}} baki",
+    "overBudget": "{{amount}} melebihi",
+    "categories": {
+      "groceries": "Barangan runcit",
+      "dining": "Makan luar",
+      "rent": "Sewa",
+      "utilities": "Utiliti",
+      "transport": "Pengangkutan",
+      "entertainment": "Hiburan",
+      "health": "Kesihatan",
+      "travel": "Perjalanan",
+      "shopping": "Membeli-belah",
+      "subscriptions": "Langganan",
+      "education": "Pendidikan",
+      "pets": "Haiwan peliharaan",
+      "gifts": "Hadiah",
+      "household": "Isi rumah",
+      "other": "Lain-lain"
+    },
+    "allCategories": "Semua",
+    "settleUp": "Selesaikan",
+    "settleUpDescription": "Bayaran minimum untuk menyelesaikan semua hutang",
+    "noDebts": "Semua selesai!",
+    "markAsPaid": "Tandakan sebagai dibayar",
+    "export": "Eksport",
+    "exportExpenses": "Eksport perbelanjaan",
+    "exportFormat": "Format",
+    "exportDateRange": "Julat tarikh",
+    "exportFrom": "Dari",
+    "exportTo": "Hingga",
+    "exportAll": "Sepanjang masa"
   },
   "subscriptions": {
     "title": "Langganan",
@@ -183,7 +229,11 @@
     "noDevices": "Belum ada peranti didaftarkan",
     "devicePending": "Menunggu kelulusan",
     "encryptedData": "Disulitkan — buka di peranti kau untuk tengok",
-    "manageDevices": "Urus peranti"
+    "manageDevices": "Urus peranti",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Orang hutang kau",
@@ -298,6 +348,56 @@
     "checkStatus": "Semak Status",
     "checkAndKeys": "Kekunci Segerak",
     "pendingDeviceCount": "{{count}} peranti menunggu kelulusan",
-    "approveNow": "Luluskan Sekarang"
+    "approveNow": "Luluskan Sekarang",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Rancangan makan",
+    "addMeal": "Rancang hidangan",
+    "empty": "Tiada hidangan dirancang",
+    "breakfast": "Sarapan",
+    "lunch": "Makan tengah hari",
+    "dinner": "Makan malam",
+    "snack": "Snek",
+    "ingredients": "Bahan",
+    "addToShopping": "Tambah ke senarai beli-belah",
+    "noIngredients": "Tiada bahan untuk ditambah",
+    "addedToShopping": "bahan ditambah ke senarai beli-belah"
+  },
+  "leaderboard": {
+    "title": "Papan pendahulu",
+    "points": "mata",
+    "you": "anda"
+  },
+  "roles": {
+    "admin": "Pentadbir",
+    "member": "Ahli",
+    "limited": "Terhad",
+    "changeRole": "Tukar peranan",
+    "onlyAdmins": "Hanya pentadbir boleh menukar peranan",
+    "lastAdmin": "Tidak boleh membuang pentadbir terakhir"
+  },
+  "export": {
+    "fullExport": "Eksport semua data",
+    "fullExportDesc": "Muat turun semua data isi rumah sebagai JSON",
+    "exporting": "Mengeksport..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Sambungkan Kalendar Google",
+    "syncNow": "Segerakkan sekarang",
+    "lastSynced": "Terakhir disegerakkan",
+    "syncing": "Menyegerakkan...",
+    "syncSuccess": "Kalendar berjaya disegerakkan"
   }
 }

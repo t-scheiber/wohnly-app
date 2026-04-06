@@ -85,7 +85,17 @@
     "daily": "रोज़ाना",
     "weekly": "हफ्ते में एक बार",
     "biweekly": "दो हफ्ते में एक बार",
-    "monthly": "महीने में एक बार"
+    "monthly": "महीने में एक बार",
+    "fairShare": "उचित हिस्सा",
+    "thisWeek": "इस सप्ताह",
+    "thisMonth": "इस महीने",
+    "allTime": "सभी समय",
+    "tasks": "कार्य",
+    "noAnalytics": "अभी तक कोई काम पूरा नहीं हुआ। विश्लेषण देखने के लिए काम पूरा करना शुरू करें।",
+    "effortLevel": "प्रयास स्तर",
+    "breakMode": "विराम मोड",
+    "breakModeActive": "काम रुके हुए हैं",
+    "breakModeUntil": "{{date}} तक"
   },
   "events": {
     "title": "कैलेंडर",
@@ -108,7 +118,8 @@
     "calendarSettings": "कैलेंडर सेटिंग्स",
     "deviceCalendars": "डिवाइस कैलेंडर",
     "noCalendars": "कोई कैलेंडर नहीं मिला",
-    "grantAccess": "डिवाइस के इवेंट देखने के लिए कैलेंडर एक्सेस दो"
+    "grantAccess": "डिवाइस के इवेंट देखने के लिए कैलेंडर एक्सेस दो",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "खर्चे",
@@ -123,7 +134,42 @@
     "percentage": "प्रतिशत",
     "fixed": "फिक्स्ड",
     "date": "तारीख",
-    "selectDate": "तारीख चुनो"
+    "selectDate": "तारीख चुनो",
+    "editExpense": "खर्च संपादित करें",
+    "shares": "हिस्से",
+    "splitPerPerson": "प्रति व्यक्ति विभाजन",
+    "balanced": "संतुलित",
+    "remaining": "{{amount}} शेष",
+    "overBudget": "{{amount}} अधिक",
+    "categories": {
+      "groceries": "किराना",
+      "dining": "भोजन",
+      "rent": "किराया",
+      "utilities": "उपयोगिताएँ",
+      "transport": "परिवहन",
+      "entertainment": "मनोरंजन",
+      "health": "स्वास्थ्य",
+      "travel": "यात्रा",
+      "shopping": "खरीदारी",
+      "subscriptions": "सदस्यताएँ",
+      "education": "शिक्षा",
+      "pets": "पालतू जानवर",
+      "gifts": "उपहार",
+      "household": "घरेलू",
+      "other": "अन्य"
+    },
+    "allCategories": "सभी",
+    "settleUp": "निपटान करें",
+    "settleUpDescription": "सभी कर्ज चुकाने के लिए न्यूनतम भुगतान",
+    "noDebts": "सब निपटा दिया!",
+    "markAsPaid": "भुगतान के रूप में चिह्नित करें",
+    "export": "निर्यात",
+    "exportExpenses": "खर्च निर्यात करें",
+    "exportFormat": "प्रारूप",
+    "exportDateRange": "तारीख सीमा",
+    "exportFrom": "से",
+    "exportTo": "तक",
+    "exportAll": "सभी समय"
   },
   "subscriptions": {
     "title": "सब्सक्रिप्शन",
@@ -183,7 +229,11 @@
     "noDevices": "अभी कोई डिवाइस रजिस्टर नहीं है",
     "devicePending": "स्वीकृति की प्रतीक्षा में",
     "encryptedData": "एन्क्रिप्टेड — देखने के लिए अपने डिवाइस पर खोलो",
-    "manageDevices": "डिवाइस प्रबंधित करें"
+    "manageDevices": "डिवाइस प्रबंधित करें",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "तुम्हें मिलने हैं",
@@ -298,6 +348,56 @@
     "checkStatus": "स्थिति जाँचिए",
     "checkAndKeys": "सिंक कुंजी",
     "pendingDeviceCount": "{{गिनती}} उपकरण अनुमोदन की प्रतीक्षा कर रहे हैं",
-    "approveNow": "अभी स्वीकृत करें"
+    "approveNow": "अभी स्वीकृत करें",
+    "enableNotificationsBanner": "इस डिवाइस को स्वीकृत होने पर सूचना पाने के लिए नोटिफिकेशन सक्षम करें।"
+  },
+  "finances": {
+    "title": "वित्त",
+    "analytics": "खर्च विश्लेषण"
+  },
+  "tabs": {
+    "home": "होम",
+    "lists": "सूचियाँ",
+    "chores": "काम",
+    "finances": "वित्त",
+    "more": "और"
+  },
+  "meals": {
+    "title": "भोजन योजना",
+    "addMeal": "भोजन की योजना बनाएं",
+    "empty": "कोई भोजन योजना नहीं",
+    "breakfast": "नाश्ता",
+    "lunch": "दोपहर का भोजन",
+    "dinner": "रात का खाना",
+    "snack": "नाश्ता",
+    "ingredients": "सामग्री",
+    "addToShopping": "खरीदारी सूची में जोड़ें",
+    "noIngredients": "जोड़ने के लिए कोई सामग्री नहीं",
+    "addedToShopping": "सामग्री खरीदारी सूची में जोड़ी गई"
+  },
+  "leaderboard": {
+    "title": "लीडरबोर्ड",
+    "points": "अंक",
+    "you": "आप"
+  },
+  "roles": {
+    "admin": "व्यवस्थापक",
+    "member": "सदस्य",
+    "limited": "सीमित",
+    "changeRole": "भूमिका बदलें",
+    "onlyAdmins": "केवल व्यवस्थापक भूमिकाएँ बदल सकते हैं",
+    "lastAdmin": "अंतिम व्यवस्थापक को हटाया नहीं जा सकता"
+  },
+  "export": {
+    "fullExport": "सभी डेटा निर्यात करें",
+    "fullExportDesc": "सभी घरेलू डेटा JSON के रूप में डाउनलोड करें",
+    "exporting": "निर्यात हो रहा है..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google कैलेंडर कनेक्ट करें",
+    "syncNow": "अभी सिंक करें",
+    "lastSynced": "अंतिम सिंक",
+    "syncing": "सिंक हो रहा है...",
+    "syncSuccess": "कैलेंडर सफलतापूर्वक सिंक हुआ"
   }
 }

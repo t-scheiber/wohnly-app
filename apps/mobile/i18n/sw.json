@@ -85,7 +85,17 @@
     "daily": "Kila Siku",
     "weekly": "Kila Wiki",
     "biweekly": "Kila Wiki Mbili",
-    "monthly": "Kila Mwezi"
+    "monthly": "Kila Mwezi",
+    "fairShare": "Mgawanyo sawa",
+    "thisWeek": "Wiki hii",
+    "thisMonth": "Mwezi huu",
+    "allTime": "Wakati wote",
+    "tasks": "kazi",
+    "noAnalytics": "Bado hakuna kazi zilizokamilishwa. Anza kukamilisha kazi ili kuona uchambuzi.",
+    "effortLevel": "Kiwango cha juhudi",
+    "breakMode": "Hali ya mapumziko",
+    "breakModeActive": "Kazi za nyumbani zimesimamishwa",
+    "breakModeUntil": "hadi {{date}}"
   },
   "events": {
     "title": "Kalenda",
@@ -108,7 +118,8 @@
     "calendarSettings": "Mipangilio ya Kalenda",
     "deviceCalendars": "Kalenda za Kifaa",
     "noCalendars": "Hakuna kalenda zilizopatikana",
-    "grantAccess": "Ruhusu ufikiaji wa kalenda ili uone matukio ya kifaa chako"
+    "grantAccess": "Ruhusu ufikiaji wa kalenda ili uone matukio ya kifaa chako",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Matumizi",
@@ -123,7 +134,42 @@
     "percentage": "Asilimia",
     "fixed": "Kiasi Maalum",
     "date": "Tarehe",
-    "selectDate": "Chagua Tarehe"
+    "selectDate": "Chagua Tarehe",
+    "editExpense": "Hariri gharama",
+    "shares": "Sehemu",
+    "splitPerPerson": "Mgawanyo kwa mtu",
+    "balanced": "Imesawazishwa",
+    "remaining": "{{amount}} imebaki",
+    "overBudget": "{{amount}} zaidi",
+    "categories": {
+      "groceries": "Vyakula",
+      "dining": "Kula nje",
+      "rent": "Kodi",
+      "utilities": "Huduma",
+      "transport": "Usafiri",
+      "entertainment": "Burudani",
+      "health": "Afya",
+      "travel": "Usafiri",
+      "shopping": "Ununuzi",
+      "subscriptions": "Usajili",
+      "education": "Elimu",
+      "pets": "Wanyama wa kipenzi",
+      "gifts": "Zawadi",
+      "household": "Nyumba",
+      "other": "Nyingine"
+    },
+    "allCategories": "Zote",
+    "settleUp": "Lipia",
+    "settleUpDescription": "Malipo ya chini kabisa ya kulipia deni zote",
+    "noDebts": "Yote ymelipwa!",
+    "markAsPaid": "Weka alama kuwa imelipwa",
+    "export": "Hamisha",
+    "exportExpenses": "Hamisha gharama",
+    "exportFormat": "Muundo",
+    "exportDateRange": "Kipindi cha tarehe",
+    "exportFrom": "Kutoka",
+    "exportTo": "Hadi",
+    "exportAll": "Wakati wote"
   },
   "subscriptions": {
     "title": "Usajili",
@@ -183,7 +229,11 @@
     "noDevices": "Hakuna vifaa vilivyosajiliwa bado",
     "devicePending": "Inasubiri idhini",
     "encryptedData": "Imefichwa — fungua kwenye kifaa chako kuona",
-    "manageDevices": "Dhibiti vifaa"
+    "manageDevices": "Dhibiti vifaa",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Unadaiwa",
@@ -298,6 +348,56 @@
     "checkStatus": "Angalia Hali",
     "checkAndKeys": "Funguo za Usawazishaji",
     "pendingDeviceCount": "Vifaa {{count}} vinasubiri kuidhinishwa",
-    "approveNow": "Idhinisha Sasa"
+    "approveNow": "Idhinisha Sasa",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Mpango wa mlo",
+    "addMeal": "Panga mlo",
+    "empty": "Hakuna mlo uliopangwa",
+    "breakfast": "Kifungua kinywa",
+    "lunch": "Chakula cha mchana",
+    "dinner": "Chakula cha jioni",
+    "snack": "Vitafunio",
+    "ingredients": "Viungo",
+    "addToShopping": "Ongeza kwenye orodha ya ununuzi",
+    "noIngredients": "Hakuna viungo vya kuongeza",
+    "addedToShopping": "viungo vimeongezwa kwenye orodha ya ununuzi"
+  },
+  "leaderboard": {
+    "title": "Ubao wa viongozi",
+    "points": "pointi",
+    "you": "wewe"
+  },
+  "roles": {
+    "admin": "Msimamizi",
+    "member": "Mwanachama",
+    "limited": "Mdogo",
+    "changeRole": "Badilisha jukumu",
+    "onlyAdmins": "Wasimamizi pekee wanaweza kubadilisha majukumu",
+    "lastAdmin": "Haiwezekani kuondoa msimamizi wa mwisho"
+  },
+  "export": {
+    "fullExport": "Hamisha data zote",
+    "fullExportDesc": "Pakua data zote za nyumba kama JSON",
+    "exporting": "Inahamisha..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Unganisha Kalenda ya Google",
+    "syncNow": "Sawazisha sasa",
+    "lastSynced": "Ilisawazishwa mara ya mwisho",
+    "syncing": "Inasawazisha...",
+    "syncSuccess": "Kalenda imesawazishwa kwa mafanikio"
   }
 }

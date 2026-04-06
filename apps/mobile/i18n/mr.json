@@ -85,7 +85,17 @@
     "daily": "रोज",
     "weekly": "दर आठवड्याला",
     "biweekly": "दोन आठवड्यांतून एकदा",
-    "monthly": "दर महिन्याला"
+    "monthly": "दर महिन्याला",
+    "fairShare": "न्याय्य वाटा",
+    "thisWeek": "या आठवड्यात",
+    "thisMonth": "या महिन्यात",
+    "allTime": "सर्व काळ",
+    "tasks": "कार्ये",
+    "noAnalytics": "अद्याप कोणतीही कामे पूर्ण झालेली नाहीत. विश्लेषण पाहण्यासाठी कामे पूर्ण करणे सुरू करा.",
+    "effortLevel": "प्रयत्न पातळी",
+    "breakMode": "विश्रांती मोड",
+    "breakModeActive": "कामे थांबवली आहेत",
+    "breakModeUntil": "{{date}} पर्यंत"
   },
   "events": {
     "title": "कॅलेंडर",
@@ -108,7 +118,8 @@
     "calendarSettings": "कॅलेंडर सेटिंग्ज",
     "deviceCalendars": "डिव्हाइस कॅलेंडर्स",
     "noCalendars": "कॅलेंडर्स सापडले नाहीत",
-    "grantAccess": "डिव्हाइसचे इव्हेंट बघण्यासाठी कॅलेंडर ॲक्सेस द्या"
+    "grantAccess": "डिव्हाइसचे इव्हेंट बघण्यासाठी कॅलेंडर ॲक्सेस द्या",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "खर्च",
@@ -123,7 +134,42 @@
     "percentage": "टक्केवारी",
     "fixed": "ठरलेलं",
     "date": "तारीख",
-    "selectDate": "तारीख निवडा"
+    "selectDate": "तारीख निवडा",
+    "editExpense": "खर्च संपादित करा",
+    "shares": "वाटे",
+    "splitPerPerson": "प्रत्येक व्यक्तीसाठी विभागणी",
+    "balanced": "संतुलित",
+    "remaining": "{{amount}} शिल्लक",
+    "overBudget": "{{amount}} जास्त",
+    "categories": {
+      "groceries": "किराणा",
+      "dining": "भोजन",
+      "rent": "भाडे",
+      "utilities": "उपयोगिता",
+      "transport": "वाहतूक",
+      "entertainment": "मनोरंजन",
+      "health": "आरोग्य",
+      "travel": "प्रवास",
+      "shopping": "खरेदी",
+      "subscriptions": "सदस्यता",
+      "education": "शिक्षण",
+      "pets": "पाळीव प्राणी",
+      "gifts": "भेटवस्तू",
+      "household": "घरगुती",
+      "other": "इतर"
+    },
+    "allCategories": "सर्व",
+    "settleUp": "निपटारा करा",
+    "settleUpDescription": "सर्व कर्ज फेडण्यासाठी किमान देयके",
+    "noDebts": "सर्व निपटारा झाला!",
+    "markAsPaid": "भरले म्हणून चिन्हांकित करा",
+    "export": "निर्यात करा",
+    "exportExpenses": "खर्च निर्यात करा",
+    "exportFormat": "स्वरूप",
+    "exportDateRange": "तारीख श्रेणी",
+    "exportFrom": "पासून",
+    "exportTo": "पर्यंत",
+    "exportAll": "सर्व काळ"
   },
   "subscriptions": {
     "title": "सबस्क्रिप्शन्स",
@@ -183,7 +229,11 @@
     "noDevices": "अजून कोणतेही डिव्हाइस नोंदणीकृत नाही",
     "devicePending": "मंजुरीसाठी प्रतीक्षा",
     "encryptedData": "एन्क्रिप्टेड — बघण्यासाठी तुमच्या डिव्हाइसवर उघडा",
-    "manageDevices": "डिव्हाइस व्यवस्थापित करा"
+    "manageDevices": "डिव्हाइस व्यवस्थापित करा",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "तुम्हाला द्यायचे आहे",
@@ -298,6 +348,56 @@
     "checkStatus": "स्थिती तपासा",
     "checkAndKeys": "सिंक की",
     "pendingDeviceCount": "{{count}} डिव्हाइस मंजुरीची प्रतीक्षा करत आहे",
-    "approveNow": "आता मंजूर करा"
+    "approveNow": "आता मंजूर करा",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "जेवणाची योजना",
+    "addMeal": "जेवणाची योजना करा",
+    "empty": "कोणतेही जेवण नियोजित नाही",
+    "breakfast": "नाश्ता",
+    "lunch": "दुपारचे जेवण",
+    "dinner": "रात्रीचे जेवण",
+    "snack": "नाश्ता",
+    "ingredients": "साहित्य",
+    "addToShopping": "खरेदी यादीत जोडा",
+    "noIngredients": "जोडण्यासाठी साहित्य नाही",
+    "addedToShopping": "साहित्य खरेदी यादीत जोडले"
+  },
+  "leaderboard": {
+    "title": "लीडरबोर्ड",
+    "points": "गुण",
+    "you": "तुम्ही"
+  },
+  "roles": {
+    "admin": "प्रशासक",
+    "member": "सदस्य",
+    "limited": "मर्यादित",
+    "changeRole": "भूमिका बदला",
+    "onlyAdmins": "केवळ प्रशासक भूमिका बदलू शकतात",
+    "lastAdmin": "शेवटचा प्रशासक काढता येत नाही"
+  },
+  "export": {
+    "fullExport": "सर्व डेटा निर्यात करा",
+    "fullExportDesc": "सर्व घरगुती डेटा JSON म्हणून डाउनलोड करा",
+    "exporting": "निर्यात होत आहे..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Google कॅलेंडर जोडा",
+    "syncNow": "आता सिंक करा",
+    "lastSynced": "शेवटचे सिंक",
+    "syncing": "सिंक होत आहे...",
+    "syncSuccess": "कॅलेंडर यशस्वीरित्या सिंक झाले"
   }
 }

@@ -12,11 +12,20 @@ export function isTauri(): boolean {
   );
 }
 
+// Dynamic loaders for Tauri plugins — isolated so Metro doesn't try to resolve
+// these modules during Expo web builds where they don't exist.
+async function getTauriShell(): Promise<{ open: (url: string) => Promise<void> } | null> {
+  try { return await (Function('return import("@tauri-apps/plugin-shell")')() as any); } catch { return null; }
+}
+async function getTauriDeepLink(): Promise<{ onOpenUrl: (cb: (urls: string[]) => void) => Promise<() => void> } | null> {
+  try { return await (Function('return import("@tauri-apps/plugin-deep-link")')() as any); } catch { return null; }
+}
+
 /** Open a URL in the system browser via Tauri shell plugin */
 export async function openInBrowser(url: string): Promise<void> {
   if (!isTauri()) return;
-  const { open } = await import("@tauri-apps/plugin-shell");
-  await open(url);
+  const shell = await getTauriShell();
+  await shell?.open(url);
 }
 
 /** Listen for deep link events from Tauri */
@@ -28,8 +37,9 @@ export function onDeepLink(
   let unlisten: (() => void) | undefined;
 
   (async () => {
-    const { onOpenUrl } = await import("@tauri-apps/plugin-deep-link");
-    unlisten = await onOpenUrl((urls: string[]) => {
+    const deepLink = await getTauriDeepLink();
+    if (!deepLink) return;
+    unlisten = await deepLink.onOpenUrl((urls: string[]) => {
       if (urls.length > 0) {
         callback(urls[0]);
       }

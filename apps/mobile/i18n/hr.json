@@ -85,7 +85,17 @@
     "daily": "Dnevno",
     "weekly": "Tjedno",
     "biweekly": "Svaka dva tjedna",
-    "monthly": "Mjesečno"
+    "monthly": "Mjesečno",
+    "fairShare": "Pravedan udio",
+    "thisWeek": "Ovaj tjedan",
+    "thisMonth": "Ovaj mjesec",
+    "allTime": "Sve vrijeme",
+    "tasks": "zadaci",
+    "noAnalytics": "Još nema završenih kućanskih poslova. Počnite dovršavati poslove za prikaz analitike.",
+    "effortLevel": "Razina truda",
+    "breakMode": "Način pauze",
+    "breakModeActive": "Kućanski poslovi su pauzirani",
+    "breakModeUntil": "do {{date}}"
   },
   "events": {
     "title": "Kalendar",
@@ -108,7 +118,8 @@
     "calendarSettings": "Postavke kalendara",
     "deviceCalendars": "Kalendari uređaja",
     "noCalendars": "Kalendari nisu pronađeni",
-    "grantAccess": "Dozvoli pristup kalendaru da vidiš događaje s uređaja"
+    "grantAccess": "Dozvoli pristup kalendaru da vidiš događaje s uređaja",
+    "openSettings": "Open Settings"
   },
   "expenses": {
     "title": "Troškovi",
@@ -123,7 +134,42 @@
     "percentage": "Postotak",
     "fixed": "Fiksno",
     "date": "Datum",
-    "selectDate": "Odaberi datum"
+    "selectDate": "Odaberi datum",
+    "editExpense": "Uredi trošak",
+    "shares": "Udjeli",
+    "splitPerPerson": "Podjela po osobi",
+    "balanced": "Uravnoteženo",
+    "remaining": "{{amount}} preostalo",
+    "overBudget": "{{amount}} preko",
+    "categories": {
+      "groceries": "Namirnice",
+      "dining": "Prehrana",
+      "rent": "Najam",
+      "utilities": "Režije",
+      "transport": "Prijevoz",
+      "entertainment": "Zabava",
+      "health": "Zdravlje",
+      "travel": "Putovanje",
+      "shopping": "Kupovina",
+      "subscriptions": "Pretplate",
+      "education": "Obrazovanje",
+      "pets": "Kućni ljubimci",
+      "gifts": "Pokloni",
+      "household": "Kućanstvo",
+      "other": "Ostalo"
+    },
+    "allCategories": "Sve",
+    "settleUp": "Podmiri",
+    "settleUpDescription": "Minimalna plaćanja za podmirenje svih dugova",
+    "noDebts": "Sve podmireno!",
+    "markAsPaid": "Označi kao plaćeno",
+    "export": "Izvoz",
+    "exportExpenses": "Izvezi troškove",
+    "exportFormat": "Format",
+    "exportDateRange": "Raspon datuma",
+    "exportFrom": "Od",
+    "exportTo": "Do",
+    "exportAll": "Sve vrijeme"
   },
   "subscriptions": {
     "title": "Pretplate",
@@ -183,7 +229,11 @@
     "noDevices": "Još nema registriranih uređaja",
     "devicePending": "Čeka se odobrenje",
     "encryptedData": "Šifrirano — otvori na svom uređaju za pregled",
-    "manageDevices": "Upravljanje uređajima"
+    "manageDevices": "Upravljanje uređajima",
+    "weekStartsOn": "Week Starts On",
+    "monday": "Monday",
+    "sunday": "Sunday",
+    "timeFormat": "Time Format"
   },
   "balances": {
     "owedToYou": "Duguju ti",
@@ -298,6 +348,56 @@
     "checkStatus": "Provjerite status",
     "checkAndKeys": "Tipke za sinkronizaciju",
     "pendingDeviceCount": "{{count}} uređaj(a) čeka na odobrenje",
-    "approveNow": "Odobri sada"
+    "approveNow": "Odobri sada",
+    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+  },
+  "finances": {
+    "title": "Finances",
+    "analytics": "Spending Analytics"
+  },
+  "tabs": {
+    "home": "Home",
+    "lists": "Lists",
+    "chores": "Chores",
+    "finances": "Finances",
+    "more": "More"
+  },
+  "meals": {
+    "title": "Plan obroka",
+    "addMeal": "Planiraj obrok",
+    "empty": "Nema planiranih obroka",
+    "breakfast": "Doručak",
+    "lunch": "Ručak",
+    "dinner": "Večera",
+    "snack": "Užina",
+    "ingredients": "Sastojci",
+    "addToShopping": "Dodaj na popis za kupovinu",
+    "noIngredients": "Nema sastojaka za dodavanje",
+    "addedToShopping": "sastojci dodani na popis za kupovinu"
+  },
+  "leaderboard": {
+    "title": "Ljestvica",
+    "points": "bod.",
+    "you": "ti"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "member": "Član",
+    "limited": "Ograničen",
+    "changeRole": "Promijeni ulogu",
+    "onlyAdmins": "Samo administratori mogu mijenjati uloge",
+    "lastAdmin": "Ne može se ukloniti posljednji administrator"
+  },
+  "export": {
+    "fullExport": "Izvezi sve podatke",
+    "fullExportDesc": "Preuzmi sve podatke kućanstva kao JSON",
+    "exporting": "Izvoz..."
+  },
+  "calendarSync": {
+    "connectGoogle": "Poveži Google kalendar",
+    "syncNow": "Sinkroniziraj sada",
+    "lastSynced": "Zadnja sinkronizacija",
+    "syncing": "Sinkronizacija...",
+    "syncSuccess": "Kalendar uspješno sinkroniziran"
   }
 }
