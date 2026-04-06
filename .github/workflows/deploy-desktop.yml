@@ -288,12 +288,68 @@ jobs:
         id: version
         run: echo "version=$(jq -r '.version' apps/desktop/tauri/tauri.conf.json)" >> "$GITHUB_OUTPUT"
 
-      - name: Create release
+      - name: Rename artifacts to fixed filenames for stable download URLs
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          mkdir -p artifacts/release
+
+          # macOS DMG
+          DMG=$(find artifacts/macos -name '*.dmg' | head -1)
+          if [ -n "$DMG" ]; then
+            cp "$DMG" "artifacts/release/Wohnly-macOS.dmg"
+            cp "$DMG" "artifacts/release/Wohnly-${VERSION}-macOS.dmg"
+          fi
+
+          # Windows EXE (NSIS)
+          EXE=$(find artifacts/windows -name '*.exe' | head -1)
+          if [ -n "$EXE" ]; then
+            cp "$EXE" "artifacts/release/Wohnly-Windows-Setup.exe"
+            cp "$EXE" "artifacts/release/Wohnly-${VERSION}-Windows-Setup.exe"
+          fi
+
+          # Windows MSI
+          MSI=$(find artifacts/windows -name '*.msi' | head -1)
+          if [ -n "$MSI" ]; then
+            cp "$MSI" "artifacts/release/Wohnly-Windows.msi"
+            cp "$MSI" "artifacts/release/Wohnly-${VERSION}-Windows.msi"
+          fi
+
+          ls -la artifacts/release/
+
+      - name: Delete previous 'latest' release if exists
+        run: gh release delete desktop-latest --yes 2>/dev/null || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete previous 'latest' tag if exists
+        run: git push origin :refs/tags/desktop-latest 2>/dev/null || true
+
+      - name: Create 'latest' release (always up to date)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: desktop-latest
+          name: Wohnly Desktop (Latest)
+          body: |
+            **Latest desktop build — v${{ steps.version.outputs.version }}**
+
+            | Platform | Download |
+            |---|---|
+            | macOS | [Wohnly-macOS.dmg](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-macOS.dmg) |
+            | Windows (Installer) | [Wohnly-Windows-Setup.exe](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-Windows-Setup.exe) |
+            | Windows (MSI) | [Wohnly-Windows.msi](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-Windows.msi) |
+          files: |
+            artifacts/release/Wohnly-macOS.dmg
+            artifacts/release/Wohnly-Windows-Setup.exe
+            artifacts/release/Wohnly-Windows.msi
+          make_latest: true
+          prerelease: false
+
+      - name: Create versioned release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: desktop-v${{ steps.version.outputs.version }}
           name: Wohnly Desktop v${{ steps.version.outputs.version }}
           files: |
-            artifacts/macos/**/*
+            artifacts/release/Wohnly-${{ steps.version.outputs.version }}-*
             artifacts/windows/**/*
           draft: true
