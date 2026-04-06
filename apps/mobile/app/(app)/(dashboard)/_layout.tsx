@@ -13,6 +13,7 @@ export default function DashboardLayout() {
         headerTintColor: colors.text,
         headerShadowVisible: false,
         headerTitleStyle: { fontWeight: "700" },
+        contentStyle: { flex: 1 },
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
