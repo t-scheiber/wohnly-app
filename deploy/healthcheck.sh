@@ -1,37 +1,39 @@
 #!/bin/bash
 # API Health Check — runs via cron on the VPS.
-# Checks the /api/health endpoint and emails t@wohnly.app if the API is down.
-# Also auto-restarts the API via PM2 if it's not running.
+# Checks the /api/health endpoint. If down:
+#   1. Pull latest code from git
+#   2. Install deps + prisma generate
+#   3. Restart API via PM2
+#   4. Email t@wohnly.app with status
+# Also deploys the web frontend if git had changes.
 
 HEALTH_URL="http://localhost:3001/api/health"
 ALERT_EMAIL="t@wohnly.app"
 FROM_EMAIL="noreply@wohnly.app"
 STATE_FILE="/tmp/wohnly-api-health-state"
 PM2_APP="wohnly-api"
+REPO_DIR="/var/www/wohnly"
+WEB_DIR="/var/www/wohnly-web"
 
-# Check health endpoint (2 second timeout)
+# Check health endpoint (5 second timeout)
 HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$HEALTH_URL" 2>/dev/null)
 
 if [ "$HTTP_CODE" = "200" ]; then
   # API is healthy — clear any previous down state
   if [ -f "$STATE_FILE" ]; then
     rm -f "$STATE_FILE"
-    # Send recovery email
     echo -e "Subject: [Wohnly] API recovered\nFrom: $FROM_EMAIL\nTo: $ALERT_EMAIL\n\nThe Wohnly API is back online.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nHealth: $HEALTH_URL -> $HTTP_CODE" | sendmail -t -f "$FROM_EMAIL" 2>/dev/null || true
   fi
   exit 0
 fi
 
-# API is down — check if we already alerted
+# API is down — check if we already alerted recently (avoid spam)
 if [ -f "$STATE_FILE" ]; then
-  # Already alerted, don't spam. But try to restart.
   LAST_ALERT=$(cat "$STATE_FILE")
   NOW=$(date +%s)
   DIFF=$((NOW - LAST_ALERT))
-
   # Re-alert every 30 minutes if still down
   if [ "$DIFF" -lt 1800 ]; then
-    # Just try restart, no email
     pm2 restart "$PM2_APP" 2>/dev/null || true
     exit 0
   fi
@@ -40,18 +42,50 @@ fi
 # Record alert timestamp
 date +%s > "$STATE_FILE"
 
-# Try to restart the API
-pm2 restart "$PM2_APP" 2>/dev/null || pm2 start /var/www/wohnly/deploy/pm2.api.config.cjs --only "$PM2_APP" --update-env 2>/dev/null
+# Full recovery: pull latest code, rebuild, restart
+cd "$REPO_DIR" || exit 1
+export GIT_SSH_COMMAND="ssh -i /root/.ssh/wohnly_deploy -o StrictHostKeyChecking=no"
 
-# Wait a moment and re-check
+# Pull latest
+git stash 2>/dev/null || true
+git fetch origin main 2>/dev/null
+BEFORE=$(git rev-parse HEAD)
+git reset --hard origin/main 2>/dev/null
+AFTER=$(git rev-parse HEAD)
+
+# Install deps
+npm ci --silent 2>/dev/null
+
+# Prisma
+cd apps/api
+npx prisma generate 2>/dev/null
+npx prisma db push --accept-data-loss 2>/dev/null
+cd "$REPO_DIR"
+
+# Restart API
+pm2 delete "$PM2_APP" 2>/dev/null || true
+pm2 start deploy/pm2.api.config.cjs --only "$PM2_APP" --update-env 2>/dev/null
+pm2 save 2>/dev/null
+
+# If code changed, also rebuild and deploy web
+if [ "$BEFORE" != "$AFTER" ]; then
+  cd apps/mobile
+  npx expo export --platform web 2>/dev/null
+  node scripts/inject-adsense.mjs 2>/dev/null
+  cp -r dist/* "$WEB_DIR/" 2>/dev/null
+  cd "$REPO_DIR"
+fi
+
+# Wait and re-check
 sleep 5
 HTTP_RECHECK=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$HEALTH_URL" 2>/dev/null)
 
 if [ "$HTTP_RECHECK" = "200" ]; then
-  BODY="The Wohnly API was down but has been auto-restarted successfully.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nOriginal status: $HTTP_CODE\nAfter restart: $HTTP_RECHECK"
+  BODY="The Wohnly API was down but has been auto-recovered.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nOriginal status: $HTTP_CODE\nAfter recovery: $HTTP_RECHECK\n\nRecovery steps taken:\n- git pull ($(git log --oneline -1))\n- npm ci + prisma generate\n- pm2 restart"
+  [ "$BEFORE" != "$AFTER" ] && BODY="$BODY\n- Web frontend redeployed (code changed)"
   rm -f "$STATE_FILE"
 else
-  BODY="The Wohnly API is DOWN and auto-restart failed.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nHealth check: $HEALTH_URL -> $HTTP_CODE\nAfter restart attempt: $HTTP_RECHECK\n\nPlease check the server manually:\n  ssh root@$(hostname) 'pm2 logs wohnly-api --lines 30 --nostream'"
+  BODY="The Wohnly API is DOWN and auto-recovery FAILED.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nHealth check: $HEALTH_URL -> $HTTP_CODE\nAfter recovery attempt: $HTTP_RECHECK\n\nManual intervention required:\n  ssh vps 'pm2 logs wohnly-api --lines 50 --nostream'"
 fi
 
 # Send alert email
