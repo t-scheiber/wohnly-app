@@ -210,15 +210,7 @@ export default function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <AuthGate>
               <StatusBar style={theme.colorScheme === "dark" ? "light" : "dark"} />
-              {Platform.OS === "web" ? (
-                <View style={{ flex: 1, alignItems: "center", backgroundColor: Colors[theme.colorScheme].background }}>
-                  <View style={{ flex: 1, width: "100%", maxWidth: 600 }}>
-                    <Slot />
-                  </View>
-                </View>
-              ) : (
-                <Slot />
-              )}
+              <Slot />
             </AuthGate>
           </QueryClientProvider>
         </SafeAreaProvider>
