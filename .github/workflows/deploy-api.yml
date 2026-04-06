@@ -7,6 +7,7 @@ on:
     paths:
       - 'apps/api/**'
       - 'packages/shared/**'
+      - 'deploy/**'
       - '.github/workflows/deploy-api.yml'
 
 jobs:
@@ -33,3 +34,8 @@ jobs:
             pm2 delete wohnly-api 2>/dev/null || true
             pm2 start deploy/pm2.api.config.cjs --only wohnly-api --update-env
             pm2 save
+
+            # Install health check cron (every 2 minutes)
+            chmod +x deploy/healthcheck.sh
+            CRON_CMD="*/2 * * * * /var/www/wohnly/deploy/healthcheck.sh >> /var/log/wohnly-health.log 2>&1"
+            ( crontab -l 2>/dev/null | grep -v "healthcheck.sh" ; echo "$CRON_CMD" ) | crontab -
