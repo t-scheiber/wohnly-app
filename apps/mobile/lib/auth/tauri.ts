@@ -12,20 +12,19 @@ export function isTauri(): boolean {
   );
 }
 
-// Dynamic loaders for Tauri plugins — isolated so Metro doesn't try to resolve
-// these modules during Expo web builds where they don't exist.
-async function getTauriShell(): Promise<{ open: (url: string) => Promise<void> } | null> {
-  try { return await (Function('return import("@tauri-apps/plugin-shell")')() as any); } catch { return null; }
-}
-async function getTauriDeepLink(): Promise<{ onOpenUrl: (cb: (urls: string[]) => void) => Promise<() => void> } | null> {
-  try { return await (Function('return import("@tauri-apps/plugin-deep-link")')() as any); } catch { return null; }
+// Use Tauri's IPC directly via the global __TAURI_INTERNALS__ object.
+// The dynamic-import-via-Function() trick doesn't work because Metro
+// can't bundle the plugin, so the runtime import() fails silently.
+// The IPC invoke is always available and works on both macOS and Windows.
+
+function tauriInvoke(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
+  return (window as any).__TAURI_INTERNALS__.invoke(cmd, args);
 }
 
 /** Open a URL in the system browser via Tauri shell plugin */
 export async function openInBrowser(url: string): Promise<void> {
   if (!isTauri()) return;
-  const shell = await getTauriShell();
-  await shell?.open(url);
+  await tauriInvoke("plugin:shell|open", { path: url });
 }
 
 /** Listen for deep link events from Tauri */
@@ -37,13 +36,25 @@ export function onDeepLink(
   let unlisten: (() => void) | undefined;
 
   (async () => {
-    const deepLink = await getTauriDeepLink();
-    if (!deepLink) return;
-    unlisten = await deepLink.onOpenUrl((urls: string[]) => {
-      if (urls.length > 0) {
-        callback(urls[0]);
-      }
+    const internals = (window as any).__TAURI_INTERNALS__;
+
+    // Register a JS callback via Tauri's transformCallback (returns a numeric ID).
+    // Then subscribe to the Rust-side event through the event plugin.
+    const handlerId = internals.transformCallback((event: any) => {
+      console.log("[onDeepLink] event received:", JSON.stringify(event));
+      const urls: string[] = event?.payload?.urls ?? event?.payload ?? [];
+      if (urls.length > 0) callback(urls[0]);
     });
+
+    await internals.invoke("plugin:event|listen", {
+      event: "deep-link://new-url",
+      target: { kind: "Any" },
+      handler: handlerId,
+    });
+
+    unlisten = () => {
+      internals.invoke("plugin:event|unlisten", handlerId).catch(() => {});
+    };
   })();
 
   return () => {
