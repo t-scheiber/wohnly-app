@@ -8,6 +8,7 @@
 # Also deploys the web frontend if git had changes.
 
 HEALTH_URL="http://localhost:3001/api/health"
+EXTERNAL_URL="https://api.wohnly.app/api/health"
 ALERT_EMAIL="t@wohnly.app"
 FROM_EMAIL="noreply@wohnly.app"
 STATE_FILE="/tmp/wohnly-api-health-state"
@@ -15,8 +16,23 @@ PM2_APP="wohnly-api"
 REPO_DIR="/var/www/wohnly"
 WEB_DIR="/var/www/wohnly-web"
 
-# Check health endpoint (5 second timeout)
+# Check both internal (Node process) and external (reverse proxy + SSL) endpoints
 HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$HEALTH_URL" 2>/dev/null)
+EXT_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$EXTERNAL_URL" 2>/dev/null)
+
+# If external fails but internal passes, it's a reverse proxy / SSL issue
+if [ "$HTTP_CODE" = "200" ] && [ "$EXT_CODE" != "200" ]; then
+  # Try restarting nginx/caddy
+  systemctl restart nginx 2>/dev/null || systemctl restart caddy 2>/dev/null || true
+  sleep 2
+  EXT_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$EXTERNAL_URL" 2>/dev/null)
+  if [ "$EXT_CODE" != "200" ]; then
+    echo -e "Subject: [Wohnly] Reverse proxy is down!\nFrom: $FROM_EMAIL\nTo: $ALERT_EMAIL\n\nAPI is running (localhost:3001 -> $HTTP_CODE) but external URL is failing ($EXTERNAL_URL -> $EXT_CODE).\nRestarted reverse proxy but it's still down.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" | sendmail -t -f "$FROM_EMAIL" 2>/dev/null || true
+  fi
+fi
+
+# Use external status as the overall health (catches more failure modes)
+[ "$EXT_CODE" != "200" ] && HTTP_CODE="$EXT_CODE"
 
 if [ "$HTTP_CODE" = "200" ]; then
   # API is healthy — clear any previous down state
