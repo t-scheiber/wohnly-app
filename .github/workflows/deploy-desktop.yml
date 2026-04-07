@@ -253,25 +253,6 @@ jobs:
           tauriScript: npx tauri
           args: --verbose
 
-      # Optional: Sign Windows installers with Azure Trusted Signing.
-      # Requires secrets: AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET,
-      #                   AZURE_SIGNING_ACCOUNT, AZURE_CERT_PROFILE
-      # See: https://learn.microsoft.com/en-us/azure/trusted-signing/
-      - name: Sign Windows installers
-        if: env.AZURE_TENANT_ID != ''
-        uses: azure/trusted-signing-action@v0.5.0
-        env:
-          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        with:
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          endpoint: https://eus.codesigning.azure.net/
-          trusted-signing-account-name: ${{ secrets.AZURE_SIGNING_ACCOUNT }}
-          certificate-profile-name: ${{ secrets.AZURE_CERT_PROFILE }}
-          files-folder: apps/desktop/tauri/target/release/bundle/nsis
-          files-folder-filter: exe
-
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v5
         with:
