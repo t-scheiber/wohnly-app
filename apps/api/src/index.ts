@@ -78,6 +78,7 @@ app.use(
       "http://localhost:8081",
       "http://localhost:19006",
       "tauri://localhost",
+      "http://tauri.localhost",
       "https://tauri.localhost",
     ],
     credentials: true,

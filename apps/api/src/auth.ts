@@ -37,6 +37,7 @@ export const auth = betterAuth({
     "http://localhost:8081",
     "http://localhost:19006",
     "tauri://localhost",
+    "http://tauri.localhost",
     "https://tauri.localhost",
   ],
 
