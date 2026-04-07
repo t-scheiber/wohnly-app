@@ -70,3 +70,5 @@ apps/api/prisma/migrations/**/migration_lock.toml
 # Design assets
 banner.psd
 banner.png
+
+msstorelistings/
