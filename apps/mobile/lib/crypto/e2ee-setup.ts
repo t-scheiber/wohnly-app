@@ -9,10 +9,30 @@ import { sealToDevice, sealedToBase64, openSealedHK, base64ToSealed } from "./se
 import { saveDeviceKeys, getDeviceKeys, hasDeviceKeys } from "./device-storage";
 import { cacheHouseholdKey } from "./household-key-cache";
 import { apiPost, api } from "@/lib/api/client";
+import { isTauri } from "@/lib/auth/tauri";
+
+function getDeviceName(): string {
+  if (Platform.OS === "web" && typeof navigator !== "undefined") {
+    const ua = navigator.userAgent;
+    if (isTauri()) {
+      if (ua.includes("Windows")) return "Windows Desktop";
+      if (ua.includes("Macintosh")) return "macOS Desktop";
+      return "Desktop";
+    }
+    if (ua.includes("Macintosh")) return "macOS Web";
+    if (ua.includes("Windows")) return "Windows Web";
+    if (ua.includes("Linux")) return "Linux Web";
+    return "Web Browser";
+  }
+  if (Platform.OS === "ios") return "iPhone";
+  if (Platform.OS === "android") return "Android";
+  return Platform.OS;
+}
 
 /**
  * Ensure the current device is registered with the server.
- * If already registered, returns stored keys. Otherwise generates new keys and registers.
+ * If already registered, validates with the server (handles account deletion/recreation).
+ * Otherwise generates new keys and registers.
  */
 export async function ensureDeviceRegistered(): Promise<{
   deviceId: string;
@@ -20,29 +40,31 @@ export async function ensureDeviceRegistered(): Promise<{
   privateKey: Uint8Array;
 }> {
   const existing = await getDeviceKeys();
-  if (existing) return existing;
+
+  if (existing) {
+    // Validate cached keys with server — the register endpoint deduplicates
+    // by publicKey. If the account was deleted and recreated, the server
+    // will assign a new deviceId which we update in the cache.
+    const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
+      publicKey: existing.publicKey,
+      name: getDeviceName(),
+    });
+
+    if (res.deviceId !== existing.deviceId) {
+      await saveDeviceKeys(res.deviceId, existing.publicKey, existing.privateKey);
+      return { deviceId: res.deviceId, publicKey: existing.publicKey, privateKey: existing.privateKey };
+    }
+
+    return existing;
+  }
 
   // Generate new keypair
   const { publicKey, privateKey } = await generateDeviceKeys();
 
-  // Build a descriptive device name
-  let deviceName: string = Platform.OS;
-  if (Platform.OS === "web" && typeof navigator !== "undefined") {
-    const ua = navigator.userAgent;
-    if (ua.includes("Macintosh")) deviceName = "macOS Web";
-    else if (ua.includes("Windows")) deviceName = "Windows Web";
-    else if (ua.includes("Linux")) deviceName = "Linux Web";
-    else deviceName = "Web Browser";
-  } else if (Platform.OS === "ios") {
-    deviceName = "iPhone";
-  } else if (Platform.OS === "android") {
-    deviceName = "Android";
-  }
-
   // Register with server (deduplicates by publicKey)
   const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
     publicKey,
-    name: deviceName,
+    name: getDeviceName(),
   });
 
   // Save to secure storage

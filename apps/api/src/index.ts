@@ -101,6 +101,22 @@ app.use("*", async (c, next) => {
   await next();
 });
 
+// Tauri desktop OAuth callback: serves an HTML page that redirects to
+// the wohnly:// deep link and tells the user they can close the tab.
+// Must be outside /api/auth/* to avoid the Better Auth wildcard.
+app.get("/api/tauri-callback", (c) => {
+  const cookie = c.req.query("cookie") ?? "";
+  const deepLink = `wohnly://auth/callback?cookie=${encodeURIComponent(cookie)}`;
+  return c.html(`<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Wohnly</title>
+<style>body{font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#0f1a1a;color:#fff;text-align:center}
+.box{max-width:360px}h2{margin-bottom:8px}p{color:#aaa;font-size:14px}</style></head>
+<body><div class="box"><h2>Login successful</h2><p>Returning to Wohnly...</p>
+<p style="margin-top:24px;font-size:12px;color:#666">You can close this tab.</p></div>
+<script>window.location.href=${JSON.stringify(deepLink)};setTimeout(()=>window.close(),1500)</script>
+</body></html>`);
+});
+
 // Better Auth handles its own routes.
 // Hono uses `*` as the wildcard matcher for nested paths.
 app.all("/api/auth", (c) => auth.handler(c.req.raw));

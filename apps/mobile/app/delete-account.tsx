@@ -5,6 +5,8 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { authClient } from "@/lib/auth/client";
 import { apiDelete } from "@/lib/api/client";
+import { isTauri, clearTauriCookie } from "@/lib/auth/tauri";
+import { clearDeviceKeys } from "@/lib/crypto/device-storage";
 
 export default function DeleteAccountScreen() {
   const colorScheme = useColorScheme() ?? "light";
@@ -26,7 +28,9 @@ export default function DeleteAccountScreen() {
       try {
         await apiDelete("/api/user/account");
         setDeleted(true);
-        await authClient.signOut();
+        if (isTauri()) clearTauriCookie();
+        await clearDeviceKeys();
+        await authClient.signOut().catch(() => {});
         setTimeout(() => router.replace("/(auth)/sign-in"), 3000);
       } catch (err: unknown) {
         Alert.alert("Error", err instanceof Error ? err.message : "Failed to delete account");
