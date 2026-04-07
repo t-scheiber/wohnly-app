@@ -128,6 +128,21 @@ app.route("/api/meals", mealsRouter);
 // Health check
 app.get("/api/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));
 
+// Desktop download — proxies the GitHub release so the URL has no redirects
+// (required by Microsoft Store package validation)
+app.get("/download/:file", async (c) => {
+  const file = c.req.param("file");
+  const ghUrl = `https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/${file}`;
+  const res = await fetch(ghUrl, { redirect: "follow" });
+  if (!res.ok) return c.text("Not found", 404);
+  c.header("Content-Type", "application/octet-stream");
+  c.header("Content-Disposition", `attachment; filename="${file}"`);
+  if (res.headers.get("content-length")) {
+    c.header("Content-Length", res.headers.get("content-length")!);
+  }
+  return c.body(res.body as ReadableStream);
+});
+
 // Redirect API root to web app (catches OAuth post-redirect)
 app.get("/", (c) => c.redirect(process.env.APP_URL ?? "https://wohnly.app"));
 
