@@ -81,7 +81,7 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   const callbackURL = "wohnly://auth/callback";
   const url = `${apiUrl}/api/auth/sign-in/social`;
 
-  let res: Response;
+  let res: Response | undefined;
   const body = JSON.stringify({ provider, callbackURL });
   const opts: RequestInit = {
     method: "POST",
@@ -103,6 +103,12 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
       }
       await new Promise((r) => setTimeout(r, 1000));
     }
+  }
+
+  if (!res) {
+    throw new Error(
+      "Could not get a response from the server after multiple retries."
+    );
   }
 
   if (!res.ok) {
