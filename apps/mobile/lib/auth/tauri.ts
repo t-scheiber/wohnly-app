@@ -81,7 +81,7 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   const callbackURL = "wohnly://auth/callback";
   const url = `${apiUrl}/api/auth/sign-in/social`;
 
-  let res: Response;
+  let res!: Response;
   const body = JSON.stringify({ provider, callbackURL });
   const opts: RequestInit = {
     method: "POST",
