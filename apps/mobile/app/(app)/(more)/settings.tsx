@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Check, HelpCircle } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
+import { isTauri, clearTauriCookie } from "@/lib/auth/tauri";
 import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences, useHouseholdDevices, usePendingDevices, useApproveDevice, useRejectDevice } from "@/lib/api/queries";
 import { apiPatch } from "@/lib/api/client";
 import { useHousehold } from "@/lib/hooks/useHousehold";
@@ -326,6 +327,8 @@ export default function SettingsScreen() {
     if (Platform.OS === "web") {
       if (confirm(t("settings.signOutConfirm"))) {
         clearHouseholdKeys();
+        if (isTauri()) clearTauriCookie();
+        clearDeviceKeys();
         authClient.signOut().then(() => router.replace("/(auth)/sign-in"));
       }
       return;
@@ -337,7 +340,7 @@ export default function SettingsScreen() {
         style: "destructive",
         onPress: async () => {
           clearHouseholdKeys();
-          try { await clearDeviceKeys(); } catch {}
+          await clearDeviceKeys();
           await authClient.signOut();
           router.replace("/(auth)/sign-in");
         },

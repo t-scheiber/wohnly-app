@@ -36,6 +36,15 @@ export function DeviceOnboardingBanners() {
     fetchAndCacheHouseholdKey(householdId).then(() => refetchCurrent());
   }, [householdId, hasKey, keyChecked, currentDevice?.status]);
 
+  // Auto-poll for approval when device is pending
+  useEffect(() => {
+    if (currentDevice?.status !== "pending") return;
+    const interval = setInterval(() => {
+      refetchCurrent();
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [currentDevice?.status, refetchCurrent]);
+
   if (deviceLoading || !householdId) return null;
 
   // Don't show "pending" banner if there are no other approved devices
@@ -76,55 +85,43 @@ export function DeviceOnboardingBanners() {
     } catch {}
   };
 
-  // 1. Current device is pending
+  // 1. Current device is pending — full-screen waiting state
   if (isPending) {
     return (
-      <>
-        <View style={[styles.banner, { backgroundColor: "#fffbeb", borderColor: "#fef3c7" }]}>
-          <View style={styles.iconWrapper}>
-            <ShieldAlert size={20} color="#d97706" />
-          </View>
-          <View style={styles.content}>
-            <Text style={[styles.title, { color: "#92400e" }]}>
-              {t("help.devicePendingBanner")}
-            </Text>
-            <TouchableOpacity
-              onPress={handleCheckStatus}
-              disabled={syncing}
-              style={[styles.button, { backgroundColor: "#f59e0b" }]}
-            >
-              {syncing ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <>
-                  <RefreshCw size={14} color="#fff" />
-                  <Text style={styles.buttonText}>{t("help.checkStatus")}</Text>
-                </>
-              )}
-            </TouchableOpacity>
-          </View>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 32 }}>
+        <View style={{ width: 80, height: 80, borderRadius: 24, backgroundColor: "#fef3c7", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+          <ShieldAlert size={40} color="#d97706" />
         </View>
-        {/* Prompt to enable notifications so user gets notified when approved */}
+        <Text style={{ fontSize: 22, fontWeight: "bold", color: colors.text, textAlign: "center", marginBottom: 8 }}>
+          {t("help.waitingForApproval", { defaultValue: "Waiting for Approval" })}
+        </Text>
+        <Text style={{ fontSize: 15, color: colors.textSecondary, textAlign: "center", lineHeight: 22, marginBottom: 28 }}>
+          {t("help.waitingForApprovalDescription", { defaultValue: "Another device in your household needs to approve this device before you can access shared data." })}
+        </Text>
+        <TouchableOpacity
+          onPress={handleCheckStatus}
+          disabled={syncing}
+          style={{ flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: "#f59e0b", paddingHorizontal: 24, paddingVertical: 14, borderRadius: 12 }}
+        >
+          {syncing ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <>
+              <RefreshCw size={16} color="#fff" />
+              <Text style={{ color: "#fff", fontSize: 15, fontWeight: "700" }}>{t("help.checkStatus")}</Text>
+            </>
+          )}
+        </TouchableOpacity>
         {Platform.OS !== "web" && !notifications.enabled && !notifications.loading && (
-          <View style={[styles.banner, { backgroundColor: "#eff6ff", borderColor: "#dbeafe" }]}>
-            <View style={styles.iconWrapper}>
-              <Bell size={20} color="#2563eb" />
-            </View>
-            <View style={styles.content}>
-              <Text style={[styles.title, { color: "#1e40af" }]}>
-                {t("help.enableNotificationsBanner")}
-              </Text>
-              <TouchableOpacity
-                onPress={handleEnableNotifications}
-                style={[styles.button, { backgroundColor: "#3b82f6" }]}
-              >
-                <Bell size={14} color="#fff" />
-                <Text style={styles.buttonText}>{t("settings.notifications")}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <TouchableOpacity
+            onPress={handleEnableNotifications}
+            style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 16, paddingHorizontal: 20, paddingVertical: 12, borderRadius: 10, borderWidth: 1, borderColor: "#dbeafe" }}
+          >
+            <Bell size={16} color="#3b82f6" />
+            <Text style={{ color: "#3b82f6", fontSize: 14, fontWeight: "600" }}>{t("help.enableNotificationsBanner", { defaultValue: "Enable notifications to know when approved" })}</Text>
+          </TouchableOpacity>
         )}
-      </>
+      </View>
     );
   }
 

@@ -16,7 +16,7 @@ export default function ListsLayout() {
         contentStyle: { flex: 1 },
       }}
     >
-      <Stack.Screen name="index" options={{ title: "Lists" }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="todos" options={{ title: "Todos" }} />
       <Stack.Screen name="shopping" options={{ title: "Shopping List" }} />
     </Stack>

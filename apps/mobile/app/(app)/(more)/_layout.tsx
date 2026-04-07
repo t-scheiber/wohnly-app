@@ -15,7 +15,7 @@ export default function MoreLayout() {
         headerTitleStyle: { fontWeight: "700" },
       }}
     >
-      <Stack.Screen name="index" options={{ title: "More" }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="settings" options={{ title: "Settings" }} />
       <Stack.Screen name="devices" options={{ title: "My Devices" }} />
       <Stack.Screen name="help" options={{ title: "Help & Tips" }} />

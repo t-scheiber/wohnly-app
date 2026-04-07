@@ -80,7 +80,7 @@ export default function MoreScreen() {
           <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 20, paddingBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
             {t("settings.household")}
           </Text>
-          <View style={{ borderTopWidth: 1, borderTopColor: colors.border, borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
+          <View style={{ borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
             <MenuItem
               icon={<Users size={20} color={colors.primary} />}
               label={t("household.members")}
@@ -102,7 +102,7 @@ export default function MoreScreen() {
           <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 20, paddingBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
             {t("more.schedule")}
           </Text>
-          <View style={{ borderTopWidth: 1, borderTopColor: colors.border, borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
+          <View style={{ borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
             <MenuItem
               icon={<Calendar size={20} color={colors.primary} />}
               label={t("more.calendar")}
@@ -118,7 +118,7 @@ export default function MoreScreen() {
           <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 20, paddingBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
             {t("more.settings")}
           </Text>
-          <View style={{ borderTopWidth: 1, borderTopColor: colors.border, borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
+          <View style={{ borderRadius: 12, marginHorizontal: 16, overflow: "hidden" }}>
             <MenuItem
               icon={<Settings size={20} color={colors.textSecondary} />}
               label={t("more.settings")}
