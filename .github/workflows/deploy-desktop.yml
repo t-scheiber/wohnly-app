@@ -206,7 +206,7 @@ jobs:
   # -- Windows: build, sign, optionally submit to Microsoft Store --
 
   build-windows:
-    name: Build Windows (.msi + .exe)
+    name: Build Windows
     needs: build-web
     if: >
       github.event_name == 'push' ||
