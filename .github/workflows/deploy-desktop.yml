@@ -269,16 +269,14 @@ jobs:
           endpoint: https://eus.codesigning.azure.net/
           trusted-signing-account-name: ${{ secrets.AZURE_SIGNING_ACCOUNT }}
           certificate-profile-name: ${{ secrets.AZURE_CERT_PROFILE }}
-          files-folder: apps/desktop/tauri/target/release/bundle
-          files-folder-filter: exe,msi
-          files-folder-depth: 3
+          files-folder: apps/desktop/tauri/target/release/bundle/nsis
+          files-folder-filter: exe
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: |
-            apps/desktop/tauri/target/release/bundle/msi/*.msi
             apps/desktop/tauri/target/release/bundle/nsis/*.exe
             apps/desktop/tauri/target/release/bundle/nsis/*.nsis.zip
             apps/desktop/tauri/target/release/bundle/nsis/*.nsis.zip.sig
@@ -353,13 +351,6 @@ jobs:
             cp "$WIN_SIG" "artifacts/release/Wohnly-Windows-Setup.nsis.zip.sig"
           fi
 
-          # Windows MSI
-          MSI=$(find artifacts/windows -name '*.msi' 2>/dev/null | head -1)
-          if [ -n "$MSI" ]; then
-            cp "$MSI" "artifacts/release/Wohnly-Windows.msi"
-            cp "$MSI" "artifacts/release/Wohnly-${VERSION}-Windows.msi"
-          fi
-
           ls -la artifacts/release/
 
       - name: Generate updater manifest (latest.json)
@@ -425,8 +416,7 @@ jobs:
             | Platform | Download |
             |---|---|
             | macOS | [Wohnly-macOS.dmg](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-macOS.dmg) |
-            | Windows (Installer) | [Wohnly-Windows-Setup.exe](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-Windows-Setup.exe) |
-            | Windows (MSI) | [Wohnly-Windows.msi](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-Windows.msi) |
+            | Windows | [Wohnly-Windows-Setup.exe](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-Windows-Setup.exe) |
           files: |
             artifacts/release/Wohnly-macOS.dmg
             artifacts/release/Wohnly-macOS.app.tar.gz
@@ -434,7 +424,6 @@ jobs:
             artifacts/release/Wohnly-Windows-Setup.exe
             artifacts/release/Wohnly-Windows-Setup.nsis.zip
             artifacts/release/Wohnly-Windows-Setup.nsis.zip.sig
-            artifacts/release/Wohnly-Windows.msi
             artifacts/release/latest.json
           make_latest: true
           prerelease: false
