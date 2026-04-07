@@ -45,9 +45,14 @@ wohnly-app-*.json
 # Expo template
 app-example
 
-# generated native folders (Expo prebuild output at repo root)
+# generated native folders (Expo prebuild output)
 /ios/
 /android/
+apps/mobile/ios/
+apps/mobile/android/
+
+# Playwright MCP
+.playwright-mcp/
 
 # API build output
 apps/api/dist/
