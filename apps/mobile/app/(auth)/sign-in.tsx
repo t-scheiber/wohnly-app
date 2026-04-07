@@ -194,7 +194,7 @@ export default function SignInScreen() {
           <Text style={[styles.privacyText, { color: colors.textSecondary }]}>Privacy Policy</Text>
         </Link>
 
-        {Platform.OS === "web" && (() => {
+        {Platform.OS === "web" && !isTauri() && (() => {
           const os = getDesktopOS();
           if (!os) return null;
           const url = os === "windows"

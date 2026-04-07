@@ -31,6 +31,12 @@
     },
     "shell": {
       "open": "^https?://.+"
+    },
+    "updater": {
+      "endpoints": [
+        "https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhENkJBMUI4Njc1RjI4NTQKUldSVUtGOW51S0ZyalVCVXR0aDJNU0pjRFJpMnJ6WTJhdnpjcmloZjdlMnRHRW5sTUV2RC80UGMK"
     }
   },
   "bundle": {
