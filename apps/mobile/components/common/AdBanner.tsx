@@ -56,8 +56,9 @@ interface AdBannerProps {
 export function AdBanner({ style }: AdBannerProps) {
   const { isPremium, isLoading } = usePremium();
 
-  // Don't show ads for premium users or while loading
-  if (isPremium || isLoading) {
+  // Only hide ads for confirmed premium users.
+  // Show ads while loading (default to showing ads).
+  if (isPremium && !isLoading) {
     return null;
   }
 

@@ -1,4 +1,4 @@
-# Tauri desktop build artifacts (can be several GB)
+# Tauri desktop build artifacts (several GB)
 apps/desktop/tauri/target
 apps/desktop/tauri/gen
 
@@ -15,3 +15,27 @@ apps/mobile/.expo
 # Documentation
 *.md
 LICENSE
+
+# MS Store listings (not needed for mobile builds)
+msstorelistings
+
+# Desktop assets
+apps/desktop/tauri/icons
+apps/desktop/tauri/nsis-hooks.nsi
+apps/desktop/*.sh
+apps/desktop/manifest.json
+apps/desktop/sw.js
+
+# API (not needed for mobile builds)
+apps/api/dist
+apps/api/prisma/migrations
+
+# Deploy scripts
+deploy
+
+# Misc
+*.png
+!apps/mobile/assets/**/*.png
+!apps/mobile/android/**/*.png
+!apps/mobile/ios/**/*.png
+logo1080.png
