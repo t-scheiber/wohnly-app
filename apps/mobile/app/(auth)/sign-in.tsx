@@ -93,8 +93,8 @@ export default function SignInScreen() {
     // Also check getCurrent() for deep links received during app launch
     (async () => {
       try {
-        const mod = await (Function('return import("@tauri-apps/plugin-deep-link")')() as any);
-        const urls = await mod.getCurrent();
+        const internals = (window as any).__TAURI_INTERNALS__;
+        const urls = await internals.invoke("plugin:deep-link|get_current");
         if (urls && urls.length > 0 && urls[0].includes("callback")) {
           processDeepLink(urls[0]);
         }
@@ -102,7 +102,9 @@ export default function SignInScreen() {
     })();
 
     function processDeepLink(url: string) {
+      console.log("[processDeepLink] url:", url);
       const stored = handleTauriDeepLink(url);
+      console.log("[processDeepLink] stored:", stored);
       if (stored) {
         localStorage.setItem(HANDLED_KEY, "1");
         window.location.reload();

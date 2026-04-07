@@ -34,11 +34,11 @@ jobs:
     name: Build web export
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -59,14 +59,14 @@ jobs:
         run: bash build-pwa.sh
 
       - name: Upload web dist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: web-dist
           path: apps/mobile/dist
           retention-days: 1
 
       - name: Upload Tauri icons
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: tauri-icons
           path: apps/desktop/tauri/icons
@@ -83,21 +83,21 @@ jobs:
       inputs.platform == 'macos'
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: web-dist
           path: apps/mobile/dist
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: tauri-icons
           path: apps/desktop/tauri/icons
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -141,7 +141,7 @@ jobs:
           args: --verbose
 
       - name: Upload macOS artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: macos-build
           path: |
@@ -160,9 +160,9 @@ jobs:
       (inputs.platform == 'all' || inputs.platform == 'macos')
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: macos-build
           path: artifacts/macos
@@ -214,14 +214,14 @@ jobs:
       inputs.platform == 'windows'
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: web-dist
           path: apps/mobile/dist
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: tauri-icons
           path: apps/desktop/tauri/icons
@@ -234,9 +234,9 @@ jobs:
         with:
           workspaces: apps/desktop/tauri
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -273,7 +273,7 @@ jobs:
           files-folder-filter: exe
 
       - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: windows-build
           path: |
@@ -292,18 +292,18 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download macOS artifacts
         if: needs.build-macos.result == 'success'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: macos-build
           path: artifacts/macos
 
       - name: Download Windows artifacts
         if: needs.build-windows.result == 'success'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: windows-build
           path: artifacts/windows
