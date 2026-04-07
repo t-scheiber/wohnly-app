@@ -1,6 +1,18 @@
 name: Build & Deploy Desktop (macOS + Windows)
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/mobile/app/**"
+      - "apps/mobile/lib/**"
+      - "apps/mobile/components/**"
+      - "apps/mobile/constants/**"
+      - "apps/mobile/hooks/**"
+      - "apps/mobile/assets/**"
+      - "apps/mobile/i18n/**"
+      - "apps/desktop/**"
+      - "packages/**"
   workflow_dispatch:
     inputs:
       platform:
@@ -13,11 +25,6 @@ on:
           - windows
       submit:
         description: "Submit to stores after build"
-        required: false
-        type: boolean
-        default: false
-      release:
-        description: "Create GitHub release with artifacts"
         required: false
         type: boolean
         default: false
@@ -65,7 +72,7 @@ jobs:
           path: apps/desktop/tauri/icons
           retention-days: 1
 
-  # ── macOS: build, sign, notarize, optionally submit to Mac App Store ──
+  # -- macOS: build, sign, notarize, optionally submit to Mac App Store --
 
   build-macos:
     name: Build & sign macOS
@@ -126,6 +133,8 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: apps/desktop
           tauriScript: npx tauri
@@ -138,6 +147,8 @@ jobs:
           path: |
             apps/desktop/tauri/target/release/bundle/dmg/*.dmg
             apps/desktop/tauri/target/release/bundle/macos/*.app
+            apps/desktop/tauri/target/release/bundle/macos/*.app.tar.gz
+            apps/desktop/tauri/target/release/bundle/macos/*.app.tar.gz.sig
           retention-days: 30
 
   submit-macos:
@@ -192,10 +203,10 @@ jobs:
             --apiIssuer "${{ secrets.ASC_API_ISSUER_ID }}" \
             --verbose
 
-  # ── Windows: build, optionally submit to Microsoft Store ──
+  # -- Windows: build, sign, optionally submit to Microsoft Store --
 
   build-windows:
-    name: Build Windows (.msi + .msix)
+    name: Build Windows (.msi + .exe)
     needs: build-web
     if: >
       github.event_name == 'push' ||
@@ -235,10 +246,32 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: apps/desktop
           tauriScript: npx tauri
           args: --verbose
+
+      # Optional: Sign Windows installers with Azure Trusted Signing.
+      # Requires secrets: AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET,
+      #                   AZURE_SIGNING_ACCOUNT, AZURE_CERT_PROFILE
+      # See: https://learn.microsoft.com/en-us/azure/trusted-signing/
+      - name: Sign Windows installers
+        if: env.AZURE_TENANT_ID != ''
+        uses: azure/trusted-signing-action@v0.5.0
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: https://eus.codesigning.azure.net/
+          trusted-signing-account-name: ${{ secrets.AZURE_SIGNING_ACCOUNT }}
+          certificate-profile-name: ${{ secrets.AZURE_CERT_PROFILE }}
+          files-folder: apps/desktop/tauri/target/release/bundle
+          files-folder-filter: exe,msi
+          files-folder-depth: 3
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
@@ -247,32 +280,32 @@ jobs:
           path: |
             apps/desktop/tauri/target/release/bundle/msi/*.msi
             apps/desktop/tauri/target/release/bundle/nsis/*.exe
+            apps/desktop/tauri/target/release/bundle/nsis/*.nsis.zip
+            apps/desktop/tauri/target/release/bundle/nsis/*.nsis.zip.sig
           retention-days: 30
 
-  # Windows Store: download the .msi artifact from the build and upload
-  # manually at https://partner.microsoft.com/dashboard
-  # Or submit the PWA at https://wohnly.app via https://pwabuilder.com
-
-  # ── GitHub Release (optional) ──
+  # -- GitHub Release: always runs after builds complete --
 
   release:
     name: Create GitHub release
     needs: [build-macos, build-windows]
-    if: >
-      github.event_name == 'workflow_dispatch' &&
-      inputs.release
+    if: always() && (needs.build-macos.result == 'success' || needs.build-windows.result == 'success')
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - name: Download macOS artifacts
+        if: needs.build-macos.result == 'success'
+        uses: actions/download-artifact@v4
         with:
           name: macos-build
           path: artifacts/macos
 
-      - uses: actions/download-artifact@v4
+      - name: Download Windows artifacts
+        if: needs.build-windows.result == 'success'
+        uses: actions/download-artifact@v4
         with:
           name: windows-build
           path: artifacts/windows
@@ -287,27 +320,91 @@ jobs:
           mkdir -p artifacts/release
 
           # macOS DMG
-          DMG=$(find artifacts/macos -name '*.dmg' | head -1)
+          DMG=$(find artifacts/macos -name '*.dmg' 2>/dev/null | head -1)
           if [ -n "$DMG" ]; then
             cp "$DMG" "artifacts/release/Wohnly-macOS.dmg"
             cp "$DMG" "artifacts/release/Wohnly-${VERSION}-macOS.dmg"
           fi
 
+          # macOS update bundle (.app.tar.gz + signature)
+          MAC_TAR=$(find artifacts/macos -name '*.app.tar.gz' 2>/dev/null | head -1)
+          if [ -n "$MAC_TAR" ]; then
+            cp "$MAC_TAR" "artifacts/release/Wohnly-macOS.app.tar.gz"
+          fi
+          MAC_SIG=$(find artifacts/macos -name '*.app.tar.gz.sig' 2>/dev/null | head -1)
+          if [ -n "$MAC_SIG" ]; then
+            cp "$MAC_SIG" "artifacts/release/Wohnly-macOS.app.tar.gz.sig"
+          fi
+
           # Windows EXE (NSIS)
-          EXE=$(find artifacts/windows -name '*.exe' | head -1)
+          EXE=$(find artifacts/windows -name '*-setup.exe' -o -name '*Setup.exe' 2>/dev/null | head -1)
           if [ -n "$EXE" ]; then
             cp "$EXE" "artifacts/release/Wohnly-Windows-Setup.exe"
             cp "$EXE" "artifacts/release/Wohnly-${VERSION}-Windows-Setup.exe"
           fi
 
+          # Windows update bundle (.nsis.zip + signature)
+          WIN_ZIP=$(find artifacts/windows -name '*.nsis.zip' 2>/dev/null | head -1)
+          if [ -n "$WIN_ZIP" ]; then
+            cp "$WIN_ZIP" "artifacts/release/Wohnly-Windows-Setup.nsis.zip"
+          fi
+          WIN_SIG=$(find artifacts/windows -name '*.nsis.zip.sig' 2>/dev/null | head -1)
+          if [ -n "$WIN_SIG" ]; then
+            cp "$WIN_SIG" "artifacts/release/Wohnly-Windows-Setup.nsis.zip.sig"
+          fi
+
           # Windows MSI
-          MSI=$(find artifacts/windows -name '*.msi' | head -1)
+          MSI=$(find artifacts/windows -name '*.msi' 2>/dev/null | head -1)
           if [ -n "$MSI" ]; then
             cp "$MSI" "artifacts/release/Wohnly-Windows.msi"
             cp "$MSI" "artifacts/release/Wohnly-${VERSION}-Windows.msi"
           fi
 
           ls -la artifacts/release/
+
+      - name: Generate updater manifest (latest.json)
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PUB_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          BASE="https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest"
+
+          # Read signatures (empty string if not found)
+          WIN_SIG=""
+          MAC_SIG=""
+          if [ -f "artifacts/release/Wohnly-Windows-Setup.nsis.zip.sig" ]; then
+            WIN_SIG=$(cat "artifacts/release/Wohnly-Windows-Setup.nsis.zip.sig")
+          fi
+          if [ -f "artifacts/release/Wohnly-macOS.app.tar.gz.sig" ]; then
+            MAC_SIG=$(cat "artifacts/release/Wohnly-macOS.app.tar.gz.sig")
+          fi
+
+          # Build platforms JSON
+          PLATFORMS="{"
+          FIRST=true
+
+          if [ -n "$WIN_SIG" ]; then
+            PLATFORMS="$PLATFORMS\"windows-x86_64\":{\"signature\":$(echo "$WIN_SIG" | jq -Rs .),\"url\":\"${BASE}/Wohnly-Windows-Setup.nsis.zip\"}"
+            FIRST=false
+          fi
+
+          if [ -n "$MAC_SIG" ]; then
+            [ "$FIRST" = false ] && PLATFORMS="$PLATFORMS,"
+            MAC_ENTRY="\"signature\":$(echo "$MAC_SIG" | jq -Rs .),\"url\":\"${BASE}/Wohnly-macOS.app.tar.gz\""
+            PLATFORMS="$PLATFORMS\"darwin-x86_64\":{${MAC_ENTRY}},\"darwin-aarch64\":{${MAC_ENTRY}}"
+          fi
+
+          PLATFORMS="$PLATFORMS}"
+
+          # Write latest.json
+          jq -n \
+            --arg version "$VERSION" \
+            --arg pub_date "$PUB_DATE" \
+            --argjson platforms "$PLATFORMS" \
+            '{version: $version, pub_date: $pub_date, platforms: $platforms}' \
+            > artifacts/release/latest.json
+
+          echo "Generated latest.json:"
+          cat artifacts/release/latest.json
 
       - name: Delete previous 'latest' release if exists
         run: gh release delete desktop-latest --yes 2>/dev/null || true
@@ -332,8 +429,13 @@ jobs:
             | Windows (MSI) | [Wohnly-Windows.msi](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-Windows.msi) |
           files: |
             artifacts/release/Wohnly-macOS.dmg
+            artifacts/release/Wohnly-macOS.app.tar.gz
+            artifacts/release/Wohnly-macOS.app.tar.gz.sig
             artifacts/release/Wohnly-Windows-Setup.exe
+            artifacts/release/Wohnly-Windows-Setup.nsis.zip
+            artifacts/release/Wohnly-Windows-Setup.nsis.zip.sig
             artifacts/release/Wohnly-Windows.msi
+            artifacts/release/latest.json
           make_latest: true
           prerelease: false
 
@@ -344,5 +446,4 @@ jobs:
           name: Wohnly Desktop v${{ steps.version.outputs.version }}
           files: |
             artifacts/release/Wohnly-${{ steps.version.outputs.version }}-*
-            artifacts/windows/**/*
           draft: true

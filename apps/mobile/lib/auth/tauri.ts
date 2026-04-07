@@ -66,18 +66,33 @@ export function onDeepLink(
  */
 export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   const apiUrl =
-    Constants.expoConfig?.extra?.apiUrl ?? "http://localhost:3001";
+    Constants.expoConfig?.extra?.apiUrl ?? "https://api.wohnly.app";
   const callbackURL = "wohnly://auth/callback";
+  const url = `${apiUrl}/api/auth/sign-in/social`;
 
-  const res = await fetch(`${apiUrl}/api/auth/sign-in/social`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ provider, callbackURL }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ provider, callbackURL }),
+    });
+  } catch (err) {
+    console.error("[tauriSignIn] fetch failed:", { url, provider, err });
+    throw new Error(
+      `Could not reach the server (${apiUrl}). Check your internet connection and try again.`
+    );
+  }
 
-  const data = await res.json();
-  if (!data.url) {
-    throw new Error(data.error || "Failed to get authorization URL");
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    console.error("[tauriSignIn] server error:", { status: res.status, body });
+    throw new Error(`Sign-in failed (${res.status}). Please try again.`);
+  }
+
+  const data = await res.json().catch(() => null);
+  if (!data?.url) {
+    throw new Error(data?.error || "Failed to get authorization URL");
   }
 
   const proxyUrl = `${apiUrl}/api/auth/expo-authorization-proxy?authorizationURL=${encodeURIComponent(data.url)}`;

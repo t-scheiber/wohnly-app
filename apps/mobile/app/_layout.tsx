@@ -8,6 +8,7 @@ import { GestureHandlerRootView as _GestureHandlerRootView } from "react-native-
 const GestureHandlerRootView = _GestureHandlerRootView as any;
 import { StatusBar } from "expo-status-bar";
 import { authClient } from "@/lib/auth/client";
+import { useTauriUpdater } from "@/lib/hooks/use-tauri-updater";
 import { initRevenueCat } from "@/lib/payments/setup";
 import { useConsent } from "@/lib/hooks/useConsent";
 import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
@@ -193,6 +194,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
 export default function RootLayout() {
   const theme = useThemeProvider();
+  useTauriUpdater();
 
   // Web document language handling
   useEffect(() => {
