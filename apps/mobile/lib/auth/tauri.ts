@@ -71,17 +71,27 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   const url = `${apiUrl}/api/auth/sign-in/social`;
 
   let res: Response;
-  try {
-    res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ provider, callbackURL }),
-    });
-  } catch (err) {
-    console.error("[tauriSignIn] fetch failed:", { url, provider, err });
-    throw new Error(
-      `Could not reach the server (${apiUrl}). Check your internet connection and try again.`
-    );
+  const body = JSON.stringify({ provider, callbackURL });
+  const opts: RequestInit = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+  };
+
+  // Retry up to 2 times — WebView2 sometimes fails the first request
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      res = await fetch(url, opts);
+      break;
+    } catch (err) {
+      console.error(`[tauriSignIn] attempt ${attempt + 1} failed:`, err);
+      if (attempt === 2) {
+        throw new Error(
+          `Could not reach the server (${apiUrl}). Check your internet connection and try again.`
+        );
+      }
+      await new Promise((r) => setTimeout(r, 1000));
+    }
   }
 
   if (!res.ok) {
