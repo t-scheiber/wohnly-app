@@ -34,6 +34,8 @@ export const auth = betterAuth({
   trustedOrigins: [
     "wohnly://",
     "https://wohnly.app",
+    "https://www.wohnly.app",
+    "https://api.wohnly.app",
     "http://localhost:8081",
     "http://localhost:19006",
     "tauri://localhost",
