@@ -145,10 +145,12 @@ app.route("/api/meals", mealsRouter);
 // Health check
 app.get("/api/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));
 
-// Desktop download — proxies the GitHub release so the URL has no redirects
-// (required by Microsoft Store package validation)
+// Desktop download — proxies the macOS GitHub release (Windows is on Microsoft Store)
 app.get("/download/:file", async (c) => {
   const file = c.req.param("file");
+  if (file.toLowerCase().includes("windows")) {
+    return c.text("Windows builds are available on the Microsoft Store", 410);
+  }
   const ghUrl = `https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/${file}`;
   const res = await fetch(ghUrl, { redirect: "follow" });
   if (!res.ok) return c.text("Not found", 404);

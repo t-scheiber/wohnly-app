@@ -21,6 +21,34 @@ const sizes = [
   { name: '128x128@2x.png', size: 256 },
 ];
 
+// MSIX package icon sizes (placed in msix/assets/)
+const MSIX_OUT = resolve(__dirname, 'msix/assets');
+mkdirSync(MSIX_OUT, { recursive: true });
+
+const msixSizes = [
+  { name: 'StoreLogo.png', size: 50 },
+  { name: 'Square44x44Logo.png', size: 44 },
+  { name: 'Square150x150Logo.png', size: 150 },
+];
+
+for (const { name, size } of msixSizes) {
+  await sharp(SOURCE).resize(size, size).png().toFile(resolve(MSIX_OUT, name));
+  console.log(`Generated msix/assets/${name}`);
+}
+
+// Wide310x150Logo: 310x150 with the icon centered on transparent background
+const wideWidth = 310;
+const wideHeight = 150;
+const iconSize = 140; // slightly smaller than height for padding
+const iconBuf = await sharp(SOURCE).resize(iconSize, iconSize).png().toBuffer();
+await sharp({
+  create: { width: wideWidth, height: wideHeight, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } }
+})
+  .composite([{ input: iconBuf, left: Math.round((wideWidth - iconSize) / 2), top: Math.round((wideHeight - iconSize) / 2) }])
+  .png()
+  .toFile(resolve(MSIX_OUT, 'Wide310x150Logo.png'));
+console.log('Generated msix/assets/Wide310x150Logo.png');
+
 for (const { name, size } of sizes) {
   await sharp(SOURCE).resize(size, size).png().toFile(resolve(OUT, name));
   console.log(`Generated ${name}`);
