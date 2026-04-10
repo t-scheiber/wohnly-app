@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap3 rescap">
+
+  <Identity
+    Name="Wohnlyapp.wohnly.app"
+    Publisher="CN=324D4F53-F5CA-452E-9765-A4C607503E6B"
+    Version="REPLACE_VERSION"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Wohnly</DisplayName>
+    <PublisherDisplayName>Wohnly app</PublisherDisplayName>
+    <!-- Store ID: 9P5JTRSRMJPB -->
+    <Description>Wohnly - Household Manager. Shared to-do lists, shopping lists, chore tracking, expense splitting, meal planning, and more.</Description>
+    <Logo>assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <Application
+      Id="Wohnly"
+      Executable="wohnly-desktop.exe"
+      EntryPoint="Windows.FullTrustApplication">
+
+      <uap:VisualElements
+        DisplayName="Wohnly"
+        Description="Household Manager"
+        Square150x150Logo="assets\Square150x150Logo.png"
+        Square44x44Logo="assets\Square44x44Logo.png"
+        BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="assets\Wide310x150Logo.png" />
+      </uap:VisualElements>
+
+      <!-- Deep link protocol handler -->
+      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="wohnly">
+            <uap:DisplayName>Wohnly</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+      </Extensions>
+
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

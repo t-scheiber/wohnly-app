@@ -57,7 +57,8 @@ function MacLogo({ size = 16, color = "currentColor" }: { size?: number; color?:
   );
 }
 
-const DOWNLOAD_BASE = "https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest";
+const MACOS_DOWNLOAD = "https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-macOS.dmg";
+const MS_STORE_URL = "https://apps.microsoft.com/detail/9P5JTRSRMJPB";
 
 function getDesktopOS(): "windows" | "mac" | null {
   if (Platform.OS !== "web" || typeof navigator === "undefined") return null;
@@ -199,10 +200,8 @@ export default function SignInScreen() {
         {Platform.OS === "web" && !isTauri() && (() => {
           const os = getDesktopOS();
           if (!os) return null;
-          const url = os === "windows"
-            ? `${DOWNLOAD_BASE}/Wohnly-Windows-Setup.exe`
-            : `${DOWNLOAD_BASE}/Wohnly-macOS.dmg`;
-          const label = os === "windows" ? "Download for Windows" : "Download for macOS";
+          const url = os === "windows" ? MS_STORE_URL : MACOS_DOWNLOAD;
+          const label = os === "windows" ? "Get it from the Microsoft Store" : "Download for macOS";
           const Logo = os === "windows" ? WindowsLogo : MacLogo;
           return (
             <View style={styles.downloadSection}>
