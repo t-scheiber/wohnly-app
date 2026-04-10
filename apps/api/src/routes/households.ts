@@ -37,16 +37,23 @@ app.post("/", async (c) => {
     });
 
     // Store sealed household key for the creating device (E2EE)
-    const device = await tx.device.findFirst({
+    let device = await tx.device.findFirst({
       where: { id: deviceId, userId },
     });
     if (!device) {
-      throw new Error("Device not found");
+      // Fallback: the client may have a stale deviceId — find any approved device for this user
+      device = await tx.device.findFirst({
+        where: { userId, status: "approved" },
+        orderBy: { createdAt: "desc" },
+      });
+    }
+    if (!device) {
+      throw new Error("No registered device found — please sign out and back in");
     }
     await tx.householdKeyEnvelope.create({
       data: {
         householdId: h.id,
-        deviceId,
+        deviceId: device.id,
         sealedHK,
       },
     });
