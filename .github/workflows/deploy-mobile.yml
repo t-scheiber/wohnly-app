@@ -62,6 +62,10 @@ jobs:
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
+      - name: Write App Store Connect API key
+        if: inputs.submit && (inputs.platform == 'ios' || inputs.platform == 'all')
+        run: echo "${{ secrets.ASC_API_KEY_P8 }}" | base64 -d > AuthKey_C5QRM2S8XQ.p8
+
       - name: Submit iOS to App Store
         if: inputs.submit && (inputs.platform == 'ios' || inputs.platform == 'all')
         working-directory: apps/mobile
