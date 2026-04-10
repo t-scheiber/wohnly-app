@@ -97,22 +97,23 @@ function SettingsRow({ label, value, onPress, destructive, isLast, right, colors
   right?: React.ReactNode; colors: (typeof Colors)["light"];
 }) {
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       disabled={!onPress && !right}
-      activeOpacity={onPress ? 0.6 : 1}
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+      style={({ pressed }) => ({
+        flexDirection: "row" as const,
+        justifyContent: "space-between" as const,
+        alignItems: "center" as const,
         padding: 16,
         borderBottomWidth: isLast ? 0 : 1,
         borderBottomColor: colors.border,
-      }}
+        opacity: pressed ? 0.6 : 1,
+        cursor: onPress ? "pointer" as any : "default" as any,
+      })}
     >
       <Text style={{ fontSize: 16, color: destructive ? colors.destructive : colors.text }}>{label}</Text>
       {right ?? (value ? <Text style={{ fontSize: 16, color: colors.textSecondary }}>{value}</Text> : null)}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
