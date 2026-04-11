@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, apiPost, apiPatch, apiDelete } from "./client";
-import { getEncryptionKey } from "@/lib/crypto/active-household";
+import { getEncryptionKey, requireEncryptionKey } from "@/lib/crypto/active-household";
 import {
   encryptTodo, decryptTodo,
   encryptShoppingItem, decryptShoppingItem,
@@ -187,12 +187,12 @@ export function useCreateTodo() {
   return useMutation({
     mutationFn: async (data: { title: string; description?: string; dueDate?: string; assigneeIds?: string[]; isPersonal?: boolean }) => {
       const { isPersonal, ...body } = data;
-      const hk = getEncryptionKey();
-      if (hk && !isPersonal) {
-        const enc = await encryptTodo(body, hk);
-        return apiPost(isPersonal ? "/api/personal-todos" : "/api/todos", { ...body, ...enc });
+      if (isPersonal) {
+        return apiPost("/api/personal-todos", body);
       }
-      return apiPost(isPersonal ? "/api/personal-todos" : "/api/todos", body);
+      const hk = requireEncryptionKey();
+      const enc = await encryptTodo(body, hk);
+      return apiPost("/api/todos", { ...body, ...enc });
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["todos"] });
@@ -217,12 +217,15 @@ export function useUpdateTodo() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, isPersonal, ...data }: { id: string; isPersonal?: boolean; title?: string; description?: string; dueDate?: string | null; assigneeIds?: string[] }) => {
-      const hk = getEncryptionKey();
-      if (hk && !isPersonal && data.title) {
-        const enc = await encryptTodo(data as { title: string; description?: string }, hk);
-        return apiPatch(isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`, { ...data, ...enc });
+      if (isPersonal) {
+        return apiPatch(`/api/personal-todos/${id}`, data);
       }
-      return apiPatch(isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`, data);
+      const hk = requireEncryptionKey();
+      if (data.title) {
+        const enc = await encryptTodo(data as { title: string; description?: string }, hk);
+        return apiPatch(`/api/todos/${id}`, { ...data, ...enc });
+      }
+      return apiPatch(`/api/todos/${id}`, data);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["todos"] });
@@ -297,12 +300,12 @@ export function useCreateShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: { name: string; quantity?: string; isPersonal?: boolean }) => {
-      const hk = getEncryptionKey();
-      if (hk && !data.isPersonal) {
-        const enc = await encryptShoppingItem(data, hk);
-        return apiPost("/api/shopping", { ...data, ...enc });
+      if (data.isPersonal) {
+        return apiPost("/api/shopping", data);
       }
-      return apiPost("/api/shopping", data);
+      const hk = requireEncryptionKey();
+      const enc = await encryptShoppingItem(data, hk);
+      return apiPost("/api/shopping", { ...data, ...enc });
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["shopping"] });
@@ -326,8 +329,8 @@ export function useUpdateShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: { id: string; name?: string; quantity?: string }) => {
-      const hk = getEncryptionKey();
-      if (hk && data.name) {
+      const hk = requireEncryptionKey();
+      if (data.name) {
         const enc = await encryptShoppingItem(data as { name: string; quantity?: string }, hk);
         return apiPatch(`/api/shopping/${id}`, { ...data, ...enc });
       }
@@ -372,12 +375,9 @@ export function useCreateChore() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: { title: string; frequency: string; description?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
-      const hk = getEncryptionKey();
-      if (hk) {
-        const enc = await encryptChore(data, hk);
-        return apiPost("/api/chores", { ...data, ...enc });
-      }
-      return apiPost("/api/chores", data);
+      const hk = requireEncryptionKey();
+      const enc = await encryptChore(data, hk);
+      return apiPost("/api/chores", { ...data, ...enc });
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["chores"] }),
   });
@@ -414,8 +414,8 @@ export function useUpdateChore() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: { id: string; title?: string; description?: string; frequency?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
-      const hk = getEncryptionKey();
-      if (hk && data.title) {
+      const hk = requireEncryptionKey();
+      if (data.title) {
         const enc = await encryptChore(data as { title: string; description?: string }, hk);
         return apiPatch(`/api/chores/${id}`, { ...data, ...enc });
       }
@@ -560,15 +560,12 @@ export function useCreateEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const hk = getEncryptionKey();
-      if (hk && data.title) {
-        const enc = await encryptEvent(
-          { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
-          hk
-        );
-        return apiPost("/api/events", { ...data, ...enc });
-      }
-      return apiPost("/api/events", data);
+      const hk = requireEncryptionKey();
+      const enc = await encryptEvent(
+        { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
+        hk
+      );
+      return apiPost("/api/events", { ...data, ...enc });
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
   });
@@ -586,8 +583,8 @@ export function useUpdateEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
-      const hk = getEncryptionKey();
-      if (hk && data.title) {
+      const hk = requireEncryptionKey();
+      if (data.title) {
         const enc = await encryptEvent(
           { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
           hk
@@ -619,15 +616,12 @@ export function useCreateExpense() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const hk = getEncryptionKey();
-      if (hk && data.title) {
-        const enc = await encryptExpense(
-          { title: data.title as string, description: data.description as string | null },
-          hk
-        );
-        return apiPost("/api/expenses", { ...data, ...enc });
-      }
-      return apiPost("/api/expenses", data);
+      const hk = requireEncryptionKey();
+      const enc = await encryptExpense(
+        { title: data.title as string, description: data.description as string | null },
+        hk
+      );
+      return apiPost("/api/expenses", { ...data, ...enc });
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["expenses"] });
@@ -672,15 +666,10 @@ export function useAddAttachment() {
       mimeType?: string;
       fileName?: string;
     }) => {
-      const hk = getEncryptionKey();
-      if (hk) {
-        const enc = await encryptAttachment(content, hk);
-        return apiPost(`/api/expenses/${expenseId}/attachments`, {
-          type, mimeType, fileName, ...enc,
-        });
-      }
+      const hk = requireEncryptionKey();
+      const enc = await encryptAttachment(content, hk);
       return apiPost(`/api/expenses/${expenseId}/attachments`, {
-        type, content, mimeType, fileName,
+        type, mimeType, fileName, ...enc,
       });
     },
     onSuccess: (_data, vars) => {
@@ -764,8 +753,8 @@ export function useUpdateExpense() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
-      const hk = getEncryptionKey();
-      if (hk && data.title) {
+      const hk = requireEncryptionKey();
+      if (data.title) {
         const enc = await encryptExpense(
           { title: data.title as string, description: data.description as string | null },
           hk
@@ -800,15 +789,12 @@ export function useCreateSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const hk = getEncryptionKey();
-      if (hk && data.name) {
-        const enc = await encryptSubscription(
-          { name: data.name as string, description: data.description as string | null },
-          hk
-        );
-        return apiPost("/api/subscriptions", { ...data, ...enc });
-      }
-      return apiPost("/api/subscriptions", data);
+      const hk = requireEncryptionKey();
+      const enc = await encryptSubscription(
+        { name: data.name as string, description: data.description as string | null },
+        hk
+      );
+      return apiPost("/api/subscriptions", { ...data, ...enc });
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["subscriptions"] });
@@ -832,8 +818,8 @@ export function useUpdateSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
-      const hk = getEncryptionKey();
-      if (hk && data.name) {
+      const hk = requireEncryptionKey();
+      if (data.name) {
         const enc = await encryptSubscription(
           { name: data.name as string, description: data.description as string | null },
           hk
