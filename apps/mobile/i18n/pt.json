@@ -14,7 +14,8 @@
     "search": "Pesquisar",
     "noResults": "Nenhum resultado encontrado",
     "pullToRefresh": "Puxa para atualizar",
-    "seeAll": "Ver tudo"
+    "seeAll": "Ver tudo",
+    "gotIt": "Entendi"
   },
   "auth": {
     "signIn": "Entrar",
@@ -68,12 +69,26 @@
     "addTodo": "Adicionar uma tarefa...",
     "empty": "Ainda sem tarefas",
     "deleteTodo": "Apagar tarefa",
-    "deleteConfirm": "Tens a certeza?"
+    "deleteConfirm": "Tens a certeza?",
+    "editTodo": "Editar tarefa",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Título da tarefa",
+    "dueDate": "Data de vencimento",
+    "noDueDate": "Sem data de vencimento",
+    "due": "Vence: {{date}}"
   },
   "shopping": {
     "title": "Lista de compras",
     "addItem": "Adicionar artigo...",
-    "empty": "A lista de compras está vazia"
+    "empty": "A lista de compras está vazia",
+    "deleteItem": "Eliminar artigo",
+    "deleteConfirm": "Eliminar \"{{name}}\"?",
+    "editItem": "Editar artigo",
+    "nameLabel": "Nome",
+    "namePlaceholder": "Nome do artigo",
+    "quantityLabel": "Quantidade",
+    "quantityPlaceholder": "ex. 2x, 500g",
+    "clearChecked": "Limpar marcados"
   },
   "chores": {
     "title": "Tarefas domésticas",
@@ -96,7 +111,18 @@
     "effortLevel": "Nível de esforço",
     "breakMode": "Modo pausa",
     "breakModeActive": "As tarefas estão pausadas",
-    "breakModeUntil": "até {{date}}"
+    "breakModeUntil": "até {{date}}",
+    "deleteChore": "Eliminar tarefa",
+    "deleteConfirm": "Tens a certeza?",
+    "dueToday": "Para hoje",
+    "allChores": "Todas as tarefas",
+    "turn": " é a vez de",
+    "rotating": "(rotativo)",
+    "assignedTo": "Atribuído a: {{names}}",
+    "hideAnalytics": "Ocultar estatísticas",
+    "showAnalytics": "Mostrar partilha justa",
+    "choresPausedUntil": "As tarefas estão pausadas até {{date}}",
+    "choresPausedIndefinitely": "As tarefas estão pausadas indefinidamente"
   },
   "events": {
     "title": "Calendário",
@@ -356,10 +382,21 @@
     "title": "Finanças",
     "analytics": "Análise de gastos"
   },
+  "lists": {
+    "todos": "Tarefas",
+    "todosDesc": "Tarefas pessoais e domésticas",
+    "shopping": "Lista de compras",
+    "shoppingDesc": "Compras colaborativas",
+    "chores": "Afazeres",
+    "choresDesc": "Tarefas domésticas recorrentes",
+    "mealPlan": "Plano de refeições",
+    "mealPlanDesc": "Planejar refeições e adicionar ingredientes às compras"
+  },
   "tabs": {
     "home": "Início",
     "lists": "Listas",
     "chores": "Tarefas",
+    "calendar": "Calendário",
     "finances": "Finanças",
     "more": "Mais"
   },

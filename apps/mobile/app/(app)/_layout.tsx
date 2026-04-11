@@ -1,9 +1,10 @@
 import { Tabs } from "expo-router";
 import { Platform } from "react-native";
-import { Home, ListTodo, Sparkles, DollarSign, Menu } from "lucide-react-native";
+import { Home, ListTodo, CalendarDays, DollarSign, Menu } from "lucide-react-native";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
+import { CommonActions } from "@react-navigation/native";
 
 export default function AppLayout() {
   const colorScheme = useColorScheme() ?? "light";
@@ -12,6 +13,22 @@ export default function AppLayout() {
 
   return (
     <Tabs
+      screenListeners={({ navigation, route }) => ({
+        tabPress: (e) => {
+          const state = navigation.getState();
+          const currentRoute = state.routes[state.index];
+          // If tapping the already-active tab, reset its nested stack to the first screen
+          if (currentRoute.name === route.name && currentRoute.state?.index && currentRoute.state.index > 0) {
+            e.preventDefault();
+            navigation.dispatch(
+              CommonActions.navigate({
+                name: route.name,
+                params: { screen: "index" },
+              })
+            );
+          }
+        },
+      })}
       screenOptions={{
         sceneStyle: { flex: 1 },
         tabBarActiveTintColor: colors.tabIconSelected,
@@ -56,11 +73,11 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
-        name="(chores)"
+        name="(events)"
         options={{
-          title: t("tabs.chores"),
+          title: t("tabs.calendar"),
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <Sparkles size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => <CalendarDays size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -72,7 +89,7 @@ export default function AppLayout() {
         }}
       />
       <Tabs.Screen
-        name="(events)"
+        name="(chores)"
         options={{
           href: null,
           headerShown: false,

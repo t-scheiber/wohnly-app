@@ -14,7 +14,8 @@
     "search": "Поиск",
     "noResults": "Ничего не найдено",
     "pullToRefresh": "Потяни для обновления",
-    "seeAll": "Смотреть все"
+    "seeAll": "Смотреть все",
+    "gotIt": "Понятно"
   },
   "auth": {
     "signIn": "Войти",
@@ -68,12 +69,26 @@
     "addTodo": "Добавить задачу...",
     "empty": "Ещё нет задач",
     "deleteTodo": "Удалить задачу",
-    "deleteConfirm": "Ты уверен?"
+    "deleteConfirm": "Ты уверен?",
+    "editTodo": "Редактировать задачу",
+    "titleLabel": "Название",
+    "titlePlaceholder": "Название задачи",
+    "dueDate": "Срок выполнения",
+    "noDueDate": "Без срока",
+    "due": "Срок: {{date}}"
   },
   "shopping": {
     "title": "Список покупок",
     "addItem": "Добавить товар...",
-    "empty": "Список покупок пуст"
+    "empty": "Список покупок пуст",
+    "deleteItem": "Удалить товар",
+    "deleteConfirm": "Удалить \"{{name}}\"?",
+    "editItem": "Редактировать товар",
+    "nameLabel": "Название",
+    "namePlaceholder": "Название товара",
+    "quantityLabel": "Количество",
+    "quantityPlaceholder": "напр. 2x, 500г",
+    "clearChecked": "Очистить отмеченные"
   },
   "chores": {
     "title": "Домашние обязанности",
@@ -96,7 +111,18 @@
     "effortLevel": "Уровень усилий",
     "breakMode": "Режим паузы",
     "breakModeActive": "Обязанности приостановлены",
-    "breakModeUntil": "до {{date}}"
+    "breakModeUntil": "до {{date}}",
+    "deleteChore": "Удалить обязанность",
+    "deleteConfirm": "Ты уверен?",
+    "dueToday": "На сегодня",
+    "allChores": "Все обязанности",
+    "turn": " очередь",
+    "rotating": "(по очереди)",
+    "assignedTo": "Назначено: {{names}}",
+    "hideAnalytics": "Скрыть статистику",
+    "showAnalytics": "Показать справедливое распределение",
+    "choresPausedUntil": "Обязанности приостановлены до {{date}}",
+    "choresPausedIndefinitely": "Обязанности приостановлены на неопределённый срок"
   },
   "events": {
     "title": "Календарь",
@@ -356,10 +382,21 @@
     "title": "Финансы",
     "analytics": "Анализ расходов"
   },
+  "lists": {
+    "todos": "Задачи",
+    "todosDesc": "Личные и домашние задачи",
+    "shopping": "Список покупок",
+    "shoppingDesc": "Совместные покупки",
+    "chores": "Обязанности",
+    "choresDesc": "Повторяющиеся домашние дела",
+    "mealPlan": "План питания",
+    "mealPlanDesc": "Планируйте блюда и добавляйте ингредиенты в список покупок"
+  },
   "tabs": {
     "home": "Главная",
     "lists": "Списки",
     "chores": "Дела",
+    "calendar": "Календарь",
     "finances": "Финансы",
     "more": "Ещё"
   },

@@ -14,7 +14,8 @@
     "search": "ค้นหา",
     "noResults": "ไม่พบผลลัพธ์",
     "pullToRefresh": "ดึงลงเพื่อรีเฟรช",
-    "seeAll": "ดูทั้งหมด"
+    "seeAll": "ดูทั้งหมด",
+    "gotIt": "เข้าใจแล้ว"
   },
   "auth": {
     "signIn": "เข้าสู่ระบบ",
@@ -68,12 +69,26 @@
     "addTodo": "เพิ่มสิ่งที่ต้องทำ...",
     "empty": "ยังไม่มีสิ่งที่ต้องทำ",
     "deleteTodo": "ลบสิ่งที่ต้องทำ",
-    "deleteConfirm": "แน่ใจนะ?"
+    "deleteConfirm": "แน่ใจนะ?",
+    "editTodo": "แก้ไขสิ่งที่ต้องทำ",
+    "titleLabel": "ชื่อ",
+    "titlePlaceholder": "ชื่อสิ่งที่ต้องทำ",
+    "dueDate": "วันครบกำหนด",
+    "noDueDate": "ไม่มีวันครบกำหนด",
+    "due": "ครบกำหนด: {{date}}"
   },
   "shopping": {
     "title": "รายการช้อปปิ้ง",
     "addItem": "เพิ่มรายการ...",
-    "empty": "รายการช้อปปิ้งว่างเปล่า"
+    "empty": "รายการช้อปปิ้งว่างเปล่า",
+    "deleteItem": "ลบรายการ",
+    "deleteConfirm": "ลบ \"{{name}}\"?",
+    "editItem": "แก้ไขรายการ",
+    "nameLabel": "ชื่อ",
+    "namePlaceholder": "ชื่อรายการ",
+    "quantityLabel": "จำนวน",
+    "quantityPlaceholder": "เช่น 2x, 500g",
+    "clearChecked": "ล้างรายการที่เลือก"
   },
   "chores": {
     "title": "งานบ้าน",
@@ -96,7 +111,18 @@
     "effortLevel": "ระดับความพยายาม",
     "breakMode": "โหมดพัก",
     "breakModeActive": "งานบ้านถูกหยุดชั่วคราว",
-    "breakModeUntil": "จนถึง {{date}}"
+    "breakModeUntil": "จนถึง {{date}}",
+    "deleteChore": "ลบงานบ้าน",
+    "deleteConfirm": "แน่ใจนะ?",
+    "dueToday": "วันนี้",
+    "allChores": "งานบ้านทั้งหมด",
+    "turn": " ถึงคิว",
+    "rotating": "(สลับกัน)",
+    "assignedTo": "มอบหมายให้: {{names}}",
+    "hideAnalytics": "ซ่อนสถิติ",
+    "showAnalytics": "แสดงการแบ่งงานอย่างยุติธรรม",
+    "choresPausedUntil": "งานบ้านถูกหยุดชั่วคราวจนถึง {{date}}",
+    "choresPausedIndefinitely": "งานบ้านถูกหยุดชั่วคราวอย่างไม่มีกำหนด"
   },
   "events": {
     "title": "ปฏิทิน",
@@ -356,10 +382,21 @@
     "title": "การเงิน",
     "analytics": "วิเคราะห์การใช้จ่าย"
   },
+  "lists": {
+    "todos": "สิ่งที่ต้องทำ",
+    "todosDesc": "งานส่วนตัวและงานบ้าน",
+    "shopping": "รายการซื้อของ",
+    "shoppingDesc": "ซื้อของร่วมกัน",
+    "chores": "งานบ้าน",
+    "choresDesc": "งานบ้านที่ทำเป็นประจำ",
+    "mealPlan": "แผนมื้ออาหาร",
+    "mealPlanDesc": "วางแผนมื้ออาหารและเพิ่มวัตถุดิบในรายการซื้อของ"
+  },
   "tabs": {
     "home": "หน้าแรก",
     "lists": "รายการ",
     "chores": "งานบ้าน",
+    "calendar": "ปฏิทิน",
     "finances": "การเงิน",
     "more": "เพิ่มเติม"
   },

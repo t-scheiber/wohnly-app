@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Share, Platform, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { UserPlus, ShoppingCart, Sparkles, CheckCircle2, ChevronRight } from "lucide-react-native";
+import { UserPlus, ShoppingCart, Sparkles, CheckCircle2, ChevronRight, X } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
+
+const DISMISSED_KEY = "wohnly_getting_started_dismissed";
 
 interface GettingStartedCardProps {
   memberCount: number;
@@ -25,6 +28,18 @@ export function GettingStartedCard({
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
   const router = useRouter();
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    AsyncStorage.getItem(DISMISSED_KEY).then((v) => {
+      if (v === "true") setDismissed(true);
+    });
+  }, []);
+
+  const handleDismiss = () => {
+    setDismissed(true);
+    AsyncStorage.setItem(DISMISSED_KEY, "true");
+  };
 
   const handleShareInvite = async () => {
     if (!inviteCode) return;
@@ -75,11 +90,16 @@ export function GettingStartedCard({
   ];
 
   const allCompleted = steps.every((s) => s.completed);
-  if (allCompleted) return null;
+  if (allCompleted || dismissed) return null;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.card, borderColor: colors.border }]}>
-      <Text style={[styles.title, { color: colors.text }]}>{t("help.gettingStarted")}</Text>
+      <View style={styles.headerRow}>
+        <Text style={[styles.title, { color: colors.text }]}>{t("help.gettingStarted")}</Text>
+        <TouchableOpacity onPress={handleDismiss} hitSlop={12}>
+          <X size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
+      </View>
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
         {t("help.gettingStartedDesc")}
       </Text>
@@ -121,6 +141,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 2,
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
     fontSize: 18,

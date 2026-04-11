@@ -14,7 +14,8 @@
     "search": "Leita",
     "noResults": "Engar niðurstöður fundust",
     "pullToRefresh": "Dragðu niður til að uppfæra",
-    "seeAll": "Sjá allt"
+    "seeAll": "Sjá allt",
+    "gotIt": "Skil"
   },
   "auth": {
     "signIn": "Skrá inn",
@@ -68,12 +69,26 @@
     "addTodo": "Bæta við verkefni...",
     "empty": "Engin verkefni ennþá",
     "deleteTodo": "Eyða verkefni",
-    "deleteConfirm": "Ertu viss?"
+    "deleteConfirm": "Ertu viss?",
+    "editTodo": "Breyta verkefni",
+    "titleLabel": "Titill",
+    "titlePlaceholder": "Titill verkefnis",
+    "dueDate": "Skiladagur",
+    "noDueDate": "Enginn skiladagur",
+    "due": "Skiladagur: {{date}}"
   },
   "shopping": {
     "title": "Innkaupalisti",
     "addItem": "Bæta við vöru...",
-    "empty": "Innkaupalisti er tómur"
+    "empty": "Innkaupalisti er tómur",
+    "deleteItem": "Eyða hlut",
+    "deleteConfirm": "Eyða \"{{name}}\"?",
+    "editItem": "Breyta hlut",
+    "nameLabel": "Nafn",
+    "namePlaceholder": "Heiti hlutar",
+    "quantityLabel": "Magn",
+    "quantityPlaceholder": "t.d. 2x, 500g",
+    "clearChecked": "Hreinsa merkt"
   },
   "chores": {
     "title": "Heimilisverk",
@@ -96,7 +111,18 @@
     "effortLevel": "Áreynslustig",
     "breakMode": "Hléshamur",
     "breakModeActive": "Heimilisverk eru í bið",
-    "breakModeUntil": "til {{date}}"
+    "breakModeUntil": "til {{date}}",
+    "deleteChore": "Eyða heimiliverki",
+    "deleteConfirm": "Ertu viss?",
+    "dueToday": "Á dagskrá í dag",
+    "allChores": "Öll heimilisverk",
+    "turn": " á röðinni",
+    "rotating": "(til skiptis)",
+    "assignedTo": "Úthlutað til: {{names}}",
+    "hideAnalytics": "Fela tölfræði",
+    "showAnalytics": "Sýna sanngjarna skiptingu",
+    "choresPausedUntil": "Heimilisverk eru í bið til {{date}}",
+    "choresPausedIndefinitely": "Heimilisverk eru í bið um óákveðinn tíma"
   },
   "events": {
     "title": "Dagatal",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Verkefni",
+    "todosDesc": "Persónuleg & heimilisverkefni",
+    "shopping": "Innkaupalisti",
+    "shoppingDesc": "Sameiginleg innkaup",
+    "chores": "Heimilisstörf",
+    "choresDesc": "Endurtekin heimilisstörf",
+    "mealPlan": "Matseðill",
+    "mealPlanDesc": "Skipuleggðu máltíðir og bættu hráefnum á innkaupalista"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Dagatal",
     "finances": "Finances",
     "more": "More"
   },

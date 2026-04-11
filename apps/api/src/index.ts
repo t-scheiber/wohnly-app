@@ -119,8 +119,25 @@ app.get("/api/tauri-callback", (c) => {
 
 // Better Auth handles its own routes.
 // Hono uses `*` as the wildcard matcher for nested paths.
-app.all("/api/auth", (c) => auth.handler(c.req.raw));
-app.all("/api/auth/*", (c) => auth.handler(c.req.raw));
+// Wrap to intercept wohnly:// redirects — browsers block 302 to custom
+// schemes, so we serve an HTML page that redirects via JavaScript instead.
+async function handleAuth(c: any) {
+  const res = await auth.handler(c.req.raw);
+  const location = res.headers.get("location");
+  if (location && location.startsWith("wohnly://")) {
+    return c.html(`<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Wohnly</title>
+<style>body{font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#0f1a1a;color:#fff;text-align:center}
+.box{max-width:360px}h2{margin-bottom:8px}p{color:#aaa;font-size:14px}</style></head>
+<body><div class="box"><h2>Login successful</h2><p>Returning to Wohnly...</p>
+<p style="margin-top:24px;font-size:12px;color:#666">You can close this tab.</p></div>
+<script>window.location.href=${JSON.stringify(location)};setTimeout(()=>window.close(),1500)</script>
+</body></html>`);
+  }
+  return res;
+}
+app.all("/api/auth", handleAuth);
+app.all("/api/auth/*", handleAuth);
 
 // API Routes
 app.route("/api/households", householdsRouter);

@@ -14,7 +14,8 @@
     "search": "Hae",
     "noResults": "Tuloksia ei löytynyt",
     "pullToRefresh": "Vedä päivittääksesi",
-    "seeAll": "Näytä kaikki"
+    "seeAll": "Näytä kaikki",
+    "gotIt": "Selvä"
   },
   "auth": {
     "signIn": "Kirjaudu sisään",
@@ -68,12 +69,26 @@
     "addTodo": "Lisää tehtävä...",
     "empty": "Ei tehtäviä vielä",
     "deleteTodo": "Poista tehtävä",
-    "deleteConfirm": "Oletko varma?"
+    "deleteConfirm": "Oletko varma?",
+    "editTodo": "Muokkaa tehtävää",
+    "titleLabel": "Otsikko",
+    "titlePlaceholder": "Tehtävän otsikko",
+    "dueDate": "Eräpäivä",
+    "noDueDate": "Ei eräpäivää",
+    "due": "Eräpäivä: {{date}}"
   },
   "shopping": {
     "title": "Ostoslista",
     "addItem": "Lisää tuote...",
-    "empty": "Ostoslista on tyhjä"
+    "empty": "Ostoslista on tyhjä",
+    "deleteItem": "Poista tuote",
+    "deleteConfirm": "Poista \"{{name}}\"?",
+    "editItem": "Muokkaa tuotetta",
+    "nameLabel": "Nimi",
+    "namePlaceholder": "Tuotteen nimi",
+    "quantityLabel": "Määrä",
+    "quantityPlaceholder": "esim. 2x, 500g",
+    "clearChecked": "Tyhjennä valitut"
   },
   "chores": {
     "title": "Kotityöt",
@@ -96,7 +111,18 @@
     "effortLevel": "Vaativuustaso",
     "breakMode": "Taukotila",
     "breakModeActive": "Askareet on tauolla",
-    "breakModeUntil": "{{date}} asti"
+    "breakModeUntil": "{{date}} asti",
+    "deleteChore": "Poista kotityö",
+    "deleteConfirm": "Oletko varma?",
+    "dueToday": "Tänään",
+    "allChores": "Kaikki kotityöt",
+    "turn": "n vuoro",
+    "rotating": "(vuorotellen)",
+    "assignedTo": "Osoitettu: {{names}}",
+    "hideAnalytics": "Piilota tilastot",
+    "showAnalytics": "Näytä reilu jako",
+    "choresPausedUntil": "Kotityöt ovat tauolla {{date}} asti",
+    "choresPausedIndefinitely": "Kotityöt ovat tauolla toistaiseksi"
   },
   "events": {
     "title": "Kalenteri",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Tehtävät",
+    "todosDesc": "Henkilökohtaiset & kotitalouden tehtävät",
+    "shopping": "Ostoslista",
+    "shoppingDesc": "Yhteinen ostoslista",
+    "chores": "Kotityöt",
+    "choresDesc": "Toistuvat kotitaloustyöt",
+    "mealPlan": "Ateriasuunnitelma",
+    "mealPlanDesc": "Suunnittele ateriat & lisää ainekset ostoslistalle"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalenteri",
     "finances": "Finances",
     "more": "More"
   },

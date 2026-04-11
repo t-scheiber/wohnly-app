@@ -14,7 +14,8 @@
     "search": "খোঁজো",
     "noResults": "কিছু পাওয়া যায়নি",
     "pullToRefresh": "রিফ্রেশ করতে টানো",
-    "seeAll": "সব দেখুন"
+    "seeAll": "সব দেখুন",
+    "gotIt": "বুঝেছি"
   },
   "auth": {
     "signIn": "সাইন ইন",
@@ -68,12 +69,26 @@
     "addTodo": "একটা টুডু যোগ করো...",
     "empty": "এখনো কোনো টুডু নেই",
     "deleteTodo": "টুডু মুছে ফেলো",
-    "deleteConfirm": "তুমি কি নিশ্চিত?"
+    "deleteConfirm": "তুমি কি নিশ্চিত?",
+    "editTodo": "টুডু সম্পাদনা",
+    "titleLabel": "শিরোনাম",
+    "titlePlaceholder": "টুডু শিরোনাম",
+    "dueDate": "নির্ধারিত তারিখ",
+    "noDueDate": "কোনো নির্ধারিত তারিখ নেই",
+    "due": "নির্ধারিত: {{date}}"
   },
   "shopping": {
     "title": "শপিং লিস্ট",
     "addItem": "আইটেম যোগ করো...",
-    "empty": "শপিং লিস্ট খালি"
+    "empty": "শপিং লিস্ট খালি",
+    "deleteItem": "আইটেম মুছুন",
+    "deleteConfirm": "\"{{name}}\" মুছবেন?",
+    "editItem": "আইটেম সম্পাদনা",
+    "nameLabel": "নাম",
+    "namePlaceholder": "আইটেমের নাম",
+    "quantityLabel": "পরিমাণ",
+    "quantityPlaceholder": "যেমন 2x, 500g",
+    "clearChecked": "চেক করা মুছুন"
   },
   "chores": {
     "title": "ঘরের কাজ",
@@ -96,7 +111,18 @@
     "effortLevel": "প্রচেষ্টার মাত্রা",
     "breakMode": "বিরতি মোড",
     "breakModeActive": "কাজগুলি বিরতিতে আছে",
-    "breakModeUntil": "{{date}} পর্যন্ত"
+    "breakModeUntil": "{{date}} পর্যন্ত",
+    "deleteChore": "কাজ মুছুন",
+    "deleteConfirm": "তুমি কি নিশ্চিত?",
+    "dueToday": "আজকের জন্য",
+    "allChores": "সব কাজ",
+    "turn": "-এর পালা",
+    "rotating": "(পর্যায়ক্রমে)",
+    "assignedTo": "নিযুক্ত: {{names}}",
+    "hideAnalytics": "পরিসংখ্যান লুকান",
+    "showAnalytics": "ন্যায্য ভাগাভাগি দেখান",
+    "choresPausedUntil": "কাজগুলো {{date}} পর্যন্ত বিরতিতে আছে",
+    "choresPausedIndefinitely": "কাজগুলো অনির্দিষ্টকালের জন্য বিরতিতে আছে"
   },
   "events": {
     "title": "ক্যালেন্ডার",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "কাজের তালিকা",
+    "todosDesc": "ব্যক্তিগত ও গৃহস্থালি কাজ",
+    "shopping": "কেনাকাটার তালিকা",
+    "shoppingDesc": "একসাথে কেনাকাটা",
+    "chores": "গৃহকর্ম",
+    "choresDesc": "পুনরাবৃত্ত গৃহস্থালি কাজ",
+    "mealPlan": "খাবার পরিকল্পনা",
+    "mealPlanDesc": "খাবার পরিকল্পনা করুন ও উপকরণ কেনাকাটার তালিকায় যোগ করুন"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "ক্যালেন্ডার",
     "finances": "Finances",
     "more": "More"
   },

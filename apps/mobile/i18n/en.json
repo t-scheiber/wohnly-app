@@ -14,7 +14,8 @@
     "search": "Search",
     "noResults": "No results found",
     "pullToRefresh": "Pull to refresh",
-    "seeAll": "See All"
+    "seeAll": "See All",
+    "gotIt": "Got it"
   },
   "auth": {
     "signIn": "Sign In",
@@ -68,12 +69,26 @@
     "addTodo": "Add a todo...",
     "empty": "No todos yet",
     "deleteTodo": "Delete Todo",
-    "deleteConfirm": "Are you sure?"
+    "deleteConfirm": "Are you sure?",
+    "editTodo": "Edit Todo",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Todo title",
+    "dueDate": "Due Date",
+    "noDueDate": "No due date",
+    "due": "Due: {{date}}"
   },
   "shopping": {
     "title": "Shopping List",
     "addItem": "Add item...",
-    "empty": "Shopping list is empty"
+    "empty": "Shopping list is empty",
+    "deleteItem": "Delete Item",
+    "deleteConfirm": "Delete \"{{name}}\"?",
+    "editItem": "Edit Item",
+    "nameLabel": "Name",
+    "namePlaceholder": "Item name",
+    "quantityLabel": "Quantity",
+    "quantityPlaceholder": "e.g. 2x, 500g",
+    "clearChecked": "Clear checked"
   },
   "chores": {
     "title": "Chores",
@@ -96,7 +111,18 @@
     "effortLevel": "Effort Level",
     "breakMode": "Break Mode",
     "breakModeActive": "Chores are paused",
-    "breakModeUntil": "until {{date}}"
+    "breakModeUntil": "until {{date}}",
+    "deleteChore": "Delete Chore",
+    "deleteConfirm": "Are you sure?",
+    "dueToday": "Due Today",
+    "allChores": "All Chores",
+    "turn": "'s turn",
+    "rotating": "(rotating)",
+    "assignedTo": "Assigned to: {{names}}",
+    "hideAnalytics": "Hide Analytics",
+    "showAnalytics": "Show Fair Share Analytics",
+    "choresPausedUntil": "Chores are paused until {{date}}",
+    "choresPausedIndefinitely": "Chores are paused indefinitely"
   },
   "events": {
     "title": "Calendar",
@@ -384,10 +410,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Todos",
+    "todosDesc": "Personal & household tasks",
+    "shopping": "Shopping List",
+    "shoppingDesc": "Collaborative shopping",
+    "chores": "Chores",
+    "choresDesc": "Recurring household tasks",
+    "mealPlan": "Meal Plan",
+    "mealPlanDesc": "Plan meals & add ingredients to shopping"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Calendar",
     "finances": "Finances",
     "more": "More"
   },

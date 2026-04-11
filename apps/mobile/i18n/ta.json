@@ -14,7 +14,8 @@
     "search": "தேடு",
     "noResults": "முடிவுகள் எதுவும் இல்லை",
     "pullToRefresh": "புதுப்பிக்க இழு",
-    "seeAll": "அனைத்தையும் காண்"
+    "seeAll": "அனைத்தையும் காண்",
+    "gotIt": "புரிந்தது"
   },
   "auth": {
     "signIn": "உள்நுழை",
@@ -68,12 +69,26 @@
     "addTodo": "செய்ய வேண்டியது சேர்...",
     "empty": "இன்னும் செய்ய வேண்டியவை இல்லை",
     "deleteTodo": "செய்ய வேண்டியதை நீக்கு",
-    "deleteConfirm": "நிச்சயமா?"
+    "deleteConfirm": "நிச்சயமா?",
+    "editTodo": "செய்ய வேண்டியதை திருத்து",
+    "titleLabel": "தலைப்பு",
+    "titlePlaceholder": "செய்ய வேண்டியதன் தலைப்பு",
+    "dueDate": "கெடு தேதி",
+    "noDueDate": "கெடு தேதி இல்லை",
+    "due": "கெடு: {{date}}"
   },
   "shopping": {
     "title": "ஷாப்பிங் பட்டியல்",
     "addItem": "பொருள் சேர்...",
-    "empty": "ஷாப்பிங் பட்டியல் காலியாக உள்ளது"
+    "empty": "ஷாப்பிங் பட்டியல் காலியாக உள்ளது",
+    "deleteItem": "பொருளை நீக்கு",
+    "deleteConfirm": "\"{{name}}\" நீக்கவா?",
+    "editItem": "பொருளை திருத்து",
+    "nameLabel": "பெயர்",
+    "namePlaceholder": "பொருளின் பெயர்",
+    "quantityLabel": "அளவு",
+    "quantityPlaceholder": "எ.கா. 2x, 500g",
+    "clearChecked": "தேர்வு செய்தவற்றை நீக்கு"
   },
   "chores": {
     "title": "வீட்டு வேலைகள்",
@@ -96,7 +111,18 @@
     "effortLevel": "முயற்சி நிலை",
     "breakMode": "இடைவேளை முறை",
     "breakModeActive": "வேலைகள் இடைநிறுத்தப்பட்டுள்ளன",
-    "breakModeUntil": "{{date}} வரை"
+    "breakModeUntil": "{{date}} வரை",
+    "deleteChore": "வேலையை நீக்கு",
+    "deleteConfirm": "நிச்சயமா?",
+    "dueToday": "இன்று செய்ய வேண்டியது",
+    "allChores": "எல்லா வேலைகளும்",
+    "turn": " முறை",
+    "rotating": "(மாற்றி மாற்றி)",
+    "assignedTo": "ஒதுக்கப்பட்டது: {{names}}",
+    "hideAnalytics": "புள்ளிவிவரங்களை மறை",
+    "showAnalytics": "நியாயமான பகிர்வைக் காட்டு",
+    "choresPausedUntil": "வேலைகள் {{date}} வரை இடைநிறுத்தப்பட்டுள்ளன",
+    "choresPausedIndefinitely": "வேலைகள் காலவரையின்றி இடைநிறுத்தப்பட்டுள்ளன"
   },
   "events": {
     "title": "காலண்டர்",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "செய்ய வேண்டியவை",
+    "todosDesc": "தனிப்பட்ட & வீட்டு பணிகள்",
+    "shopping": "கடை பட்டியல்",
+    "shoppingDesc": "கூட்டு கடை பட்டியல்",
+    "chores": "வீட்டு வேலைகள்",
+    "choresDesc": "தொடர்ச்சியான வீட்டு வேலைகள்",
+    "mealPlan": "உணவு திட்டம்",
+    "mealPlanDesc": "உணவைத் திட்டமிடுங்கள் & பொருட்களை கடை பட்டியலில் சேருங்கள்"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "நாட்காட்டி",
     "finances": "Finances",
     "more": "More"
   },

@@ -14,7 +14,8 @@
     "search": "Търси",
     "noResults": "Няма намерени резултати",
     "pullToRefresh": "Дръпни за опресняване",
-    "seeAll": "Виж всички"
+    "seeAll": "Виж всички",
+    "gotIt": "Разбрах"
   },
   "auth": {
     "signIn": "Вход",
@@ -68,12 +69,26 @@
     "addTodo": "Добави задача...",
     "empty": "Все още няма задачи",
     "deleteTodo": "Изтрий задача",
-    "deleteConfirm": "Сигурен ли си?"
+    "deleteConfirm": "Сигурен ли си?",
+    "editTodo": "Редактиране на задача",
+    "titleLabel": "Заглавие",
+    "titlePlaceholder": "Заглавие на задачата",
+    "dueDate": "Краен срок",
+    "noDueDate": "Без краен срок",
+    "due": "Срок: {{date}}"
   },
   "shopping": {
     "title": "Списък за пазаруване",
     "addItem": "Добави артикул...",
-    "empty": "Списъкът за пазаруване е празен"
+    "empty": "Списъкът за пазаруване е празен",
+    "deleteItem": "Изтриване на артикул",
+    "deleteConfirm": "Изтриване на \"{{name}}\"?",
+    "editItem": "Редактиране на артикул",
+    "nameLabel": "Име",
+    "namePlaceholder": "Име на артикула",
+    "quantityLabel": "Количество",
+    "quantityPlaceholder": "напр. 2x, 500г",
+    "clearChecked": "Изчистване на отбелязаните"
   },
   "chores": {
     "title": "Домакински задължения",
@@ -96,7 +111,18 @@
     "effortLevel": "Ниво на усилие",
     "breakMode": "Режим на почивка",
     "breakModeActive": "Задълженията са на пауза",
-    "breakModeUntil": "до {{date}}"
+    "breakModeUntil": "до {{date}}",
+    "deleteChore": "Изтриване на задължение",
+    "deleteConfirm": "Сигурен ли си?",
+    "dueToday": "За днес",
+    "allChores": "Всички задължения",
+    "turn": " е на ред",
+    "rotating": "(ротация)",
+    "assignedTo": "Назначено на: {{names}}",
+    "hideAnalytics": "Скриване на статистиката",
+    "showAnalytics": "Показване на справедливо разпределение",
+    "choresPausedUntil": "Задълженията са спрени до {{date}}",
+    "choresPausedIndefinitely": "Задълженията са спрени за неопределено време"
   },
   "events": {
     "title": "Календар",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Задачи",
+    "todosDesc": "Лични и домакински задачи",
+    "shopping": "Списък за пазаруване",
+    "shoppingDesc": "Съвместно пазаруване",
+    "chores": "Домакинство",
+    "choresDesc": "Повтарящи се домакински задължения",
+    "mealPlan": "Хранителен план",
+    "mealPlanDesc": "Планирайте ястия и добавете съставки в списъка за пазаруване"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Календар",
     "finances": "Finances",
     "more": "More"
   },

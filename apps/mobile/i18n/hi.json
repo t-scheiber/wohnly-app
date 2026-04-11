@@ -14,7 +14,8 @@
     "search": "खोजो",
     "noResults": "कुछ नहीं मिला",
     "pullToRefresh": "रिफ्रेश के लिए नीचे खींचो",
-    "seeAll": "सभी देखें"
+    "seeAll": "सभी देखें",
+    "gotIt": "समझ गया"
   },
   "auth": {
     "signIn": "साइन इन",
@@ -68,12 +69,26 @@
     "addTodo": "टू-डू जोड़ो...",
     "empty": "अभी कोई टू-डू नहीं है",
     "deleteTodo": "टू-डू डिलीट करो",
-    "deleteConfirm": "क्या तुम्हें यकीन है?"
+    "deleteConfirm": "क्या तुम्हें यकीन है?",
+    "editTodo": "टू-डू संपादित करें",
+    "titleLabel": "शीर्षक",
+    "titlePlaceholder": "टू-डू शीर्षक",
+    "dueDate": "नियत तारीख",
+    "noDueDate": "कोई नियत तारीख नहीं",
+    "due": "नियत: {{date}}"
   },
   "shopping": {
     "title": "शॉपिंग लिस्ट",
     "addItem": "आइटम जोड़ो...",
-    "empty": "शॉपिंग लिस्ट खाली है"
+    "empty": "शॉपिंग लिस्ट खाली है",
+    "deleteItem": "आइटम हटाएँ",
+    "deleteConfirm": "\"{{name}}\" हटाएँ?",
+    "editItem": "आइटम संपादित करें",
+    "nameLabel": "नाम",
+    "namePlaceholder": "आइटम का नाम",
+    "quantityLabel": "मात्रा",
+    "quantityPlaceholder": "जैसे 2x, 500g",
+    "clearChecked": "चेक किए हुए हटाएँ"
   },
   "chores": {
     "title": "घर के काम",
@@ -96,7 +111,18 @@
     "effortLevel": "प्रयास स्तर",
     "breakMode": "विराम मोड",
     "breakModeActive": "काम रुके हुए हैं",
-    "breakModeUntil": "{{date}} तक"
+    "breakModeUntil": "{{date}} तक",
+    "deleteChore": "काम हटाएँ",
+    "deleteConfirm": "क्या तुम्हें यकीन है?",
+    "dueToday": "आज के लिए",
+    "allChores": "सभी काम",
+    "turn": " की बारी",
+    "rotating": "(बारी-बारी)",
+    "assignedTo": "सौंपा गया: {{names}}",
+    "hideAnalytics": "आँकड़े छुपाएँ",
+    "showAnalytics": "उचित बँटवारा दिखाएँ",
+    "choresPausedUntil": "काम {{date}} तक रोके गए हैं",
+    "choresPausedIndefinitely": "काम अनिश्चितकाल के लिए रोके गए हैं"
   },
   "events": {
     "title": "कैलेंडर",
@@ -356,10 +382,21 @@
     "title": "वित्त",
     "analytics": "खर्च विश्लेषण"
   },
+  "lists": {
+    "todos": "कार्य",
+    "todosDesc": "व्यक्तिगत और घरेलू कार्य",
+    "shopping": "खरीदारी सूची",
+    "shoppingDesc": "साझा खरीदारी",
+    "chores": "घरेलू काम",
+    "choresDesc": "नियमित घरेलू कार्य",
+    "mealPlan": "भोजन योजना",
+    "mealPlanDesc": "भोजन की योजना बनाएं और सामग्री खरीदारी सूची में जोड़ें"
+  },
   "tabs": {
     "home": "होम",
     "lists": "सूचियाँ",
     "chores": "काम",
+    "calendar": "कैलेंडर",
     "finances": "वित्त",
     "more": "और"
   },

@@ -14,7 +14,8 @@
     "search": "వెతుకు",
     "noResults": "ఫలితాలు దొరకలేదు",
     "pullToRefresh": "రిఫ్రెష్ చేయడానికి లాగు",
-    "seeAll": "అన్నీ చూడండి"
+    "seeAll": "అన్నీ చూడండి",
+    "gotIt": "అర్థమైంది"
   },
   "auth": {
     "signIn": "సైన్ ఇన్",
@@ -68,12 +69,26 @@
     "addTodo": "చేయాల్సింది జోడించు...",
     "empty": "ఇంకా చేయాల్సినవి లేవు",
     "deleteTodo": "చేయాల్సింది తొలగించు",
-    "deleteConfirm": "ఖచ్చితంగా?"
+    "deleteConfirm": "ఖచ్చితంగా?",
+    "editTodo": "చేయాల్సింది మార్చు",
+    "titleLabel": "శీర్షిక",
+    "titlePlaceholder": "చేయాల్సింది శీర్షిక",
+    "dueDate": "గడువు తేదీ",
+    "noDueDate": "గడువు తేదీ లేదు",
+    "due": "గడువు: {{date}}"
   },
   "shopping": {
     "title": "షాపింగ్ లిస్ట్",
     "addItem": "ఐటెం జోడించు...",
-    "empty": "షాపింగ్ లిస్ట్ ఖాళీగా ఉంది"
+    "empty": "షాపింగ్ లిస్ట్ ఖాళీగా ఉంది",
+    "deleteItem": "వస్తువు తొలగించు",
+    "deleteConfirm": "\"{{name}}\" తొలగించాలా?",
+    "editItem": "వస్తువు మార్చు",
+    "nameLabel": "పేరు",
+    "namePlaceholder": "వస్తువు పేరు",
+    "quantityLabel": "పరిమాణం",
+    "quantityPlaceholder": "ఉదా. 2x, 500g",
+    "clearChecked": "చెక్ చేసినవి తొలగించు"
   },
   "chores": {
     "title": "ఇంటి పనులు",
@@ -96,7 +111,18 @@
     "effortLevel": "ప్రయత్న స్థాయి",
     "breakMode": "విరామ మోడ్",
     "breakModeActive": "పనులు విరమించబడ్డాయి",
-    "breakModeUntil": "{{date}} వరకు"
+    "breakModeUntil": "{{date}} వరకు",
+    "deleteChore": "పని తొలగించు",
+    "deleteConfirm": "ఖచ్చితంగా?",
+    "dueToday": "ఈరోజు చేయాల్సింది",
+    "allChores": "అన్ని పనులు",
+    "turn": " వంతు",
+    "rotating": "(మారుతూ)",
+    "assignedTo": "అప్పగించబడింది: {{names}}",
+    "hideAnalytics": "గణాంకాలు దాచు",
+    "showAnalytics": "న్యాయమైన పంపిణీ చూపు",
+    "choresPausedUntil": "పనులు {{date}} వరకు ఆపబడ్డాయి",
+    "choresPausedIndefinitely": "పనులు అనిశ్చితంగా ఆపబడ్డాయి"
   },
   "events": {
     "title": "క్యాలెండర్",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "చేయవలసినవి",
+    "todosDesc": "వ్యక్తిగత & గృహ పనులు",
+    "shopping": "షాపింగ్ జాబితా",
+    "shoppingDesc": "సహకార షాపింగ్",
+    "chores": "ఇంటి పనులు",
+    "choresDesc": "పునరావృత గృహ పనులు",
+    "mealPlan": "భోజన ప్రణాళిక",
+    "mealPlanDesc": "భోజనాలను ప్లాన్ చేయండి & పదార్థాలను షాపింగ్ జాబితాకు జోడించండి"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "క్యాలెండర్",
     "finances": "Finances",
     "more": "More"
   },

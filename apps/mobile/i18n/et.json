@@ -14,7 +14,8 @@
     "search": "Otsi",
     "noResults": "Tulemusi ei leitud",
     "pullToRefresh": "Tõmba alla, et värskendada",
-    "seeAll": "Vaata kõiki"
+    "seeAll": "Vaata kõiki",
+    "gotIt": "Selge"
   },
   "auth": {
     "signIn": "Logi sisse",
@@ -68,12 +69,26 @@
     "addTodo": "Lisa ülesanne...",
     "empty": "Ülesandeid pole veel",
     "deleteTodo": "Kustuta ülesanne",
-    "deleteConfirm": "Oled kindel?"
+    "deleteConfirm": "Oled kindel?",
+    "editTodo": "Muuda ülesannet",
+    "titleLabel": "Pealkiri",
+    "titlePlaceholder": "Ülesande pealkiri",
+    "dueDate": "Tähtaeg",
+    "noDueDate": "Tähtaeg puudub",
+    "due": "Tähtaeg: {{date}}"
   },
   "shopping": {
     "title": "Ostunimekiri",
     "addItem": "Lisa toode...",
-    "empty": "Ostunimekiri on tühi"
+    "empty": "Ostunimekiri on tühi",
+    "deleteItem": "Kustuta toode",
+    "deleteConfirm": "Kustutada \"{{name}}\"?",
+    "editItem": "Muuda toodet",
+    "nameLabel": "Nimi",
+    "namePlaceholder": "Toote nimi",
+    "quantityLabel": "Kogus",
+    "quantityPlaceholder": "nt 2x, 500g",
+    "clearChecked": "Tühjenda märgitud"
   },
   "chores": {
     "title": "Kodutööd",
@@ -96,7 +111,18 @@
     "effortLevel": "Pingutuse tase",
     "breakMode": "Puhkerežiim",
     "breakModeActive": "Majapidamistööd on peatatud",
-    "breakModeUntil": "kuni {{date}}"
+    "breakModeUntil": "kuni {{date}}",
+    "deleteChore": "Kustuta kodutöö",
+    "deleteConfirm": "Oled kindel?",
+    "dueToday": "Tänaseks",
+    "allChores": "Kõik kodutööd",
+    "turn": " kord",
+    "rotating": "(vahelduv)",
+    "assignedTo": "Määratud: {{names}}",
+    "hideAnalytics": "Peida statistika",
+    "showAnalytics": "Näita õiglast jaotust",
+    "choresPausedUntil": "Kodutööd on peatatud kuni {{date}}",
+    "choresPausedIndefinitely": "Kodutööd on määramata ajaks peatatud"
   },
   "events": {
     "title": "Kalender",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Ülesanded",
+    "todosDesc": "Isiklikud ja majapidamise ülesanded",
+    "shopping": "Ostunimekiri",
+    "shoppingDesc": "Ühine sisseostude tegemine",
+    "chores": "Kodutööd",
+    "choresDesc": "Korduvad majapidamistööd",
+    "mealPlan": "Toiduplaan",
+    "mealPlanDesc": "Planeeri toidukordi ja lisa koostisosad ostunimekirja"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalender",
     "finances": "Finances",
     "more": "More"
   },

@@ -14,7 +14,8 @@
     "search": "Sök",
     "noResults": "Inga resultat hittades",
     "pullToRefresh": "Dra ner för att uppdatera",
-    "seeAll": "Visa alla"
+    "seeAll": "Visa alla",
+    "gotIt": "Uppfattat"
   },
   "auth": {
     "signIn": "Logga in",
@@ -68,12 +69,26 @@
     "addTodo": "Lägg till uppgift...",
     "empty": "Inga uppgifter ännu",
     "deleteTodo": "Radera uppgift",
-    "deleteConfirm": "Är du säker?"
+    "deleteConfirm": "Är du säker?",
+    "editTodo": "Redigera uppgift",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "Uppgiftens titel",
+    "dueDate": "Förfallodatum",
+    "noDueDate": "Inget förfallodatum",
+    "due": "Förfaller: {{date}}"
   },
   "shopping": {
     "title": "Inköpslista",
     "addItem": "Lägg till vara...",
-    "empty": "Inköpslistan är tom"
+    "empty": "Inköpslistan är tom",
+    "deleteItem": "Ta bort vara",
+    "deleteConfirm": "Ta bort \"{{name}}\"?",
+    "editItem": "Redigera vara",
+    "nameLabel": "Namn",
+    "namePlaceholder": "Varans namn",
+    "quantityLabel": "Antal",
+    "quantityPlaceholder": "t.ex. 2x, 500g",
+    "clearChecked": "Rensa markerade"
   },
   "chores": {
     "title": "Sysslor",
@@ -96,7 +111,18 @@
     "effortLevel": "Ansträngningsnivå",
     "breakMode": "Pausläge",
     "breakModeActive": "Sysslorna är pausade",
-    "breakModeUntil": "till {{date}}"
+    "breakModeUntil": "till {{date}}",
+    "deleteChore": "Ta bort syssla",
+    "deleteConfirm": "Är du säker?",
+    "dueToday": "Idag",
+    "allChores": "Alla sysslor",
+    "turn": "s tur",
+    "rotating": "(roterande)",
+    "assignedTo": "Tilldelad till: {{names}}",
+    "hideAnalytics": "Dölj statistik",
+    "showAnalytics": "Visa rättvis fördelning",
+    "choresPausedUntil": "Sysslor är pausade till {{date}}",
+    "choresPausedIndefinitely": "Sysslor är pausade på obestämd tid"
   },
   "events": {
     "title": "Kalender",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Att göra",
+    "todosDesc": "Personliga & hushållsuppgifter",
+    "shopping": "Inköpslista",
+    "shoppingDesc": "Gemensamma inköp",
+    "chores": "Sysslor",
+    "choresDesc": "Återkommande hushållssysslor",
+    "mealPlan": "Matplan",
+    "mealPlanDesc": "Planera måltider & lägg till ingredienser i inköpslistan"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalender",
     "finances": "Finances",
     "more": "More"
   },

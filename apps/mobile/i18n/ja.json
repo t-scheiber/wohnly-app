@@ -14,7 +14,8 @@
     "search": "検索",
     "noResults": "結果が見つからなかったよ",
     "pullToRefresh": "引っ張って更新",
-    "seeAll": "すべて見る"
+    "seeAll": "すべて見る",
+    "gotIt": "了解"
   },
   "auth": {
     "signIn": "ログイン",
@@ -68,12 +69,26 @@
     "addTodo": "やることを追加...",
     "empty": "まだやることがないよ",
     "deleteTodo": "やることを削除",
-    "deleteConfirm": "本当に削除する？"
+    "deleteConfirm": "本当に削除する？",
+    "editTodo": "やることを編集",
+    "titleLabel": "タイトル",
+    "titlePlaceholder": "やることのタイトル",
+    "dueDate": "期限",
+    "noDueDate": "期限なし",
+    "due": "期限: {{date}}"
   },
   "shopping": {
     "title": "買い物リスト",
     "addItem": "アイテムを追加...",
-    "empty": "買い物リストは空だよ"
+    "empty": "買い物リストは空だよ",
+    "deleteItem": "アイテムを削除",
+    "deleteConfirm": "「{{name}}」を削除する？",
+    "editItem": "アイテムを編集",
+    "nameLabel": "名前",
+    "namePlaceholder": "アイテム名",
+    "quantityLabel": "数量",
+    "quantityPlaceholder": "例: 2個、500g",
+    "clearChecked": "チェック済みを削除"
   },
   "chores": {
     "title": "家事",
@@ -96,7 +111,18 @@
     "effortLevel": "労力レベル",
     "breakMode": "休憩モード",
     "breakModeActive": "家事は一時停止中",
-    "breakModeUntil": "{{date}}まで"
+    "breakModeUntil": "{{date}}まで",
+    "deleteChore": "家事を削除",
+    "deleteConfirm": "本当に削除する？",
+    "dueToday": "今日やること",
+    "allChores": "すべての家事",
+    "turn": "の番",
+    "rotating": "(交代制)",
+    "assignedTo": "担当: {{names}}",
+    "hideAnalytics": "統計を隠す",
+    "showAnalytics": "公平な分担を表示",
+    "choresPausedUntil": "家事は{{date}}まで休止中",
+    "choresPausedIndefinitely": "家事は無期限で休止中"
   },
   "events": {
     "title": "カレンダー",
@@ -356,10 +382,21 @@
     "title": "家計",
     "analytics": "支出分析"
   },
+  "lists": {
+    "todos": "やること",
+    "todosDesc": "個人・家庭のタスク",
+    "shopping": "買い物リスト",
+    "shoppingDesc": "共同で買い物",
+    "chores": "家事",
+    "choresDesc": "定期的な家事タスク",
+    "mealPlan": "食事プラン",
+    "mealPlanDesc": "献立を計画し、食材を買い物リストに追加"
+  },
   "tabs": {
     "home": "ホーム",
     "lists": "リスト",
     "chores": "家事",
+    "calendar": "カレンダー",
     "finances": "家計",
     "more": "その他"
   },

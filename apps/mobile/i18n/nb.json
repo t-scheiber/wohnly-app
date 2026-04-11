@@ -14,7 +14,8 @@
     "search": "Søk",
     "noResults": "Ingen resultater funnet",
     "pullToRefresh": "Dra ned for å oppdatere",
-    "seeAll": "Se alle"
+    "seeAll": "Se alle",
+    "gotIt": "Skjønner"
   },
   "auth": {
     "signIn": "Logg inn",
@@ -68,12 +69,26 @@
     "addTodo": "Legg til gjøremål...",
     "empty": "Ingen gjøremål ennå",
     "deleteTodo": "Slett gjøremål",
-    "deleteConfirm": "Er du sikker?"
+    "deleteConfirm": "Er du sikker?",
+    "editTodo": "Rediger gjøremål",
+    "titleLabel": "Tittel",
+    "titlePlaceholder": "Gjøremålets tittel",
+    "dueDate": "Forfallsdato",
+    "noDueDate": "Ingen forfallsdato",
+    "due": "Forfaller: {{date}}"
   },
   "shopping": {
     "title": "Handleliste",
     "addItem": "Legg til vare...",
-    "empty": "Handlelisten er tom"
+    "empty": "Handlelisten er tom",
+    "deleteItem": "Slett vare",
+    "deleteConfirm": "Slette \"{{name}}\"?",
+    "editItem": "Rediger vare",
+    "nameLabel": "Navn",
+    "namePlaceholder": "Varenavn",
+    "quantityLabel": "Antall",
+    "quantityPlaceholder": "f.eks. 2x, 500g",
+    "clearChecked": "Fjern avkryssede"
   },
   "chores": {
     "title": "Husarbeid",
@@ -96,7 +111,18 @@
     "effortLevel": "Innsatsnivå",
     "breakMode": "Pausemodus",
     "breakModeActive": "Gjøremålene er satt på pause",
-    "breakModeUntil": "til {{date}}"
+    "breakModeUntil": "til {{date}}",
+    "deleteChore": "Slett husarbeid",
+    "deleteConfirm": "Er du sikker?",
+    "dueToday": "I dag",
+    "allChores": "Alle husarbeid",
+    "turn": "s tur",
+    "rotating": "(rullerende)",
+    "assignedTo": "Tildelt til: {{names}}",
+    "hideAnalytics": "Skjul statistikk",
+    "showAnalytics": "Vis rettferdig fordeling",
+    "choresPausedUntil": "Husarbeid er satt på pause til {{date}}",
+    "choresPausedIndefinitely": "Husarbeid er satt på pause på ubestemt tid"
   },
   "events": {
     "title": "Kalender",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Gjøremål",
+    "todosDesc": "Personlige & husholdsoppgaver",
+    "shopping": "Handleliste",
+    "shoppingDesc": "Felles handling",
+    "chores": "Plikter",
+    "choresDesc": "Gjentakende husholdsoppgaver",
+    "mealPlan": "Måltidsplan",
+    "mealPlanDesc": "Planlegg måltider & legg ingredienser til handlelisten"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalender",
     "finances": "Finances",
     "more": "More"
   },

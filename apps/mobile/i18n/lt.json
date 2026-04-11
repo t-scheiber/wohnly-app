@@ -14,7 +14,8 @@
     "search": "Ieškoti",
     "noResults": "Rezultatų nerasta",
     "pullToRefresh": "Patrauk žemyn, kad atnaujintum",
-    "seeAll": "Žiūrėti viską"
+    "seeAll": "Žiūrėti viską",
+    "gotIt": "Supratau"
   },
   "auth": {
     "signIn": "Prisijungti",
@@ -68,12 +69,26 @@
     "addTodo": "Pridėti užduotį...",
     "empty": "Dar nėra užduočių",
     "deleteTodo": "Ištrinti užduotį",
-    "deleteConfirm": "Ar tikrai?"
+    "deleteConfirm": "Ar tikrai?",
+    "editTodo": "Redaguoti užduotį",
+    "titleLabel": "Pavadinimas",
+    "titlePlaceholder": "Užduoties pavadinimas",
+    "dueDate": "Terminas",
+    "noDueDate": "Be termino",
+    "due": "Terminas: {{date}}"
   },
   "shopping": {
     "title": "Pirkinių sąrašas",
     "addItem": "Pridėti prekę...",
-    "empty": "Pirkinių sąrašas tuščias"
+    "empty": "Pirkinių sąrašas tuščias",
+    "deleteItem": "Ištrinti prekę",
+    "deleteConfirm": "Ištrinti \"{{name}}\"?",
+    "editItem": "Redaguoti prekę",
+    "nameLabel": "Pavadinimas",
+    "namePlaceholder": "Prekės pavadinimas",
+    "quantityLabel": "Kiekis",
+    "quantityPlaceholder": "pvz. 2x, 500g",
+    "clearChecked": "Išvalyti pažymėtus"
   },
   "chores": {
     "title": "Namų ruoša",
@@ -96,7 +111,18 @@
     "effortLevel": "Pastangų lygis",
     "breakMode": "Pertraukos režimas",
     "breakModeActive": "Namų ruošos darbai pristabdyti",
-    "breakModeUntil": "iki {{date}}"
+    "breakModeUntil": "iki {{date}}",
+    "deleteChore": "Ištrinti darbą",
+    "deleteConfirm": "Ar tikrai?",
+    "dueToday": "Šiandien",
+    "allChores": "Visi darbai",
+    "turn": " eilė",
+    "rotating": "(kaitaliojasi)",
+    "assignedTo": "Priskirta: {{names}}",
+    "hideAnalytics": "Slėpti statistiką",
+    "showAnalytics": "Rodyti teisingą paskirstymą",
+    "choresPausedUntil": "Darbai sustabdyti iki {{date}}",
+    "choresPausedIndefinitely": "Darbai sustabdyti neribotam laikui"
   },
   "events": {
     "title": "Kalendorius",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Užduotys",
+    "todosDesc": "Asmeninės ir namų ūkio užduotys",
+    "shopping": "Pirkinių sąrašas",
+    "shoppingDesc": "Bendri pirkiniai",
+    "chores": "Namų ruoša",
+    "choresDesc": "Pasikartojančios namų ruošos užduotys",
+    "mealPlan": "Maitinimo planas",
+    "mealPlanDesc": "Planuokite patiekalus ir pridėkite ingredientus į pirkinių sąrašą"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalendorius",
     "finances": "Finances",
     "more": "More"
   },

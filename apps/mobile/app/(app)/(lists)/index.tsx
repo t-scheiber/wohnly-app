@@ -1,35 +1,45 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { ScreenView } from "@/components/ui/ScreenView";
-import { CheckSquare, ShoppingCart, ChevronRight, UtensilsCrossed } from "lucide-react-native";
+import { CheckSquare, ShoppingCart, ChevronRight, UtensilsCrossed, Sparkles } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AdBanner } from "@/components/common/AdBanner";
+import { HelpButton } from "@/components/common/HelpButton";
 
 export default function ListsScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const router = useRouter();
+  const { t } = useTranslation();
 
   const items = [
     {
       icon: <CheckSquare size={22} color={colors.primary} />,
-      label: "Todos",
-      sublabel: "Personal & household tasks",
+      label: t("lists.todos"),
+      sublabel: t("lists.todosDesc"),
       route: "/(app)/(lists)/todos" as const,
       bg: colors.primary,
     },
     {
       icon: <ShoppingCart size={22} color="#3b82f6" />,
-      label: "Shopping List",
-      sublabel: "Collaborative shopping",
+      label: t("lists.shopping"),
+      sublabel: t("lists.shoppingDesc"),
       route: "/(app)/(lists)/shopping" as const,
       bg: "#3b82f6",
     },
     {
+      icon: <Sparkles size={22} color="#8b5cf6" />,
+      label: t("lists.chores"),
+      sublabel: t("lists.choresDesc"),
+      route: "/(app)/(chores)" as const,
+      bg: "#8b5cf6",
+    },
+    {
       icon: <UtensilsCrossed size={22} color="#f59e0b" />,
-      label: "Meal Plan",
-      sublabel: "Plan meals & add ingredients to shopping",
+      label: t("lists.mealPlan"),
+      sublabel: t("lists.mealPlanDesc"),
       route: "/(app)/(lists)/meals" as const,
       bg: "#f59e0b",
     },
@@ -38,8 +48,9 @@ export default function ListsScreen() {
   return (
     <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView>
-        <View style={{ padding: 20, paddingBottom: 16 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>Lists</Text>
+        <View style={{ padding: 20, paddingBottom: 16, flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("tabs.lists")}</Text>
+          <HelpButton />
         </View>
 
         <View style={{ paddingHorizontal: 16, gap: 12 }}>

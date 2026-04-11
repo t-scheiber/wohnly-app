@@ -20,11 +20,13 @@ import ClearCompletedButton from "@/components/list/ClearCompletedButton";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { impactLight, notifySuccess } from "@/lib/utils/haptics";
+import { useTranslation } from "react-i18next";
 import type { ShoppingItem } from "@wohnly/shared";
 
 export default function ShoppingScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { t } = useTranslation();
 
   const [tab, setTab] = useState<"household" | "personal">("household");
   const [newItem, setNewItem] = useState("");
@@ -190,8 +192,8 @@ export default function ShoppingScreen() {
     return (
       <SwipeableListItem
         onDelete={() => handleDelete(item.id)}
-        deleteConfirmTitle="Delete Item"
-        deleteConfirmMessage={`Delete "${item.name}"?`}
+        deleteConfirmTitle={t("shopping.deleteItem")}
+        deleteConfirmMessage={t("shopping.deleteConfirm", { name: item.name })}
       >
         {content}
       </SwipeableListItem>
@@ -202,26 +204,25 @@ export default function ShoppingScreen() {
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Tab switcher */}
       <View style={{ flexDirection: "row", padding: 16, gap: 8 }}>
-        {(["household", "personal"] as const).map((t) => (
+        {(["household", "personal"] as const).map((key) => (
           <TouchableOpacity
-            key={t}
-            onPress={() => setTab(t)}
+            key={key}
+            onPress={() => setTab(key)}
             style={{
               flex: 1,
               paddingVertical: 10,
               borderRadius: 8,
-              backgroundColor: tab === t ? colors.primary : colors.muted,
+              backgroundColor: tab === key ? colors.primary : colors.muted,
               alignItems: "center",
             }}
           >
             <Text
               style={{
-                color: tab === t ? colors.primaryForeground : colors.text,
+                color: tab === key ? colors.primaryForeground : colors.text,
                 fontWeight: "600",
-                textTransform: "capitalize",
               }}
             >
-              {t}
+              {t(`todos.${key}`)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -281,12 +282,12 @@ export default function ShoppingScreen() {
           <ClearCompletedButton
             completedCount={checked.length}
             onClear={handleClearChecked}
-            label="Clear checked"
+            label={t("shopping.clearChecked")}
           />
         }
         ListEmptyComponent={
           <View style={{ alignItems: "center", paddingVertical: 48 }}>
-            <Text style={{ fontSize: 16, color: colors.textSecondary }}>Shopping list is empty</Text>
+            <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("shopping.empty")}</Text>
           </View>
         }
       />
@@ -305,7 +306,7 @@ export default function ShoppingScreen() {
         }}
       >
         <TextInput
-          placeholder="Add item..."
+          placeholder={t("shopping.addItem")}
           placeholderTextColor={colors.textSecondary}
           value={newItem}
           onChangeText={setNewItem}
@@ -333,7 +334,7 @@ export default function ShoppingScreen() {
           }}
         >
           <Text style={{ color: newItem.trim() ? colors.primaryForeground : colors.textSecondary, fontWeight: "600" }}>
-            Add
+            {t("common.add")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -347,32 +348,32 @@ export default function ShoppingScreen() {
       >
         <View style={{ flex: 1, backgroundColor: colors.background, padding: 24 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-            <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>Edit Item</Text>
+            <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>{t("shopping.editItem")}</Text>
             <TouchableOpacity onPress={() => setEditItem(null)}>
-              <Text style={{ fontSize: 16, color: colors.textSecondary }}>Cancel</Text>
+              <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("common.cancel")}</Text>
             </TouchableOpacity>
           </View>
 
           <Input
-            label="Name"
+            label={t("shopping.nameLabel")}
             value={editName}
             onChangeText={setEditName}
-            placeholder="Item name"
+            placeholder={t("shopping.namePlaceholder")}
             autoFocus
           />
 
           <Input
-            label="Quantity"
+            label={t("shopping.quantityLabel")}
             value={editQuantity}
             onChangeText={setEditQuantity}
-            placeholder="e.g. 2x, 500g"
+            placeholder={t("shopping.quantityPlaceholder")}
           />
 
           <Button
             onPress={handleSaveEdit}
             disabled={!editName.trim()}
           >
-            Save
+            {t("common.save")}
           </Button>
         </View>
       </Modal>

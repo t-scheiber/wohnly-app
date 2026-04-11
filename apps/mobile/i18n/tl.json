@@ -14,7 +14,8 @@
     "search": "Maghanap",
     "noResults": "Walang resulta",
     "pullToRefresh": "Hilahin para i-refresh",
-    "seeAll": "Tingnan lahat"
+    "seeAll": "Tingnan lahat",
+    "gotIt": "Sige"
   },
   "auth": {
     "signIn": "Mag-sign In",
@@ -68,12 +69,26 @@
     "addTodo": "Magdagdag ng gagawin...",
     "empty": "Wala pang gagawin",
     "deleteTodo": "Burahin ang Gagawin",
-    "deleteConfirm": "Sure ka ba?"
+    "deleteConfirm": "Sure ka ba?",
+    "editTodo": "I-edit ang gagawin",
+    "titleLabel": "Pamagat",
+    "titlePlaceholder": "Pamagat ng gagawin",
+    "dueDate": "Takdang Petsa",
+    "noDueDate": "Walang takdang petsa",
+    "due": "Takda: {{date}}"
   },
   "shopping": {
     "title": "Shopping List",
     "addItem": "Magdagdag ng item...",
-    "empty": "Walang laman ang shopping list"
+    "empty": "Walang laman ang shopping list",
+    "deleteItem": "I-delete ang Item",
+    "deleteConfirm": "I-delete ang \"{{name}}\"?",
+    "editItem": "I-edit ang Item",
+    "nameLabel": "Pangalan",
+    "namePlaceholder": "Pangalan ng item",
+    "quantityLabel": "Dami",
+    "quantityPlaceholder": "hal. 2x, 500g",
+    "clearChecked": "I-clear ang naka-check"
   },
   "chores": {
     "title": "Mga Gawaing Bahay",
@@ -96,7 +111,18 @@
     "effortLevel": "Antas ng pagsisikap",
     "breakMode": "Break mode",
     "breakModeActive": "Ang mga gawain ay naka-pause",
-    "breakModeUntil": "hanggang {{date}}"
+    "breakModeUntil": "hanggang {{date}}",
+    "deleteChore": "I-delete ang Gawain",
+    "deleteConfirm": "Sure ka ba?",
+    "dueToday": "Para Ngayon",
+    "allChores": "Lahat ng Gawain",
+    "turn": " ang turn",
+    "rotating": "(palit-palit)",
+    "assignedTo": "Nakatalaga sa: {{names}}",
+    "hideAnalytics": "Itago ang Analytics",
+    "showAnalytics": "Ipakita ang Patas na Hatian",
+    "choresPausedUntil": "Mga gawain ay naka-pause hanggang {{date}}",
+    "choresPausedIndefinitely": "Mga gawain ay naka-pause nang walang takda"
   },
   "events": {
     "title": "Kalendaryo",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Mga Gawain",
+    "todosDesc": "Personal at gawaing bahay",
+    "shopping": "Listahan ng Bilihin",
+    "shoppingDesc": "Sabay-sabay mamili",
+    "chores": "Gawaing Bahay",
+    "choresDesc": "Paulit-ulit na gawaing bahay",
+    "mealPlan": "Plano ng Pagkain",
+    "mealPlanDesc": "Magplano ng pagkain at magdagdag ng sangkap sa listahan ng bilihin"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalendaryo",
     "finances": "Finances",
     "more": "More"
   },
