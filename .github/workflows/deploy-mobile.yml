@@ -71,6 +71,10 @@ jobs:
         working-directory: apps/mobile
         run: eas submit --platform ios --non-interactive --latest
 
+      - name: Write Google Service Account key
+        if: inputs.submit && (inputs.platform == 'android' || inputs.platform == 'all')
+        run: echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_B64 }}" | base64 -d > apps/mobile/google-service-account.json
+
       - name: Submit Android to Play Store
         if: inputs.submit && (inputs.platform == 'android' || inputs.platform == 'all')
         working-directory: apps/mobile
