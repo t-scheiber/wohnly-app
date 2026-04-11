@@ -7,6 +7,7 @@ import {
   TextInput,
   RefreshControl,
   Modal,
+  Pressable,
 } from "react-native";
 import { useTodos, usePersonalTodos, useCreateTodo, useToggleTodo, useDeleteTodo, useUpdateTodo, useClearCompletedTodos } from "@/lib/api/queries";
 import { AdBanner } from "@/components/common/AdBanner";
@@ -71,7 +72,7 @@ export default function TodosScreen() {
 
   const handleToggle = (todo: Todo) => {
     impactLight();
-    toggleTodo.mutate(todo);
+    toggleTodo.mutate({ ...todo, isPersonal: tab === "personal" });
   };
 
   const handleDelete = (id: string) => {
@@ -159,11 +160,11 @@ export default function TodosScreen() {
           </TouchableOpacity>
         )}
 
-        {/* Todo text - tappable for edit */}
-        <TouchableOpacity
-          onPress={() => openEditModal(item)}
+        {/* Todo text - tap to toggle, long press to edit */}
+        <Pressable
+          onPress={() => handleToggle(item)}
+          onLongPress={() => openEditModal(item)}
           style={{ flex: 1 }}
-          activeOpacity={0.7}
         >
           <Text
             style={{
@@ -176,10 +177,10 @@ export default function TodosScreen() {
           </Text>
           {item.dueDate && (
             <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 2 }}>
-              Due: {new Date(item.dueDate).toLocaleDateString()}
+              {t("todos.due", { date: new Date(item.dueDate).toLocaleDateString() })}
             </Text>
           )}
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
 

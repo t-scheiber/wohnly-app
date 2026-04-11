@@ -2,7 +2,7 @@
   "expo": {
     "name": "Wohnly",
     "slug": "wohnly",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "wohnly",
@@ -21,7 +21,9 @@
       },
       "buildNumber": "7",
       "entitlements": {
-        "com.apple.security.application-groups": ["group.app.wohnly"]
+        "com.apple.security.application-groups": [
+          "group.app.wohnly"
+        ]
       }
     },
     "android": {
@@ -39,7 +41,7 @@
         "READ_CALENDAR",
         "WRITE_CALENDAR"
       ],
-      "versionCode": 7
+      "versionCode": 10
     },
     "web": {
       "bundler": "metro",
@@ -49,7 +51,9 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
-      ["@bacons/apple-targets"],
+      [
+        "@bacons/apple-targets"
+      ],
       [
         "expo-splash-screen",
         {
