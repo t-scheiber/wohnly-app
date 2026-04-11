@@ -14,7 +14,8 @@
     "search": "검색",
     "noResults": "결과를 찾지 못했어",
     "pullToRefresh": "당겨서 새로고침",
-    "seeAll": "모두 보기"
+    "seeAll": "모두 보기",
+    "gotIt": "알겠어"
   },
   "auth": {
     "signIn": "로그인",
@@ -68,12 +69,26 @@
     "addTodo": "할 일 추가...",
     "empty": "아직 할 일이 없어",
     "deleteTodo": "할 일 삭제",
-    "deleteConfirm": "정말 삭제할 거야?"
+    "deleteConfirm": "정말 삭제할 거야?",
+    "editTodo": "할 일 수정",
+    "titleLabel": "제목",
+    "titlePlaceholder": "할 일 제목",
+    "dueDate": "마감일",
+    "noDueDate": "마감일 없음",
+    "due": "마감: {{date}}"
   },
   "shopping": {
     "title": "장보기 목록",
     "addItem": "항목 추가...",
-    "empty": "장보기 목록이 비어있어"
+    "empty": "장보기 목록이 비어있어",
+    "deleteItem": "항목 삭제",
+    "deleteConfirm": "\"{{name}}\" 삭제할까?",
+    "editItem": "항목 수정",
+    "nameLabel": "이름",
+    "namePlaceholder": "항목 이름",
+    "quantityLabel": "수량",
+    "quantityPlaceholder": "예: 2개, 500g",
+    "clearChecked": "체크된 항목 지우기"
   },
   "chores": {
     "title": "집안일",
@@ -96,7 +111,18 @@
     "effortLevel": "노력 수준",
     "breakMode": "휴식 모드",
     "breakModeActive": "집안일이 일시 중지됨",
-    "breakModeUntil": "{{date}}까지"
+    "breakModeUntil": "{{date}}까지",
+    "deleteChore": "집안일 삭제",
+    "deleteConfirm": "정말 삭제할 거야?",
+    "dueToday": "오늘 할 일",
+    "allChores": "모든 집안일",
+    "turn": " 차례",
+    "rotating": "(교대)",
+    "assignedTo": "담당: {{names}}",
+    "hideAnalytics": "통계 숨기기",
+    "showAnalytics": "공정한 분배 보기",
+    "choresPausedUntil": "집안일이 {{date}}까지 일시 중지됨",
+    "choresPausedIndefinitely": "집안일이 무기한 일시 중지됨"
   },
   "events": {
     "title": "캘린더",
@@ -356,10 +382,21 @@
     "title": "가계부",
     "analytics": "지출 분석"
   },
+  "lists": {
+    "todos": "할 일",
+    "todosDesc": "개인 및 가정 업무",
+    "shopping": "장보기 목록",
+    "shoppingDesc": "함께 장보기",
+    "chores": "집안일",
+    "choresDesc": "반복되는 집안일",
+    "mealPlan": "식단 계획",
+    "mealPlanDesc": "식단을 계획하고 재료를 장보기 목록에 추가"
+  },
   "tabs": {
     "home": "홈",
     "lists": "목록",
     "chores": "집안일",
+    "calendar": "캘린더",
     "finances": "가계부",
     "more": "더보기"
   },

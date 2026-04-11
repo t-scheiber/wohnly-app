@@ -14,7 +14,8 @@
     "search": "Meklēt",
     "noResults": "Nav rezultātu",
     "pullToRefresh": "Velc uz leju, lai atjauninātu",
-    "seeAll": "Skatīt visu"
+    "seeAll": "Skatīt visu",
+    "gotIt": "Sapratu"
   },
   "auth": {
     "signIn": "Pieslēgties",
@@ -68,12 +69,26 @@
     "addTodo": "Pievienot uzdevumu...",
     "empty": "Vēl nav uzdevumu",
     "deleteTodo": "Dzēst uzdevumu",
-    "deleteConfirm": "Vai esi drošs?"
+    "deleteConfirm": "Vai esi drošs?",
+    "editTodo": "Rediģēt uzdevumu",
+    "titleLabel": "Nosaukums",
+    "titlePlaceholder": "Uzdevuma nosaukums",
+    "dueDate": "Termiņš",
+    "noDueDate": "Nav termiņa",
+    "due": "Termiņš: {{date}}"
   },
   "shopping": {
     "title": "Iepirkumu saraksts",
     "addItem": "Pievienot preci...",
-    "empty": "Iepirkumu saraksts ir tukšs"
+    "empty": "Iepirkumu saraksts ir tukšs",
+    "deleteItem": "Dzēst preci",
+    "deleteConfirm": "Dzēst \"{{name}}\"?",
+    "editItem": "Rediģēt preci",
+    "nameLabel": "Nosaukums",
+    "namePlaceholder": "Preces nosaukums",
+    "quantityLabel": "Daudzums",
+    "quantityPlaceholder": "piem. 2x, 500g",
+    "clearChecked": "Notīrīt atzīmētos"
   },
   "chores": {
     "title": "Mājas darbi",
@@ -96,7 +111,18 @@
     "effortLevel": "Piepūles līmenis",
     "breakMode": "Pauzes režīms",
     "breakModeActive": "Mājas darbi ir apturēti",
-    "breakModeUntil": "līdz {{date}}"
+    "breakModeUntil": "līdz {{date}}",
+    "deleteChore": "Dzēst darbu",
+    "deleteConfirm": "Vai esi drošs?",
+    "dueToday": "Šodien",
+    "allChores": "Visi darbi",
+    "turn": " kārta",
+    "rotating": "(mainās)",
+    "assignedTo": "Piešķirts: {{names}}",
+    "hideAnalytics": "Slēpt statistiku",
+    "showAnalytics": "Rādīt taisnīgu sadalījumu",
+    "choresPausedUntil": "Darbi ir apturēti līdz {{date}}",
+    "choresPausedIndefinitely": "Darbi ir apturēti uz nenoteiktu laiku"
   },
   "events": {
     "title": "Kalendārs",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Uzdevumi",
+    "todosDesc": "Personiskie un mājsaimniecības uzdevumi",
+    "shopping": "Iepirkumu saraksts",
+    "shoppingDesc": "Kopīgie iepirkumi",
+    "chores": "Mājas darbi",
+    "choresDesc": "Atkārtojošies mājsaimniecības darbi",
+    "mealPlan": "Ēdienreižu plāns",
+    "mealPlanDesc": "Plānojiet ēdienus un pievienojiet sastāvdaļas iepirkumu sarakstam"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalendārs",
     "finances": "Finances",
     "more": "More"
   },

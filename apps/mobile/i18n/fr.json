@@ -14,7 +14,8 @@
     "search": "Rechercher",
     "noResults": "Aucun résultat trouvé",
     "pullToRefresh": "Tire pour rafraîchir",
-    "seeAll": "Tout voir"
+    "seeAll": "Tout voir",
+    "gotIt": "Compris"
   },
   "auth": {
     "signIn": "Se connecter",
@@ -68,12 +69,26 @@
     "addTodo": "Ajouter une tâche...",
     "empty": "Pas encore de tâches",
     "deleteTodo": "Supprimer la tâche",
-    "deleteConfirm": "Tu es sûr(e) ?"
+    "deleteConfirm": "Tu es sûr(e) ?",
+    "editTodo": "Modifier la tâche",
+    "titleLabel": "Titre",
+    "titlePlaceholder": "Titre de la tâche",
+    "dueDate": "Date d'échéance",
+    "noDueDate": "Pas de date d'échéance",
+    "due": "Échéance : {{date}}"
   },
   "shopping": {
     "title": "Liste de courses",
     "addItem": "Ajouter un article...",
-    "empty": "La liste de courses est vide"
+    "empty": "La liste de courses est vide",
+    "deleteItem": "Supprimer l'article",
+    "deleteConfirm": "Supprimer \"{{name}}\" ?",
+    "editItem": "Modifier l'article",
+    "nameLabel": "Nom",
+    "namePlaceholder": "Nom de l'article",
+    "quantityLabel": "Quantité",
+    "quantityPlaceholder": "ex. 2x, 500g",
+    "clearChecked": "Supprimer les cochés"
   },
   "chores": {
     "title": "Corvées",
@@ -96,7 +111,18 @@
     "effortLevel": "Niveau d'effort",
     "breakMode": "Mode pause",
     "breakModeActive": "Les corvées sont en pause",
-    "breakModeUntil": "jusqu'au {{date}}"
+    "breakModeUntil": "jusqu'au {{date}}",
+    "deleteChore": "Supprimer la corvée",
+    "deleteConfirm": "Tu es sûr(e) ?",
+    "dueToday": "À faire aujourd'hui",
+    "allChores": "Toutes les corvées",
+    "turn": " à son tour",
+    "rotating": "(en rotation)",
+    "assignedTo": "Assigné à : {{names}}",
+    "hideAnalytics": "Masquer les statistiques",
+    "showAnalytics": "Afficher la répartition équitable",
+    "choresPausedUntil": "Les corvées sont suspendues jusqu'au {{date}}",
+    "choresPausedIndefinitely": "Les corvées sont suspendues indéfiniment"
   },
   "events": {
     "title": "Calendrier",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Analyse des dépenses"
   },
+  "lists": {
+    "todos": "Tâches",
+    "todosDesc": "Tâches personnelles et du foyer",
+    "shopping": "Liste de courses",
+    "shoppingDesc": "Courses collaboratives",
+    "chores": "Corvées",
+    "choresDesc": "Tâches ménagères récurrentes",
+    "mealPlan": "Plan de repas",
+    "mealPlanDesc": "Planifier les repas et ajouter les ingrédients aux courses"
+  },
   "tabs": {
     "home": "Accueil",
     "lists": "Listes",
     "chores": "Corvées",
+    "calendar": "Calendrier",
     "finances": "Finances",
     "more": "Plus"
   },

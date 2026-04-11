@@ -14,7 +14,8 @@
     "search": "Ara",
     "noResults": "Sonuç bulunamadı",
     "pullToRefresh": "Yenilemek için aşağı çek",
-    "seeAll": "Tümünü gör"
+    "seeAll": "Tümünü gör",
+    "gotIt": "Anladım"
   },
   "auth": {
     "signIn": "Giriş Yap",
@@ -68,12 +69,26 @@
     "addTodo": "Yapılacak ekle...",
     "empty": "Henüz yapılacak bir şey yok",
     "deleteTodo": "Yapılacak Sil",
-    "deleteConfirm": "Emin misin?"
+    "deleteConfirm": "Emin misin?",
+    "editTodo": "Yapılacağı düzenle",
+    "titleLabel": "Başlık",
+    "titlePlaceholder": "Yapılacak başlığı",
+    "dueDate": "Son Tarih",
+    "noDueDate": "Son tarih yok",
+    "due": "Son tarih: {{date}}"
   },
   "shopping": {
     "title": "Alışveriş Listesi",
     "addItem": "Ürün ekle...",
-    "empty": "Alışveriş listesi boş"
+    "empty": "Alışveriş listesi boş",
+    "deleteItem": "Ürünü Sil",
+    "deleteConfirm": "\"{{name}}\" silinsin mi?",
+    "editItem": "Ürünü Düzenle",
+    "nameLabel": "Ad",
+    "namePlaceholder": "Ürün adı",
+    "quantityLabel": "Miktar",
+    "quantityPlaceholder": "örn. 2x, 500g",
+    "clearChecked": "İşaretlileri temizle"
   },
   "chores": {
     "title": "Ev İşleri",
@@ -96,7 +111,18 @@
     "effortLevel": "Zorluk seviyesi",
     "breakMode": "Mola modu",
     "breakModeActive": "Ev işleri duraklatıldı",
-    "breakModeUntil": "{{date}} tarihine kadar"
+    "breakModeUntil": "{{date}} tarihine kadar",
+    "deleteChore": "Ev İşini Sil",
+    "deleteConfirm": "Emin misin?",
+    "dueToday": "Bugün",
+    "allChores": "Tüm Ev İşleri",
+    "turn": " sırası",
+    "rotating": "(sırayla)",
+    "assignedTo": "Atanan: {{names}}",
+    "hideAnalytics": "İstatistikleri Gizle",
+    "showAnalytics": "Adil Paylaşımı Göster",
+    "choresPausedUntil": "Ev işleri {{date}} tarihine kadar duraklatıldı",
+    "choresPausedIndefinitely": "Ev işleri süresiz olarak duraklatıldı"
   },
   "events": {
     "title": "Takvim",
@@ -356,10 +382,21 @@
     "title": "Finans",
     "analytics": "Harcama analizi"
   },
+  "lists": {
+    "todos": "Yapılacaklar",
+    "todosDesc": "Kişisel ve ev işleri görevleri",
+    "shopping": "Alışveriş Listesi",
+    "shoppingDesc": "Ortak alışveriş",
+    "chores": "Ev İşleri",
+    "choresDesc": "Tekrarlayan ev işleri",
+    "mealPlan": "Yemek Planı",
+    "mealPlanDesc": "Yemekleri planla ve malzemeleri alışveriş listesine ekle"
+  },
   "tabs": {
     "home": "Ana Sayfa",
     "lists": "Listeler",
     "chores": "İşler",
+    "calendar": "Takvim",
     "finances": "Finans",
     "more": "Daha Fazla"
   },

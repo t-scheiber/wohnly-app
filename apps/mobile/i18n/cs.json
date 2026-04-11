@@ -14,7 +14,8 @@
     "search": "Hledat",
     "noResults": "Nic jsme nenašli",
     "pullToRefresh": "Potáhni pro obnovení",
-    "seeAll": "Zobrazit vše"
+    "seeAll": "Zobrazit vše",
+    "gotIt": "Rozumím"
   },
   "auth": {
     "signIn": "Přihlásit se",
@@ -68,12 +69,26 @@
     "addTodo": "Přidat úkol...",
     "empty": "Zatím žádné úkoly",
     "deleteTodo": "Smazat úkol",
-    "deleteConfirm": "Opravdu chceš smazat?"
+    "deleteConfirm": "Opravdu chceš smazat?",
+    "editTodo": "Upravit úkol",
+    "titleLabel": "Název",
+    "titlePlaceholder": "Název úkolu",
+    "dueDate": "Termín",
+    "noDueDate": "Bez termínu",
+    "due": "Termín: {{date}}"
   },
   "shopping": {
     "title": "Nákupní seznam",
     "addItem": "Přidat položku...",
-    "empty": "Nákupní seznam je prázdný"
+    "empty": "Nákupní seznam je prázdný",
+    "deleteItem": "Smazat položku",
+    "deleteConfirm": "Smazat \"{{name}}\"?",
+    "editItem": "Upravit položku",
+    "nameLabel": "Název",
+    "namePlaceholder": "Název položky",
+    "quantityLabel": "Množství",
+    "quantityPlaceholder": "např. 2x, 500g",
+    "clearChecked": "Vymazat zaškrtnuté"
   },
   "chores": {
     "title": "Domácí práce",
@@ -96,7 +111,18 @@
     "effortLevel": "Úroveň námahy",
     "breakMode": "Režim pauzy",
     "breakModeActive": "Domácí práce jsou pozastaveny",
-    "breakModeUntil": "do {{date}}"
+    "breakModeUntil": "do {{date}}",
+    "deleteChore": "Smazat práci",
+    "deleteConfirm": "Opravdu chceš smazat?",
+    "dueToday": "Na dnešek",
+    "allChores": "Všechny práce",
+    "turn": " je na řadě",
+    "rotating": "(střídání)",
+    "assignedTo": "Přiřazeno: {{names}}",
+    "hideAnalytics": "Skrýt statistiky",
+    "showAnalytics": "Zobrazit spravedlivé rozdělení",
+    "choresPausedUntil": "Práce jsou pozastaveny do {{date}}",
+    "choresPausedIndefinitely": "Práce jsou pozastaveny na neurčito"
   },
   "events": {
     "title": "Kalendář",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Úkoly",
+    "todosDesc": "Osobní a domácí úkoly",
+    "shopping": "Nákupní seznam",
+    "shoppingDesc": "Společné nákupy",
+    "chores": "Domácí práce",
+    "choresDesc": "Opakující se domácí práce",
+    "mealPlan": "Jídelní plán",
+    "mealPlanDesc": "Plánujte jídla a přidejte ingredience do nákupního seznamu"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalendář",
     "finances": "Finances",
     "more": "More"
   },

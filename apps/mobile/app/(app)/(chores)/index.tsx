@@ -15,6 +15,8 @@ import { notifySuccess, notifyWarning } from "@/lib/utils/haptics";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AdBanner } from "@/components/common/AdBanner";
+import { HelpButton } from "@/components/common/HelpButton";
+import { useTranslation } from "react-i18next";
 import { getChoreOccurrences } from "@wohnly/shared";
 import type { Chore } from "@wohnly/shared";
 
@@ -66,6 +68,7 @@ function isDueToday(chore: Chore): boolean {
 export default function ChoresScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { t } = useTranslation();
 
   const { data, refetch } = useChores();
   const completeChore = useCompleteChore();
@@ -95,9 +98,9 @@ export default function ChoresScreen() {
 
     const result = [];
     if (dueToday.length > 0) {
-      result.push({ title: "Due Today", data: dueToday });
+      result.push({ title: t("chores.dueToday"), data: dueToday });
     }
-    result.push({ title: "All Chores", data: chores });
+    result.push({ title: t("chores.allChores"), data: chores });
     return result;
   }, [data?.chores]);
 
@@ -107,7 +110,7 @@ export default function ChoresScreen() {
   };
 
   const handleDelete = (id: string) => {
-    confirmAction("Delete Chore", "Are you sure?", () => {
+    confirmAction(t("chores.deleteChore"), t("chores.deleteConfirm"), () => {
       notifyWarning();
       deleteChore.mutate(id);
     });
@@ -135,8 +138,8 @@ export default function ChoresScreen() {
       <SwipeableListItem
         onDelete={() => handleDelete(item.id)}
         onPress={() => handleTapChore(item)}
-        deleteConfirmTitle="Delete Chore"
-        deleteConfirmMessage="Are you sure you want to delete this chore?"
+        deleteConfirmTitle={t("chores.deleteChore")}
+        deleteConfirmMessage={t("chores.deleteConfirm")}
       >
         <View
           style={{
@@ -204,7 +207,7 @@ export default function ChoresScreen() {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ color: "#fff", fontWeight: "600" }}>Mark Done</Text>
+                <Text style={{ color: "#fff", fontWeight: "600" }}>{t("chores.markDone")}</Text>
               </TouchableOpacity>
               {item.assignments && item.assignments.length > 0 && (
                 <TouchableOpacity
@@ -230,7 +233,10 @@ export default function ChoresScreen() {
   return (
     <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>Chores</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("chores.title")}</Text>
+          <HelpButton />
+        </View>
         <TouchableOpacity
           onPress={() => setShowForm(true)}
           style={{
@@ -240,7 +246,7 @@ export default function ChoresScreen() {
             paddingVertical: 8,
           }}
         >
-          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ Add</Text>
+          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -277,9 +283,9 @@ export default function ChoresScreen() {
             <PauseCircle size={22} color={colors.calendarChore} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 15, fontWeight: "700", color: colors.calendarChore }}>Break Mode</Text>
+            <Text style={{ fontSize: 15, fontWeight: "700", color: colors.calendarChore }}>{t("chores.breakMode")}</Text>
             <Text style={{ fontSize: 12, color: colors.textSecondary, marginTop: 1 }}>
-              Chores are paused{breakModeData?.breakMode?.end ? ` until ${new Date(breakModeData.breakMode.end).toLocaleDateString()}` : " indefinitely"}
+              {breakModeData?.breakMode?.end ? t("chores.choresPausedUntil", { date: new Date(breakModeData.breakMode.end).toLocaleDateString() }) : t("chores.choresPausedIndefinitely")}
             </Text>
           </View>
         </View>
@@ -302,7 +308,7 @@ export default function ChoresScreen() {
         }}
       >
         <Text style={{ fontSize: 13, color: showAnalytics ? colors.primary : colors.textSecondary, fontWeight: "600" }}>
-          {showAnalytics ? "Hide Analytics" : "Show Fair Share Analytics"}
+          {showAnalytics ? t("chores.hideAnalytics") : t("chores.showAnalytics")}
         </Text>
       </TouchableOpacity>
 
@@ -320,7 +326,7 @@ export default function ChoresScreen() {
           <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: 6, backgroundColor: colors.background }}>
             <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, textTransform: "uppercase", letterSpacing: 0.5 }}>
               {section.title}
-              {section.title === "Due Today" && (
+              {section.title === t("chores.dueToday") && (
                 <Text style={{ color: colors.primary }}> ({section.data.length})</Text>
               )}
             </Text>
@@ -333,7 +339,7 @@ export default function ChoresScreen() {
         }
         ListEmptyComponent={
           <View style={{ alignItems: "center", paddingVertical: 48 }}>
-            <Text style={{ fontSize: 16, color: colors.textSecondary }}>No chores yet</Text>
+            <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("chores.empty")}</Text>
           </View>
         }
         stickySectionHeadersEnabled={false}

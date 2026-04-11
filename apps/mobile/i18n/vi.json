@@ -14,7 +14,8 @@
     "search": "Tìm kiếm",
     "noResults": "Không tìm thấy kết quả",
     "pullToRefresh": "Kéo xuống để làm mới",
-    "seeAll": "Xem tất cả"
+    "seeAll": "Xem tất cả",
+    "gotIt": "Hiểu rồi"
   },
   "auth": {
     "signIn": "Đăng nhập",
@@ -68,12 +69,26 @@
     "addTodo": "Thêm việc cần làm...",
     "empty": "Chưa có việc nào",
     "deleteTodo": "Xóa việc cần làm",
-    "deleteConfirm": "Bạn chắc chưa?"
+    "deleteConfirm": "Bạn chắc chưa?",
+    "editTodo": "Sửa việc cần làm",
+    "titleLabel": "Tiêu đề",
+    "titlePlaceholder": "Tiêu đề việc cần làm",
+    "dueDate": "Hạn chót",
+    "noDueDate": "Không có hạn chót",
+    "due": "Hạn: {{date}}"
   },
   "shopping": {
     "title": "Danh sách mua sắm",
     "addItem": "Thêm món...",
-    "empty": "Danh sách mua sắm đang trống"
+    "empty": "Danh sách mua sắm đang trống",
+    "deleteItem": "Xóa mục",
+    "deleteConfirm": "Xóa \"{{name}}\"?",
+    "editItem": "Sửa mục",
+    "nameLabel": "Tên",
+    "namePlaceholder": "Tên mục",
+    "quantityLabel": "Số lượng",
+    "quantityPlaceholder": "vd. 2x, 500g",
+    "clearChecked": "Xóa đã chọn"
   },
   "chores": {
     "title": "Việc nhà",
@@ -96,7 +111,18 @@
     "effortLevel": "Mức độ nỗ lực",
     "breakMode": "Chế độ nghỉ",
     "breakModeActive": "Việc nhà đã tạm dừng",
-    "breakModeUntil": "đến {{date}}"
+    "breakModeUntil": "đến {{date}}",
+    "deleteChore": "Xóa việc nhà",
+    "deleteConfirm": "Bạn chắc chưa?",
+    "dueToday": "Hôm nay",
+    "allChores": "Tất cả việc nhà",
+    "turn": " đến lượt",
+    "rotating": "(luân phiên)",
+    "assignedTo": "Giao cho: {{names}}",
+    "hideAnalytics": "Ẩn thống kê",
+    "showAnalytics": "Hiện phân chia công bằng",
+    "choresPausedUntil": "Việc nhà tạm dừng đến {{date}}",
+    "choresPausedIndefinitely": "Việc nhà tạm dừng vô thời hạn"
   },
   "events": {
     "title": "Lịch",
@@ -356,10 +382,21 @@
     "title": "Tài chính",
     "analytics": "Phân tích chi tiêu"
   },
+  "lists": {
+    "todos": "Việc cần làm",
+    "todosDesc": "Công việc cá nhân & gia đình",
+    "shopping": "Danh sách mua sắm",
+    "shoppingDesc": "Mua sắm cùng nhau",
+    "chores": "Việc nhà",
+    "choresDesc": "Việc nhà định kỳ",
+    "mealPlan": "Kế hoạch bữa ăn",
+    "mealPlanDesc": "Lên kế hoạch bữa ăn & thêm nguyên liệu vào danh sách mua sắm"
+  },
   "tabs": {
     "home": "Trang chủ",
     "lists": "Danh sách",
     "chores": "Việc nhà",
+    "calendar": "Lịch",
     "finances": "Tài chính",
     "more": "Thêm"
   },

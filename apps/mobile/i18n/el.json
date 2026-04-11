@@ -14,7 +14,8 @@
     "search": "Αναζήτηση",
     "noResults": "Δε βρέθηκαν αποτελέσματα",
     "pullToRefresh": "Τράβα για ανανέωση",
-    "seeAll": "Εμφάνιση όλων"
+    "seeAll": "Εμφάνιση όλων",
+    "gotIt": "Κατάλαβα"
   },
   "auth": {
     "signIn": "Σύνδεση",
@@ -68,12 +69,26 @@
     "addTodo": "Πρόσθεσε εργασία...",
     "empty": "Δεν υπάρχουν εργασίες ακόμα",
     "deleteTodo": "Διαγραφή εργασίας",
-    "deleteConfirm": "Είσαι σίγουρος/η;"
+    "deleteConfirm": "Είσαι σίγουρος/η;",
+    "editTodo": "Επεξεργασία εργασίας",
+    "titleLabel": "Τίτλος",
+    "titlePlaceholder": "Τίτλος εργασίας",
+    "dueDate": "Ημερομηνία λήξης",
+    "noDueDate": "Χωρίς ημερομηνία λήξης",
+    "due": "Λήξη: {{date}}"
   },
   "shopping": {
     "title": "Λίστα αγορών",
     "addItem": "Πρόσθεσε προϊόν...",
-    "empty": "Η λίστα αγορών είναι άδεια"
+    "empty": "Η λίστα αγορών είναι άδεια",
+    "deleteItem": "Διαγραφή αντικειμένου",
+    "deleteConfirm": "Διαγραφή \"{{name}}\";",
+    "editItem": "Επεξεργασία αντικειμένου",
+    "nameLabel": "Όνομα",
+    "namePlaceholder": "Όνομα αντικειμένου",
+    "quantityLabel": "Ποσότητα",
+    "quantityPlaceholder": "π.χ. 2x, 500γρ",
+    "clearChecked": "Εκκαθάριση επιλεγμένων"
   },
   "chores": {
     "title": "Δουλειές σπιτιού",
@@ -96,7 +111,18 @@
     "effortLevel": "Επίπεδο προσπάθειας",
     "breakMode": "Λειτουργία παύσης",
     "breakModeActive": "Οι δουλειές είναι σε παύση",
-    "breakModeUntil": "μέχρι {{date}}"
+    "breakModeUntil": "μέχρι {{date}}",
+    "deleteChore": "Διαγραφή δουλειάς",
+    "deleteConfirm": "Είσαι σίγουρος/η;",
+    "dueToday": "Για σήμερα",
+    "allChores": "Όλες οι δουλειές",
+    "turn": " σειρά του/της",
+    "rotating": "(εναλλαγή)",
+    "assignedTo": "Ανατέθηκε σε: {{names}}",
+    "hideAnalytics": "Απόκρυψη στατιστικών",
+    "showAnalytics": "Εμφάνιση δίκαιης κατανομής",
+    "choresPausedUntil": "Οι δουλειές είναι σε παύση μέχρι {{date}}",
+    "choresPausedIndefinitely": "Οι δουλειές είναι σε παύση επ' αόριστον"
   },
   "events": {
     "title": "Ημερολόγιο",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Εργασίες",
+    "todosDesc": "Προσωπικές & οικιακές εργασίες",
+    "shopping": "Λίστα αγορών",
+    "shoppingDesc": "Συνεργατικές αγορές",
+    "chores": "Δουλειές σπιτιού",
+    "choresDesc": "Επαναλαμβανόμενες οικιακές εργασίες",
+    "mealPlan": "Πλάνο γευμάτων",
+    "mealPlanDesc": "Σχεδιάστε γεύματα & προσθέστε υλικά στη λίστα αγορών"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Ημερολόγιο",
     "finances": "Finances",
     "more": "More"
   },

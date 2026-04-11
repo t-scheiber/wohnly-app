@@ -6,7 +6,8 @@ import { Check, HelpCircle } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
 import { isTauri, clearTauriCookie } from "@/lib/auth/tauri";
 import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences, useHouseholdDevices, usePendingDevices, useApproveDevice, useRejectDevice } from "@/lib/api/queries";
-import { apiPatch } from "@/lib/api/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { api, apiPatch } from "@/lib/api/client";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useHouseholdKey } from "@/lib/hooks/useHouseholdKey";
 import { distributeKeyToDevice } from "@/lib/crypto/e2ee-setup";
@@ -18,6 +19,8 @@ import { clearDeviceKeys } from "@/lib/crypto/device-storage";
 import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
 import { apiPost } from "@/lib/api/client";
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
 
 // ── Picker Modal (works on web + native) ──
 
@@ -166,6 +169,7 @@ export default function SettingsScreen() {
   const leaveHousehold = useLeaveHousehold();
   const notifications = useNotificationSettings();
   const { data: prefs } = usePreferences();
+  const queryClient = useQueryClient();
   const { data: household } = useHousehold();
   const { data: devicesData } = useHouseholdDevices();
   const { data: pendingData } = usePendingDevices();
@@ -544,24 +548,23 @@ export default function SettingsScreen() {
             label={t("export.fullExport", "Export All Data")}
             onPress={async () => {
               try {
+                const data = await api("/api/households/export?format=json");
+                const json = JSON.stringify(data, null, 2);
+                const filename = `wohnly-export-${new Date().toISOString().split("T")[0]}.json`;
                 if (Platform.OS === "web") {
-                  const res = await fetch("/api/households/export?format=json", { credentials: "include" });
-                  const blob = await res.blob();
+                  const blob = new Blob([json], { type: "application/json" });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement("a");
                   a.href = url;
-                  a.download = `wohnly-export-${new Date().toISOString().split("T")[0]}.json`;
+                  a.download = filename;
                   a.click();
                   URL.revokeObjectURL(url);
                 } else {
-                  const { api } = require("@/lib/api/client");
-                  const FileSystem = require("expo-file-system");
-                  const Sharing = require("expo-sharing");
-                  const data = await api("/api/households/export?format=json");
-                  const fileUri = `${FileSystem.cacheDirectory}wohnly-export-${new Date().toISOString().split("T")[0]}.json`;
-                  await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data, null, 2));
+                  const file = new File(Paths.cache, filename);
+                  file.create({ overwrite: true });
+                  file.write(json);
                   if (await Sharing.isAvailableAsync()) {
-                    await Sharing.shareAsync(fileUri, { mimeType: "application/json" });
+                    await Sharing.shareAsync(file.uri, { mimeType: "application/json" });
                   }
                 }
               } catch (err) {
@@ -606,6 +609,7 @@ export default function SettingsScreen() {
         options={CURRENCY_OPTIONS}
         selected={(prefs?.defaultCurrency || "EUR") as string}
         onSelect={(code) => {
+          queryClient.setQueryData(["preferences"], (old: any) => ({ ...old, defaultCurrency: code }));
           apiPatch("/api/user/preferences", { defaultCurrency: code });
         }}
         colors={colors}
@@ -621,6 +625,7 @@ export default function SettingsScreen() {
         ]}
         selected={(prefs?.weekStartsOn || "monday") as string}
         onSelect={(val) => {
+          queryClient.setQueryData(["preferences"], (old: any) => ({ ...old, weekStartsOn: val }));
           apiPatch("/api/user/preferences", { weekStartsOn: val });
         }}
         colors={colors}
@@ -636,6 +641,7 @@ export default function SettingsScreen() {
         ]}
         selected={(prefs?.timeFormat || "24h") as string}
         onSelect={(val) => {
+          queryClient.setQueryData(["preferences"], (old: any) => ({ ...old, timeFormat: val }));
           apiPatch("/api/user/preferences", { timeFormat: val });
         }}
         colors={colors}

@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity, Animated as RNAnimated, Pressable, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 const Animated = RNAnimated as any;
 import { Colors } from "@/constants/Colors";
@@ -15,6 +17,8 @@ interface TooltipProps {
 export function Tooltip({ visible, message, position, onDismiss }: TooltipProps) {
   const { colorScheme } = useTheme();
   const colors = Colors[colorScheme];
+  const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -34,7 +38,7 @@ export function Tooltip({ visible, message, position, onDismiss }: TooltipProps)
           styles.container,
           {
             opacity,
-            [position === "top" ? "bottom" : "top"]: 0,
+            [position === "top" ? "bottom" : "top"]: position === "bottom" ? insets.top + 8 : insets.bottom + 8,
           },
         ]}
       >
@@ -55,7 +59,7 @@ export function Tooltip({ visible, message, position, onDismiss }: TooltipProps)
             onPress={onDismiss}
             style={[styles.dismissButton, { backgroundColor: colors.primary }]}
           >
-            <Text style={[styles.dismissText, { color: colors.primaryForeground }]}>Got it</Text>
+            <Text style={[styles.dismissText, { color: colors.primaryForeground }]}>{t("common.gotIt")}</Text>
           </TouchableOpacity>
         </View>
 

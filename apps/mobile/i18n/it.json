@@ -14,7 +14,8 @@
     "search": "Cerca",
     "noResults": "Nessun risultato trovato",
     "pullToRefresh": "Tira per aggiornare",
-    "seeAll": "Vedi tutto"
+    "seeAll": "Vedi tutto",
+    "gotIt": "Capito"
   },
   "auth": {
     "signIn": "Accedi",
@@ -68,12 +69,26 @@
     "addTodo": "Aggiungi una cosa da fare...",
     "empty": "Ancora nessuna cosa da fare",
     "deleteTodo": "Elimina cosa da fare",
-    "deleteConfirm": "Sei sicuro?"
+    "deleteConfirm": "Sei sicuro?",
+    "editTodo": "Modifica attività",
+    "titleLabel": "Titolo",
+    "titlePlaceholder": "Titolo dell'attività",
+    "dueDate": "Data di scadenza",
+    "noDueDate": "Nessuna data di scadenza",
+    "due": "Scadenza: {{date}}"
   },
   "shopping": {
     "title": "Lista della spesa",
     "addItem": "Aggiungi articolo...",
-    "empty": "La lista della spesa è vuota"
+    "empty": "La lista della spesa è vuota",
+    "deleteItem": "Elimina articolo",
+    "deleteConfirm": "Eliminare \"{{name}}\"?",
+    "editItem": "Modifica articolo",
+    "nameLabel": "Nome",
+    "namePlaceholder": "Nome dell'articolo",
+    "quantityLabel": "Quantità",
+    "quantityPlaceholder": "es. 2x, 500g",
+    "clearChecked": "Cancella selezionati"
   },
   "chores": {
     "title": "Faccende",
@@ -96,7 +111,18 @@
     "effortLevel": "Livello di impegno",
     "breakMode": "Modalità pausa",
     "breakModeActive": "Le faccende sono in pausa",
-    "breakModeUntil": "fino al {{date}}"
+    "breakModeUntil": "fino al {{date}}",
+    "deleteChore": "Elimina faccenda",
+    "deleteConfirm": "Sei sicuro?",
+    "dueToday": "Da fare oggi",
+    "allChores": "Tutte le faccende",
+    "turn": " tocca a",
+    "rotating": "(a rotazione)",
+    "assignedTo": "Assegnato a: {{names}}",
+    "hideAnalytics": "Nascondi statistiche",
+    "showAnalytics": "Mostra ripartizione equa",
+    "choresPausedUntil": "Le faccende sono sospese fino al {{date}}",
+    "choresPausedIndefinitely": "Le faccende sono sospese a tempo indeterminato"
   },
   "events": {
     "title": "Calendario",
@@ -356,10 +382,21 @@
     "title": "Finanze",
     "analytics": "Analisi spese"
   },
+  "lists": {
+    "todos": "Attività",
+    "todosDesc": "Attività personali e domestiche",
+    "shopping": "Lista della spesa",
+    "shoppingDesc": "Spesa collaborativa",
+    "chores": "Faccende",
+    "choresDesc": "Faccende domestiche ricorrenti",
+    "mealPlan": "Piano pasti",
+    "mealPlanDesc": "Pianifica i pasti e aggiungi ingredienti alla spesa"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Liste",
     "chores": "Faccende",
+    "calendar": "Calendario",
     "finances": "Finanze",
     "more": "Altro"
   },

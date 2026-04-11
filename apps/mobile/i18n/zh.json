@@ -14,7 +14,8 @@
     "search": "搜索",
     "noResults": "没有找到结果",
     "pullToRefresh": "下拉刷新",
-    "seeAll": "查看全部"
+    "seeAll": "查看全部",
+    "gotIt": "知道了"
   },
   "auth": {
     "signIn": "登录",
@@ -68,12 +69,26 @@
     "addTodo": "添加待办...",
     "empty": "还没有待办事项",
     "deleteTodo": "删除待办",
-    "deleteConfirm": "确定要删除吗？"
+    "deleteConfirm": "确定要删除吗？",
+    "editTodo": "编辑待办",
+    "titleLabel": "标题",
+    "titlePlaceholder": "待办标题",
+    "dueDate": "截止日期",
+    "noDueDate": "无截止日期",
+    "due": "截止: {{date}}"
   },
   "shopping": {
     "title": "购物清单",
     "addItem": "添加物品...",
-    "empty": "购物清单是空的"
+    "empty": "购物清单是空的",
+    "deleteItem": "删除商品",
+    "deleteConfirm": "删除\"{{name}}\"？",
+    "editItem": "编辑商品",
+    "nameLabel": "名称",
+    "namePlaceholder": "商品名称",
+    "quantityLabel": "数量",
+    "quantityPlaceholder": "如 2个、500g",
+    "clearChecked": "清除已勾选"
   },
   "chores": {
     "title": "家务",
@@ -96,7 +111,18 @@
     "effortLevel": "努力程度",
     "breakMode": "休息模式",
     "breakModeActive": "家务已暂停",
-    "breakModeUntil": "直到 {{date}}"
+    "breakModeUntil": "直到 {{date}}",
+    "deleteChore": "删除家务",
+    "deleteConfirm": "确定要删除吗？",
+    "dueToday": "今日待做",
+    "allChores": "所有家务",
+    "turn": "的轮次",
+    "rotating": "(轮流)",
+    "assignedTo": "分配给: {{names}}",
+    "hideAnalytics": "隐藏统计",
+    "showAnalytics": "显示公平分配",
+    "choresPausedUntil": "家务已暂停至{{date}}",
+    "choresPausedIndefinitely": "家务已无限期暂停"
   },
   "events": {
     "title": "日历",
@@ -356,10 +382,21 @@
     "title": "财务",
     "analytics": "支出分析"
   },
+  "lists": {
+    "todos": "待办事项",
+    "todosDesc": "个人和家庭任务",
+    "shopping": "购物清单",
+    "shoppingDesc": "协作购物",
+    "chores": "家务",
+    "choresDesc": "定期家务任务",
+    "mealPlan": "膳食计划",
+    "mealPlanDesc": "计划膳食并将食材添加到购物清单"
+  },
   "tabs": {
     "home": "首页",
     "lists": "列表",
     "chores": "家务",
+    "calendar": "日历",
     "finances": "财务",
     "more": "更多"
   },

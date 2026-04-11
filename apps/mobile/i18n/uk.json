@@ -14,7 +14,8 @@
     "search": "Пошук",
     "noResults": "Нічого не знайдено",
     "pullToRefresh": "Потягни для оновлення",
-    "seeAll": "Переглянути все"
+    "seeAll": "Переглянути все",
+    "gotIt": "Зрозуміло"
   },
   "auth": {
     "signIn": "Увійти",
@@ -68,12 +69,26 @@
     "addTodo": "Додати завдання...",
     "empty": "Ще немає завдань",
     "deleteTodo": "Видалити завдання",
-    "deleteConfirm": "Ти впевнений?"
+    "deleteConfirm": "Ти впевнений?",
+    "editTodo": "Редагувати завдання",
+    "titleLabel": "Назва",
+    "titlePlaceholder": "Назва завдання",
+    "dueDate": "Термін виконання",
+    "noDueDate": "Без терміну",
+    "due": "Термін: {{date}}"
   },
   "shopping": {
     "title": "Список покупок",
     "addItem": "Додати товар...",
-    "empty": "Список покупок порожній"
+    "empty": "Список покупок порожній",
+    "deleteItem": "Видалити товар",
+    "deleteConfirm": "Видалити \"{{name}}\"?",
+    "editItem": "Редагувати товар",
+    "nameLabel": "Назва",
+    "namePlaceholder": "Назва товару",
+    "quantityLabel": "Кількість",
+    "quantityPlaceholder": "напр. 2x, 500г",
+    "clearChecked": "Очистити позначені"
   },
   "chores": {
     "title": "Домашні обов'язки",
@@ -96,7 +111,18 @@
     "effortLevel": "Рівень зусиль",
     "breakMode": "Режим паузи",
     "breakModeActive": "Обов'язки призупинено",
-    "breakModeUntil": "до {{date}}"
+    "breakModeUntil": "до {{date}}",
+    "deleteChore": "Видалити обов'язок",
+    "deleteConfirm": "Ти впевнений?",
+    "dueToday": "На сьогодні",
+    "allChores": "Усі обов'язки",
+    "turn": " черга",
+    "rotating": "(по черзі)",
+    "assignedTo": "Призначено: {{names}}",
+    "hideAnalytics": "Сховати статистику",
+    "showAnalytics": "Показати справедливий розподіл",
+    "choresPausedUntil": "Обов'язки призупинено до {{date}}",
+    "choresPausedIndefinitely": "Обов'язки призупинено на невизначений термін"
   },
   "events": {
     "title": "Календар",
@@ -356,10 +382,21 @@
     "title": "Фінанси",
     "analytics": "Аналіз витрат"
   },
+  "lists": {
+    "todos": "Завдання",
+    "todosDesc": "Особисті та домашні завдання",
+    "shopping": "Список покупок",
+    "shoppingDesc": "Спільні покупки",
+    "chores": "Обов'язки",
+    "choresDesc": "Регулярні домашні справи",
+    "mealPlan": "План харчування",
+    "mealPlanDesc": "Плануйте страви та додавайте інгредієнти до списку покупок"
+  },
   "tabs": {
     "home": "Головна",
     "lists": "Списки",
     "chores": "Справи",
+    "calendar": "Календар",
     "finances": "Фінанси",
     "more": "Ще"
   },

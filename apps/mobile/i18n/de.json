@@ -14,7 +14,8 @@
     "search": "Suchen",
     "noResults": "Keine Ergebnisse gefunden",
     "pullToRefresh": "Zum Aktualisieren ziehen",
-    "seeAll": "Alle anzeigen"
+    "seeAll": "Alle anzeigen",
+    "gotIt": "Verstanden"
   },
   "auth": {
     "signIn": "Anmelden",
@@ -68,12 +69,26 @@
     "addTodo": "Aufgabe hinzufügen...",
     "empty": "Noch keine Aufgaben",
     "deleteTodo": "Aufgabe löschen",
-    "deleteConfirm": "Bist du sicher?"
+    "deleteConfirm": "Bist du sicher?",
+    "editTodo": "Aufgabe bearbeiten",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "Aufgabentitel",
+    "dueDate": "Fälligkeitsdatum",
+    "noDueDate": "Kein Fälligkeitsdatum",
+    "due": "Fällig: {{date}}"
   },
   "shopping": {
     "title": "Einkaufsliste",
     "addItem": "Artikel hinzufügen...",
-    "empty": "Einkaufsliste ist leer"
+    "empty": "Einkaufsliste ist leer",
+    "deleteItem": "Artikel löschen",
+    "deleteConfirm": "\"{{name}}\" löschen?",
+    "editItem": "Artikel bearbeiten",
+    "nameLabel": "Name",
+    "namePlaceholder": "Artikelname",
+    "quantityLabel": "Menge",
+    "quantityPlaceholder": "z.B. 2x, 500g",
+    "clearChecked": "Abgehakte löschen"
   },
   "chores": {
     "title": "Aufgabenplan",
@@ -96,7 +111,18 @@
     "effortLevel": "Aufwand",
     "breakMode": "Pause-Modus",
     "breakModeActive": "Aufgaben sind pausiert",
-    "breakModeUntil": "bis {{date}}"
+    "breakModeUntil": "bis {{date}}",
+    "deleteChore": "Aufgabe löschen",
+    "deleteConfirm": "Bist du sicher?",
+    "dueToday": "Heute fällig",
+    "allChores": "Alle Aufgaben",
+    "turn": "s Reihe",
+    "rotating": "(rotierend)",
+    "assignedTo": "Zugewiesen an: {{names}}",
+    "hideAnalytics": "Statistiken ausblenden",
+    "showAnalytics": "Faire Aufteilung anzeigen",
+    "choresPausedUntil": "Aufgaben sind pausiert bis {{date}}",
+    "choresPausedIndefinitely": "Aufgaben sind auf unbestimmte Zeit pausiert"
   },
   "events": {
     "title": "Kalender",
@@ -394,10 +420,21 @@
     "title": "Finanzen",
     "analytics": "Ausgabenanalyse"
   },
+  "lists": {
+    "todos": "Aufgaben",
+    "todosDesc": "Persönliche & Haushaltsaufgaben",
+    "shopping": "Einkaufsliste",
+    "shoppingDesc": "Gemeinsam einkaufen",
+    "chores": "Hausarbeiten",
+    "choresDesc": "Wiederkehrende Haushaltsaufgaben",
+    "mealPlan": "Essensplan",
+    "mealPlanDesc": "Mahlzeiten planen & Zutaten zur Einkaufsliste"
+  },
   "tabs": {
     "home": "Start",
     "lists": "Listen",
     "chores": "Aufgaben",
+    "calendar": "Kalender",
     "finances": "Finanzen",
     "more": "Mehr"
   }

@@ -14,7 +14,8 @@
     "search": "Buscar",
     "noResults": "No se encontraron resultados",
     "pullToRefresh": "Tira para actualizar",
-    "seeAll": "Ver todo"
+    "seeAll": "Ver todo",
+    "gotIt": "Entendido"
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -68,12 +69,26 @@
     "addTodo": "Añadir una tarea...",
     "empty": "Aún no hay tareas",
     "deleteTodo": "Eliminar tarea",
-    "deleteConfirm": "¿Estás seguro?"
+    "deleteConfirm": "¿Estás seguro?",
+    "editTodo": "Editar tarea",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Título de la tarea",
+    "dueDate": "Fecha de vencimiento",
+    "noDueDate": "Sin fecha de vencimiento",
+    "due": "Vence: {{date}}"
   },
   "shopping": {
     "title": "Lista de compras",
     "addItem": "Añadir artículo...",
-    "empty": "La lista de compras está vacía"
+    "empty": "La lista de compras está vacía",
+    "deleteItem": "Eliminar artículo",
+    "deleteConfirm": "¿Eliminar \"{{name}}\"?",
+    "editItem": "Editar artículo",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Nombre del artículo",
+    "quantityLabel": "Cantidad",
+    "quantityPlaceholder": "ej. 2x, 500g",
+    "clearChecked": "Borrar marcados"
   },
   "chores": {
     "title": "Tareas del hogar",
@@ -96,7 +111,18 @@
     "effortLevel": "Nivel de esfuerzo",
     "breakMode": "Modo descanso",
     "breakModeActive": "Las tareas están en pausa",
-    "breakModeUntil": "hasta {{date}}"
+    "breakModeUntil": "hasta {{date}}",
+    "deleteChore": "Eliminar tarea",
+    "deleteConfirm": "¿Estás seguro?",
+    "dueToday": "Para hoy",
+    "allChores": "Todas las tareas",
+    "turn": " le toca",
+    "rotating": "(rotativo)",
+    "assignedTo": "Asignado a: {{names}}",
+    "hideAnalytics": "Ocultar estadísticas",
+    "showAnalytics": "Mostrar reparto equitativo",
+    "choresPausedUntil": "Las tareas están pausadas hasta {{date}}",
+    "choresPausedIndefinitely": "Las tareas están pausadas indefinidamente"
   },
   "events": {
     "title": "Calendario",
@@ -356,10 +382,21 @@
     "title": "Finanzas",
     "analytics": "Análisis de gastos"
   },
+  "lists": {
+    "todos": "Tareas",
+    "todosDesc": "Tareas personales y del hogar",
+    "shopping": "Lista de compras",
+    "shoppingDesc": "Compras colaborativas",
+    "chores": "Quehaceres",
+    "choresDesc": "Tareas domésticas recurrentes",
+    "mealPlan": "Plan de comidas",
+    "mealPlanDesc": "Planificar comidas y añadir ingredientes a la compra"
+  },
   "tabs": {
     "home": "Inicio",
     "lists": "Listas",
     "chores": "Tareas",
+    "calendar": "Calendario",
     "finances": "Finanzas",
     "more": "Más"
   },

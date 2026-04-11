@@ -14,7 +14,8 @@
     "search": "Išči",
     "noResults": "Ni rezultatov",
     "pullToRefresh": "Povleci za osvežitev",
-    "seeAll": "Prikaži vse"
+    "seeAll": "Prikaži vse",
+    "gotIt": "Razumem"
   },
   "auth": {
     "signIn": "Prijava",
@@ -68,12 +69,26 @@
     "addTodo": "Dodaj opravilo...",
     "empty": "Še ni opravil",
     "deleteTodo": "Izbriši opravilo",
-    "deleteConfirm": "Si prepričan/a?"
+    "deleteConfirm": "Si prepričan/a?",
+    "editTodo": "Uredi opravilo",
+    "titleLabel": "Naslov",
+    "titlePlaceholder": "Naslov opravila",
+    "dueDate": "Rok",
+    "noDueDate": "Brez roka",
+    "due": "Rok: {{date}}"
   },
   "shopping": {
     "title": "Nakupovalni seznam",
     "addItem": "Dodaj artikel...",
-    "empty": "Nakupovalni seznam je prazen"
+    "empty": "Nakupovalni seznam je prazen",
+    "deleteItem": "Izbriši artikel",
+    "deleteConfirm": "Izbrisati \"{{name}}\"?",
+    "editItem": "Uredi artikel",
+    "nameLabel": "Ime",
+    "namePlaceholder": "Ime artikla",
+    "quantityLabel": "Količina",
+    "quantityPlaceholder": "npr. 2x, 500g",
+    "clearChecked": "Počisti označene"
   },
   "chores": {
     "title": "Gospodinjska opravila",
@@ -96,7 +111,18 @@
     "effortLevel": "Raven napora",
     "breakMode": "Način premora",
     "breakModeActive": "Opravila so začasno ustavljena",
-    "breakModeUntil": "do {{date}}"
+    "breakModeUntil": "do {{date}}",
+    "deleteChore": "Izbriši opravilo",
+    "deleteConfirm": "Si prepričan/a?",
+    "dueToday": "Za danes",
+    "allChores": "Vsa opravila",
+    "turn": " na vrsti",
+    "rotating": "(izmenično)",
+    "assignedTo": "Dodeljeno: {{names}}",
+    "hideAnalytics": "Skrij statistiko",
+    "showAnalytics": "Prikaži pravično razdelitev",
+    "choresPausedUntil": "Opravila so zaustavljena do {{date}}",
+    "choresPausedIndefinitely": "Opravila so zaustavljena za nedoločen čas"
   },
   "events": {
     "title": "Koledar",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Opravila",
+    "todosDesc": "Osebna in gospodinjska opravila",
+    "shopping": "Nakupovalni seznam",
+    "shoppingDesc": "Skupno nakupovanje",
+    "chores": "Hišna opravila",
+    "choresDesc": "Ponavljajoča se gospodinjska opravila",
+    "mealPlan": "Jedilnik",
+    "mealPlanDesc": "Načrtujte obroke in dodajte sestavine na nakupovalni seznam"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Koledar",
     "finances": "Finances",
     "more": "More"
   },

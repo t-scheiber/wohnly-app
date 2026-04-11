@@ -20,11 +20,13 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { impactLight, notifySuccess } from "@/lib/utils/haptics";
+import { useTranslation } from "react-i18next";
 import type { Todo } from "@wohnly/shared";
 
 export default function TodosScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { t } = useTranslation();
 
   const [tab, setTab] = useState<"household" | "personal">("household");
   const [newTitle, setNewTitle] = useState("");
@@ -189,8 +191,8 @@ export default function TodosScreen() {
     return (
       <SwipeableListItem
         onDelete={() => handleDelete(item.id)}
-        deleteConfirmTitle="Delete Todo"
-        deleteConfirmMessage={`Delete "${item.title}"?`}
+        deleteConfirmTitle={t("todos.deleteTodo")}
+        deleteConfirmMessage={t("todos.deleteConfirm")}
       >
         {content}
       </SwipeableListItem>
@@ -201,26 +203,25 @@ export default function TodosScreen() {
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Tab switcher */}
       <View style={{ flexDirection: "row", padding: 16, gap: 8 }}>
-        {(["household", "personal"] as const).map((t) => (
+        {(["household", "personal"] as const).map((key) => (
           <TouchableOpacity
-            key={t}
-            onPress={() => setTab(t)}
+            key={key}
+            onPress={() => setTab(key)}
             style={{
               flex: 1,
               paddingVertical: 10,
               borderRadius: 8,
-              backgroundColor: tab === t ? colors.primary : colors.muted,
+              backgroundColor: tab === key ? colors.primary : colors.muted,
               alignItems: "center",
             }}
           >
             <Text
               style={{
-                color: tab === t ? colors.primaryForeground : colors.text,
+                color: tab === key ? colors.primaryForeground : colors.text,
                 fontWeight: "600",
-                textTransform: "capitalize",
               }}
             >
-              {t}
+              {t(`todos.${key}`)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -254,7 +255,7 @@ export default function TodosScreen() {
         }
         ListEmptyComponent={
           <View style={{ alignItems: "center", paddingVertical: 48 }}>
-            <Text style={{ fontSize: 16, color: colors.textSecondary }}>No todos yet</Text>
+            <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("todos.empty")}</Text>
           </View>
         }
       />
@@ -273,7 +274,7 @@ export default function TodosScreen() {
         }}
       >
         <TextInput
-          placeholder="Add a todo..."
+          placeholder={t("todos.addTodo")}
           placeholderTextColor={colors.textSecondary}
           value={newTitle}
           onChangeText={setNewTitle}
@@ -301,7 +302,7 @@ export default function TodosScreen() {
           }}
         >
           <Text style={{ color: newTitle.trim() ? colors.primaryForeground : colors.textSecondary, fontWeight: "600" }}>
-            Add
+            {t("common.add")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -315,25 +316,25 @@ export default function TodosScreen() {
       >
         <View style={{ flex: 1, backgroundColor: colors.background, padding: 24 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-            <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>Edit Todo</Text>
+            <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>{t("todos.editTodo")}</Text>
             <TouchableOpacity onPress={() => setEditTodo(null)}>
-              <Text style={{ fontSize: 16, color: colors.textSecondary }}>Cancel</Text>
+              <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("common.cancel")}</Text>
             </TouchableOpacity>
           </View>
 
           <Input
-            label="Title"
+            label={t("todos.titleLabel")}
             value={editTitle}
             onChangeText={setEditTitle}
-            placeholder="Todo title"
+            placeholder={t("todos.titlePlaceholder")}
             autoFocus
           />
 
           <DatePicker
-            label="Due Date"
+            label={t("todos.dueDate")}
             value={editDueDate}
             onChange={setEditDueDate}
-            placeholder="No due date"
+            placeholder={t("todos.noDueDate")}
             optional
             onClear={() => setEditDueDate(undefined)}
           />
@@ -342,7 +343,7 @@ export default function TodosScreen() {
             onPress={handleSaveEdit}
             disabled={!editTitle.trim()}
           >
-            Save
+            {t("common.save")}
           </Button>
         </View>
       </Modal>

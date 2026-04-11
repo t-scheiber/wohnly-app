@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 import { useRouter } from "expo-router";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { useTranslation } from "react-i18next";
-import { CheckSquare, ShoppingCart, Sparkles, DollarSign } from "lucide-react-native";
+import { CheckSquare, ShoppingCart, Sparkles, DollarSign, CalendarDays, CreditCard } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
 import { useMemberBalances, useHouseholdMembers, useShoppingList, useTodos, useChores } from "@/lib/api/queries";
 import { useHousehold } from "@/lib/hooks/useHousehold";
@@ -12,6 +12,7 @@ import { HouseholdOnboarding } from "@/components/household/HouseholdOnboarding"
 import { GettingStartedCard } from "@/components/dashboard/GettingStartedCard";
 import { DeviceOnboardingBanners } from "@/components/dashboard/DeviceOnboardingBanners";
 import { AdBanner } from "@/components/common/AdBanner";
+import { HelpButton } from "@/components/common/HelpButton";
 import { Spinner } from "@/components/ui/Spinner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -73,7 +74,9 @@ export default function DashboardScreen() {
     { title: t("todos.title"), icon: <CheckSquare size={22} color="#fff" />, route: "/(app)/(lists)/todos" as const, color: "#0d9488" },
     { title: t("shopping.title"), icon: <ShoppingCart size={22} color="#fff" />, route: "/(app)/(lists)/shopping" as const, color: "#3b82f6" },
     { title: t("chores.title"), icon: <Sparkles size={22} color="#fff" />, route: "/(app)/(chores)" as const, color: "#6366f1" },
-    { title: t("expenses.title"), icon: <DollarSign size={22} color="#fff" />, route: "/(app)/(finances)" as const, color: "#10b981" },
+    { title: t("finances.title"), icon: <DollarSign size={22} color="#fff" />, route: "/(app)/(finances)" as const, color: "#10b981" },
+    { title: t("subscriptions.title"), icon: <CreditCard size={22} color="#fff" />, route: "/(app)/(finances)" as const, color: "#f59e0b" },
+    { title: t("events.title"), icon: <CalendarDays size={22} color="#fff" />, route: "/(app)/(events)" as const, color: "#8b5cf6" },
   ];
 
   return (
@@ -87,9 +90,12 @@ export default function DashboardScreen() {
       >
         {/* Welcome */}
         <View style={{ marginBottom: 24 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text, marginBottom: 4 }}>
-            {t("dashboard.welcome")}{firstName ? `, ${firstName}` : ""}
-          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>
+              {t("dashboard.welcome")}{firstName ? `, ${firstName}` : ""}
+            </Text>
+            <HelpButton />
+          </View>
           {balances?.householdName && (
             <Text style={{ fontSize: 16, color: colors.textSecondary }}>
               {balances.householdName}

@@ -14,7 +14,8 @@
     "search": "Søg",
     "noResults": "Ingen resultater fundet",
     "pullToRefresh": "Træk ned for at opdatere",
-    "seeAll": "Se alle"
+    "seeAll": "Se alle",
+    "gotIt": "Forstået"
   },
   "auth": {
     "signIn": "Log ind",
@@ -68,12 +69,26 @@
     "addTodo": "Tilføj opgave...",
     "empty": "Ingen opgaver endnu",
     "deleteTodo": "Slet opgave",
-    "deleteConfirm": "Er du sikker?"
+    "deleteConfirm": "Er du sikker?",
+    "editTodo": "Rediger opgave",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "Opgavetitel",
+    "dueDate": "Forfaldsdato",
+    "noDueDate": "Ingen forfaldsdato",
+    "due": "Forfalder: {{date}}"
   },
   "shopping": {
     "title": "Indkøbsliste",
     "addItem": "Tilføj vare...",
-    "empty": "Indkøbslisten er tom"
+    "empty": "Indkøbslisten er tom",
+    "deleteItem": "Slet vare",
+    "deleteConfirm": "Slet \"{{name}}\"?",
+    "editItem": "Rediger vare",
+    "nameLabel": "Navn",
+    "namePlaceholder": "Varenavn",
+    "quantityLabel": "Antal",
+    "quantityPlaceholder": "f.eks. 2x, 500g",
+    "clearChecked": "Ryd afkrydsede"
   },
   "chores": {
     "title": "Huslige pligter",
@@ -96,7 +111,18 @@
     "effortLevel": "Indsatsniveau",
     "breakMode": "Pausetilstand",
     "breakModeActive": "Pligterne er sat på pause",
-    "breakModeUntil": "indtil {{date}}"
+    "breakModeUntil": "indtil {{date}}",
+    "deleteChore": "Slet pligt",
+    "deleteConfirm": "Er du sikker?",
+    "dueToday": "Forfalder i dag",
+    "allChores": "Alle pligter",
+    "turn": "s tur",
+    "rotating": "(skiftevis)",
+    "assignedTo": "Tildelt til: {{names}}",
+    "hideAnalytics": "Skjul statistik",
+    "showAnalytics": "Vis retfærdig fordeling",
+    "choresPausedUntil": "Pligter er sat på pause til {{date}}",
+    "choresPausedIndefinitely": "Pligter er sat på pause på ubestemt tid"
   },
   "events": {
     "title": "Kalender",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Opgaver",
+    "todosDesc": "Personlige & husholdningsopgaver",
+    "shopping": "Indkøbsliste",
+    "shoppingDesc": "Fælles indkøb",
+    "chores": "Pligter",
+    "choresDesc": "Tilbagevendende husholdningsopgaver",
+    "mealPlan": "Madplan",
+    "mealPlanDesc": "Planlæg måltider & tilføj ingredienser til indkøbslisten"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalender",
     "finances": "Finances",
     "more": "More"
   },

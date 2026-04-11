@@ -14,7 +14,8 @@
     "search": "Pretraži",
     "noResults": "Nema rezultata",
     "pullToRefresh": "Povuci za osvježavanje",
-    "seeAll": "Prikaži sve"
+    "seeAll": "Prikaži sve",
+    "gotIt": "Razumijem"
   },
   "auth": {
     "signIn": "Prijavi se",
@@ -68,12 +69,26 @@
     "addTodo": "Dodaj zadatak...",
     "empty": "Još nema zadataka",
     "deleteTodo": "Obriši zadatak",
-    "deleteConfirm": "Jesi li siguran/na?"
+    "deleteConfirm": "Jesi li siguran/na?",
+    "editTodo": "Uredi zadatak",
+    "titleLabel": "Naslov",
+    "titlePlaceholder": "Naslov zadatka",
+    "dueDate": "Rok",
+    "noDueDate": "Bez roka",
+    "due": "Rok: {{date}}"
   },
   "shopping": {
     "title": "Popis za kupovinu",
     "addItem": "Dodaj artikl...",
-    "empty": "Popis za kupovinu je prazan"
+    "empty": "Popis za kupovinu je prazan",
+    "deleteItem": "Obriši stavku",
+    "deleteConfirm": "Obrisati \"{{name}}\"?",
+    "editItem": "Uredi stavku",
+    "nameLabel": "Naziv",
+    "namePlaceholder": "Naziv stavke",
+    "quantityLabel": "Količina",
+    "quantityPlaceholder": "npr. 2x, 500g",
+    "clearChecked": "Obriši označene"
   },
   "chores": {
     "title": "Kućanski poslovi",
@@ -96,7 +111,18 @@
     "effortLevel": "Razina truda",
     "breakMode": "Način pauze",
     "breakModeActive": "Kućanski poslovi su pauzirani",
-    "breakModeUntil": "do {{date}}"
+    "breakModeUntil": "do {{date}}",
+    "deleteChore": "Obriši posao",
+    "deleteConfirm": "Jesi li siguran/na?",
+    "dueToday": "Za danas",
+    "allChores": "Svi poslovi",
+    "turn": " na redu",
+    "rotating": "(rotirajuće)",
+    "assignedTo": "Dodijeljeno: {{names}}",
+    "hideAnalytics": "Sakrij statistiku",
+    "showAnalytics": "Prikaži pravednu raspodjelu",
+    "choresPausedUntil": "Poslovi su pauzirani do {{date}}",
+    "choresPausedIndefinitely": "Poslovi su pauzirani na neodređeno"
   },
   "events": {
     "title": "Kalendar",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Zadaci",
+    "todosDesc": "Osobni i kućanski zadaci",
+    "shopping": "Popis za kupovinu",
+    "shoppingDesc": "Zajednička kupovina",
+    "chores": "Kućanski poslovi",
+    "choresDesc": "Ponavljajući kućanski poslovi",
+    "mealPlan": "Plan obroka",
+    "mealPlanDesc": "Planirajte obroke i dodajte sastojke na popis za kupovinu"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalendar",
     "finances": "Finances",
     "more": "More"
   },

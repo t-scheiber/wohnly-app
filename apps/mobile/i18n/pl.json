@@ -14,7 +14,8 @@
     "search": "Szukaj",
     "noResults": "Nie znaleziono wyników",
     "pullToRefresh": "Pociągnij, aby odświeżyć",
-    "seeAll": "Zobacz wszystko"
+    "seeAll": "Zobacz wszystko",
+    "gotIt": "Rozumiem"
   },
   "auth": {
     "signIn": "Zaloguj się",
@@ -68,12 +69,26 @@
     "addTodo": "Dodaj zadanie...",
     "empty": "Brak zadań",
     "deleteTodo": "Usuń zadanie",
-    "deleteConfirm": "Na pewno?"
+    "deleteConfirm": "Na pewno?",
+    "editTodo": "Edytuj zadanie",
+    "titleLabel": "Tytuł",
+    "titlePlaceholder": "Tytuł zadania",
+    "dueDate": "Termin",
+    "noDueDate": "Bez terminu",
+    "due": "Termin: {{date}}"
   },
   "shopping": {
     "title": "Lista zakupów",
     "addItem": "Dodaj produkt...",
-    "empty": "Lista zakupów jest pusta"
+    "empty": "Lista zakupów jest pusta",
+    "deleteItem": "Usuń produkt",
+    "deleteConfirm": "Usunąć \"{{name}}\"?",
+    "editItem": "Edytuj produkt",
+    "nameLabel": "Nazwa",
+    "namePlaceholder": "Nazwa produktu",
+    "quantityLabel": "Ilość",
+    "quantityPlaceholder": "np. 2x, 500g",
+    "clearChecked": "Wyczyść zaznaczone"
   },
   "chores": {
     "title": "Obowiązki",
@@ -96,7 +111,18 @@
     "effortLevel": "Poziom wysiłku",
     "breakMode": "Tryb przerwy",
     "breakModeActive": "Obowiązki są wstrzymane",
-    "breakModeUntil": "do {{date}}"
+    "breakModeUntil": "do {{date}}",
+    "deleteChore": "Usuń obowiązek",
+    "deleteConfirm": "Na pewno?",
+    "dueToday": "Na dziś",
+    "allChores": "Wszystkie obowiązki",
+    "turn": " kolej",
+    "rotating": "(rotacyjnie)",
+    "assignedTo": "Przypisano do: {{names}}",
+    "hideAnalytics": "Ukryj statystyki",
+    "showAnalytics": "Pokaż sprawiedliwy podział",
+    "choresPausedUntil": "Obowiązki wstrzymane do {{date}}",
+    "choresPausedIndefinitely": "Obowiązki wstrzymane na czas nieokreślony"
   },
   "events": {
     "title": "Kalendarz",
@@ -356,10 +382,21 @@
     "title": "Finanse",
     "analytics": "Analiza wydatków"
   },
+  "lists": {
+    "todos": "Zadania",
+    "todosDesc": "Zadania osobiste i domowe",
+    "shopping": "Lista zakupów",
+    "shoppingDesc": "Wspólne zakupy",
+    "chores": "Obowiązki",
+    "choresDesc": "Powtarzające się obowiązki domowe",
+    "mealPlan": "Plan posiłków",
+    "mealPlanDesc": "Planuj posiłki i dodawaj składniki do zakupów"
+  },
   "tabs": {
     "home": "Główna",
     "lists": "Listy",
     "chores": "Obowiązki",
+    "calendar": "Kalendarz",
     "finances": "Finanse",
     "more": "Więcej"
   },

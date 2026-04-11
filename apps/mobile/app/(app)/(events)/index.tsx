@@ -2,6 +2,7 @@ import type { CalendarItem } from "@/components/calendar/CalendarDayAgenda";
 import { CalendarDayAgenda } from "@/components/calendar/CalendarDayAgenda";
 import { CalendarMonthView } from "@/components/calendar/CalendarMonthView";
 import { AdBanner } from "@/components/common/AdBanner";
+import { HelpButton } from "@/components/common/HelpButton";
 import { AddEventForm } from "@/components/forms/AddEventForm";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { Colors } from "@/constants/Colors";
@@ -194,9 +195,12 @@ export default function CalendarScreen() {
           paddingVertical: 8,
         }}
       >
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>
-          {t("events.title")}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>
+            {t("events.title")}
+          </Text>
+          <HelpButton />
+        </View>
         <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
           {Platform.OS !== "web" && (
             <TouchableOpacity
@@ -234,10 +238,12 @@ export default function CalendarScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={{ flexGrow: 0 }}
         contentContainerStyle={{
           paddingHorizontal: 16,
           gap: 8,
           paddingBottom: 8,
+          alignItems: "center",
         }}
       >
         {filterButtons.map((fb) => (

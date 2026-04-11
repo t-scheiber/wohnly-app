@@ -14,7 +14,8 @@
     "search": "Cari",
     "noResults": "Tiada hasil dijumpai",
     "pullToRefresh": "Tarik untuk muat semula",
-    "seeAll": "Lihat semua"
+    "seeAll": "Lihat semua",
+    "gotIt": "Faham"
   },
   "auth": {
     "signIn": "Log Masuk",
@@ -68,12 +69,26 @@
     "addTodo": "Tambah tugasan...",
     "empty": "Belum ada tugasan",
     "deleteTodo": "Padam Tugasan",
-    "deleteConfirm": "Kau pasti ke?"
+    "deleteConfirm": "Kau pasti ke?",
+    "editTodo": "Edit Tugasan",
+    "titleLabel": "Tajuk",
+    "titlePlaceholder": "Tajuk tugasan",
+    "dueDate": "Tarikh Akhir",
+    "noDueDate": "Tiada tarikh akhir",
+    "due": "Tarikh akhir: {{date}}"
   },
   "shopping": {
     "title": "Senarai Beli-belah",
     "addItem": "Tambah barang...",
-    "empty": "Senarai beli-belah kosong"
+    "empty": "Senarai beli-belah kosong",
+    "deleteItem": "Padam Item",
+    "deleteConfirm": "Padam \"{{name}}\"?",
+    "editItem": "Edit Item",
+    "nameLabel": "Nama",
+    "namePlaceholder": "Nama item",
+    "quantityLabel": "Kuantiti",
+    "quantityPlaceholder": "cth. 2x, 500g",
+    "clearChecked": "Kosongkan yang ditanda"
   },
   "chores": {
     "title": "Kerja Rumah",
@@ -96,7 +111,18 @@
     "effortLevel": "Tahap usaha",
     "breakMode": "Mod rehat",
     "breakModeActive": "Tugasan dijeda",
-    "breakModeUntil": "sehingga {{date}}"
+    "breakModeUntil": "sehingga {{date}}",
+    "deleteChore": "Padam Kerja Rumah",
+    "deleteConfirm": "Kau pasti ke?",
+    "dueToday": "Hari Ini",
+    "allChores": "Semua Kerja Rumah",
+    "turn": " punya giliran",
+    "rotating": "(bergilir)",
+    "assignedTo": "Ditugaskan kepada: {{names}}",
+    "hideAnalytics": "Sembunyikan Analitik",
+    "showAnalytics": "Tunjuk Agihan Saksama",
+    "choresPausedUntil": "Kerja rumah dijeda sehingga {{date}}",
+    "choresPausedIndefinitely": "Kerja rumah dijeda tanpa had masa"
   },
   "events": {
     "title": "Kalendar",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Tugasan",
+    "todosDesc": "Tugasan peribadi & isi rumah",
+    "shopping": "Senarai Beli-belah",
+    "shoppingDesc": "Beli-belah bersama",
+    "chores": "Kerja Rumah",
+    "choresDesc": "Kerja rumah berkala",
+    "mealPlan": "Rancangan Makan",
+    "mealPlanDesc": "Rancang hidangan & tambah bahan ke senarai beli-belah"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalendar",
     "finances": "Finances",
     "more": "More"
   },

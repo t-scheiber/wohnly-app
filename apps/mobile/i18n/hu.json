@@ -14,7 +14,8 @@
     "search": "Keresés",
     "noResults": "Nincs találat",
     "pullToRefresh": "Húzd le a frissítéshez",
-    "seeAll": "Összes megtekintése"
+    "seeAll": "Összes megtekintése",
+    "gotIt": "Értem"
   },
   "auth": {
     "signIn": "Bejelentkezés",
@@ -68,12 +69,26 @@
     "addTodo": "Teendő hozzáadása...",
     "empty": "Még nincsenek teendők",
     "deleteTodo": "Teendő törlése",
-    "deleteConfirm": "Biztos vagy benne?"
+    "deleteConfirm": "Biztos vagy benne?",
+    "editTodo": "Teendő szerkesztése",
+    "titleLabel": "Cím",
+    "titlePlaceholder": "Teendő címe",
+    "dueDate": "Határidő",
+    "noDueDate": "Nincs határidő",
+    "due": "Határidő: {{date}}"
   },
   "shopping": {
     "title": "Bevásárlólista",
     "addItem": "Tétel hozzáadása...",
-    "empty": "A bevásárlólista üres"
+    "empty": "A bevásárlólista üres",
+    "deleteItem": "Tétel törlése",
+    "deleteConfirm": "Törlöd: \"{{name}}\"?",
+    "editItem": "Tétel szerkesztése",
+    "nameLabel": "Név",
+    "namePlaceholder": "Tétel neve",
+    "quantityLabel": "Mennyiség",
+    "quantityPlaceholder": "pl. 2x, 500g",
+    "clearChecked": "Kipipáltak törlése"
   },
   "chores": {
     "title": "Házimunkák",
@@ -96,7 +111,18 @@
     "effortLevel": "Erőfeszítés szintje",
     "breakMode": "Szünet mód",
     "breakModeActive": "A házimunkák szünetelnek",
-    "breakModeUntil": "{{date}}-ig"
+    "breakModeUntil": "{{date}}-ig",
+    "deleteChore": "Házimunka törlése",
+    "deleteConfirm": "Biztos vagy benne?",
+    "dueToday": "Ma esedékes",
+    "allChores": "Összes házimunka",
+    "turn": " következik",
+    "rotating": "(váltakozó)",
+    "assignedTo": "Hozzárendelve: {{names}}",
+    "hideAnalytics": "Statisztikák elrejtése",
+    "showAnalytics": "Igazságos elosztás mutatása",
+    "choresPausedUntil": "A házimunkák szünetelnek {{date}}-ig",
+    "choresPausedIndefinitely": "A házimunkák határozatlan ideig szünetelnek"
   },
   "events": {
     "title": "Naptár",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Feladatok",
+    "todosDesc": "Személyes és háztartási feladatok",
+    "shopping": "Bevásárlólista",
+    "shoppingDesc": "Közös bevásárlás",
+    "chores": "Házimunkák",
+    "choresDesc": "Ismétlődő háztartási feladatok",
+    "mealPlan": "Étkezési terv",
+    "mealPlanDesc": "Tervezzen étkezéseket és adjon hozzávalókat a bevásárlólistához"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Naptár",
     "finances": "Finances",
     "more": "More"
   },

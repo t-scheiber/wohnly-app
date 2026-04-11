@@ -14,7 +14,8 @@
     "search": "Caută",
     "noResults": "Niciun rezultat găsit",
     "pullToRefresh": "Trage pentru a reîmprospăta",
-    "seeAll": "Vezi tot"
+    "seeAll": "Vezi tot",
+    "gotIt": "Am înțeles"
   },
   "auth": {
     "signIn": "Autentificare",
@@ -68,12 +69,26 @@
     "addTodo": "Adaugă o sarcină...",
     "empty": "Încă nu ai sarcini",
     "deleteTodo": "Șterge sarcina",
-    "deleteConfirm": "Ești sigur?"
+    "deleteConfirm": "Ești sigur?",
+    "editTodo": "Editează sarcina",
+    "titleLabel": "Titlu",
+    "titlePlaceholder": "Titlul sarcinii",
+    "dueDate": "Termen limită",
+    "noDueDate": "Fără termen limită",
+    "due": "Termen: {{date}}"
   },
   "shopping": {
     "title": "Lista de cumpărături",
     "addItem": "Adaugă articol...",
-    "empty": "Lista de cumpărături e goală"
+    "empty": "Lista de cumpărături e goală",
+    "deleteItem": "Șterge articolul",
+    "deleteConfirm": "Ștergi \"{{name}}\"?",
+    "editItem": "Editează articolul",
+    "nameLabel": "Nume",
+    "namePlaceholder": "Numele articolului",
+    "quantityLabel": "Cantitate",
+    "quantityPlaceholder": "ex. 2x, 500g",
+    "clearChecked": "Șterge bifatele"
   },
   "chores": {
     "title": "Treburi casnice",
@@ -96,7 +111,18 @@
     "effortLevel": "Nivel de efort",
     "breakMode": "Mod pauză",
     "breakModeActive": "Treburile sunt întrerupte",
-    "breakModeUntil": "până la {{date}}"
+    "breakModeUntil": "până la {{date}}",
+    "deleteChore": "Șterge treaba",
+    "deleteConfirm": "Ești sigur?",
+    "dueToday": "Pentru azi",
+    "allChores": "Toate treburile",
+    "turn": " e rândul lui/ei",
+    "rotating": "(prin rotație)",
+    "assignedTo": "Atribuit lui: {{names}}",
+    "hideAnalytics": "Ascunde statisticile",
+    "showAnalytics": "Arată împărțirea echitabilă",
+    "choresPausedUntil": "Treburile sunt întrerupte până la {{date}}",
+    "choresPausedIndefinitely": "Treburile sunt întrerupte pe termen nedefinit"
   },
   "events": {
     "title": "Calendar",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Sarcini",
+    "todosDesc": "Sarcini personale și casnice",
+    "shopping": "Listă de cumpărături",
+    "shoppingDesc": "Cumpărături în comun",
+    "chores": "Treburi casnice",
+    "choresDesc": "Treburi casnice recurente",
+    "mealPlan": "Plan de mese",
+    "mealPlanDesc": "Planificați mesele și adăugați ingrediente la lista de cumpărături"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Calendar",
     "finances": "Finances",
     "more": "More"
   },

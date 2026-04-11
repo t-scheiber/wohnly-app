@@ -14,7 +14,8 @@
     "search": "Tafuta",
     "noResults": "Hakuna matokeo",
     "pullToRefresh": "Vuta ili upakie upya",
-    "seeAll": "Ona zote"
+    "seeAll": "Ona zote",
+    "gotIt": "Sawa"
   },
   "auth": {
     "signIn": "Ingia",
@@ -68,12 +69,26 @@
     "addTodo": "Ongeza jambo la kufanya...",
     "empty": "Hakuna mambo ya kufanya bado",
     "deleteTodo": "Futa Jambo",
-    "deleteConfirm": "Una uhakika?"
+    "deleteConfirm": "Una uhakika?",
+    "editTodo": "Hariri kazi",
+    "titleLabel": "Kichwa",
+    "titlePlaceholder": "Kichwa cha kazi",
+    "dueDate": "Tarehe ya mwisho",
+    "noDueDate": "Hakuna tarehe ya mwisho",
+    "due": "Mwisho: {{date}}"
   },
   "shopping": {
     "title": "Orodha ya Ununuzi",
     "addItem": "Ongeza bidhaa...",
-    "empty": "Orodha ya ununuzi ni tupu"
+    "empty": "Orodha ya ununuzi ni tupu",
+    "deleteItem": "Futa bidhaa",
+    "deleteConfirm": "Futa \"{{name}}\"?",
+    "editItem": "Hariri bidhaa",
+    "nameLabel": "Jina",
+    "namePlaceholder": "Jina la bidhaa",
+    "quantityLabel": "Kiasi",
+    "quantityPlaceholder": "mfano 2x, 500g",
+    "clearChecked": "Futa zilizochaguliwa"
   },
   "chores": {
     "title": "Kazi za Nyumbani",
@@ -96,7 +111,18 @@
     "effortLevel": "Kiwango cha juhudi",
     "breakMode": "Hali ya mapumziko",
     "breakModeActive": "Kazi za nyumbani zimesimamishwa",
-    "breakModeUntil": "hadi {{date}}"
+    "breakModeUntil": "hadi {{date}}",
+    "deleteChore": "Futa kazi ya nyumba",
+    "deleteConfirm": "Una uhakika?",
+    "dueToday": "Leo",
+    "allChores": "Kazi zote za nyumba",
+    "turn": " zamu yake",
+    "rotating": "(kwa zamu)",
+    "assignedTo": "Imepewa: {{names}}",
+    "hideAnalytics": "Ficha takwimu",
+    "showAnalytics": "Onyesha mgawanyo wa haki",
+    "choresPausedUntil": "Kazi za nyumba zimesimamishwa hadi {{date}}",
+    "choresPausedIndefinitely": "Kazi za nyumba zimesimamishwa bila kikomo"
   },
   "events": {
     "title": "Kalenda",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "Mambo ya Kufanya",
+    "todosDesc": "Kazi za kibinafsi na za nyumbani",
+    "shopping": "Orodha ya Ununuzi",
+    "shoppingDesc": "Ununuzi wa pamoja",
+    "chores": "Kazi za Nyumbani",
+    "choresDesc": "Kazi za nyumbani zinazojirudia",
+    "mealPlan": "Mpango wa Milo",
+    "mealPlanDesc": "Panga milo na ongeza viungo kwenye orodha ya ununuzi"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "Kalenda",
     "finances": "Finances",
     "more": "More"
   },

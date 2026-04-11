@@ -14,7 +14,8 @@
     "search": "शोधा",
     "noResults": "काही सापडलं नाही",
     "pullToRefresh": "रिफ्रेश करायला खेचा",
-    "seeAll": "सर्व पहा"
+    "seeAll": "सर्व पहा",
+    "gotIt": "समजलं"
   },
   "auth": {
     "signIn": "साइन इन",
@@ -68,12 +69,26 @@
     "addTodo": "करायचं काम जोडा...",
     "empty": "अजून काही नाही",
     "deleteTodo": "काम हटवा",
-    "deleteConfirm": "पक्कं ना?"
+    "deleteConfirm": "पक्कं ना?",
+    "editTodo": "टुडू संपादित करा",
+    "titleLabel": "शीर्षक",
+    "titlePlaceholder": "टुडू शीर्षक",
+    "dueDate": "देय तारीख",
+    "noDueDate": "देय तारीख नाही",
+    "due": "देय: {{date}}"
   },
   "shopping": {
     "title": "शॉपिंग लिस्ट",
     "addItem": "आयटम जोडा...",
-    "empty": "शॉपिंग लिस्ट रिकामी आहे"
+    "empty": "शॉपिंग लिस्ट रिकामी आहे",
+    "deleteItem": "आयटम काढा",
+    "deleteConfirm": "\"{{name}}\" काढायचं?",
+    "editItem": "आयटम संपादित करा",
+    "nameLabel": "नाव",
+    "namePlaceholder": "आयटमचं नाव",
+    "quantityLabel": "प्रमाण",
+    "quantityPlaceholder": "उदा. 2x, 500g",
+    "clearChecked": "चेक केलेले काढा"
   },
   "chores": {
     "title": "घरकाम",
@@ -96,7 +111,18 @@
     "effortLevel": "प्रयत्न पातळी",
     "breakMode": "विश्रांती मोड",
     "breakModeActive": "कामे थांबवली आहेत",
-    "breakModeUntil": "{{date}} पर्यंत"
+    "breakModeUntil": "{{date}} पर्यंत",
+    "deleteChore": "काम काढा",
+    "deleteConfirm": "पक्कं ना?",
+    "dueToday": "आजचं",
+    "allChores": "सर्व कामं",
+    "turn": "ची पाळी",
+    "rotating": "(आलटून पालटून)",
+    "assignedTo": "नेमलेलं: {{names}}",
+    "hideAnalytics": "आकडेवारी लपवा",
+    "showAnalytics": "न्याय्य वाटणी दाखवा",
+    "choresPausedUntil": "कामं {{date}} पर्यंत थांबवली आहेत",
+    "choresPausedIndefinitely": "कामं अनिश्चित काळासाठी थांबवली आहेत"
   },
   "events": {
     "title": "कॅलेंडर",
@@ -356,10 +382,21 @@
     "title": "Finances",
     "analytics": "Spending Analytics"
   },
+  "lists": {
+    "todos": "कामे",
+    "todosDesc": "वैयक्तिक आणि घरगुती कामे",
+    "shopping": "खरेदी यादी",
+    "shoppingDesc": "एकत्रित खरेदी",
+    "chores": "घरकाम",
+    "choresDesc": "नियमित घरगुती कामे",
+    "mealPlan": "जेवण योजना",
+    "mealPlanDesc": "जेवण नियोजन करा आणि साहित्य खरेदी यादीत जोडा"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lists",
     "chores": "Chores",
+    "calendar": "कॅलेंडर",
     "finances": "Finances",
     "more": "More"
   },

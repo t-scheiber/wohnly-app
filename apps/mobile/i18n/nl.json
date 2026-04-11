@@ -14,7 +14,8 @@
     "search": "Zoeken",
     "noResults": "Geen resultaten gevonden",
     "pullToRefresh": "Trek om te vernieuwen",
-    "seeAll": "Alles bekijken"
+    "seeAll": "Alles bekijken",
+    "gotIt": "Begrepen"
   },
   "auth": {
     "signIn": "Inloggen",
@@ -68,12 +69,26 @@
     "addTodo": "Taak toevoegen...",
     "empty": "Nog geen taken",
     "deleteTodo": "Taak verwijderen",
-    "deleteConfirm": "Weet je het zeker?"
+    "deleteConfirm": "Weet je het zeker?",
+    "editTodo": "Taak bewerken",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "Titel van de taak",
+    "dueDate": "Vervaldatum",
+    "noDueDate": "Geen vervaldatum",
+    "due": "Vervalt: {{date}}"
   },
   "shopping": {
     "title": "Boodschappenlijst",
     "addItem": "Artikel toevoegen...",
-    "empty": "De boodschappenlijst is leeg"
+    "empty": "De boodschappenlijst is leeg",
+    "deleteItem": "Item verwijderen",
+    "deleteConfirm": "\"{{name}}\" verwijderen?",
+    "editItem": "Item bewerken",
+    "nameLabel": "Naam",
+    "namePlaceholder": "Itemnaam",
+    "quantityLabel": "Hoeveelheid",
+    "quantityPlaceholder": "bijv. 2x, 500g",
+    "clearChecked": "Aangevinkte wissen"
   },
   "chores": {
     "title": "Klusjes",
@@ -96,7 +111,18 @@
     "effortLevel": "Inspanningsniveau",
     "breakMode": "Pauzemodus",
     "breakModeActive": "Klusjes zijn gepauzeerd",
-    "breakModeUntil": "tot {{date}}"
+    "breakModeUntil": "tot {{date}}",
+    "deleteChore": "Klusje verwijderen",
+    "deleteConfirm": "Weet je het zeker?",
+    "dueToday": "Vandaag",
+    "allChores": "Alle klusjes",
+    "turn": " is aan de beurt",
+    "rotating": "(roulerend)",
+    "assignedTo": "Toegewezen aan: {{names}}",
+    "hideAnalytics": "Statistieken verbergen",
+    "showAnalytics": "Eerlijke verdeling tonen",
+    "choresPausedUntil": "Klusjes zijn gepauzeerd tot {{date}}",
+    "choresPausedIndefinitely": "Klusjes zijn voor onbepaalde tijd gepauzeerd"
   },
   "events": {
     "title": "Kalender",
@@ -356,10 +382,21 @@
     "title": "Financiën",
     "analytics": "Uitgavenanalyse"
   },
+  "lists": {
+    "todos": "Taken",
+    "todosDesc": "Persoonlijke & huishoudelijke taken",
+    "shopping": "Boodschappenlijst",
+    "shoppingDesc": "Samen boodschappen doen",
+    "chores": "Klusjes",
+    "choresDesc": "Terugkerende huishoudelijke taken",
+    "mealPlan": "Maaltijdplan",
+    "mealPlanDesc": "Plan maaltijden & voeg ingrediënten toe aan boodschappen"
+  },
   "tabs": {
     "home": "Home",
     "lists": "Lijsten",
     "chores": "Taken",
+    "calendar": "Kalender",
     "finances": "Financiën",
     "more": "Meer"
   },
