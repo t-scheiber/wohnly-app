@@ -17,9 +17,28 @@ export function getActiveHouseholdId(): string | null {
 
 /**
  * Get the encryption key for the active household.
- * Returns null on web or if no key is cached.
+ * Returns null if no key is cached.
  */
 export function getEncryptionKey(): Uint8Array | null {
   if (!_householdId) return null;
   return getCachedHouseholdKey(_householdId);
+}
+
+/**
+ * Get the encryption key or throw.
+ * Use this in mutations that MUST encrypt data before sending.
+ */
+export function requireEncryptionKey(): Uint8Array {
+  const hk = getEncryptionKey();
+  if (!hk) {
+    throw new EncryptionKeyMissingError();
+  }
+  return hk;
+}
+
+export class EncryptionKeyMissingError extends Error {
+  constructor() {
+    super("Encryption keys are still syncing. Please wait a moment and try again.");
+    this.name = "EncryptionKeyMissingError";
+  }
 }
