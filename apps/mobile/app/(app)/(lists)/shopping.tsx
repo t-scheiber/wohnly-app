@@ -7,6 +7,7 @@ import {
   TextInput,
   RefreshControl,
   Modal,
+  Pressable,
 } from "react-native";
 import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem, useUpdateShoppingItem, useClearCheckedShopping, useShoppingSuggestions } from "@/lib/api/queries";
 import { ScrollView } from "react-native";
@@ -161,11 +162,11 @@ export default function ShoppingScreen() {
           </TouchableOpacity>
         )}
 
-        {/* Item text - tappable for edit */}
-        <TouchableOpacity
-          onPress={() => openEditModal(item)}
+        {/* Item text - tap to toggle, long press to edit */}
+        <Pressable
+          onPress={() => handleToggle(item)}
+          onLongPress={() => openEditModal(item)}
           style={{ flex: 1 }}
-          activeOpacity={0.7}
         >
           <Text
             style={{
@@ -176,7 +177,7 @@ export default function ShoppingScreen() {
           >
             {item.name}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
 
         {item.quantity && (
           <Text style={{ fontSize: 14, color: colors.textSecondary }}>{item.quantity}</Text>

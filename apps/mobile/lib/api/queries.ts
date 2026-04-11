@@ -157,22 +157,28 @@ export function usePersonalTodos() {
 export function useToggleTodo() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (todo: Todo) =>
-      apiPatch(`/api/todos/${todo.id}`, { completed: !todo.completed }),
+    mutationFn: (todo: Todo & { isPersonal?: boolean }) => {
+      const base = todo.isPersonal ? "/api/personal-todos" : "/api/todos";
+      return apiPatch(`${base}/${todo.id}`, { completed: !todo.completed });
+    },
     onMutate: async (todo) => {
-      await qc.cancelQueries({ queryKey: ["todos"] });
-      const prev = qc.getQueryData<{ todos: Todo[] }>(["todos"]);
-      qc.setQueryData<{ todos: Todo[] }>(["todos"], (old) =>
+      const key = todo.isPersonal ? "personal-todos" : "todos";
+      await qc.cancelQueries({ queryKey: [key] });
+      const prev = qc.getQueryData<{ todos: Todo[] }>([key]);
+      qc.setQueryData<{ todos: Todo[] }>([key], (old) =>
         old
           ? { ...old, todos: old.todos.map((t) => (t.id === todo.id ? { ...t, completed: !t.completed } : t)) }
           : old
       );
-      return { prev };
+      return { prev, key };
     },
     onError: (_err, _todo, ctx) => {
-      if (ctx?.prev) qc.setQueryData(["todos"], ctx.prev);
+      if (ctx?.prev) qc.setQueryData([ctx.key], ctx.prev);
     },
-    onSettled: () => qc.invalidateQueries({ queryKey: ["todos"] }),
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["todos"] });
+      qc.invalidateQueries({ queryKey: ["personal-todos"] });
+    },
   });
 }
 
