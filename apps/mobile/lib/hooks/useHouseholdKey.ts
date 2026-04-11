@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getCachedHouseholdKey, cacheHouseholdKey } from "../crypto/household-key-cache";
+import { getCachedHouseholdKey, cacheHouseholdKey, loadHouseholdKeyFromStorage } from "../crypto/household-key-cache";
 import { getDeviceKeys } from "../crypto/device-storage";
 import { openSealedHK, base64ToSealed } from "../crypto/seal";
 import { api } from "../api/client";
@@ -19,8 +19,8 @@ export function useHouseholdKey(householdId: string | null) {
       return;
     }
 
-    // Check cache first
-    const cached = getCachedHouseholdKey(householdId);
+    // Check in-memory cache first, then persistent storage
+    const cached = getCachedHouseholdKey(householdId) ?? await loadHouseholdKeyFromStorage(householdId);
     if (cached) {
       setKey(cached);
       setLoading(false);
