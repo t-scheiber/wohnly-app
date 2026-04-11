@@ -1,6 +1,12 @@
 # Tauri desktop build artifacts (several GB)
 apps/desktop/tauri/target
+apps/desktop/tauri/target/
+**/tauri/target
+**/tauri/target/
 apps/desktop/tauri/gen
+apps/desktop/msix-output
+apps/desktop/msix-staging
+android-screenshots
 
 # Git and CI
 .git

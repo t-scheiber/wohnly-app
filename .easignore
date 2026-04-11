@@ -1,15 +1,29 @@
 # Tauri desktop build artifacts (several GB)
-apps/desktop/tauri/target
-apps/desktop/tauri/gen
+apps/desktop/tauri/target/
+apps/desktop/tauri/gen/
+apps/desktop/msix-output/
+apps/desktop/msix-staging/
+# Also match as glob
+**/tauri/target/
+**/msix-output/
+**/msix-staging/
 
 # Git and CI
-.git
-.github
-.claude
+.git/
+.github/
+.claude/
 
 # Build outputs
-apps/mobile/dist
-apps/mobile/.expo
+apps/mobile/dist/
+apps/mobile/.expo/
+
+# Screenshots and assets not needed for build
+android-screenshots/
+msstorelistings/
+
+# Rust build cache if any
+**/target/release/
+**/target/debug/
 
 # Docs
 *.md

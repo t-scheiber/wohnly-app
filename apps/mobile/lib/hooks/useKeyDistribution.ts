@@ -9,7 +9,7 @@
  * 4. Seal the key to those devices and upload
  */
 import { useEffect } from "react";
-import { getCachedHouseholdKey } from "@/lib/crypto/household-key-cache";
+import { getCachedHouseholdKey, loadHouseholdKeyFromStorage } from "@/lib/crypto/household-key-cache";
 import { getDeviceKeys } from "@/lib/crypto/device-storage";
 import { distributeKeyToDevice, fetchAndCacheHouseholdKey } from "@/lib/crypto/e2ee-setup";
 import { setActiveHouseholdId } from "@/lib/crypto/active-household";
@@ -31,13 +31,19 @@ export function useKeyDistribution() {
 
     (async () => {
       try {
-        // First, ensure we have the household key
+        // First, try in-memory cache, then persistent storage, then fetch from server
         let hk = getCachedHouseholdKey(householdId);
+        if (!hk) {
+          hk = await loadHouseholdKeyFromStorage(householdId);
+        }
         if (!hk) {
           await fetchAndCacheHouseholdKey(householdId);
           hk = getCachedHouseholdKey(householdId);
         }
-        if (!hk) return; // We don't have the key — nothing to distribute
+        if (!hk) {
+          console.log("[useKeyDistribution] No household key available — waiting for key distribution");
+          return;
+        }
 
         const deviceKeys = await getDeviceKeys();
         if (!deviceKeys) return;
