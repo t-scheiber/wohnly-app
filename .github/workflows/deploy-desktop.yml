@@ -213,12 +213,24 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
 
-          # Find the .app bundle
-          APP=$(find artifacts/macos -name '*.app' -type d | head -1)
-          if [ -z "$APP" ]; then
-            echo "Error: No .app found in artifacts"
+          # Extract .app from DMG
+          DMG=$(find artifacts/macos -name '*.dmg' | head -1)
+          if [ -z "$DMG" ]; then
+            echo "Error: No .dmg found in artifacts"
             exit 1
           fi
+          echo "Mounting DMG: $DMG"
+          hdiutil attach "$DMG" -nobrowse -mountpoint /tmp/wohnly-dmg
+          APP=$(find /tmp/wohnly-dmg -name '*.app' -type d -maxdepth 1 | head -1)
+          if [ -z "$APP" ]; then
+            echo "Error: No .app found in DMG"
+            hdiutil detach /tmp/wohnly-dmg
+            exit 1
+          fi
+          # Copy to writable location
+          cp -R "$APP" ./Wohnly.app
+          hdiutil detach /tmp/wohnly-dmg
+          APP="./Wohnly.app"
           echo "Found app: $APP"
 
           # Find the MAS signing identities
