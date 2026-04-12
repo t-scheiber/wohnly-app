@@ -15,7 +15,9 @@
     "noResults": "कुछ नहीं मिला",
     "pullToRefresh": "रिफ्रेश के लिए नीचे खींचो",
     "seeAll": "सभी देखें",
-    "gotIt": "समझ गया"
+    "gotIt": "समझ गया",
+    "downloadOnThe": "डाउनलोड करें",
+    "getItFrom": "इसे पाएं"
   },
   "auth": {
     "signIn": "साइन इन",

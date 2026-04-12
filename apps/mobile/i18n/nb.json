@@ -15,7 +15,9 @@
     "noResults": "Ingen resultater funnet",
     "pullToRefresh": "Dra ned for å oppdatere",
     "seeAll": "Se alle",
-    "gotIt": "Skjønner"
+    "gotIt": "Skjønner",
+    "downloadOnThe": "Last ned på",
+    "getItFrom": "Få den fra"
   },
   "auth": {
     "signIn": "Logg inn",

@@ -15,7 +15,9 @@
     "noResults": "Tuloksia ei löytynyt",
     "pullToRefresh": "Vedä päivittääksesi",
     "seeAll": "Näytä kaikki",
-    "gotIt": "Selvä"
+    "gotIt": "Selvä",
+    "downloadOnThe": "Lataa",
+    "getItFrom": "Hanki se"
   },
   "auth": {
     "signIn": "Kirjaudu sisään",

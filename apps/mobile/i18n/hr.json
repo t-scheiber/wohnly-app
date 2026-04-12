@@ -15,7 +15,9 @@
     "noResults": "Nema rezultata",
     "pullToRefresh": "Povuci za osvježavanje",
     "seeAll": "Prikaži sve",
-    "gotIt": "Razumijem"
+    "gotIt": "Razumijem",
+    "downloadOnThe": "Preuzmite na",
+    "getItFrom": "Nabavite na"
   },
   "auth": {
     "signIn": "Prijavi se",

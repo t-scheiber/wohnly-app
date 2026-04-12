@@ -15,7 +15,9 @@
     "noResults": "Nenhum resultado encontrado",
     "pullToRefresh": "Puxa para atualizar",
     "seeAll": "Ver tudo",
-    "gotIt": "Entendi"
+    "gotIt": "Entendi",
+    "downloadOnThe": "Baixe na",
+    "getItFrom": "Obtenha na"
   },
   "auth": {
     "signIn": "Entrar",

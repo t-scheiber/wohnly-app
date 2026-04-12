@@ -15,7 +15,9 @@
     "noResults": "কিছু পাওয়া যায়নি",
     "pullToRefresh": "রিফ্রেশ করতে টানো",
     "seeAll": "সব দেখুন",
-    "gotIt": "বুঝেছি"
+    "gotIt": "বুঝেছি",
+    "downloadOnThe": "ডাউনলোড করুন",
+    "getItFrom": "পান এখান থেকে"
   },
   "auth": {
     "signIn": "সাইন ইন",

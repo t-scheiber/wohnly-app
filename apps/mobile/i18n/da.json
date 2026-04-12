@@ -15,7 +15,9 @@
     "noResults": "Ingen resultater fundet",
     "pullToRefresh": "Træk ned for at opdatere",
     "seeAll": "Se alle",
-    "gotIt": "Forstået"
+    "gotIt": "Forstået",
+    "downloadOnThe": "Download på",
+    "getItFrom": "Hent den fra"
   },
   "auth": {
     "signIn": "Log ind",

@@ -15,7 +15,9 @@
     "noResults": "Tulemusi ei leitud",
     "pullToRefresh": "Tõmba alla, et värskendada",
     "seeAll": "Vaata kõiki",
-    "gotIt": "Selge"
+    "gotIt": "Selge",
+    "downloadOnThe": "Laadi alla",
+    "getItFrom": "Hangi see"
   },
   "auth": {
     "signIn": "Logi sisse",

@@ -15,7 +15,9 @@
     "noResults": "Tiada hasil dijumpai",
     "pullToRefresh": "Tarik untuk muat semula",
     "seeAll": "Lihat semua",
-    "gotIt": "Faham"
+    "gotIt": "Faham",
+    "downloadOnThe": "Muat turun di",
+    "getItFrom": "Dapatkan di"
   },
   "auth": {
     "signIn": "Log Masuk",

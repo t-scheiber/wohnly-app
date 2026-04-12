@@ -15,7 +15,9 @@
     "noResults": "Geen resultaten gevonden",
     "pullToRefresh": "Trek om te vernieuwen",
     "seeAll": "Alles bekijken",
-    "gotIt": "Begrepen"
+    "gotIt": "Begrepen",
+    "downloadOnThe": "Download in de",
+    "getItFrom": "Verkrijgbaar in de"
   },
   "auth": {
     "signIn": "Inloggen",

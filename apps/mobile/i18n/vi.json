@@ -15,7 +15,9 @@
     "noResults": "Không tìm thấy kết quả",
     "pullToRefresh": "Kéo xuống để làm mới",
     "seeAll": "Xem tất cả",
-    "gotIt": "Hiểu rồi"
+    "gotIt": "Hiểu rồi",
+    "downloadOnThe": "Tải về trên",
+    "getItFrom": "Tải từ"
   },
   "auth": {
     "signIn": "Đăng nhập",
