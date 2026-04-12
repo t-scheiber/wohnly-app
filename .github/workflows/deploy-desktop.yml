@@ -431,8 +431,8 @@ jobs:
 
             | Platform | Download |
             |---|---|
-            | macOS | [Wohnly-macOS.dmg](https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-macOS.dmg) |
-            | Windows | [Get it from the Microsoft Store](https://apps.microsoft.com/detail/9P5JTRSRMJPB) |
+            | macOS | [Mac App Store](https://apps.apple.com/app/wohnly/id6761035211) |
+            | Windows | [Microsoft Store](https://apps.microsoft.com/detail/9P5JTRSRMJPB) |
           files: |
             artifacts/release/Wohnly-macOS.dmg
             artifacts/release/Wohnly-macOS.app.tar.gz

@@ -15,7 +15,9 @@
     "noResults": "No results found",
     "pullToRefresh": "Pull to refresh",
     "seeAll": "See All",
-    "gotIt": "Got it"
+    "gotIt": "Got it",
+    "downloadOnThe": "Download on the",
+    "getItFrom": "Get it from"
   },
   "auth": {
     "signIn": "Sign In",

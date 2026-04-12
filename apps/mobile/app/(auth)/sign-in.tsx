@@ -57,7 +57,7 @@ function MacLogo({ size = 16, color = "currentColor" }: { size?: number; color?:
   );
 }
 
-const MACOS_DOWNLOAD = "https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest/Wohnly-macOS.dmg";
+const MAC_APP_STORE_URL = "https://apps.apple.com/app/wohnly/id6761035211";
 const MS_STORE_URL = "https://apps.microsoft.com/detail/9P5JTRSRMJPB";
 
 function getDesktopOS(): "windows" | "mac" | null {
@@ -200,22 +200,23 @@ export default function SignInScreen() {
         {Platform.OS === "web" && !isTauri() && (() => {
           const os = getDesktopOS();
           if (!os) return null;
-          const url = os === "windows" ? MS_STORE_URL : MACOS_DOWNLOAD;
-          const label = os === "windows" ? "Get it from the Microsoft Store" : "Download for macOS";
+          const url = os === "windows" ? MS_STORE_URL : MAC_APP_STORE_URL;
+          const subtitle = os === "windows" ? t("common.getItFrom") : t("common.downloadOnThe");
+          const storeName = os === "windows" ? "Microsoft Store" : "Mac App Store";
           const Logo = os === "windows" ? WindowsLogo : MacLogo;
           return (
             <View style={styles.downloadSection}>
               <View style={[styles.downloadDivider, { backgroundColor: colors.border }]} />
-              <Text style={[styles.downloadLabel, { color: colors.textSecondary }]}>
-                Get the desktop app
-              </Text>
               <TouchableOpacity
                 onPress={() => { if (typeof window !== "undefined") window.open(url, "_blank"); }}
-                activeOpacity={0.7}
-                style={[styles.downloadBtn, { borderColor: colors.border }]}
+                activeOpacity={0.8}
+                style={styles.storeBadge}
               >
-                <Logo size={16} color={colors.text} />
-                <Text style={[styles.downloadBtnText, { color: colors.text }]}>{label}</Text>
+                <Logo size={20} color="#fff" />
+                <View>
+                  <Text style={styles.storeBadgeSubtitle}>{subtitle}</Text>
+                  <Text style={styles.storeBadgeTitle}>{storeName}</Text>
+                </View>
               </TouchableOpacity>
             </View>
           );
@@ -305,22 +306,27 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 20,
   },
-  downloadLabel: {
-    fontSize: 13,
-    marginBottom: 12,
-  },
-  downloadBtn: {
+  storeBadge: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    borderWidth: 1,
+    gap: 10,
+    backgroundColor: "#000",
     borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: "#333",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
-  downloadBtnText: {
-    fontSize: 14,
-    fontWeight: "500",
+  storeBadgeSubtitle: {
+    color: "#ccc",
+    fontSize: 10,
+    fontWeight: "400",
+    lineHeight: 13,
+  },
+  storeBadgeTitle: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    lineHeight: 20,
   },
 });
