@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicedoc/nice-lsp/master/schemas/tauri.schema.json",
   "productName": "Wohnly",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "identifier": "app.wohnly",
   "build": {
     "frontendDist": "../../mobile/dist",
