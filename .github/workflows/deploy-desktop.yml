@@ -255,6 +255,10 @@ jobs:
           </plist>
           PLIST
 
+          # Mark encryption compliance so App Store Connect skips the manual prompt
+          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool true" "$APP/Contents/Info.plist" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption true" "$APP/Contents/Info.plist"
+
           # Re-sign the .app with MAS certificate
           codesign --deep --force --options runtime \
             --sign "$MAS_APP_IDENTITY" \
