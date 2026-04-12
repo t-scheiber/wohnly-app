@@ -15,7 +15,9 @@
     "noResults": "Walang resulta",
     "pullToRefresh": "Hilahin para i-refresh",
     "seeAll": "Tingnan lahat",
-    "gotIt": "Sige"
+    "gotIt": "Sige",
+    "downloadOnThe": "I-download sa",
+    "getItFrom": "Kunin sa"
   },
   "auth": {
     "signIn": "Mag-sign In",

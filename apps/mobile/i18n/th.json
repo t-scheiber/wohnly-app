@@ -15,7 +15,9 @@
     "noResults": "ไม่พบผลลัพธ์",
     "pullToRefresh": "ดึงลงเพื่อรีเฟรช",
     "seeAll": "ดูทั้งหมด",
-    "gotIt": "เข้าใจแล้ว"
+    "gotIt": "เข้าใจแล้ว",
+    "downloadOnThe": "ดาวน์โหลดบน",
+    "getItFrom": "รับได้จาก"
   },
   "auth": {
     "signIn": "เข้าสู่ระบบ",

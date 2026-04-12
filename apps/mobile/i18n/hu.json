@@ -15,7 +15,9 @@
     "noResults": "Nincs találat",
     "pullToRefresh": "Húzd le a frissítéshez",
     "seeAll": "Összes megtekintése",
-    "gotIt": "Értem"
+    "gotIt": "Értem",
+    "downloadOnThe": "Töltsd le az",
+    "getItFrom": "Szerezd be a"
   },
   "auth": {
     "signIn": "Bejelentkezés",

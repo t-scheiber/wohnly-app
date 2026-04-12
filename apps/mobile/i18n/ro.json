@@ -15,7 +15,9 @@
     "noResults": "Niciun rezultat găsit",
     "pullToRefresh": "Trage pentru a reîmprospăta",
     "seeAll": "Vezi tot",
-    "gotIt": "Am înțeles"
+    "gotIt": "Am înțeles",
+    "downloadOnThe": "Descarcă din",
+    "getItFrom": "Obține-l din"
   },
   "auth": {
     "signIn": "Autentificare",

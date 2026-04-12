@@ -15,7 +15,9 @@
     "noResults": "Rezultatų nerasta",
     "pullToRefresh": "Patrauk žemyn, kad atnaujintum",
     "seeAll": "Žiūrėti viską",
-    "gotIt": "Supratau"
+    "gotIt": "Supratau",
+    "downloadOnThe": "Atsisiųskite iš",
+    "getItFrom": "Gaukite iš"
   },
   "auth": {
     "signIn": "Prisijungti",

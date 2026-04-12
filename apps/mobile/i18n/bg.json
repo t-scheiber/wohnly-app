@@ -15,7 +15,9 @@
     "noResults": "Няма намерени резултати",
     "pullToRefresh": "Дръпни за опресняване",
     "seeAll": "Виж всички",
-    "gotIt": "Разбрах"
+    "gotIt": "Разбрах",
+    "downloadOnThe": "Изтегли от",
+    "getItFrom": "Вземи го от"
   },
   "auth": {
     "signIn": "Вход",

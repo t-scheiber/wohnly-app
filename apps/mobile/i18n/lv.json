@@ -15,7 +15,9 @@
     "noResults": "Nav rezultātu",
     "pullToRefresh": "Velc uz leju, lai atjauninātu",
     "seeAll": "Skatīt visu",
-    "gotIt": "Sapratu"
+    "gotIt": "Sapratu",
+    "downloadOnThe": "Lejupielādēt no",
+    "getItFrom": "Iegūstiet to no"
   },
   "auth": {
     "signIn": "Pieslēgties",

@@ -15,7 +15,9 @@
     "noResults": "Nic jsme nenašli",
     "pullToRefresh": "Potáhni pro obnovení",
     "seeAll": "Zobrazit vše",
-    "gotIt": "Rozumím"
+    "gotIt": "Rozumím",
+    "downloadOnThe": "Stáhněte na",
+    "getItFrom": "Získejte z"
   },
   "auth": {
     "signIn": "Přihlásit se",

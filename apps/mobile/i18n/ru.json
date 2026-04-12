@@ -15,7 +15,9 @@
     "noResults": "Ничего не найдено",
     "pullToRefresh": "Потяни для обновления",
     "seeAll": "Смотреть все",
-    "gotIt": "Понятно"
+    "gotIt": "Понятно",
+    "downloadOnThe": "Загрузите в",
+    "getItFrom": "Получите в"
   },
   "auth": {
     "signIn": "Войти",

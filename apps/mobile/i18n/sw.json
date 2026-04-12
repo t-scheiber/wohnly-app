@@ -15,7 +15,9 @@
     "noResults": "Hakuna matokeo",
     "pullToRefresh": "Vuta ili upakie upya",
     "seeAll": "Ona zote",
-    "gotIt": "Sawa"
+    "gotIt": "Sawa",
+    "downloadOnThe": "Pakua kwenye",
+    "getItFrom": "Ipate kwenye"
   },
   "auth": {
     "signIn": "Ingia",

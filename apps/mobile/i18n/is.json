@@ -15,7 +15,9 @@
     "noResults": "Engar niðurstöður fundust",
     "pullToRefresh": "Dragðu niður til að uppfæra",
     "seeAll": "Sjá allt",
-    "gotIt": "Skil"
+    "gotIt": "Skil",
+    "downloadOnThe": "Hlaðið niður á",
+    "getItFrom": "Fáðu það á"
   },
   "auth": {
     "signIn": "Skrá inn",

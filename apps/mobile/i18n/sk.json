@@ -15,7 +15,9 @@
     "noResults": "Nič sme nenašli",
     "pullToRefresh": "Potiahni pre obnovenie",
     "seeAll": "Zobraziť všetko",
-    "gotIt": "Rozumiem"
+    "gotIt": "Rozumiem",
+    "downloadOnThe": "Stiahnite na",
+    "getItFrom": "Získajte z"
   },
   "auth": {
     "signIn": "Prihlásiť sa",

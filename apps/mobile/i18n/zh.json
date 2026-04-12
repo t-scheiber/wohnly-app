@@ -15,7 +15,9 @@
     "noResults": "没有找到结果",
     "pullToRefresh": "下拉刷新",
     "seeAll": "查看全部",
-    "gotIt": "知道了"
+    "gotIt": "知道了",
+    "downloadOnThe": "下载于",
+    "getItFrom": "获取自"
   },
   "auth": {
     "signIn": "登录",

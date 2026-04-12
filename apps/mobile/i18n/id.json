@@ -15,7 +15,9 @@
     "noResults": "Tidak ada hasil",
     "pullToRefresh": "Tarik untuk memperbarui",
     "seeAll": "Lihat semua",
-    "gotIt": "Mengerti"
+    "gotIt": "Mengerti",
+    "downloadOnThe": "Unduh di",
+    "getItFrom": "Dapatkan di"
   },
   "auth": {
     "signIn": "Masuk",

@@ -15,7 +15,9 @@
     "noResults": "Sonuç bulunamadı",
     "pullToRefresh": "Yenilemek için aşağı çek",
     "seeAll": "Tümünü gör",
-    "gotIt": "Anladım"
+    "gotIt": "Anladım",
+    "downloadOnThe": "Şuradan indir:",
+    "getItFrom": "Şuradan edin:"
   },
   "auth": {
     "signIn": "Giriş Yap",
