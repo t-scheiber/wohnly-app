@@ -95,16 +95,20 @@ function createIco(pngBuffers) {
 writeFileSync(resolve(OUT, 'icon.ico'), createIco(icoBuffers));
 console.log('Generated icon.ico');
 
-// Generate .icns (simplified — just embed 512x512 PNG in icns container)
+// Generate .icns (512x512 + 1024x1024 PNGs in icns container)
 const png512 = await sharp(SOURCE).resize(512, 512).png().toBuffer();
+const png1024 = await sharp(SOURCE).resize(1024, 1024).png().toBuffer();
 const icnsType = Buffer.from('icns');
 const ic09 = Buffer.from('ic09'); // 512x512 PNG
-const entrySize = Buffer.alloc(4);
-entrySize.writeUInt32BE(png512.length + 8);
+const ic09Size = Buffer.alloc(4);
+ic09Size.writeUInt32BE(png512.length + 8);
+const ic10 = Buffer.from('ic10'); // 512x512@2x (1024x1024) PNG
+const ic10Size = Buffer.alloc(4);
+ic10Size.writeUInt32BE(png1024.length + 8);
 const totalSize = Buffer.alloc(4);
-totalSize.writeUInt32BE(png512.length + 8 + 8);
-const icnsData = Buffer.concat([icnsType, totalSize, ic09, entrySize, png512]);
+totalSize.writeUInt32BE(8 + (png512.length + 8) + (png1024.length + 8));
+const icnsData = Buffer.concat([icnsType, totalSize, ic09, ic09Size, png512, ic10, ic10Size, png1024]);
 writeFileSync(resolve(OUT, 'icon.icns'), icnsData);
-console.log('Generated icon.icns');
+console.log('Generated icon.icns (512x512 + 1024x1024)');
 
 console.log('All Tauri icons generated.');
