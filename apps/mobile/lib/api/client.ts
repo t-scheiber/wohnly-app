@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { authClient } from "../auth/client";
 import { isTauri, getTauriSessionToken } from "../auth/tauri";
 
-const API_BASE = Constants.expoConfig?.extra?.apiUrl ?? "http://localhost:3001";
+const API_BASE = Constants.expoConfig?.extra?.apiUrl ?? "https://api.wohnly.app";
 
 /** Regular web (not Tauri, not native) uses browser cookies */
 const isRegularWeb = Platform.OS === "web" && !isTauri();

@@ -8,7 +8,7 @@ import {
   COOKIE_STORAGE_KEY,
 } from "./tauri";
 
-const apiUrl = Constants.expoConfig?.extra?.apiUrl ?? "http://localhost:3001";
+const apiUrl = Constants.expoConfig?.extra?.apiUrl ?? "https://api.wohnly.app";
 
 /**
  * Check isTauri at runtime (not module init) because __TAURI_INTERNALS__

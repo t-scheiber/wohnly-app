@@ -20,12 +20,15 @@ export async function encryptData(
   }
 
   const nonce = s.randombytes_buf(s.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
-  const message = new TextEncoder().encode(plaintext);
-  const ad = associatedData ? new TextEncoder().encode(associatedData) : null;
 
+  // Pass plaintext as string directly — both libsodium-wrappers (web) and
+  // react-native-libsodium (native) accept string inputs and handle encoding
+  // internally.  Using TextEncoder().encode() produces a Uint8Array subclass
+  // that react-native-libsodium's JSI bridge does not recognise on some
+  // devices (iPad M3 / iPadOS 26), causing "input type not yet implemented".
   const ciphertext = s.crypto_aead_xchacha20poly1305_ietf_encrypt(
-    message,
-    ad,
+    plaintext,
+    associatedData ?? null,
     null, // nsec (not used)
     nonce,
     householdKey
@@ -51,7 +54,7 @@ export async function decryptData(
 
   const ciphertext = s.from_base64(cipherBase64);
   const nonce = s.from_base64(nonceBase64);
-  const ad = associatedData ? new TextEncoder().encode(associatedData) : null;
+  const ad = associatedData ?? null;
 
   try {
     const decrypted = s.crypto_aead_xchacha20poly1305_ietf_decrypt(
