@@ -12,7 +12,7 @@ const API_KEYS = {
 export async function initRevenueCat(userId: string) {
   if (Platform.OS === "web") return; // RevenueCat is mobile-only
 
-  Purchases.setLogLevel(LOG_LEVEL.DEBUG);
+  Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.DEBUG : LOG_LEVEL.ERROR);
 
   const apiKey = Platform.select({
     ios: API_KEYS.ios,

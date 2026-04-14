@@ -38,6 +38,7 @@ yarn-error.*
 # Service account keys
 google-service-account.json
 wohnly-app-*.json
+eas-submit_serviceaccount.json
 
 # typescript
 *.tsbuildinfo

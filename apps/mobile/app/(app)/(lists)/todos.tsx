@@ -8,6 +8,7 @@ import {
   RefreshControl,
   Modal,
   Pressable,
+  Alert,
 } from "react-native";
 import { useTodos, usePersonalTodos, useCreateTodo, useToggleTodo, useDeleteTodo, useUpdateTodo, useClearCompletedTodos } from "@/lib/api/queries";
 import { AdBanner } from "@/components/common/AdBanner";
@@ -62,12 +63,16 @@ export default function TodosScreen() {
 
   const handleAdd = async () => {
     if (!newTitle.trim()) return;
-    await createTodo.mutateAsync({
-      title: newTitle.trim(),
-      isPersonal: tab === "personal",
-    });
-    setNewTitle("");
-    notifySuccess();
+    try {
+      await createTodo.mutateAsync({
+        title: newTitle.trim(),
+        isPersonal: tab === "personal",
+      });
+      setNewTitle("");
+      notifySuccess();
+    } catch (err) {
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+    }
   };
 
   const handleToggle = (todo: Todo) => {
@@ -299,6 +304,7 @@ export default function TodosScreen() {
             backgroundColor: newTitle.trim() ? colors.primary : colors.muted,
             borderRadius: 8,
             paddingHorizontal: 16,
+            paddingVertical: 10,
             justifyContent: "center",
           }}
         >

@@ -8,6 +8,7 @@ import {
   RefreshControl,
   Modal,
   Pressable,
+  Alert,
 } from "react-native";
 import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem, useUpdateShoppingItem, useClearCheckedShopping, useShoppingSuggestions } from "@/lib/api/queries";
 import { ScrollView } from "react-native";
@@ -65,12 +66,16 @@ export default function ShoppingScreen() {
 
   const handleAdd = async () => {
     if (!newItem.trim()) return;
-    await createItem.mutateAsync({
-      name: newItem.trim(),
-      isPersonal: tab === "personal",
-    });
-    setNewItem("");
-    notifySuccess();
+    try {
+      await createItem.mutateAsync({
+        name: newItem.trim(),
+        isPersonal: tab === "personal",
+      });
+      setNewItem("");
+      notifySuccess();
+    } catch (err) {
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+    }
   };
 
   const handleToggle = (item: ShoppingItem) => {
@@ -331,6 +336,7 @@ export default function ShoppingScreen() {
             backgroundColor: newItem.trim() ? colors.primary : colors.muted,
             borderRadius: 8,
             paddingHorizontal: 16,
+            paddingVertical: 10,
             justifyContent: "center",
           }}
         >

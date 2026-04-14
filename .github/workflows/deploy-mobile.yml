@@ -74,7 +74,7 @@ jobs:
 
       - name: Write Google Service Account key
         if: inputs.submit && (inputs.platform == 'android' || inputs.platform == 'all')
-        run: echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_B64 }}" | base64 -d > apps/mobile/google-service-account.json
+        run: echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_B64 }}" | base64 -d > eas-submit_serviceaccount.json
 
       - name: Submit Android to Play Store
         if: inputs.submit && (inputs.platform == 'android' || inputs.platform == 'all')

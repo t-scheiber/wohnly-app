@@ -122,7 +122,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     if (isPending) return;
 
     const inAuthGroup = segments[0] === "(auth)";
-    const isPublicPage = segments[0] === "privacy-policy";
+    const isPublicPage = segments[0] === "privacy-policy" || (segments[0] as string) === "support";
 
     if (!session && !inAuthGroup && !isPublicPage) {
       router.replace("/(auth)/sign-in");

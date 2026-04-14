@@ -16,6 +16,8 @@
       "infoPlist": {
         "NSCalendarsUsageDescription": "Wohnly needs calendar access to sync your household events.",
         "NSCalendarsFullAccessUsageDescription": "Wohnly needs calendar access to sync your household events.",
+        "NSCameraUsageDescription": "Wohnly uses the camera to scan receipts and attach photos to expenses, so you can keep a visual record of your household spending.",
+        "NSPhotoLibraryUsageDescription": "Wohnly accesses your photo library to let you attach existing receipt photos or images to expenses for record-keeping.",
         "ITSAppUsesNonExemptEncryption": false,
         "UIRequiredDeviceCapabilities": []
       },
