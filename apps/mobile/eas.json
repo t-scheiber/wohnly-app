@@ -30,8 +30,8 @@
         "ascApiKeyId": "C5QRM2S8XQ"
       },
       "android": {
-        "serviceAccountKeyPath": "./google-service-account.json",
-        "track": "internal"
+        "serviceAccountKeyPath": "../../eas-submit_serviceaccount.json",
+        "track": "production"
       }
     }
   }
