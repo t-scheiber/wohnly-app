@@ -329,21 +329,22 @@ export default function ShoppingScreen() {
             borderColor: colors.border,
           }}
         />
-        <TouchableOpacity
+        <Pressable
           onPress={handleAdd}
           disabled={!newItem.trim()}
-          style={{
+          style={({ pressed }) => ({
             backgroundColor: newItem.trim() ? colors.primary : colors.muted,
             borderRadius: 8,
             paddingHorizontal: 16,
             paddingVertical: 10,
-            justifyContent: "center",
-          }}
+            justifyContent: "center" as const,
+            opacity: pressed ? 0.8 : 1,
+          })}
         >
           <Text style={{ color: newItem.trim() ? colors.primaryForeground : colors.textSecondary, fontWeight: "600" }}>
             {t("common.add")}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Edit modal */}

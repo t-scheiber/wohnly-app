@@ -6,12 +6,14 @@
 import { useState, useEffect } from "react";
 import { Platform } from "react-native";
 
+let MobileAds: any = null;
 let AdsConsent: any = null;
 let AdsConsentStatus: any = null;
 
 if (Platform.OS !== "web") {
   try {
     const ads = require("react-native-google-mobile-ads");
+    MobileAds = ads.default ?? ads.MobileAds;
     AdsConsent = ads.AdsConsent;
     AdsConsentStatus = ads.AdsConsentStatus;
   } catch {}
@@ -28,6 +30,11 @@ export function useConsent() {
 
     (async () => {
       try {
+        // Initialize the Google Mobile Ads SDK before any ad operations
+        if (MobileAds) {
+          await MobileAds().initialize();
+        }
+
         // Request consent info update
         const consentInfo = await AdsConsent.requestInfoUpdate();
 
@@ -41,7 +48,7 @@ export function useConsent() {
 
         setConsentReady(true);
       } catch {
-        // Consent failed — still allow app to function, just don't show personalized ads
+        // Consent or ads init failed — still allow app to function
         setConsentReady(true);
       }
     })();

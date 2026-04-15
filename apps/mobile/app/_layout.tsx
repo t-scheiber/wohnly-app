@@ -1,6 +1,6 @@
 import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Modal, Pressable, Alert, Platform } from "react-native";
+import { View, Text, TextInput, Pressable, Modal, Alert, Platform } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView as _GestureHandlerRootView } from "react-native-gesture-handler";
@@ -74,21 +74,21 @@ function NamePromptModal({ colorScheme, onComplete }: { colorScheme: "light" | "
             }}
             onSubmitEditing={handleSave}
           />
-          <TouchableOpacity
+          <Pressable
             onPress={handleSave}
             disabled={saving || !name.trim()}
-            style={{
+            style={({ pressed }) => ({
               backgroundColor: colors.primary,
               borderRadius: 12,
               padding: 16,
-              alignItems: "center",
-              opacity: saving || !name.trim() ? 0.5 : 1,
-            }}
+              alignItems: "center" as const,
+              opacity: saving || !name.trim() ? 0.5 : pressed ? 0.8 : 1,
+            })}
           >
             <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "700" }}>
               {saving ? "Saving..." : "Continue"}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </Modal>

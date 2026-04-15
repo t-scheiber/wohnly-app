@@ -292,16 +292,17 @@ export default function DevicesScreen() {
               onSubmitEditing={handleSaveRename}
             />
             <View style={{ flexDirection: "row", gap: 12 }}>
-              <TouchableOpacity
+              <Pressable
                 onPress={() => setRenameModalOpen(false)}
-                style={{
+                style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: colors.border,
-                  alignItems: "center",
-                }}
+                  alignItems: "center" as const,
+                  opacity: pressed ? 0.7 : 1,
+                })}
               >
                 <Text
                   style={{
@@ -312,19 +313,19 @@ export default function DevicesScreen() {
                 >
                   {t("common.cancel")}
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </Pressable>
+              <Pressable
                 onPress={handleSaveRename}
                 disabled={renameDevice.isPending || !renameValue.trim()}
-                style={{
+                style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
                   borderRadius: 10,
                   backgroundColor: colors.primary,
-                  alignItems: "center",
+                  alignItems: "center" as const,
                   opacity:
-                    renameDevice.isPending || !renameValue.trim() ? 0.5 : 1,
-                }}
+                    renameDevice.isPending || !renameValue.trim() ? 0.5 : pressed ? 0.8 : 1,
+                })}
               >
                 <Text
                   style={{
@@ -335,7 +336,7 @@ export default function DevicesScreen() {
                 >
                   {t("common.save")}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </Pressable>
         </Pressable>

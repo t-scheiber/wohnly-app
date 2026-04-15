@@ -441,36 +441,37 @@ export default function SettingsScreen() {
                       </Text>
                     </View>
                     <View style={{ flexDirection: "row", gap: 8 }}>
-                      <TouchableOpacity
+                      <Pressable
                         onPress={() => handleApproveDevice(device.id, device.publicKey)}
                         disabled={approveDevice.isPending}
-                        style={{
+                        style={({ pressed }) => ({
                           backgroundColor: colors.primary,
                           borderRadius: 8,
                           paddingHorizontal: 12,
                           paddingVertical: 6,
-                          opacity: approveDevice.isPending ? 0.5 : 1,
-                        }}
+                          opacity: approveDevice.isPending ? 0.5 : pressed ? 0.8 : 1,
+                        })}
                       >
                         <Text style={{ color: colors.primaryForeground, fontSize: 13, fontWeight: "600" }}>
                           {t("settings.approveDevice")}
                         </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
+                      </Pressable>
+                      <Pressable
                         onPress={() => handleRejectDevice(device.id)}
                         disabled={rejectDevice.isPending}
-                        style={{
+                        style={({ pressed }) => ({
                           borderWidth: 1,
                           borderColor: colors.destructive,
                           borderRadius: 8,
                           paddingHorizontal: 12,
                           paddingVertical: 6,
-                        }}
+                          opacity: rejectDevice.isPending ? 0.5 : pressed ? 0.8 : 1,
+                        })}
                       >
                         <Text style={{ color: colors.destructive, fontSize: 13, fontWeight: "600" }}>
                           {t("settings.rejectDevice")}
                         </Text>
-                      </TouchableOpacity>
+                      </Pressable>
                     </View>
                   </View>
                 </View>
@@ -674,26 +675,26 @@ export default function SettingsScreen() {
               onSubmitEditing={handleSaveName}
             />
             <View style={{ flexDirection: "row", gap: 12 }}>
-              <TouchableOpacity
+              <Pressable
                 onPress={() => setNameModalOpen(false)}
-                style={{ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.border, alignItems: "center" }}
+                style={({ pressed }) => ({ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.border, alignItems: "center" as const, opacity: pressed ? 0.7 : 1 })}
               >
                 <Text style={{ color: colors.textSecondary, fontSize: 16, fontWeight: "600" }}>{t("common.cancel")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </Pressable>
+              <Pressable
                 onPress={handleSaveName}
                 disabled={savingName || !editName.trim()}
-                style={{
+                style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
                   borderRadius: 10,
                   backgroundColor: colors.primary,
-                  alignItems: "center",
-                  opacity: savingName || !editName.trim() ? 0.5 : 1,
-                }}
+                  alignItems: "center" as const,
+                  opacity: savingName || !editName.trim() ? 0.5 : pressed ? 0.8 : 1,
+                })}
               >
                 <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "600" }}>{t("common.save")}</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </Pressable>
         </Pressable>
@@ -730,38 +731,38 @@ export default function SettingsScreen() {
             />
             <View style={{ flexDirection: "row", gap: 12 }}>
               {nicknameValue !== "" && (
-                <TouchableOpacity
+                <Pressable
                   onPress={() => {
                     setNickname.mutate(
                       { memberId: nicknameMemberId, nickname: "" },
                       { onSuccess: () => setNicknameModalOpen(false) }
                     );
                   }}
-                  style={{ padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.destructive, alignItems: "center" }}
+                  style={({ pressed }) => ({ padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.destructive, alignItems: "center" as const, opacity: pressed ? 0.7 : 1 })}
                 >
                   <Text style={{ color: colors.destructive, fontSize: 16, fontWeight: "600" }}>{t("common.delete")}</Text>
-                </TouchableOpacity>
+                </Pressable>
               )}
-              <TouchableOpacity
+              <Pressable
                 onPress={() => setNicknameModalOpen(false)}
-                style={{ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.border, alignItems: "center" }}
+                style={({ pressed }) => ({ flex: 1, padding: 14, borderRadius: 10, borderWidth: 1, borderColor: colors.border, alignItems: "center" as const, opacity: pressed ? 0.7 : 1 })}
               >
                 <Text style={{ color: colors.textSecondary, fontSize: 16, fontWeight: "600" }}>{t("common.cancel")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </Pressable>
+              <Pressable
                 onPress={handleSaveNickname}
                 disabled={setNickname.isPending || !nicknameValue.trim()}
-                style={{
+                style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
                   borderRadius: 10,
                   backgroundColor: colors.primary,
-                  alignItems: "center",
-                  opacity: setNickname.isPending || !nicknameValue.trim() ? 0.5 : 1,
-                }}
+                  alignItems: "center" as const,
+                  opacity: setNickname.isPending || !nicknameValue.trim() ? 0.5 : pressed ? 0.8 : 1,
+                })}
               >
                 <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "600" }}>{t("common.save")}</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </Pressable>
         </Pressable>
