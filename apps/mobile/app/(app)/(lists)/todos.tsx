@@ -297,21 +297,22 @@ export default function TodosScreen() {
             borderColor: colors.border,
           }}
         />
-        <TouchableOpacity
+        <Pressable
           onPress={handleAdd}
           disabled={!newTitle.trim()}
-          style={{
+          style={({ pressed }) => ({
             backgroundColor: newTitle.trim() ? colors.primary : colors.muted,
             borderRadius: 8,
             paddingHorizontal: 16,
             paddingVertical: 10,
-            justifyContent: "center",
-          }}
+            justifyContent: "center" as const,
+            opacity: pressed ? 0.8 : 1,
+          })}
         >
           <Text style={{ color: newTitle.trim() ? colors.primaryForeground : colors.textSecondary, fontWeight: "600" }}>
             {t("common.add")}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Edit modal */}

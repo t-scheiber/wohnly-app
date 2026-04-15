@@ -21,7 +21,7 @@
         "ITSAppUsesNonExemptEncryption": false,
         "UIRequiredDeviceCapabilities": []
       },
-      "buildNumber": "7",
+      "buildNumber": "8",
       "entitlements": {
         "com.apple.security.application-groups": [
           "group.app.wohnly"
@@ -43,7 +43,7 @@
         "READ_CALENDAR",
         "WRITE_CALENDAR"
       ],
-      "versionCode": 10
+      "versionCode": 15
     },
     "web": {
       "bundler": "metro",
@@ -123,8 +123,7 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": true
     },
     "extra": {
       "router": {},

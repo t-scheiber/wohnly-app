@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   Platform,
   ActivityIndicator,
@@ -21,6 +21,7 @@ import {
 } from "@/lib/auth/tauri";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTranslation } from "react-i18next";
 
 function GoogleLogo({ size = 20 }: { size?: number }) {
   return (
@@ -74,6 +75,7 @@ const HANDLED_KEY = "wohnly_deeplink_handled";
 export default function SignInScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { t } = useTranslation();
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
 
@@ -156,11 +158,10 @@ export default function SignInScreen() {
         </Text>
 
         {/* Google Sign-In */}
-        <TouchableOpacity
+        <Pressable
           onPress={() => handleSocialSignIn("google")}
-          activeOpacity={0.8}
           disabled={loadingGoogle}
-          style={styles.googleBtn}
+          style={({ pressed }) => [styles.googleBtn, { opacity: pressed ? 0.8 : 1 }]}
         >
           <View style={styles.oauthContent}>
             {loadingGoogle ? (
@@ -172,14 +173,13 @@ export default function SignInScreen() {
               </>
             )}
           </View>
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Apple Sign-In */}
-        <TouchableOpacity
+        <Pressable
           onPress={() => handleSocialSignIn("apple")}
-          activeOpacity={0.8}
           disabled={loadingApple}
-          style={styles.appleBtn}
+          style={({ pressed }) => [styles.appleBtn, { opacity: pressed ? 0.8 : 1 }]}
         >
           <View style={styles.oauthContent}>
             {loadingApple ? (
@@ -191,7 +191,7 @@ export default function SignInScreen() {
               </>
             )}
           </View>
-        </TouchableOpacity>
+        </Pressable>
 
         <Link href="/privacy-policy" style={styles.privacyLink}>
           <Text style={[styles.privacyText, { color: colors.textSecondary }]}>Privacy Policy</Text>
@@ -207,17 +207,16 @@ export default function SignInScreen() {
           return (
             <View style={styles.downloadSection}>
               <View style={[styles.downloadDivider, { backgroundColor: colors.border }]} />
-              <TouchableOpacity
+              <Pressable
                 onPress={() => { if (typeof window !== "undefined") window.open(url, "_blank"); }}
-                activeOpacity={0.8}
-                style={styles.storeBadge}
+                style={({ pressed }) => [styles.storeBadge, { opacity: pressed ? 0.8 : 1 }]}
               >
                 <Logo size={20} color="#fff" />
                 <View>
                   <Text style={styles.storeBadgeSubtitle}>{subtitle}</Text>
                   <Text style={styles.storeBadgeTitle}>{storeName}</Text>
                 </View>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           );
         })()}

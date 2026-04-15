@@ -18,6 +18,11 @@ apps/mobile/dist
 apps/mobile/.expo
 *.tsbuildinfo
 
+# Android build artifacts (prevents stale cache conflicts and reduces archive size)
+android/build
+android/app/build
+android/.gradle
+
 # Documentation
 *.md
 LICENSE

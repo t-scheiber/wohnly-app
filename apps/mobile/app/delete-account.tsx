@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Alert, Platform, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, TextInput, Pressable, Alert, Platform, ActivityIndicator } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -18,7 +18,7 @@ export default function DeleteAccountScreen() {
   const [loading, setLoading] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
-  const canDelete = confirmText.toLowerCase() === "delete my account";
+  const canDelete = confirmText.trim().toLowerCase() === "delete my account";
 
   const handleDelete = async () => {
     if (!canDelete) return;
@@ -125,16 +125,16 @@ export default function DeleteAccountScreen() {
           }}
         />
 
-        <TouchableOpacity
+        <Pressable
           onPress={handleDelete}
           disabled={!canDelete || loading}
-          style={{
+          style={({ pressed }) => ({
             backgroundColor: canDelete ? colors.destructive : colors.muted,
             borderRadius: 10,
             padding: 16,
-            alignItems: "center",
-            opacity: loading ? 0.7 : 1,
-          }}
+            alignItems: "center" as const,
+            opacity: loading ? 0.7 : pressed ? 0.8 : 1,
+          })}
         >
           {loading ? (
             <ActivityIndicator color="#fff" />
@@ -143,11 +143,11 @@ export default function DeleteAccountScreen() {
               Permanently Delete Account
             </Text>
           )}
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity onPress={() => router.back()} style={{ padding: 16, alignItems: "center", marginTop: 8 }}>
+        <Pressable onPress={() => router.back()} style={({ pressed }) => ({ padding: 16, alignItems: "center" as const, marginTop: 8, opacity: pressed ? 0.7 : 1 })}>
           <Text style={{ color: colors.primary, fontSize: 16 }}>Cancel</Text>
-        </TouchableOpacity>
+        </Pressable>
       </ScrollView>
     </>
   );
