@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Alert, Switch, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Alert, Switch, Pressable } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { MemberPicker } from "../common/MemberPicker";
@@ -8,23 +8,6 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import type { Chore } from "@wohnly/shared";
-
-const frequencies = [
-  { label: "Daily", value: "daily" },
-  { label: "Weekly", value: "weekly" },
-  { label: "Bi-weekly", value: "biweekly" },
-  { label: "Monthly", value: "monthly" },
-];
-
-const DAYS_OF_WEEK = [
-  { label: "Mon", value: 1 },
-  { label: "Tue", value: 2 },
-  { label: "Wed", value: 3 },
-  { label: "Thu", value: 4 },
-  { label: "Fri", value: 5 },
-  { label: "Sat", value: 6 },
-  { label: "Sun", value: 0 },
-];
 
 interface AddChoreFormProps {
   onSuccess?: () => void;
@@ -38,6 +21,23 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
   const { t } = useTranslation();
 
   const isEditing = !!editItem;
+
+  const frequencies = [
+    { label: t("chores.daily"), value: "daily" },
+    { label: t("chores.weekly"), value: "weekly" },
+    { label: t("chores.biweekly"), value: "biweekly" },
+    { label: t("chores.monthly"), value: "monthly" },
+  ];
+
+  const DAYS_OF_WEEK = [
+    { label: t("chores.mon"), value: 1 },
+    { label: t("chores.tue"), value: 2 },
+    { label: t("chores.wed"), value: 3 },
+    { label: t("chores.thu"), value: 4 },
+    { label: t("chores.fri"), value: 5 },
+    { label: t("chores.sat"), value: 6 },
+    { label: t("chores.sun"), value: 0 },
+  ];
 
   const [title, setTitle] = useState(editItem?.title ?? "");
   const [description, setDescription] = useState(editItem?.description ?? "");
@@ -59,7 +59,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      Alert.alert("Error", "Please enter a title");
+      Alert.alert(t("common.error"), t("chores.enterTitle"));
       return;
     }
 
@@ -81,26 +81,26 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
       }
       onSuccess?.();
     } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : `Failed to ${isEditing ? "update" : "create"} chore`);
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t(isEditing ? "chores.updateFailed" : "chores.createFailed"));
     }
   };
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
-        {isEditing ? t("chores.editChore", "Edit Chore") : t("chores.addChore")}
+        {isEditing ? t("chores.editChore") : t("chores.addChore")}
       </Text>
 
       <Input
-        label={t("chores.title") || "Title"}
-        placeholder="e.g., Clean Kitchen"
+        label={t("chores.title")}
+        placeholder={t("chores.titlePlaceholder")}
         value={title}
         onChangeText={setTitle}
       />
 
       <Input
-        label="Description (optional)"
-        placeholder="Add details..."
+        label={t("chores.description")}
+        placeholder={t("chores.descriptionPlaceholder")}
         value={description}
         onChangeText={setDescription}
         multiline
@@ -128,7 +128,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
       {showDayOfWeek && (
         <View style={{ marginBottom: 12 }}>
           <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
-            Day of Week
+            {t("chores.dayOfWeek")}
           </Text>
           <View style={{ flexDirection: "row", gap: 6 }}>
             {DAYS_OF_WEEK.map((day) => (
@@ -150,7 +150,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
       {showDayOfMonth && (
         <View style={{ marginBottom: 12 }}>
           <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
-            Day of Month
+            {t("chores.dayOfMonth")}
           </Text>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
             {[1, 5, 10, 15, 20, 25].map((d) => (
@@ -164,7 +164,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
               </Button>
             ))}
             <Input
-              placeholder="Other..."
+              placeholder={t("chores.dayOfMonthOther")}
               value={dayOfMonth && ![1, 5, 10, 15, 20, 25].includes(dayOfMonth) ? dayOfMonth.toString() : ""}
               onChangeText={(v) => {
                 const n = parseInt(v);
@@ -203,10 +203,10 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
         }}>
           <View style={{ flex: 1, marginRight: 12 }}>
             <Text style={{ fontSize: 15, fontWeight: "600", color: colors.text }}>
-              Rotate Assignees
+              {t("chores.rotateAssignees")}
             </Text>
             <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
-              Automatically alternate who does this chore each time it&apos;s completed
+              {t("chores.rotateDescription")}
             </Text>
           </View>
           <Switch
@@ -221,32 +221,32 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
       {/* Effort Weight — visual scale */}
       <View style={{ marginBottom: 12 }}>
         <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 8 }}>
-          Effort Level
+          {t("chores.effortLevel")}
         </Text>
         <View style={{ flexDirection: "row", gap: 6 }}>
           {[
-            { value: 1, label: "Trivial", emoji: "1", color: "#22c55e" },
-            { value: 2, label: "Light", emoji: "2", color: "#6db5a8" },
-            { value: 3, label: "Medium", emoji: "3", color: "#f59e0b" },
-            { value: 4, label: "Heavy", emoji: "4", color: "#f97316" },
-            { value: 5, label: "Major", emoji: "5", color: "#ef4444" },
+            { value: 1, label: t("chores.effortTrivial"), emoji: "1", color: "#22c55e" },
+            { value: 2, label: t("chores.effortLight"), emoji: "2", color: "#6db5a8" },
+            { value: 3, label: t("chores.effortMedium"), emoji: "3", color: "#f59e0b" },
+            { value: 4, label: t("chores.effortHeavy"), emoji: "4", color: "#f97316" },
+            { value: 5, label: t("chores.effortMajor"), emoji: "5", color: "#ef4444" },
           ].map((level) => {
             const isSelected = effortWeight === level.value;
             return (
-              <TouchableOpacity
+              <Pressable
                 key={level.value}
                 onPress={() => setEffortWeight(level.value)}
-                activeOpacity={0.7}
-                style={{
+                style={({ pressed }) => ({
                   flex: 1,
                   paddingVertical: 10,
                   borderRadius: 12,
                   backgroundColor: isSelected ? level.color + "18" : colors.muted,
                   borderWidth: isSelected ? 1.5 : 1,
                   borderColor: isSelected ? level.color : colors.border,
-                  alignItems: "center",
+                  alignItems: "center" as const,
                   gap: 3,
-                }}
+                  opacity: pressed ? 0.7 : 1,
+                })}
               >
                 <Text style={{ fontSize: 16, fontWeight: "800", color: isSelected ? level.color : colors.textSecondary }}>
                   {level.emoji}
@@ -258,7 +258,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
                 }}>
                   {level.label}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             );
           })}
         </View>
@@ -276,7 +276,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
           disabled={!title.trim()}
           style={{ flex: 2 }}
         >
-          {isEditing ? t("common.save", "Save") : t("chores.addChore")}
+          {isEditing ? t("common.save") : t("chores.addChore")}
         </Button>
       </View>
     </ScrollView>
