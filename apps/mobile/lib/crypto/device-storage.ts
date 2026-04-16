@@ -4,12 +4,17 @@
  * Web: IndexedDB
  *
  * The device private key NEVER leaves the device.
+ *
+ * A persistent fingerprint (UUID) is stored in a secondary backend
+ * (localStorage on web, AsyncStorage on native) so the server can
+ * recognize the same physical device even after key loss.
  */
 import { Platform } from "react-native";
 
 const DEVICE_ID_KEY = "wohnly_device_id";
 const DEVICE_PUBLIC_KEY = "wohnly_device_public_key";
 const DEVICE_PRIVATE_KEY = "wohnly_device_private_key";
+const DEVICE_FINGERPRINT_KEY = "wohnly_device_fingerprint";
 
 interface DeviceKeyStore {
   deviceId: string;
@@ -139,6 +144,43 @@ export async function hasDeviceKeys(): Promise<boolean> {
   }
   const SecureStore = await import("expo-secure-store");
   return (await SecureStore.getItemAsync(DEVICE_ID_KEY)) !== null;
+}
+
+// ── Device fingerprint (persistent across key loss) ──
+
+function generateUUID(): string {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback for environments without crypto.randomUUID
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
+/**
+ * Get or create a persistent device fingerprint.
+ * Stored in localStorage (web) or AsyncStorage (native) — a separate
+ * backend from the encryption keys so the fingerprint survives key loss.
+ */
+export async function getDeviceFingerprint(): Promise<string> {
+  if (Platform.OS === "web") {
+    let fp = localStorage.getItem(DEVICE_FINGERPRINT_KEY);
+    if (!fp) {
+      fp = generateUUID();
+      localStorage.setItem(DEVICE_FINGERPRINT_KEY, fp);
+    }
+    return fp;
+  }
+
+  const AsyncStorage = (await import("@react-native-async-storage/async-storage")).default;
+  let fp = await AsyncStorage.getItem(DEVICE_FINGERPRINT_KEY);
+  if (!fp) {
+    fp = generateUUID();
+    await AsyncStorage.setItem(DEVICE_FINGERPRINT_KEY, fp);
+  }
+  return fp;
 }
 
 export async function clearDeviceKeys(): Promise<void> {

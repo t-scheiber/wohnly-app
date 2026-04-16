@@ -11,7 +11,7 @@ app.use("*", requireAuth);
 app.post("/register", async (c) => {
   const userId = c.get("userId") as string;
   const user = c.get("user") as { id: string; name: string; email: string };
-  const { name, publicKey } = await c.req.json();
+  const { name, publicKey, fingerprint } = await c.req.json();
 
   if (!publicKey) return c.json({ error: "publicKey is required" }, 400);
 
@@ -20,7 +20,31 @@ app.post("/register", async (c) => {
     where: { userId, publicKey },
   });
   if (existingDevice) {
+    // Backfill fingerprint if missing
+    if (fingerprint && !existingDevice.fingerprint) {
+      await prisma.device.update({
+        where: { id: existingDevice.id },
+        data: { fingerprint, name: name || existingDevice.name },
+      });
+    }
     return c.json({ deviceId: existingDevice.id, status: existingDevice.status });
+  }
+
+  // Fingerprint dedup: same physical device re-registering with new keys (e.g. after key loss).
+  // Update the existing device's publicKey instead of creating a duplicate.
+  if (fingerprint) {
+    const fpDevice = await prisma.device.findFirst({
+      where: { userId, fingerprint },
+    });
+    if (fpDevice) {
+      // Delete old key envelopes — they were sealed to the old publicKey
+      await prisma.householdKeyEnvelope.deleteMany({ where: { deviceId: fpDevice.id } });
+      const updated = await prisma.device.update({
+        where: { id: fpDevice.id },
+        data: { publicKey, name: name || fpDevice.name },
+      });
+      return c.json({ deviceId: updated.id, status: updated.status });
+    }
   }
 
   // Check if user already has any approved device
@@ -36,6 +60,7 @@ app.post("/register", async (c) => {
       userId,
       name: name || null,
       publicKey,
+      fingerprint: fingerprint || null,
       status,
     },
   });

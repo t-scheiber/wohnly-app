@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Check, HelpCircle } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
-import { isTauri, clearTauriCookie } from "@/lib/auth/tauri";
+import { isTauri, clearTauriCookie, openInBrowser } from "@/lib/auth/tauri";
 import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences, useHouseholdDevices, usePendingDevices, useApproveDevice, useRejectDevice } from "@/lib/api/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { api, apiPatch } from "@/lib/api/client";
@@ -15,7 +15,6 @@ import { useTheme } from "@/lib/hooks/useTheme";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
 import { LANGUAGES as ALL_LANGUAGES, changeLanguage as setI18nLanguage } from "@/i18n";
-import { clearDeviceKeys } from "@/lib/crypto/device-storage";
 import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
 import { apiPost } from "@/lib/api/client";
@@ -243,7 +242,6 @@ export default function SettingsScreen() {
           leaveHousehold.mutate(undefined, {
             onSuccess: () => {
               clearHouseholdKeys();
-              try { clearDeviceKeys(); } catch {}
               router.replace("/(app)/(dashboard)");
             },
             onError: (err) => {
@@ -260,7 +258,14 @@ export default function SettingsScreen() {
       if (Platform.OS === "web") {
         // Web/Desktop: redirect to Stripe Checkout
         const { url } = await apiPost<{ url: string }>("/api/webhooks/stripe/checkout", {});
-        if (url) window.location.href = url;
+        if (url) {
+          if (isTauri()) {
+            // Tauri: open in system browser (WebView can't navigate to external URLs)
+            await openInBrowser(url);
+          } else {
+            window.location.href = url;
+          }
+        }
         return;
       }
       // Mobile: use RevenueCat
@@ -333,7 +338,6 @@ export default function SettingsScreen() {
       if (confirm(t("settings.signOutConfirm"))) {
         clearHouseholdKeys();
         if (isTauri()) clearTauriCookie();
-        clearDeviceKeys();
         authClient.signOut().then(() => router.replace("/(auth)/sign-in"));
       }
       return;
@@ -345,7 +349,6 @@ export default function SettingsScreen() {
         style: "destructive",
         onPress: async () => {
           clearHouseholdKeys();
-          await clearDeviceKeys();
           await authClient.signOut();
           router.replace("/(auth)/sign-in");
         },

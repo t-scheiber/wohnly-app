@@ -6,7 +6,7 @@
 import { Platform } from "react-native";
 import { generateDeviceKeys, generateHouseholdKey } from "./keys";
 import { sealToDevice, sealedToBase64, openSealedHK, base64ToSealed } from "./seal";
-import { saveDeviceKeys, getDeviceKeys, hasDeviceKeys } from "./device-storage";
+import { saveDeviceKeys, getDeviceKeys, hasDeviceKeys, getDeviceFingerprint } from "./device-storage";
 import { cacheHouseholdKey } from "./household-key-cache";
 import { apiPost, api } from "@/lib/api/client";
 import { isTauri } from "@/lib/auth/tauri";
@@ -40,14 +40,16 @@ export async function ensureDeviceRegistered(): Promise<{
   privateKey: Uint8Array;
 }> {
   const existing = await getDeviceKeys();
+  const fingerprint = await getDeviceFingerprint();
 
   if (existing) {
     // Validate cached keys with server — the register endpoint deduplicates
-    // by publicKey. If the account was deleted and recreated, the server
-    // will assign a new deviceId which we update in the cache.
+    // by publicKey (and fingerprint). If the account was deleted and recreated,
+    // the server will assign a new deviceId which we update in the cache.
     const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
       publicKey: existing.publicKey,
       name: getDeviceName(),
+      fingerprint,
     });
 
     if (res.deviceId !== existing.deviceId) {
@@ -61,10 +63,11 @@ export async function ensureDeviceRegistered(): Promise<{
   // Generate new keypair
   const { publicKey, privateKey } = await generateDeviceKeys();
 
-  // Register with server (deduplicates by publicKey)
+  // Register with server (deduplicates by fingerprint, then publicKey)
   const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
     publicKey,
     name: getDeviceName(),
+    fingerprint,
   });
 
   // Save to secure storage
