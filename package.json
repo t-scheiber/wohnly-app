@@ -26,13 +26,11 @@
     "db:push": "npm run db:push --workspace=apps/api"
   },
   "dependencies": {
-    "react-native-purchases": "^9.14.0",
-    "react-native-purchases-ui": "^9.14.0",
     "sharp": "^0.34.5"
   },
   "overrides": {
-    "react": "19.2.5",
-    "react-dom": "19.2.5"
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
   },
   "devDependencies": {
     "@tauri-apps/api": "^2.10.1",
