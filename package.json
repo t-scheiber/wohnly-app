@@ -25,7 +25,7 @@
     "db:generate": "npm run db:generate --workspace=apps/api",
     "db:push": "npm run db:push --workspace=apps/api"
   },
-  "dependencies": {
+  "optionalDependencies": {
     "sharp": "^0.34.5"
   },
   "overrides": {
