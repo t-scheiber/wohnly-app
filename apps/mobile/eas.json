@@ -4,18 +4,21 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "node": "22.16.0",
       "env": {
         "EXPO_NO_CAPABILITY_SYNC": "1"
       }
     },
     "preview": {
       "distribution": "internal",
+      "node": "22.16.0",
       "env": {
         "EXPO_NO_CAPABILITY_SYNC": "1"
       }
     },
     "production": {
       "autoIncrement": true,
+      "node": "22.16.0",
       "env": {
         "EXPO_NO_CAPABILITY_SYNC": "1"
       }
