@@ -20,7 +20,7 @@
         "ITSAppUsesNonExemptEncryption": false,
         "UIRequiredDeviceCapabilities": []
       },
-      "buildNumber": "8",
+      "buildNumber": "9",
       "entitlements": {
         "com.apple.security.application-groups": [
           "group.app.wohnly"
@@ -41,7 +41,7 @@
         "READ_CALENDAR",
         "WRITE_CALENDAR"
       ],
-      "versionCode": 15
+      "versionCode": 17
     },
     "web": {
       "bundler": "metro",
