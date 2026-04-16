@@ -554,12 +554,13 @@ model SubscriptionSplit {
 // ── E2E Encryption ──────────────────────────────────────────────────
 
 model Device {
-  id        String   @id @default(cuid())
-  userId    String
-  name      String?
-  publicKey String   // X25519 public key (base64)
-  status    String   @default("pending") // "pending" | "approved" | "rejected"
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String
+  name        String?
+  publicKey   String   // X25519 public key (base64)
+  fingerprint String?  // Persistent device UUID — survives key loss
+  status      String   @default("pending") // "pending" | "approved" | "rejected"
+  createdAt   DateTime @default(now())
 
   user      User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   envelopes HouseholdKeyEnvelope[]
@@ -567,6 +568,7 @@ model Device {
   @@unique([userId, publicKey])
   @@index([userId])
   @@index([userId, status])
+  @@index([userId, fingerprint])
 }
 
 model HouseholdKeyEnvelope {
