@@ -438,7 +438,7 @@ jobs:
         run: git push origin :refs/tags/desktop-latest 2>/dev/null || true
 
       - name: Create 'latest' release (always up to date)
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: desktop-latest
           name: Wohnly Desktop (Latest)
@@ -458,7 +458,7 @@ jobs:
           prerelease: false
 
       - name: Create versioned release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: desktop-v${{ steps.version.outputs.version }}
           name: Wohnly Desktop v${{ steps.version.outputs.version }}
