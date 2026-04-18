@@ -9,49 +9,81 @@ const app = new Hono<AppEnv>();
 // Public endpoints hit from email links — authenticate via signed token in
 // the query string. Must be registered before the requireAuth middleware so
 // Hono doesn't wrap them with session auth.
-app.get("/confirm-leave", async (c) => {
+app.get("/confirm-leave", (c) => {
   const token = c.req.query("token");
   const appUrl = process.env.APP_URL || "https://wohnly.app";
+  if (!token) return c.redirect(`${appUrl}/leave-household?error=missing_token`);
+  return c.redirect(`${appUrl}/leave-household?token=${encodeURIComponent(token)}&mode=confirm`);
+});
 
-  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
+app.get("/cancel-leave", (c) => {
+  const token = c.req.query("token");
+  const appUrl = process.env.APP_URL || "https://wohnly.app";
+  if (!token) return c.redirect(`${appUrl}/leave-household?error=missing_token`);
+  return c.redirect(`${appUrl}/leave-household?token=${encodeURIComponent(token)}&mode=cancel`);
+});
+
+app.get("/leave-info", async (c) => {
+  const token = c.req.query("token");
+  if (!token) return c.json({ error: "missing_token" }, 400);
+
+  const confirmation = await prisma.leaveConfirmation.findUnique({
+    where: { confirmToken: token },
+    include: { member: { include: { household: { select: { name: true } } } } },
+  });
+
+  if (!confirmation) return c.json({ error: "invalid_token" }, 404);
+  if (confirmation.confirmedAt) return c.json({ error: "already_confirmed" }, 410);
+  if (confirmation.cancelledAt) return c.json({ error: "already_cancelled" }, 410);
+  if (confirmation.expiresAt < new Date()) return c.json({ error: "expired" }, 410);
+
+  return c.json({
+    householdName: confirmation.member.household.name,
+    expiresAt: confirmation.expiresAt.toISOString(),
+  });
+});
+
+app.post("/confirm-leave", async (c) => {
+  const { token } = await c.req.json();
+  if (!token) return c.json({ error: "missing_token" }, 400);
 
   const confirmation = await prisma.leaveConfirmation.findUnique({
     where: { confirmToken: token },
     include: { member: { include: { household: { include: { members: true } } } } },
   });
 
-  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
-  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
-  if (confirmation.cancelledAt) return c.redirect(`${appUrl}?error=cancelled`);
-  if (confirmation.expiresAt < new Date()) return c.redirect(`${appUrl}?error=expired`);
+  if (!confirmation) return c.json({ error: "invalid_token" }, 404);
+  if (confirmation.confirmedAt) return c.json({ error: "already_confirmed" }, 410);
+  if (confirmation.cancelledAt) return c.json({ error: "already_cancelled" }, 410);
+  if (confirmation.expiresAt < new Date()) return c.json({ error: "expired" }, 410);
 
   const householdId = confirmation.member.householdId;
   const memberCount = confirmation.member.household.members.length;
 
   await executeLeaveTransaction(confirmation, householdId, memberCount);
 
-  return c.redirect(`${appUrl}?left=true`);
+  return c.json({ success: true });
 });
 
-app.get("/cancel-leave", async (c) => {
-  const token = c.req.query("token");
-  const appUrl = process.env.APP_URL || "https://wohnly.app";
-
-  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
+app.post("/cancel-leave", async (c) => {
+  const { token } = await c.req.json();
+  if (!token) return c.json({ error: "missing_token" }, 400);
 
   const confirmation = await prisma.leaveConfirmation.findUnique({
     where: { confirmToken: token },
   });
 
-  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
-  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
+  if (!confirmation) return c.json({ error: "invalid_token" }, 404);
+  if (confirmation.confirmedAt) return c.json({ error: "already_confirmed" }, 410);
+  if (confirmation.cancelledAt) return c.json({ error: "already_cancelled" }, 410);
+  if (confirmation.expiresAt < new Date()) return c.json({ error: "expired" }, 410);
 
   await prisma.leaveConfirmation.update({
     where: { id: confirmation.id },
     data: { cancelledAt: new Date() },
   });
 
-  return c.redirect(`${appUrl}?cancelled=true`);
+  return c.json({ success: true });
 });
 
 app.use("*", requireAuth);
@@ -226,9 +258,9 @@ app.post("/leave", async (c) => {
     },
   });
 
-  const apiUrl = process.env.BETTER_AUTH_URL || "http://localhost:3001";
-  const confirmUrl = `${apiUrl}/api/members/confirm-leave?token=${confirmation.confirmToken}`;
-  const cancelUrl = `${apiUrl}/api/members/cancel-leave?token=${confirmation.confirmToken}`;
+  const appUrl = process.env.APP_URL || "https://wohnly.app";
+  const confirmUrl = `${appUrl}/leave-household?token=${confirmation.confirmToken}&mode=confirm`;
+  const cancelUrl = `${appUrl}/leave-household?token=${confirmation.confirmToken}&mode=cancel`;
   const locale = (user as { language?: string }).language === "de" ? "de" : "en";
 
   await sendLeaveConfirmationEmail(
@@ -297,30 +329,6 @@ async function executeLeaveTransaction(
     }
   });
 }
-
-// POST /api/members/confirm-leave - Confirm leave (from app)
-app.post("/confirm-leave", async (c) => {
-  const { token } = await c.req.json();
-
-  if (!token) return c.json({ error: "Token is required" }, 400);
-
-  const confirmation = await prisma.leaveConfirmation.findUnique({
-    where: { confirmToken: token },
-    include: { member: { include: { household: { include: { members: true } } } } },
-  });
-
-  if (!confirmation) return c.json({ error: "Invalid token" }, 404);
-  if (confirmation.confirmedAt) return c.json({ error: "Already confirmed" }, 400);
-  if (confirmation.cancelledAt) return c.json({ error: "Cancelled" }, 400);
-  if (confirmation.expiresAt < new Date()) return c.json({ error: "Token expired" }, 400);
-
-  const householdId = confirmation.member.householdId;
-  const memberCount = confirmation.member.household.members.length;
-
-  await executeLeaveTransaction(confirmation, householdId, memberCount);
-
-  return c.json({ success: true, message: "Successfully left household" });
-});
 
 // GET /api/members/leaderboard — Points leaderboard
 app.get("/leaderboard", async (c) => {
