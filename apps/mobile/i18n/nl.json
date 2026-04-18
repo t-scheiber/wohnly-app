@@ -463,5 +463,40 @@
     "lastSynced": "Laatst gesynchroniseerd",
     "syncing": "Synchroniseren...",
     "syncSuccess": "Agenda succesvol gesynchroniseerd"
+  },
+  "leaveHouseholdPage": {
+    "title": "Huishouden verlaten",
+    "loading": "Laden…",
+    "confirmLeave": {
+      "heading": "{{household}} verlaten?",
+      "body": "Je staat op het punt dit huishouden te verlaten. Je verliest toegang tot alle gedeelde gegevens.",
+      "warning": "Dit kan niet ongedaan worden gemaakt. Als je het laatste lid bent, worden het huishouden en alle gedeelde gegevens verwijderd.",
+      "primary": "Ja, huishouden verlaten"
+    },
+    "confirmCancel": {
+      "heading": "Je verzoek om {{household}} te verlaten annuleren?",
+      "body": "Je verzoek wordt geannuleerd en je blijft lid van het huishouden.",
+      "primary": "Ja, verzoek annuleren"
+    },
+    "secondary": "Terug",
+    "success": {
+      "leave": {
+        "heading": "Je hebt {{household}} verlaten",
+        "body": "Je hebt geen toegang meer tot de gedeelde gegevens van dit huishouden."
+      },
+      "cancel": {
+        "heading": "Verzoek geannuleerd",
+        "body": "Je bent nog steeds lid van {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Deze link mist informatie. Gebruik de knop in de e-mail.",
+      "invalidToken": "Deze link is ongeldig.",
+      "expired": "Deze link is verlopen. Vraag een nieuwe aan in de app.",
+      "alreadyConfirmed": "Dit verzoek is al bevestigd.",
+      "alreadyCancelled": "Dit verzoek is al geannuleerd.",
+      "network": "Kan de server niet bereiken. Probeer het opnieuw."
+    },
+    "returnHome": "Terug naar Wohnly"
   }
 }

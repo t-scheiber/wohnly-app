@@ -463,5 +463,40 @@
     "lastSynced": "Terakhir disegerakkan",
     "syncing": "Menyegerakkan...",
     "syncSuccess": "Kalendar berjaya disegerakkan"
+  },
+  "leaveHouseholdPage": {
+    "title": "Tinggalkan isi rumah",
+    "loading": "Memuatkan…",
+    "confirmLeave": {
+      "heading": "Tinggalkan {{household}}?",
+      "body": "Anda akan meninggalkan isi rumah ini. Anda akan kehilangan akses kepada semua data yang dikongsi.",
+      "warning": "Tindakan ini tidak boleh dibatalkan. Jika anda ahli terakhir, isi rumah dan semua data yang dikongsi akan dipadam.",
+      "primary": "Ya, tinggalkan isi rumah"
+    },
+    "confirmCancel": {
+      "heading": "Batalkan permintaan untuk meninggalkan {{household}}?",
+      "body": "Permintaan anda akan dibatalkan dan anda kekal sebagai ahli isi rumah.",
+      "primary": "Ya, batalkan permintaan"
+    },
+    "secondary": "Kembali",
+    "success": {
+      "leave": {
+        "heading": "Anda telah meninggalkan {{household}}",
+        "body": "Anda tidak lagi mempunyai akses kepada data yang dikongsi dalam isi rumah ini."
+      },
+      "cancel": {
+        "heading": "Permintaan dibatalkan",
+        "body": "Anda masih ahli {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Pautan ini tiada maklumat yang diperlukan. Gunakan butang dalam e-mel.",
+      "invalidToken": "Pautan ini tidak sah.",
+      "expired": "Pautan ini telah tamat tempoh. Minta pautan baharu dari aplikasi.",
+      "alreadyConfirmed": "Permintaan ini telah disahkan.",
+      "alreadyCancelled": "Permintaan ini telah dibatalkan.",
+      "network": "Tidak dapat menghubungi pelayan. Sila cuba lagi."
+    },
+    "returnHome": "Kembali ke Wohnly"
   }
 }

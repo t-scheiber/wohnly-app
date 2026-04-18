@@ -463,5 +463,40 @@
     "lastSynced": "Son senkronizasyon",
     "syncing": "Senkronize ediliyor...",
     "syncSuccess": "Takvim başarıyla senkronize edildi"
+  },
+  "leaveHouseholdPage": {
+    "title": "Evden ayrıl",
+    "loading": "Yükleniyor…",
+    "confirmLeave": {
+      "heading": "{{household}} evinden ayrılmak istiyor musunuz?",
+      "body": "Bu evden ayrılmak üzeresiniz. Paylaşılan tüm verilere erişiminizi kaybedeceksiniz.",
+      "warning": "Bu işlem geri alınamaz. Son üye sizseniz, ev ve tüm paylaşılan veriler silinir.",
+      "primary": "Evet, evden ayrıl"
+    },
+    "confirmCancel": {
+      "heading": "{{household}} evinden ayrılma isteğini iptal etmek istiyor musunuz?",
+      "body": "İsteğiniz iptal edilecek ve evin üyesi olmaya devam edeceksiniz.",
+      "primary": "Evet, isteği iptal et"
+    },
+    "secondary": "Geri",
+    "success": {
+      "leave": {
+        "heading": "{{household}} evinden ayrıldınız",
+        "body": "Artık bu evin paylaşılan verilerine erişiminiz yok."
+      },
+      "cancel": {
+        "heading": "İstek iptal edildi",
+        "body": "Hâlâ {{household}} evinin üyesisiniz."
+      }
+    },
+    "error": {
+      "missingToken": "Bu bağlantıda bilgi eksik. E-postadaki düğmeyi kullanın.",
+      "invalidToken": "Bu bağlantı geçersiz.",
+      "expired": "Bu bağlantının süresi doldu. Uygulamadan yeni bir bağlantı isteyin.",
+      "alreadyConfirmed": "Bu istek zaten onaylanmış.",
+      "alreadyCancelled": "Bu istek zaten iptal edilmiş.",
+      "network": "Sunucuya ulaşılamadı. Lütfen tekrar deneyin."
+    },
+    "returnHome": "Wohnly'e dön"
   }
 }

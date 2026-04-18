@@ -463,5 +463,40 @@
     "lastSynced": "Đồng bộ lần cuối",
     "syncing": "Đang đồng bộ...",
     "syncSuccess": "Đồng bộ lịch thành công"
+  },
+  "leaveHouseholdPage": {
+    "title": "Rời khỏi hộ gia đình",
+    "loading": "Đang tải…",
+    "confirmLeave": {
+      "heading": "Rời khỏi {{household}}?",
+      "body": "Bạn sắp rời khỏi hộ gia đình này. Bạn sẽ mất quyền truy cập vào tất cả dữ liệu dùng chung.",
+      "warning": "Hành động này không thể hoàn tác. Nếu bạn là thành viên cuối cùng, hộ gia đình và toàn bộ dữ liệu dùng chung sẽ bị xóa.",
+      "primary": "Có, rời khỏi hộ gia đình"
+    },
+    "confirmCancel": {
+      "heading": "Hủy yêu cầu rời khỏi {{household}}?",
+      "body": "Yêu cầu của bạn sẽ bị hủy và bạn vẫn là thành viên của hộ gia đình.",
+      "primary": "Có, hủy yêu cầu"
+    },
+    "secondary": "Quay lại",
+    "success": {
+      "leave": {
+        "heading": "Bạn đã rời khỏi {{household}}",
+        "body": "Bạn không còn quyền truy cập vào dữ liệu dùng chung của hộ gia đình này."
+      },
+      "cancel": {
+        "heading": "Đã hủy yêu cầu",
+        "body": "Bạn vẫn là thành viên của {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Liên kết này thiếu thông tin. Hãy dùng nút trong email.",
+      "invalidToken": "Liên kết này không hợp lệ.",
+      "expired": "Liên kết này đã hết hạn. Hãy yêu cầu liên kết mới từ ứng dụng.",
+      "alreadyConfirmed": "Yêu cầu này đã được xác nhận.",
+      "alreadyCancelled": "Yêu cầu này đã bị hủy.",
+      "network": "Không thể kết nối tới máy chủ. Vui lòng thử lại."
+    },
+    "returnHome": "Quay lại Wohnly"
   }
 }

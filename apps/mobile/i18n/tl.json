@@ -463,5 +463,40 @@
     "lastSynced": "Huling na-sync",
     "syncing": "Nagsi-sync...",
     "syncSuccess": "Na-sync ang kalendaryo"
+  },
+  "leaveHouseholdPage": {
+    "title": "Umalis sa sambahayan",
+    "loading": "Naglo-load…",
+    "confirmLeave": {
+      "heading": "Umalis sa {{household}}?",
+      "body": "Aalis ka na sa sambahayang ito. Mawawalan ka ng access sa lahat ng shared data.",
+      "warning": "Ang pagkilos na ito ay hindi maibabalik. Kung ikaw ang huling miyembro, mabubura ang sambahayan at lahat ng shared data.",
+      "primary": "Oo, umalis sa sambahayan"
+    },
+    "confirmCancel": {
+      "heading": "Kanselahin ang kahilingan mong umalis sa {{household}}?",
+      "body": "Ikakansela ang kahilingan mo at mananatili kang miyembro ng sambahayan.",
+      "primary": "Oo, kanselahin ang kahilingan"
+    },
+    "secondary": "Bumalik",
+    "success": {
+      "leave": {
+        "heading": "Umalis ka na sa {{household}}",
+        "body": "Wala ka nang access sa shared data ng sambahayang ito."
+      },
+      "cancel": {
+        "heading": "Kinansela ang kahilingan",
+        "body": "Miyembro ka pa rin ng {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Kulang ng impormasyon ang link na ito. Gamitin ang button mula sa email.",
+      "invalidToken": "Hindi wasto ang link na ito.",
+      "expired": "Nag-expire na ang link na ito. Humingi ng bago sa app.",
+      "alreadyConfirmed": "Nakumpirma na ang kahilingan.",
+      "alreadyCancelled": "Nakansela na ang kahilingan.",
+      "network": "Hindi naabot ang server. Subukan ulit."
+    },
+    "returnHome": "Bumalik sa Wohnly"
   }
 }

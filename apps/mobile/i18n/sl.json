@@ -463,5 +463,40 @@
     "lastSynced": "Nazadnje sinhronizirano",
     "syncing": "Sinhroniziranje...",
     "syncSuccess": "Koledar uspešno sinhroniziran"
+  },
+  "leaveHouseholdPage": {
+    "title": "Zapusti gospodinjstvo",
+    "loading": "Nalaganje…",
+    "confirmLeave": {
+      "heading": "Zapustiti {{household}}?",
+      "body": "Ravno zapuščate to gospodinjstvo. Izgubili boste dostop do vseh skupnih podatkov.",
+      "warning": "Tega dejanja ni mogoče razveljaviti. Če ste zadnji član, bosta gospodinjstvo in vsi skupni podatki izbrisani.",
+      "primary": "Da, zapusti gospodinjstvo"
+    },
+    "confirmCancel": {
+      "heading": "Prekličete zahtevo za zapustitev {{household}}?",
+      "body": "Vaša zahteva bo preklicana in ostanete član gospodinjstva.",
+      "primary": "Da, prekliči zahtevo"
+    },
+    "secondary": "Nazaj",
+    "success": {
+      "leave": {
+        "heading": "Zapustili ste {{household}}",
+        "body": "Nimate več dostopa do skupnih podatkov tega gospodinjstva."
+      },
+      "cancel": {
+        "heading": "Zahteva preklicana",
+        "body": "Še vedno ste član gospodinjstva {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Temu povezavi manjkajo podatki. Uporabite gumb iz e-pošte.",
+      "invalidToken": "Ta povezava ni veljavna.",
+      "expired": "Ta povezava je potekla. Zahtevajte novo v aplikaciji.",
+      "alreadyConfirmed": "Ta zahteva je že potrjena.",
+      "alreadyCancelled": "Ta zahteva je že preklicana.",
+      "network": "Strežnika ni bilo mogoče doseči. Poskusite znova."
+    },
+    "returnHome": "Nazaj na Wohnly"
   }
 }

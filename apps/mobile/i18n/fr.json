@@ -463,5 +463,40 @@
     "lastSynced": "Dernière synchronisation",
     "syncing": "Synchronisation...",
     "syncSuccess": "Calendrier synchronisé avec succès"
+  },
+  "leaveHouseholdPage": {
+    "title": "Quitter le foyer",
+    "loading": "Chargement…",
+    "confirmLeave": {
+      "heading": "Quitter {{household}} ?",
+      "body": "Vous êtes sur le point de quitter ce foyer. Vous perdrez l'accès à toutes les données partagées.",
+      "warning": "Cette action est irréversible. Si vous êtes le dernier membre, le foyer et toutes ses données partagées seront supprimés.",
+      "primary": "Oui, quitter le foyer"
+    },
+    "confirmCancel": {
+      "heading": "Annuler votre demande pour quitter {{household}} ?",
+      "body": "Votre demande sera annulée et vous resterez dans le foyer.",
+      "primary": "Oui, annuler la demande"
+    },
+    "secondary": "Retour",
+    "success": {
+      "leave": {
+        "heading": "Vous avez quitté {{household}}",
+        "body": "Vous n'avez plus accès aux données partagées de ce foyer."
+      },
+      "cancel": {
+        "heading": "Demande annulée",
+        "body": "Vous êtes toujours membre de {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Ce lien est incomplet. Veuillez utiliser le bouton dans l'e-mail.",
+      "invalidToken": "Ce lien est invalide.",
+      "expired": "Ce lien a expiré. Veuillez en demander un nouveau depuis l'application.",
+      "alreadyConfirmed": "Cette demande a déjà été confirmée.",
+      "alreadyCancelled": "Cette demande a déjà été annulée.",
+      "network": "Impossible de joindre le serveur. Veuillez réessayer."
+    },
+    "returnHome": "Retour à Wohnly"
   }
 }

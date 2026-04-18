@@ -463,5 +463,40 @@
     "lastSynced": "Sist synkronisert",
     "syncing": "Synkroniserer...",
     "syncSuccess": "Kalender synkronisert"
+  },
+  "leaveHouseholdPage": {
+    "title": "Forlat husstand",
+    "loading": "Laster…",
+    "confirmLeave": {
+      "heading": "Forlate {{household}}?",
+      "body": "Du er i ferd med å forlate denne husstanden. Du mister tilgang til alle delte data.",
+      "warning": "Denne handlingen kan ikke angres. Hvis du er det siste medlemmet, slettes husstanden og alle delte data.",
+      "primary": "Ja, forlat husstanden"
+    },
+    "confirmCancel": {
+      "heading": "Avbryte forespørselen om å forlate {{household}}?",
+      "body": "Forespørselen din avbrytes og du forblir medlem av husstanden.",
+      "primary": "Ja, avbryt forespørselen"
+    },
+    "secondary": "Tilbake",
+    "success": {
+      "leave": {
+        "heading": "Du har forlatt {{household}}",
+        "body": "Du har ikke lenger tilgang til de delte dataene i denne husstanden."
+      },
+      "cancel": {
+        "heading": "Forespørsel avbrutt",
+        "body": "Du er fortsatt medlem av {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Denne lenken mangler informasjon. Bruk knappen fra e-posten.",
+      "invalidToken": "Denne lenken er ugyldig.",
+      "expired": "Denne lenken er utløpt. Be om en ny fra appen.",
+      "alreadyConfirmed": "Denne forespørselen er allerede bekreftet.",
+      "alreadyCancelled": "Denne forespørselen er allerede avbrutt.",
+      "network": "Kunne ikke nå serveren. Prøv igjen."
+    },
+    "returnHome": "Tilbake til Wohnly"
   }
 }

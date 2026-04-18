@@ -463,5 +463,40 @@
     "lastSynced": "Senast synkroniserad",
     "syncing": "Synkroniserar...",
     "syncSuccess": "Kalender synkroniserad"
+  },
+  "leaveHouseholdPage": {
+    "title": "Lämna hushåll",
+    "loading": "Laddar…",
+    "confirmLeave": {
+      "heading": "Lämna {{household}}?",
+      "body": "Du är på väg att lämna detta hushåll. Du förlorar åtkomst till all delad data.",
+      "warning": "Den här åtgärden kan inte ångras. Om du är sista medlemmen raderas hushållet och all delad data.",
+      "primary": "Ja, lämna hushållet"
+    },
+    "confirmCancel": {
+      "heading": "Avbryta din begäran att lämna {{household}}?",
+      "body": "Din begäran avbryts och du förblir medlem i hushållet.",
+      "primary": "Ja, avbryt begäran"
+    },
+    "secondary": "Tillbaka",
+    "success": {
+      "leave": {
+        "heading": "Du har lämnat {{household}}",
+        "body": "Du har inte längre åtkomst till den delade datan i detta hushåll."
+      },
+      "cancel": {
+        "heading": "Begäran avbruten",
+        "body": "Du är fortfarande medlem i {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Den här länken saknar information. Använd knappen från e-postmeddelandet.",
+      "invalidToken": "Den här länken är ogiltig.",
+      "expired": "Den här länken har gått ut. Begär en ny från appen.",
+      "alreadyConfirmed": "Den här begäran har redan bekräftats.",
+      "alreadyCancelled": "Den här begäran har redan avbrutits.",
+      "network": "Kunde inte nå servern. Försök igen."
+    },
+    "returnHome": "Tillbaka till Wohnly"
   }
 }

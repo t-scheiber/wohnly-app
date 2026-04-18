@@ -463,5 +463,40 @@
     "lastSynced": "Última sincronização",
     "syncing": "Sincronizando...",
     "syncSuccess": "Agenda sincronizada com sucesso"
+  },
+  "leaveHouseholdPage": {
+    "title": "Sair do agregado",
+    "loading": "A carregar…",
+    "confirmLeave": {
+      "heading": "Sair de {{household}}?",
+      "body": "Está prestes a sair deste agregado. Perderá o acesso a todos os dados partilhados.",
+      "warning": "Esta ação não pode ser anulada. Se for o último membro, o agregado e todos os dados partilhados serão eliminados.",
+      "primary": "Sim, sair do agregado"
+    },
+    "confirmCancel": {
+      "heading": "Cancelar o seu pedido para sair de {{household}}?",
+      "body": "O seu pedido será cancelado e continuará a ser membro do agregado.",
+      "primary": "Sim, cancelar pedido"
+    },
+    "secondary": "Voltar",
+    "success": {
+      "leave": {
+        "heading": "Saiu de {{household}}",
+        "body": "Já não tem acesso aos dados partilhados deste agregado."
+      },
+      "cancel": {
+        "heading": "Pedido cancelado",
+        "body": "Continua a ser membro de {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Este link não tem informação suficiente. Use o botão do e-mail.",
+      "invalidToken": "Este link é inválido.",
+      "expired": "Este link expirou. Peça um novo na aplicação.",
+      "alreadyConfirmed": "Este pedido já foi confirmado.",
+      "alreadyCancelled": "Este pedido já foi cancelado.",
+      "network": "Não foi possível contactar o servidor. Tente novamente."
+    },
+    "returnHome": "Voltar ao Wohnly"
   }
 }

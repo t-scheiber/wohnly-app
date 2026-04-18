@@ -463,5 +463,40 @@
     "lastSynced": "Síðast samstillt",
     "syncing": "Samstilling...",
     "syncSuccess": "Dagatal samstillt"
+  },
+  "leaveHouseholdPage": {
+    "title": "Yfirgefa heimili",
+    "loading": "Hleð…",
+    "confirmLeave": {
+      "heading": "Yfirgefa {{household}}?",
+      "body": "Þú ert að fara að yfirgefa þetta heimili. Þú missir aðgang að öllum sameiginlegum gögnum.",
+      "warning": "Þessa aðgerð er ekki hægt að afturkalla. Ef þú ert síðasti meðlimurinn, þá verður heimilið og öll sameiginleg gögn eydd.",
+      "primary": "Já, yfirgefa heimilið"
+    },
+    "confirmCancel": {
+      "heading": "Hætta við beiðni um að yfirgefa {{household}}?",
+      "body": "Beiðni þinni verður hætt og þú verður áfram meðlimur á heimilinu.",
+      "primary": "Já, hætta við beiðni"
+    },
+    "secondary": "Til baka",
+    "success": {
+      "leave": {
+        "heading": "Þú hefur yfirgefið {{household}}",
+        "body": "Þú hefur ekki lengur aðgang að sameiginlegum gögnum þessa heimilis."
+      },
+      "cancel": {
+        "heading": "Beiðni hætt við",
+        "body": "Þú ert enn meðlimur í {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Þennan tengil vantar upplýsingar. Notaðu hnappinn úr tölvupóstinum.",
+      "invalidToken": "Þessi tengill er ógildur.",
+      "expired": "Þessi tengill er útrunninn. Biddu um nýjan í appinu.",
+      "alreadyConfirmed": "Þessi beiðni hefur þegar verið staðfest.",
+      "alreadyCancelled": "Þessari beiðni hefur þegar verið hætt við.",
+      "network": "Náði ekki sambandi við miðlara. Reyndu aftur."
+    },
+    "returnHome": "Til baka í Wohnly"
   }
 }

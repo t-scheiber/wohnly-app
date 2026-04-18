@@ -463,5 +463,40 @@
     "lastSynced": "Terakhir disinkronkan",
     "syncing": "Menyinkronkan...",
     "syncSuccess": "Kalender berhasil disinkronkan"
+  },
+  "leaveHouseholdPage": {
+    "title": "Keluar dari rumah tangga",
+    "loading": "Memuat…",
+    "confirmLeave": {
+      "heading": "Keluar dari {{household}}?",
+      "body": "Anda akan keluar dari rumah tangga ini. Anda akan kehilangan akses ke semua data bersama.",
+      "warning": "Tindakan ini tidak dapat dibatalkan. Jika Anda anggota terakhir, rumah tangga dan semua data bersama akan dihapus.",
+      "primary": "Ya, keluar dari rumah tangga"
+    },
+    "confirmCancel": {
+      "heading": "Batalkan permintaan untuk keluar dari {{household}}?",
+      "body": "Permintaan Anda akan dibatalkan dan Anda tetap menjadi anggota rumah tangga.",
+      "primary": "Ya, batalkan permintaan"
+    },
+    "secondary": "Kembali",
+    "success": {
+      "leave": {
+        "heading": "Anda telah keluar dari {{household}}",
+        "body": "Anda tidak lagi memiliki akses ke data bersama rumah tangga ini."
+      },
+      "cancel": {
+        "heading": "Permintaan dibatalkan",
+        "body": "Anda masih menjadi anggota {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Tautan ini kekurangan informasi. Gunakan tombol dari email.",
+      "invalidToken": "Tautan ini tidak valid.",
+      "expired": "Tautan ini telah kedaluwarsa. Minta yang baru dari aplikasi.",
+      "alreadyConfirmed": "Permintaan ini sudah dikonfirmasi.",
+      "alreadyCancelled": "Permintaan ini sudah dibatalkan.",
+      "network": "Tidak dapat menghubungi server. Silakan coba lagi."
+    },
+    "returnHome": "Kembali ke Wohnly"
   }
 }

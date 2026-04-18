@@ -463,5 +463,40 @@
     "lastSynced": "Viimati sünkroonitud",
     "syncing": "Sünkroonimine...",
     "syncSuccess": "Kalender edukalt sünkroonitud"
+  },
+  "leaveHouseholdPage": {
+    "title": "Lahku leibkonnast",
+    "loading": "Laadin…",
+    "confirmLeave": {
+      "heading": "Kas lahkud leibkonnast {{household}}?",
+      "body": "Oled lahkumas sellest leibkonnast. Kaotad juurdepääsu kõikidele jagatud andmetele.",
+      "warning": "Seda tegevust ei saa tagasi võtta. Kui oled viimane liige, kustutatakse leibkond ja kõik jagatud andmed.",
+      "primary": "Jah, lahku leibkonnast"
+    },
+    "confirmCancel": {
+      "heading": "Kas tühistad taotluse lahkuda leibkonnast {{household}}?",
+      "body": "Taotlus tühistatakse ja jääd leibkonna liikmeks.",
+      "primary": "Jah, tühista taotlus"
+    },
+    "secondary": "Tagasi",
+    "success": {
+      "leave": {
+        "heading": "Lahkusid leibkonnast {{household}}",
+        "body": "Sul ei ole enam juurdepääsu selle leibkonna jagatud andmetele."
+      },
+      "cancel": {
+        "heading": "Taotlus tühistatud",
+        "body": "Oled endiselt leibkonna {{household}} liige."
+      }
+    },
+    "error": {
+      "missingToken": "Sellel lingil on teavet puudu. Kasuta e-kirjas olevat nuppu.",
+      "invalidToken": "See link on kehtetu.",
+      "expired": "See link on aegunud. Palu rakenduses uus.",
+      "alreadyConfirmed": "See taotlus on juba kinnitatud.",
+      "alreadyCancelled": "See taotlus on juba tühistatud.",
+      "network": "Serverini ei jõutud. Proovi uuesti."
+    },
+    "returnHome": "Tagasi Wohnly juurde"
   }
 }

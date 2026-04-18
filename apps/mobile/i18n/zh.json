@@ -463,5 +463,40 @@
     "lastSynced": "上次同步",
     "syncing": "同步中...",
     "syncSuccess": "日历同步成功"
+  },
+  "leaveHouseholdPage": {
+    "title": "离开家庭",
+    "loading": "加载中…",
+    "confirmLeave": {
+      "heading": "要离开 {{household}} 吗？",
+      "body": "您即将离开此家庭。您将失去所有共享数据的访问权限。",
+      "warning": "此操作无法撤销。如果您是最后一名成员，家庭及其所有共享数据将被删除。",
+      "primary": "是，离开家庭"
+    },
+    "confirmCancel": {
+      "heading": "取消离开 {{household}} 的请求？",
+      "body": "您的请求将被取消，您将继续保留在家庭中。",
+      "primary": "是，取消请求"
+    },
+    "secondary": "返回",
+    "success": {
+      "leave": {
+        "heading": "您已离开 {{household}}",
+        "body": "您将无法再访问此家庭的共享数据。"
+      },
+      "cancel": {
+        "heading": "请求已取消",
+        "body": "您仍然是 {{household}} 的成员。"
+      }
+    },
+    "error": {
+      "missingToken": "此链接缺少必需信息。请使用邮件中的按钮。",
+      "invalidToken": "此链接无效。",
+      "expired": "此链接已过期。请在应用中重新申请。",
+      "alreadyConfirmed": "此请求已确认。",
+      "alreadyCancelled": "此请求已取消。",
+      "network": "无法连接到服务器。请重试。"
+    },
+    "returnHome": "返回 Wohnly"
   }
 }

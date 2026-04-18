@@ -463,5 +463,40 @@
     "lastSynced": "Naposledy synchronizované",
     "syncing": "Synchronizácia...",
     "syncSuccess": "Kalendár úspešne synchronizovaný"
+  },
+  "leaveHouseholdPage": {
+    "title": "Opustiť domácnosť",
+    "loading": "Načítava sa…",
+    "confirmLeave": {
+      "heading": "Opustiť {{household}}?",
+      "body": "Chystáte sa opustiť túto domácnosť. Stratíte prístup ku všetkým zdieľaným údajom.",
+      "warning": "Túto akciu nemožno vrátiť späť. Ak ste posledný člen, domácnosť a všetky zdieľané údaje budú vymazané.",
+      "primary": "Áno, opustiť domácnosť"
+    },
+    "confirmCancel": {
+      "heading": "Zrušiť žiadosť o opustenie {{household}}?",
+      "body": "Vaša žiadosť bude zrušená a zostanete členom domácnosti.",
+      "primary": "Áno, zrušiť žiadosť"
+    },
+    "secondary": "Späť",
+    "success": {
+      "leave": {
+        "heading": "Opustili ste {{household}}",
+        "body": "Už nemáte prístup k zdieľaným údajom tejto domácnosti."
+      },
+      "cancel": {
+        "heading": "Žiadosť zrušená",
+        "body": "Stále ste členom domácnosti {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Tomuto odkazu chýbajú informácie. Použite tlačidlo z e-mailu.",
+      "invalidToken": "Tento odkaz je neplatný.",
+      "expired": "Platnosť tohto odkazu uplynula. Vyžiadajte si nový v aplikácii.",
+      "alreadyConfirmed": "Táto žiadosť už bola potvrdená.",
+      "alreadyCancelled": "Táto žiadosť už bola zrušená.",
+      "network": "Nepodarilo sa spojiť so serverom. Skúste to znova."
+    },
+    "returnHome": "Späť do Wohnly"
   }
 }

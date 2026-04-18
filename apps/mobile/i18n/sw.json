@@ -463,5 +463,40 @@
     "lastSynced": "Ilisawazishwa mara ya mwisho",
     "syncing": "Inasawazisha...",
     "syncSuccess": "Kalenda imesawazishwa kwa mafanikio"
+  },
+  "leaveHouseholdPage": {
+    "title": "Ondoka kwenye kaya",
+    "loading": "Inapakia…",
+    "confirmLeave": {
+      "heading": "Ondoka kwenye {{household}}?",
+      "body": "Unakaribia kuondoka kwenye kaya hii. Utapoteza ufikiaji wa data yote iliyoshirikiwa.",
+      "warning": "Kitendo hiki hakiwezi kutenduliwa. Ikiwa wewe ndiye mwanachama wa mwisho, kaya na data yote iliyoshirikiwa itafutwa.",
+      "primary": "Ndiyo, ondoka kwenye kaya"
+    },
+    "confirmCancel": {
+      "heading": "Ghairi ombi la kuondoka {{household}}?",
+      "body": "Ombi lako litaghairiwa na utabaki mwanachama wa kaya.",
+      "primary": "Ndiyo, ghairi ombi"
+    },
+    "secondary": "Rudi",
+    "success": {
+      "leave": {
+        "heading": "Umeondoka kwenye {{household}}",
+        "body": "Huwezi tena kufikia data iliyoshirikiwa ya kaya hii."
+      },
+      "cancel": {
+        "heading": "Ombi limeghairiwa",
+        "body": "Bado ni mwanachama wa {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Kiungo hiki kinakosa maelezo. Tumia kitufe kwenye barua pepe.",
+      "invalidToken": "Kiungo hiki si sahihi.",
+      "expired": "Kiungo hiki kimeisha muda. Omba kipya kwenye programu.",
+      "alreadyConfirmed": "Ombi hili tayari limethibitishwa.",
+      "alreadyCancelled": "Ombi hili tayari limeghairiwa.",
+      "network": "Seva haipatikani. Jaribu tena."
+    },
+    "returnHome": "Rudi Wohnly"
   }
 }

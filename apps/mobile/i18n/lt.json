@@ -463,5 +463,40 @@
     "lastSynced": "Paskutinė sinchronizacija",
     "syncing": "Sinchronizuojama...",
     "syncSuccess": "Kalendorius sėkmingai sinchronizuotas"
+  },
+  "leaveHouseholdPage": {
+    "title": "Palikti namų ūkį",
+    "loading": "Įkeliama…",
+    "confirmLeave": {
+      "heading": "Palikti {{household}}?",
+      "body": "Jūs paliekate šį namų ūkį. Prarasite prieigą prie visų bendrinamų duomenų.",
+      "warning": "Šio veiksmo atšaukti negalima. Jei esate paskutinis narys, namų ūkis ir visi bendrinami duomenys bus ištrinti.",
+      "primary": "Taip, palikti namų ūkį"
+    },
+    "confirmCancel": {
+      "heading": "Atšaukti prašymą palikti {{household}}?",
+      "body": "Jūsų prašymas bus atšauktas ir liksite namų ūkio nariu.",
+      "primary": "Taip, atšaukti prašymą"
+    },
+    "secondary": "Atgal",
+    "success": {
+      "leave": {
+        "heading": "Palikote {{household}}",
+        "body": "Nebeturite prieigos prie šio namų ūkio bendrinamų duomenų."
+      },
+      "cancel": {
+        "heading": "Prašymas atšauktas",
+        "body": "Jūs vis dar esate {{household}} narys."
+      }
+    },
+    "error": {
+      "missingToken": "Šioje nuorodoje trūksta informacijos. Naudokite el. laiške esantį mygtuką.",
+      "invalidToken": "Ši nuoroda negalioja.",
+      "expired": "Šios nuorodos galiojimas baigėsi. Paprašykite naujos programėlėje.",
+      "alreadyConfirmed": "Šis prašymas jau patvirtintas.",
+      "alreadyCancelled": "Šis prašymas jau atšauktas.",
+      "network": "Nepavyko pasiekti serverio. Bandykite dar kartą."
+    },
+    "returnHome": "Grįžti į Wohnly"
   }
 }

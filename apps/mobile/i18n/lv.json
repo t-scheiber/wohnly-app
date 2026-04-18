@@ -463,5 +463,40 @@
     "lastSynced": "Pēdējo reizi sinhronizēts",
     "syncing": "Sinhronizē...",
     "syncSuccess": "Kalendārs veiksmīgi sinhronizēts"
+  },
+  "leaveHouseholdPage": {
+    "title": "Pamest mājsaimniecību",
+    "loading": "Ielādē…",
+    "confirmLeave": {
+      "heading": "Pamest {{household}}?",
+      "body": "Jūs gatavojaties pamest šo mājsaimniecību. Jūs zaudēsiet piekļuvi visiem koplietotajiem datiem.",
+      "warning": "Šo darbību nevar atsaukt. Ja esat pēdējais dalībnieks, mājsaimniecība un visi koplietotie dati tiks dzēsti.",
+      "primary": "Jā, pamest mājsaimniecību"
+    },
+    "confirmCancel": {
+      "heading": "Atcelt pieprasījumu pamest {{household}}?",
+      "body": "Jūsu pieprasījums tiks atcelts un jūs paliksiet mājsaimniecības dalībnieks.",
+      "primary": "Jā, atcelt pieprasījumu"
+    },
+    "secondary": "Atpakaļ",
+    "success": {
+      "leave": {
+        "heading": "Esat pametis {{household}}",
+        "body": "Jums vairs nav piekļuves šīs mājsaimniecības koplietotajiem datiem."
+      },
+      "cancel": {
+        "heading": "Pieprasījums atcelts",
+        "body": "Jūs joprojām esat {{household}} dalībnieks."
+      }
+    },
+    "error": {
+      "missingToken": "Šai saitei trūkst informācijas. Izmantojiet pogu no e-pasta.",
+      "invalidToken": "Šī saite nav derīga.",
+      "expired": "Šī saite ir beigusies. Pieprasiet jaunu lietotnē.",
+      "alreadyConfirmed": "Šis pieprasījums jau ir apstiprināts.",
+      "alreadyCancelled": "Šis pieprasījums jau ir atcelts.",
+      "network": "Nevarēja sazināties ar serveri. Mēģiniet vēlreiz."
+    },
+    "returnHome": "Atpakaļ uz Wohnly"
   }
 }

@@ -463,5 +463,40 @@
     "lastSynced": "最終同期",
     "syncing": "同期中...",
     "syncSuccess": "カレンダーの同期に成功しました"
+  },
+  "leaveHouseholdPage": {
+    "title": "世帯から退出",
+    "loading": "読み込み中…",
+    "confirmLeave": {
+      "heading": "{{household}} から退出しますか？",
+      "body": "この世帯から退出しようとしています。すべての共有データへのアクセスを失います。",
+      "warning": "この操作は取り消せません。あなたが最後のメンバーの場合、世帯とすべての共有データが削除されます。",
+      "primary": "はい、世帯から退出する"
+    },
+    "confirmCancel": {
+      "heading": "{{household}} からの退出リクエストをキャンセルしますか？",
+      "body": "リクエストはキャンセルされ、世帯のメンバーとして残ります。",
+      "primary": "はい、リクエストをキャンセル"
+    },
+    "secondary": "戻る",
+    "success": {
+      "leave": {
+        "heading": "{{household}} から退出しました",
+        "body": "この世帯の共有データにアクセスできなくなりました。"
+      },
+      "cancel": {
+        "heading": "リクエストをキャンセルしました",
+        "body": "引き続き {{household}} のメンバーです。"
+      }
+    },
+    "error": {
+      "missingToken": "このリンクには情報が不足しています。メール内のボタンを使用してください。",
+      "invalidToken": "このリンクは無効です。",
+      "expired": "このリンクの有効期限が切れました。アプリから新しいリンクをリクエストしてください。",
+      "alreadyConfirmed": "このリクエストはすでに確認済みです。",
+      "alreadyCancelled": "このリクエストはすでにキャンセル済みです。",
+      "network": "サーバーに接続できませんでした。もう一度お試しください。"
+    },
+    "returnHome": "Wohnly に戻る"
   }
 }

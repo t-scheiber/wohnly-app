@@ -463,5 +463,40 @@
     "lastSynced": "Utolsó szinkronizálás",
     "syncing": "Szinkronizálás...",
     "syncSuccess": "Naptár sikeresen szinkronizálva"
+  },
+  "leaveHouseholdPage": {
+    "title": "Háztartás elhagyása",
+    "loading": "Betöltés…",
+    "confirmLeave": {
+      "heading": "Elhagyod a(z) {{household}}-t?",
+      "body": "Épp elhagyod ezt a háztartást. Elveszíted a hozzáférést az összes megosztott adathoz.",
+      "warning": "Ez a művelet nem vonható vissza. Ha te vagy az utolsó tag, a háztartás és minden megosztott adat törlődik.",
+      "primary": "Igen, elhagyom a háztartást"
+    },
+    "confirmCancel": {
+      "heading": "Visszavonod a(z) {{household}} elhagyására vonatkozó kérést?",
+      "body": "A kérésed visszavonásra kerül, és továbbra is a háztartás tagja maradsz.",
+      "primary": "Igen, kérés visszavonása"
+    },
+    "secondary": "Vissza",
+    "success": {
+      "leave": {
+        "heading": "Elhagytad a(z) {{household}}-t",
+        "body": "Nincs többé hozzáférésed a háztartás megosztott adataihoz."
+      },
+      "cancel": {
+        "heading": "Kérés visszavonva",
+        "body": "Továbbra is a(z) {{household}} tagja maradsz."
+      }
+    },
+    "error": {
+      "missingToken": "Ez a link hiányos. Használd az e-mailben lévő gombot.",
+      "invalidToken": "Ez a link érvénytelen.",
+      "expired": "Ez a link lejárt. Kérj egy újat az alkalmazásban.",
+      "alreadyConfirmed": "Ezt a kérést már megerősítették.",
+      "alreadyCancelled": "Ezt a kérést már visszavonták.",
+      "network": "A szerver nem érhető el. Próbáld újra."
+    },
+    "returnHome": "Vissza a Wohnly-hoz"
   }
 }
