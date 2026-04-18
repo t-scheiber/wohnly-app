@@ -24,6 +24,11 @@ on:
         required: false
         type: boolean
         default: false
+      skip_build:
+        description: "Skip build and submit the latest existing EAS build"
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   manual-build:
@@ -49,14 +54,14 @@ jobs:
         run: npm ci
 
       - name: Build iOS
-        if: inputs.platform == 'ios' || inputs.platform == 'all'
+        if: ${{ !inputs.skip_build && (inputs.platform == 'ios' || inputs.platform == 'all') }}
         working-directory: apps/mobile
         run: eas build --profile ${{ inputs.profile }} --platform ios --non-interactive
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
       - name: Build Android
-        if: inputs.platform == 'android' || inputs.platform == 'all'
+        if: ${{ !inputs.skip_build && (inputs.platform == 'android' || inputs.platform == 'all') }}
         working-directory: apps/mobile
         run: eas build --profile ${{ inputs.profile }} --platform android --non-interactive
         env:
