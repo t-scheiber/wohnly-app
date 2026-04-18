@@ -425,6 +425,41 @@
     "fullExportDesc": "Alle Haushaltsdaten als JSON herunterladen",
     "exporting": "Exportiere..."
   },
+  "leaveHouseholdPage": {
+    "title": "Haushalt verlassen",
+    "loading": "Wird geladen…",
+    "confirmLeave": {
+      "heading": "{{household}} verlassen?",
+      "body": "Sie sind dabei, diesen Haushalt zu verlassen. Sie verlieren den Zugriff auf alle gemeinsamen Daten.",
+      "warning": "Dies kann nicht rückgängig gemacht werden. Wenn Sie das letzte Mitglied sind, werden der Haushalt und alle gemeinsamen Daten gelöscht.",
+      "primary": "Ja, Haushalt verlassen"
+    },
+    "confirmCancel": {
+      "heading": "Antrag auf Verlassen von {{household}} abbrechen?",
+      "body": "Ihr Antrag wird abgebrochen und Sie bleiben Mitglied des Haushalts.",
+      "primary": "Ja, Antrag abbrechen"
+    },
+    "secondary": "Zurück",
+    "success": {
+      "leave": {
+        "heading": "Sie haben {{household}} verlassen",
+        "body": "Sie haben keinen Zugriff mehr auf die gemeinsamen Daten dieses Haushalts."
+      },
+      "cancel": {
+        "heading": "Antrag abgebrochen",
+        "body": "Sie sind weiterhin Mitglied von {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Diesem Link fehlen erforderliche Informationen. Bitte verwenden Sie die Schaltfläche aus der E-Mail.",
+      "invalidToken": "Dieser Link ist ungültig.",
+      "expired": "Dieser Link ist abgelaufen. Bitte fordern Sie in der App einen neuen an.",
+      "alreadyConfirmed": "Dieser Antrag wurde bereits bestätigt.",
+      "alreadyCancelled": "Dieser Antrag wurde bereits abgebrochen.",
+      "network": "Der Server ist nicht erreichbar. Bitte versuchen Sie es erneut."
+    },
+    "returnHome": "Zurück zu Wohnly"
+  },
   "calendarSync": {
     "connectGoogle": "Google Kalender verbinden",
     "syncNow": "Jetzt synchronisieren",
