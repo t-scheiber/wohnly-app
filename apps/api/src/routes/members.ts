@@ -5,6 +5,55 @@ import { sendLeaveConfirmationEmail } from "../lib/email.js";
 import type { AppEnv } from "../types.js";
 
 const app = new Hono<AppEnv>();
+
+// Public endpoints hit from email links — authenticate via signed token in
+// the query string. Must be registered before the requireAuth middleware so
+// Hono doesn't wrap them with session auth.
+app.get("/confirm-leave", async (c) => {
+  const token = c.req.query("token");
+  const appUrl = process.env.APP_URL || "https://wohnly.app";
+
+  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
+
+  const confirmation = await prisma.leaveConfirmation.findUnique({
+    where: { confirmToken: token },
+    include: { member: { include: { household: { include: { members: true } } } } },
+  });
+
+  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
+  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
+  if (confirmation.cancelledAt) return c.redirect(`${appUrl}?error=cancelled`);
+  if (confirmation.expiresAt < new Date()) return c.redirect(`${appUrl}?error=expired`);
+
+  const householdId = confirmation.member.householdId;
+  const memberCount = confirmation.member.household.members.length;
+
+  await executeLeaveTransaction(confirmation, householdId, memberCount);
+
+  return c.redirect(`${appUrl}?left=true`);
+});
+
+app.get("/cancel-leave", async (c) => {
+  const token = c.req.query("token");
+  const appUrl = process.env.APP_URL || "https://wohnly.app";
+
+  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
+
+  const confirmation = await prisma.leaveConfirmation.findUnique({
+    where: { confirmToken: token },
+  });
+
+  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
+  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
+
+  await prisma.leaveConfirmation.update({
+    where: { id: confirmation.id },
+    data: { cancelledAt: new Date() },
+  });
+
+  return c.redirect(`${appUrl}?cancelled=true`);
+});
+
 app.use("*", requireAuth);
 
 // GET /api/members/list - List household members
@@ -249,31 +298,6 @@ async function executeLeaveTransaction(
   });
 }
 
-// GET /api/members/confirm-leave - Confirm leave (from email link)
-app.get("/confirm-leave", async (c) => {
-  const token = c.req.query("token");
-  const appUrl = process.env.APP_URL || "https://wohnly.app";
-
-  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
-
-  const confirmation = await prisma.leaveConfirmation.findUnique({
-    where: { confirmToken: token },
-    include: { member: { include: { household: { include: { members: true } } } } },
-  });
-
-  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
-  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
-  if (confirmation.cancelledAt) return c.redirect(`${appUrl}?error=cancelled`);
-  if (confirmation.expiresAt < new Date()) return c.redirect(`${appUrl}?error=expired`);
-
-  const householdId = confirmation.member.householdId;
-  const memberCount = confirmation.member.household.members.length;
-
-  await executeLeaveTransaction(confirmation, householdId, memberCount);
-
-  return c.redirect(`${appUrl}?left=true`);
-});
-
 // POST /api/members/confirm-leave - Confirm leave (from app)
 app.post("/confirm-leave", async (c) => {
   const { token } = await c.req.json();
@@ -296,28 +320,6 @@ app.post("/confirm-leave", async (c) => {
   await executeLeaveTransaction(confirmation, householdId, memberCount);
 
   return c.json({ success: true, message: "Successfully left household" });
-});
-
-// GET /api/members/cancel-leave - Cancel leave request (from email link)
-app.get("/cancel-leave", async (c) => {
-  const token = c.req.query("token");
-  const appUrl = process.env.APP_URL || "https://wohnly.app";
-
-  if (!token) return c.redirect(`${appUrl}?error=missing_token`);
-
-  const confirmation = await prisma.leaveConfirmation.findUnique({
-    where: { confirmToken: token },
-  });
-
-  if (!confirmation) return c.redirect(`${appUrl}?error=invalid_token`);
-  if (confirmation.confirmedAt) return c.redirect(`${appUrl}?error=already_confirmed`);
-
-  await prisma.leaveConfirmation.update({
-    where: { id: confirmation.id },
-    data: { cancelledAt: new Date() },
-  });
-
-  return c.redirect(`${appUrl}?cancelled=true`);
 });
 
 // GET /api/members/leaderboard — Points leaderboard
