@@ -425,6 +425,41 @@
     "fullExportDesc": "Download all household data as JSON",
     "exporting": "Exporting..."
   },
+  "leaveHouseholdPage": {
+    "title": "Leave Household",
+    "loading": "Loading…",
+    "confirmLeave": {
+      "heading": "Leave {{household}}?",
+      "body": "You're about to leave this household. You'll lose access to all shared data.",
+      "warning": "This cannot be undone. If you're the last member, the household and all its shared data will be deleted.",
+      "primary": "Yes, leave household"
+    },
+    "confirmCancel": {
+      "heading": "Cancel your request to leave {{household}}?",
+      "body": "Your leave request will be cancelled and you'll stay in the household.",
+      "primary": "Yes, cancel request"
+    },
+    "secondary": "Go back",
+    "success": {
+      "leave": {
+        "heading": "You've left {{household}}",
+        "body": "You no longer have access to this household's shared data."
+      },
+      "cancel": {
+        "heading": "Leave request cancelled",
+        "body": "You're still a member of {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "This link is missing required information. Please use the button from the email.",
+      "invalidToken": "This link is invalid.",
+      "expired": "This link has expired. Please request a new one from the app.",
+      "alreadyConfirmed": "This request has already been confirmed.",
+      "alreadyCancelled": "This request has already been cancelled.",
+      "network": "We couldn't reach the server. Please try again."
+    },
+    "returnHome": "Back to Wohnly"
+  },
   "calendarSync": {
     "connectGoogle": "Connect Google Calendar",
     "syncNow": "Sync Now",
