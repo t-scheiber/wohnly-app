@@ -20,7 +20,7 @@
         "ITSAppUsesNonExemptEncryption": false,
         "UIRequiredDeviceCapabilities": []
       },
-      "buildNumber": "10",
+      "buildNumber": "20",
       "entitlements": {
         "com.apple.security.application-groups": [
           "group.app.wohnly"
