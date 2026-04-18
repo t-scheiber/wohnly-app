@@ -463,5 +463,40 @@
     "lastSynced": "Zadnja sinkronizacija",
     "syncing": "Sinkronizacija...",
     "syncSuccess": "Kalendar uspješno sinkroniziran"
+  },
+  "leaveHouseholdPage": {
+    "title": "Napusti kućanstvo",
+    "loading": "Učitavanje…",
+    "confirmLeave": {
+      "heading": "Napustiti {{household}}?",
+      "body": "Upravo napuštate ovo kućanstvo. Izgubit ćete pristup svim zajedničkim podacima.",
+      "warning": "Ova se radnja ne može poništiti. Ako ste posljednji član, kućanstvo i svi zajednički podaci bit će izbrisani.",
+      "primary": "Da, napusti kućanstvo"
+    },
+    "confirmCancel": {
+      "heading": "Otkazati zahtjev za napuštanjem {{household}}?",
+      "body": "Vaš zahtjev bit će otkazan i ostajete član kućanstva.",
+      "primary": "Da, otkaži zahtjev"
+    },
+    "secondary": "Natrag",
+    "success": {
+      "leave": {
+        "heading": "Napustili ste {{household}}",
+        "body": "Više nemate pristup zajedničkim podacima ovog kućanstva."
+      },
+      "cancel": {
+        "heading": "Zahtjev otkazan",
+        "body": "I dalje ste član {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Ovoj poveznici nedostaju podaci. Koristite gumb iz e-pošte.",
+      "invalidToken": "Ova poveznica nije valjana.",
+      "expired": "Ova poveznica je istekla. Zatražite novu u aplikaciji.",
+      "alreadyConfirmed": "Ovaj zahtjev je već potvrđen.",
+      "alreadyCancelled": "Ovaj zahtjev je već otkazan.",
+      "network": "Nije moguće spojiti se s poslužiteljem. Pokušajte ponovno."
+    },
+    "returnHome": "Natrag na Wohnly"
   }
 }

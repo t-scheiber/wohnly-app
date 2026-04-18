@@ -463,5 +463,40 @@
     "lastSynced": "Viimeksi synkronoitu",
     "syncing": "Synkronoidaan...",
     "syncSuccess": "Kalenteri synkronoitu onnistuneesti"
+  },
+  "leaveHouseholdPage": {
+    "title": "Poistu kotitaloudesta",
+    "loading": "Ladataan…",
+    "confirmLeave": {
+      "heading": "Poistutko kotitaloudesta {{household}}?",
+      "body": "Olet poistumassa tästä kotitaloudesta. Menetät pääsyn kaikkiin jaettuihin tietoihin.",
+      "warning": "Tätä ei voi peruuttaa. Jos olet viimeinen jäsen, kotitalous ja kaikki jaetut tiedot poistetaan.",
+      "primary": "Kyllä, poistu kotitaloudesta"
+    },
+    "confirmCancel": {
+      "heading": "Peruutatko pyyntösi poistua kotitaloudesta {{household}}?",
+      "body": "Pyyntösi peruutetaan ja pysyt kotitalouden jäsenenä.",
+      "primary": "Kyllä, peruuta pyyntö"
+    },
+    "secondary": "Takaisin",
+    "success": {
+      "leave": {
+        "heading": "Olet poistunut kotitaloudesta {{household}}",
+        "body": "Sinulla ei ole enää pääsyä tämän kotitalouden jaettuihin tietoihin."
+      },
+      "cancel": {
+        "heading": "Pyyntö peruutettu",
+        "body": "Olet edelleen kotitalouden {{household}} jäsen."
+      }
+    },
+    "error": {
+      "missingToken": "Linkistä puuttuu tietoja. Käytä sähköpostin painiketta.",
+      "invalidToken": "Tämä linkki on virheellinen.",
+      "expired": "Linkki on vanhentunut. Pyydä uusi sovelluksesta.",
+      "alreadyConfirmed": "Tämä pyyntö on jo vahvistettu.",
+      "alreadyCancelled": "Tämä pyyntö on jo peruutettu.",
+      "network": "Palvelimeen ei saatu yhteyttä. Yritä uudelleen."
+    },
+    "returnHome": "Takaisin Wohnlyyn"
   }
 }

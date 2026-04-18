@@ -463,5 +463,40 @@
     "lastSynced": "Sidst synkroniseret",
     "syncing": "Synkroniserer...",
     "syncSuccess": "Kalender synkroniseret"
+  },
+  "leaveHouseholdPage": {
+    "title": "Forlad husstand",
+    "loading": "Indlæser…",
+    "confirmLeave": {
+      "heading": "Forlad {{household}}?",
+      "body": "Du er ved at forlade denne husstand. Du mister adgang til alle delte data.",
+      "warning": "Denne handling kan ikke fortrydes. Hvis du er det sidste medlem, slettes husstanden og alle delte data.",
+      "primary": "Ja, forlad husstanden"
+    },
+    "confirmCancel": {
+      "heading": "Annullér din anmodning om at forlade {{household}}?",
+      "body": "Din anmodning annulleres, og du forbliver medlem af husstanden.",
+      "primary": "Ja, annullér anmodning"
+    },
+    "secondary": "Tilbage",
+    "success": {
+      "leave": {
+        "heading": "Du har forladt {{household}}",
+        "body": "Du har ikke længere adgang til denne husstands delte data."
+      },
+      "cancel": {
+        "heading": "Anmodning annulleret",
+        "body": "Du er stadig medlem af {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Dette link mangler oplysninger. Brug knappen i e-mailen.",
+      "invalidToken": "Dette link er ugyldigt.",
+      "expired": "Dette link er udløbet. Anmod om et nyt i appen.",
+      "alreadyConfirmed": "Denne anmodning er allerede bekræftet.",
+      "alreadyCancelled": "Denne anmodning er allerede annulleret.",
+      "network": "Kunne ikke nå serveren. Prøv igen."
+    },
+    "returnHome": "Tilbage til Wohnly"
   }
 }

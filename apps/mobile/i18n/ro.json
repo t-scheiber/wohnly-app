@@ -463,5 +463,40 @@
     "lastSynced": "Ultima sincronizare",
     "syncing": "Se sincronizează...",
     "syncSuccess": "Calendar sincronizat cu succes"
+  },
+  "leaveHouseholdPage": {
+    "title": "Părăsește gospodăria",
+    "loading": "Se încarcă…",
+    "confirmLeave": {
+      "heading": "Părăsești {{household}}?",
+      "body": "Ești pe cale să părăsești această gospodărie. Vei pierde accesul la toate datele partajate.",
+      "warning": "Această acțiune nu poate fi anulată. Dacă ești ultimul membru, gospodăria și toate datele partajate vor fi șterse.",
+      "primary": "Da, părăsește gospodăria"
+    },
+    "confirmCancel": {
+      "heading": "Anulezi cererea de a părăsi {{household}}?",
+      "body": "Cererea ta va fi anulată și vei rămâne membru al gospodăriei.",
+      "primary": "Da, anulează cererea"
+    },
+    "secondary": "Înapoi",
+    "success": {
+      "leave": {
+        "heading": "Ai părăsit {{household}}",
+        "body": "Nu mai ai acces la datele partajate ale acestei gospodării."
+      },
+      "cancel": {
+        "heading": "Cerere anulată",
+        "body": "Ești în continuare membru al {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Acestui link îi lipsesc informații. Folosește butonul din e-mail.",
+      "invalidToken": "Acest link nu este valid.",
+      "expired": "Acest link a expirat. Solicită unul nou din aplicație.",
+      "alreadyConfirmed": "Această cerere a fost deja confirmată.",
+      "alreadyCancelled": "Această cerere a fost deja anulată.",
+      "network": "Serverul nu poate fi contactat. Încearcă din nou."
+    },
+    "returnHome": "Înapoi la Wohnly"
   }
 }

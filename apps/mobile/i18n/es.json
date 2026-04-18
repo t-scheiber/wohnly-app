@@ -463,5 +463,40 @@
     "lastSynced": "Última sincronización",
     "syncing": "Sincronizando...",
     "syncSuccess": "Calendario sincronizado correctamente"
+  },
+  "leaveHouseholdPage": {
+    "title": "Salir del hogar",
+    "loading": "Cargando…",
+    "confirmLeave": {
+      "heading": "¿Salir de {{household}}?",
+      "body": "Estás a punto de salir de este hogar. Perderás el acceso a todos los datos compartidos.",
+      "warning": "Esta acción no se puede deshacer. Si eres el último miembro, el hogar y todos sus datos compartidos se eliminarán.",
+      "primary": "Sí, salir del hogar"
+    },
+    "confirmCancel": {
+      "heading": "¿Cancelar tu solicitud para salir de {{household}}?",
+      "body": "Tu solicitud se cancelará y seguirás siendo miembro del hogar.",
+      "primary": "Sí, cancelar solicitud"
+    },
+    "secondary": "Volver",
+    "success": {
+      "leave": {
+        "heading": "Has salido de {{household}}",
+        "body": "Ya no tienes acceso a los datos compartidos de este hogar."
+      },
+      "cancel": {
+        "heading": "Solicitud cancelada",
+        "body": "Sigues siendo miembro de {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "A este enlace le falta información. Usa el botón del correo electrónico.",
+      "invalidToken": "Este enlace no es válido.",
+      "expired": "Este enlace ha caducado. Solicita uno nuevo desde la aplicación.",
+      "alreadyConfirmed": "Esta solicitud ya se ha confirmado.",
+      "alreadyCancelled": "Esta solicitud ya se ha cancelado.",
+      "network": "No se pudo conectar con el servidor. Inténtalo de nuevo."
+    },
+    "returnHome": "Volver a Wohnly"
   }
 }

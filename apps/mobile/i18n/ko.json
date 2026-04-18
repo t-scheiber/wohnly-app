@@ -463,5 +463,40 @@
     "lastSynced": "마지막 동기화",
     "syncing": "동기화 중...",
     "syncSuccess": "캘린더가 동기화되었습니다"
+  },
+  "leaveHouseholdPage": {
+    "title": "가구 나가기",
+    "loading": "불러오는 중…",
+    "confirmLeave": {
+      "heading": "{{household}}에서 나가시겠습니까?",
+      "body": "이 가구에서 나가려고 합니다. 모든 공유 데이터에 대한 액세스 권한을 잃게 됩니다.",
+      "warning": "이 작업은 취소할 수 없습니다. 마지막 구성원인 경우 가구와 모든 공유 데이터가 삭제됩니다.",
+      "primary": "예, 가구 나가기"
+    },
+    "confirmCancel": {
+      "heading": "{{household}}에서 나가기 요청을 취소하시겠습니까?",
+      "body": "요청이 취소되고 가구의 구성원으로 남게 됩니다.",
+      "primary": "예, 요청 취소"
+    },
+    "secondary": "뒤로",
+    "success": {
+      "leave": {
+        "heading": "{{household}}에서 나갔습니다",
+        "body": "더 이상 이 가구의 공유 데이터에 액세스할 수 없습니다."
+      },
+      "cancel": {
+        "heading": "요청이 취소되었습니다",
+        "body": "여전히 {{household}}의 구성원입니다."
+      }
+    },
+    "error": {
+      "missingToken": "이 링크에 필요한 정보가 없습니다. 이메일의 버튼을 사용하세요.",
+      "invalidToken": "이 링크는 유효하지 않습니다.",
+      "expired": "이 링크가 만료되었습니다. 앱에서 새로 요청하세요.",
+      "alreadyConfirmed": "이 요청은 이미 확인되었습니다.",
+      "alreadyCancelled": "이 요청은 이미 취소되었습니다.",
+      "network": "서버에 연결할 수 없습니다. 다시 시도하세요."
+    },
+    "returnHome": "Wohnly로 돌아가기"
   }
 }

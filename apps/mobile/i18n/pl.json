@@ -463,5 +463,40 @@
     "lastSynced": "Ostatnia synchronizacja",
     "syncing": "Synchronizowanie...",
     "syncSuccess": "Kalendarz zsynchronizowany pomyślnie"
+  },
+  "leaveHouseholdPage": {
+    "title": "Opuść gospodarstwo",
+    "loading": "Wczytywanie…",
+    "confirmLeave": {
+      "heading": "Opuścić {{household}}?",
+      "body": "Zamierzasz opuścić to gospodarstwo. Stracisz dostęp do wszystkich wspólnych danych.",
+      "warning": "Tej akcji nie można cofnąć. Jeśli jesteś ostatnim członkiem, gospodarstwo i wszystkie wspólne dane zostaną usunięte.",
+      "primary": "Tak, opuść gospodarstwo"
+    },
+    "confirmCancel": {
+      "heading": "Anulować prośbę o opuszczenie {{household}}?",
+      "body": "Twoja prośba zostanie anulowana i pozostaniesz członkiem gospodarstwa.",
+      "primary": "Tak, anuluj prośbę"
+    },
+    "secondary": "Wstecz",
+    "success": {
+      "leave": {
+        "heading": "Opuściłeś {{household}}",
+        "body": "Nie masz już dostępu do wspólnych danych tego gospodarstwa."
+      },
+      "cancel": {
+        "heading": "Prośba anulowana",
+        "body": "Nadal jesteś członkiem {{household}}."
+      }
+    },
+    "error": {
+      "missingToken": "Ten link nie zawiera wymaganych informacji. Użyj przycisku z wiadomości e-mail.",
+      "invalidToken": "Ten link jest nieprawidłowy.",
+      "expired": "Ten link wygasł. Poproś o nowy w aplikacji.",
+      "alreadyConfirmed": "Ta prośba została już potwierdzona.",
+      "alreadyCancelled": "Ta prośba została już anulowana.",
+      "network": "Nie udało się połączyć z serwerem. Spróbuj ponownie."
+    },
+    "returnHome": "Powrót do Wohnly"
   }
 }
