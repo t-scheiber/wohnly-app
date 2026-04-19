@@ -1,19 +1,33 @@
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
+import { rateLimit } from "../lib/rate-limit.js";
 import type { AppEnv } from "../types.js";
 
 const app = new Hono<AppEnv>();
 app.use("*", requireAuth);
 
-// POST /api/invitations/create
+// POST /api/invitations/create — OWNER only, optional invitedEmail for frictionless join
 app.post("/create", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json().catch(() => ({}));
   const expiresInDays = body.expiresInDays ?? 30;
+  const invitedEmail: string | undefined =
+    typeof body.invitedEmail === "string" && body.invitedEmail.length > 0
+      ? body.invitedEmail
+      : undefined;
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
+  if (member.role !== "OWNER")
+    return c.json({ error: "Only owners can create invites" }, 403);
+
+  const rl = rateLimit(`invite:create:${member.householdId}`, 10, 60 * 60 * 1000);
+  if (!rl.ok)
+    return c.json(
+      { error: "Too many invites for this household", retryAfter: rl.retryAfter },
+      429,
+    );
 
   const expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000);
 
@@ -21,6 +35,7 @@ app.post("/create", async (c) => {
     data: {
       householdId: member.householdId,
       sentByUserId: userId,
+      invitedEmail: invitedEmail ?? null,
       expiresAt,
     },
   });
