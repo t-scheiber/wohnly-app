@@ -60,27 +60,39 @@ All schema changes are fresh (no migration from existing data — see §7).
 
 ```prisma
 model AccessRequest {
-  id                String    @id @default(cuid())
-  householdId       String
-  household         Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
-  kind              AccessRequestKind            // DEVICE_ENROLLMENT | HOUSEHOLD_JOIN
-  requesterUserId   String
-  requester         User      @relation("AccessRequester", fields: [requesterUserId], references: [id])
-  requesterDeviceId String?                      // set for DEVICE_ENROLLMENT
-  invitationId      String?                      // set for HOUSEHOLD_JOIN
-  invitation        HouseholdInvitation? @relation(fields: [invitationId], references: [id])
-  verificationHash  String                       // sha256(code + id), never the plaintext
-  attemptCount      Int       @default(0)
-  status            AccessRequestStatus          // PENDING | APPROVED | REJECTED | EXPIRED
-  expiresAt         DateTime
-  approvedByUserId  String?
-  approvedAt        DateTime?
-  rejectedAt        DateTime?
-  createdAt         DateTime  @default(now())
+  id                    String    @id @default(cuid())
+  householdId           String
+  household             Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  kind                  AccessRequestKind         // DEVICE_ENROLLMENT | HOUSEHOLD_JOIN
+  requesterUserId       String
+  requester             User      @relation("AccessRequester", fields: [requesterUserId], references: [id])
+
+  // Pending-device payload — set for every request (device enrollment and first-device-of-new-user alike).
+  // The new device has no Device row yet; the approver reads the pubkey from here to seal the household key.
+  // On approve, a Device row is created using these fields and this column is used exactly once.
+  requesterDevicePublicKey   String              // X25519 pubkey, base64
+  requesterDeviceFingerprint String              // persistent UUID (client-generated), used for dedup
+  requesterDeviceName        String?             // user-agent-derived friendly name ("MacBook Pro")
+
+  // Populated only after approval — links the created Device back to the request for audit.
+  resultingDeviceId     String?   @unique
+  resultingDevice       Device?   @relation(fields: [resultingDeviceId], references: [id])
+
+  invitationId          String?                   // set for HOUSEHOLD_JOIN
+  invitation            HouseholdInvitation? @relation(fields: [invitationId], references: [id])
+  verificationHash      String                    // sha256(code + id), never the plaintext
+  attemptCount          Int       @default(0)
+  status                AccessRequestStatus       // PENDING | APPROVED | REJECTED | EXPIRED
+  expiresAt             DateTime
+  approvedByUserId      String?
+  approvedAt            DateTime?
+  rejectedAt            DateTime?
+  createdAt             DateTime  @default(now())
 
   @@index([householdId, status])
   @@index([requesterUserId, status])
   @@index([expiresAt, status])
+  @@index([requesterUserId, requesterDeviceFingerprint])
 }
 
 enum AccessRequestKind {
@@ -122,7 +134,8 @@ model EpochRotation {
 - **`HouseholdInvitation.invitedEmail`** — new optional string. When set, the join endpoint requires the session email to match.
 - **`Household.keyRotatedAt`** — new optional timestamp. Set on every successful epoch commit. Surfaces in UI as "Key rotated 2 days ago."
 - **`Household.keyEpoch`** — already exists; now actually incremented.
-- **`Device.status`** — removed. A device row either exists (= approved) or doesn't. Pending enrollments live in `AccessRequest` only.
+- **`Device.status`** — removed. A device row either exists (= approved) or doesn't. Pending enrollments live in `AccessRequest` only; the new device's public key and fingerprint are carried on the request until approval, at which point a `Device` row is created and linked back via `AccessRequest.resultingDeviceId`.
+- **`HouseholdKeyEnvelope` unique constraint** — changes from `@@unique([householdId, deviceId])` to `@@unique([householdId, deviceId, keyEpoch])`. Old envelopes are retained per epoch so a device can decrypt historical content; the existing single-envelope-per-device constraint would block that. New indexes: `@@index([householdId, keyEpoch])` for lookups during rotation commits.
 
 ### Encrypted content tables
 
@@ -158,12 +171,18 @@ All new endpoints live under `/api/access/*`. Existing crypto-related endpoints 
 
 Implemented as two new Hono middlewares: `requireOwner(householdId)` and `requireSelf(userId)`, composed on top of the existing `requireAuth`.
 
+### Envelope distribution (post-approval)
+
+- `POST /api/households/:householdId/envelopes` — upload a sealed household key envelope for an already-approved device. Body: `{ deviceId, sealedHK, keyEpoch }`. Authorized: caller must be a `HouseholdMember` of `householdId` and own at least one `Device` that already has an envelope at `keyEpoch` (i.e., they plausibly hold the plaintext key). Target `deviceId` must already exist and be in the same `householdId`. Server-side: upsert on `@@unique([householdId, deviceId, keyEpoch])` — a pre-existing envelope wins, the call returns `200` without overwrite. Emits `access.request.envelope_delivered` (resyncs the target device's waiting screen). Used by:
+  - The email-pre-authorized join path (step 4 below), where the request is auto-approved server-side and no owner held the key at approve time.
+  - The §6 post-approval recovery path, where the approve endpoint's atomic envelope insert failed or the target device was created later than its envelope.
+
 ### Invitations
 
 - `POST /api/invitations/create` — unchanged URL, new optional body field `invitedEmail`. Returns `{ code, shareUrl, expiresAt, invitedEmail }`.
-- `POST /api/households/join` — unchanged URL. Body: `{ code }`. Behavior:
-  - If invitation has `invitedEmail` **and** matches session email → immediately create `HouseholdMember` (role `MEMBER`) + auto-approved `AccessRequest` (for audit) + trigger key distribution. No verification code shown to the user.
-  - Otherwise → create `PENDING` `AccessRequest` (kind `HOUSEHOLD_JOIN`). Do **not** create the member yet. User lands on Surface C (waiting screen, §4) with the 6-digit code.
+- `POST /api/households/join` — unchanged URL. Body: `{ code, requesterDevicePublicKey, requesterDeviceFingerprint, requesterDeviceName? }`. Behavior:
+  - If invitation has `invitedEmail` **and** matches session email → inside one transaction: create `HouseholdMember` (role `MEMBER`), create `AccessRequest` (kind `HOUSEHOLD_JOIN`, status `APPROVED`, all `requesterDevice*` fields populated), create `Device` row, link `resultingDeviceId`, emit SSE. The auto-approved request is still created for audit and to trigger the key-distribution event the same way a manual approval does. No verification code shown to the user.
+  - Otherwise → create `PENDING` `AccessRequest` (kind `HOUSEHOLD_JOIN`) carrying the pubkey/fingerprint. Do **not** create `HouseholdMember` or `Device` yet — those are only written when an owner approves. User lands on Surface C (waiting screen, §4) with the 6-digit code.
 
 ### Real-time events
 
@@ -221,19 +240,19 @@ Each event carries `{ type, householdId?, requestId?, epoch? }`. No entity paylo
 
 ### Device enrollment flow (same user, cross-device)
 
-1. User signs into a new device. `e2ee-setup` generates the device keypair locally, calls `POST /api/access/requests` with `kind=DEVICE_ENROLLMENT` and the new device's public key. Server returns `{ id, verificationCode, expiresAt }`.
+1. User signs into a new device. `e2ee-setup` generates the device keypair and a persistent device fingerprint locally, then calls `POST /api/access/requests` with `kind=DEVICE_ENROLLMENT` and `{ requesterDevicePublicKey, requesterDeviceFingerprint, requesterDeviceName }`. No `Device` row is created yet — the pubkey lives on the `AccessRequest`. Server returns `{ id, verificationCode, expiresAt }`.
 2. New device displays the waiting screen (Surface C): **"Approval code: 482 193 — open Wohnly on another of your devices to approve."**
-3. An existing approved device of the same user receives SSE `access.request.created`. Inline modal (Surface B) opens: requester identity + 6-digit input field.
+3. An existing approved device of the same user receives SSE `access.request.created`. Client fetches the full request (including `requesterDevicePublicKey`). Inline modal (Surface B) opens: requester identity + 6-digit input field.
 4. User reads the code off the new device, enters it on the existing one.
-5. Existing device calls `POST /api/access/requests/:id/approve` with the entered code and the sealed household key envelope (sealed using the new device's pubkey from the request). Server validates code, stores envelope, transitions request to `APPROVED`, emits SSE.
+5. Existing device seals the current-epoch household key to the pubkey carried on the request, then calls `POST /api/access/requests/:id/approve` with the entered code and the sealed envelope. Server, inside one transaction: validates the code, creates a new `Device` row from the request's `requesterDevice*` fields, writes a `HouseholdKeyEnvelope` at the current `keyEpoch`, sets `AccessRequest.resultingDeviceId`, transitions status to `APPROVED`, emits SSE.
 6. New device receives `access.request.approved` via SSE, fetches its envelope, unseals with its device private key, caches the household key, closes Surface C.
 
 ### Household join — email-pre-authorized (frictionless path)
 
 1. Owner creates invitation with `invitedEmail = "jane@x.com"`. Link + code generated, shared with Jane.
-2. Jane signs up / logs in with `jane@x.com`. Client calls `POST /api/households/join { code }`.
-3. Server verifies session email matches `invitedEmail`. Creates `HouseholdMember` (role `MEMBER`), creates auto-approved `AccessRequest` for audit, emits `access.request.approved`.
-4. Any owner device receives the SSE event, seals the current-epoch household key to Jane's newly registered device pubkey, uploads envelope.
+2. Jane signs up / logs in with `jane@x.com`. `e2ee-setup` generates her device keypair + fingerprint locally. Client calls `POST /api/households/join { code, requesterDevicePublicKey, requesterDeviceFingerprint, requesterDeviceName }`.
+3. Server verifies session email matches `invitedEmail`. Inside one transaction: creates `HouseholdMember` (role `MEMBER`), creates auto-approved `AccessRequest` (for audit + event), creates `Device` row from the request fields, sets `resultingDeviceId`. Emits `access.request.approved`.
+4. Any owner device receives the SSE event, seals the current-epoch household key to Jane's device pubkey (read from the event's `resultingDeviceId` → Device), uploads envelope via a **post-approval distribution** call (see §6 — same endpoint used by the enrollment approve flow, but without a code requirement since the request is already `APPROVED`).
 5. Jane's device receives SSE, fetches envelope, unseals, lands on dashboard.
 
 No code ceremony. Time from Jane tapping "Join" to dashboard: ~5–10 seconds.
