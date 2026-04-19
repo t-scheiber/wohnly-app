@@ -30,6 +30,7 @@ app.post("/", async (c) => {
             userId,
             displayName: user.name,
             email: user.email,
+            role: "OWNER",
           },
         },
       },
@@ -94,7 +95,7 @@ app.post("/join", async (c) => {
       householdId: household.id,
       displayName: user.name,
       email: user.email,
-      role: "OWNER",
+      role: "MEMBER",
     },
   });
 
