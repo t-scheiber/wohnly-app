@@ -10,9 +10,8 @@
  */
 import { useEffect } from "react";
 import { getCachedHouseholdKey, loadHouseholdKeyFromStorage } from "@/lib/crypto/household-key-cache";
-import { getDeviceKeys } from "@/lib/crypto/device-storage";
-import { distributeKeyToDevice, fetchAndCacheHouseholdKey } from "@/lib/crypto/e2ee-setup";
-import { setActiveHouseholdId } from "@/lib/crypto/active-household";
+import { fetchAndCacheHouseholdKey } from "@/lib/crypto/e2ee-setup";
+import { setActiveHouseholdId, setActiveKeyEpoch } from "@/lib/crypto/active-household";
 import { api } from "@/lib/api/client";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 
@@ -31,43 +30,19 @@ export function useKeyDistribution() {
 
     (async () => {
       try {
-        // First, try in-memory cache, then persistent storage, then fetch from server
-        let hk = getCachedHouseholdKey(householdId);
+        // Resolve current epoch and fetch the key at that epoch if we don't hold it.
+        const state = await api<{ currentEpoch: number }>(`/api/households/${householdId}/key-state`);
+        const epoch = state.currentEpoch;
+        setActiveKeyEpoch(epoch);
+
+        let hk = getCachedHouseholdKey(householdId, epoch);
         if (!hk) {
-          hk = await loadHouseholdKeyFromStorage(householdId);
+          hk = await loadHouseholdKeyFromStorage(householdId, epoch);
         }
         if (!hk) {
           await fetchAndCacheHouseholdKey(householdId);
-          hk = getCachedHouseholdKey(householdId);
         }
-        if (!hk) {
-          console.log("[useKeyDistribution] No household key available — waiting for key distribution");
-          return;
-        }
-
-        const deviceKeys = await getDeviceKeys();
-        if (!deviceKeys) return;
-
-        // Get all approved devices in the household
-        const res = await api<{ devices: { id: string; publicKey: string; userId: string }[] }>(
-          `/api/devices/household`
-        );
-
-        // For each device, check if it has an envelope
-        for (const device of res.devices) {
-          if (device.id === deviceKeys.deviceId) continue; // Skip our own device
-
-          try {
-            const envRes = await api<{ envelope: { sealedHK: string } | null }>(
-              `/api/households/${householdId}/envelopes?deviceId=${device.id}`
-            );
-            if (!envRes.envelope) {
-              await distributeKeyToDevice(householdId, hk, device.publicKey, device.id);
-            }
-          } catch {
-            // Skip failed devices
-          }
-        }
+        // Legacy device fan-out removed — superseded by useKeyDistribution rewrite (Task 33).
       } catch {
         // Silent fail — key distribution is best-effort
       }

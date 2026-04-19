@@ -101,32 +101,35 @@ export async function createHouseholdWithE2EE(name: string): Promise<{
     }
   );
 
-  // Cache the household key in memory for immediate use
-  cacheHouseholdKey(res.household.id, householdKey);
+  // Cache the household key in memory for immediate use (new households start at epoch 1)
+  cacheHouseholdKey(res.household.id, 1, householdKey);
 
   return res;
 }
 
 /**
- * After joining a household, fetch and decrypt the sealed household key.
- * If no envelope exists yet (creator hasn't distributed keys), this is a no-op.
+ * After joining a household, fetch and decrypt the sealed household key for the
+ * current epoch. If no envelope exists yet (device not yet approved at this epoch),
+ * returns false so the caller can surface "awaiting distribution" UI.
  */
-export async function fetchAndCacheHouseholdKey(householdId: string): Promise<void> {
+export async function fetchAndCacheHouseholdKey(householdId: string): Promise<boolean> {
   const device = await getDeviceKeys();
-  if (!device) return; // No device keys — can't decrypt
+  if (!device) return false;
 
   try {
-    const res = await api<{ envelope: { sealedHK: string } | null }>(
-      `/api/households/${householdId}/envelopes?deviceId=${device.deviceId}`
+    const state = await api<{ currentEpoch: number }>(`/api/households/${householdId}/key-state`);
+    const res = await api<{ envelopes: { sealedHK: string; keyEpoch: number }[] }>(
+      `/api/households/${householdId}/envelopes/${state.currentEpoch}`,
     );
 
-    if (res.envelope?.sealedHK) {
-      const sealed = await base64ToSealed(res.envelope.sealedHK);
-      const householdKey = await openSealedHK(sealed, device.publicKey, device.privateKey);
-      cacheHouseholdKey(householdId, householdKey);
-    }
+    if (res.envelopes.length === 0) return false;
+    const sealed = await base64ToSealed(res.envelopes[0].sealedHK);
+    const householdKey = await openSealedHK(sealed, device.publicKey, device.privateKey);
+    cacheHouseholdKey(householdId, state.currentEpoch, householdKey);
+    return true;
   } catch {
-    // Envelope may not exist yet — that's OK, keys will be distributed later
+    // Envelope may not exist yet — key distribution event will trigger a retry
+    return false;
   }
 }
 
