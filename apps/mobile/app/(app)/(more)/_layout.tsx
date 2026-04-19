@@ -19,7 +19,7 @@ export default function MoreLayout() {
     >
       <Stack.Screen name="index" options={{ headerShown: false, title: t("tabs.more") }} />
       <Stack.Screen name="settings" options={{ title: t("settings.title") }} />
-      <Stack.Screen name="devices" options={{ title: t("settings.devices") }} />
+      <Stack.Screen name="access" options={{ title: t("access.menu.title") }} />
       <Stack.Screen name="help" options={{ title: t("help.helpAndTips") }} />
     </Stack>
   );
