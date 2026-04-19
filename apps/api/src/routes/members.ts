@@ -353,21 +353,21 @@ app.get("/leaderboard", async (c) => {
   });
 });
 
-// PATCH /api/members/:id/role — Change member role (admin only)
+// PATCH /api/members/:id/role — Change member role (owner only)
 app.patch("/:id/role", async (c) => {
   const userId = c.get("userId") as string;
   const targetId = c.req.param("id");
   const { role } = await c.req.json();
 
-  if (!role || !["admin", "member", "limited"].includes(role)) {
-    return c.json({ error: "Role must be 'admin', 'member', or 'limited'" }, 400);
+  if (!role || !["OWNER", "MEMBER"].includes(role)) {
+    return c.json({ error: "Role must be 'OWNER' or 'MEMBER'" }, 400);
   }
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
 
-  if (member.role !== "admin") {
-    return c.json({ error: "Only admins can change roles" }, 403);
+  if (member.role !== "OWNER") {
+    return c.json({ error: "Only owners can change roles" }, 403);
   }
 
   const target = await prisma.householdMember.findFirst({
@@ -375,12 +375,12 @@ app.patch("/:id/role", async (c) => {
   });
   if (!target) return c.json({ error: "Member not found" }, 404);
 
-  if (target.userId === userId && role !== "admin") {
-    const adminCount = await prisma.householdMember.count({
-      where: { householdId: member.householdId, role: "admin" },
+  if (target.userId === userId && role !== "OWNER") {
+    const ownerCount = await prisma.householdMember.count({
+      where: { householdId: member.householdId, role: "OWNER" },
     });
-    if (adminCount <= 1) {
-      return c.json({ error: "Cannot remove the last admin" }, 400);
+    if (ownerCount <= 1) {
+      return c.json({ error: "Cannot demote the last owner" }, 400);
     }
   }
 

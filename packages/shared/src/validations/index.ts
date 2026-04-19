@@ -208,7 +208,10 @@ export const createHouseholdSchema = z.object({
 });
 
 export const joinHouseholdSchema = z.object({
-  inviteCode: z.string().min(1, "Invite code is required"),
+  code: z.string().min(1, "Invite code is required"),
+  requesterDevicePublicKey: z.string().min(1).max(256),
+  requesterDeviceFingerprint: z.string().uuid(),
+  requesterDeviceName: z.string().max(100).optional(),
 });
 
 export const updateNicknameSchema = z.object({
@@ -245,3 +248,58 @@ export type UpdateNickname = z.infer<typeof updateNicknameSchema>;
 export type UpdatePreferences = z.infer<typeof updatePreferencesSchema>;
 export type CreateMealPlan = z.infer<typeof createMealPlanSchema>;
 export type UpdateMealPlan = z.infer<typeof updateMealPlanSchema>;
+
+// ── Access & Approval Schemas ──
+
+export const createAccessRequestSchema = z.object({
+  kind: z.enum(["DEVICE_ENROLLMENT", "HOUSEHOLD_JOIN"]),
+  householdId: z.string().cuid().optional(),
+  invitationCode: z.string().min(1).optional(),
+  requesterDevicePublicKey: z.string().min(1).max(256),
+  requesterDeviceFingerprint: z.string().uuid(),
+  requesterDeviceName: z.string().max(100).optional(),
+});
+
+export const approveAccessRequestSchema = z.object({
+  verificationCode: z.string().regex(/^\d{6}$/),
+  sealedHK: z.string().min(1),
+});
+
+export const rejectAccessRequestSchema = z.object({}).strict();
+
+export const listAccessRequestsSchema = z.object({
+  scope: z.enum(["incoming", "outgoing"]),
+  kind: z.enum(["DEVICE_ENROLLMENT", "HOUSEHOLD_JOIN"]).optional(),
+});
+
+export const createInvitationSchema = z
+  .object({
+    invitedEmail: z.string().email().optional(),
+  })
+  .strict();
+
+export const uploadEnvelopeSchema = z.object({
+  deviceId: z.string().cuid(),
+  sealedHK: z.string().min(1),
+  keyEpoch: z.number().int().min(1),
+});
+
+export const commitEpochSchema = z.object({
+  fromEpoch: z.number().int().min(1),
+  toEpoch: z.number().int().min(2),
+  envelopes: z
+    .array(
+      z.object({
+        deviceId: z.string().cuid(),
+        sealedHK: z.string().min(1),
+      })
+    )
+    .min(1),
+});
+
+export type CreateAccessRequest = z.infer<typeof createAccessRequestSchema>;
+export type ApproveAccessRequest = z.infer<typeof approveAccessRequestSchema>;
+export type ListAccessRequestsQuery = z.infer<typeof listAccessRequestsSchema>;
+export type CreateInvitation = z.infer<typeof createInvitationSchema>;
+export type UploadEnvelope = z.infer<typeof uploadEnvelopeSchema>;
+export type CommitEpoch = z.infer<typeof commitEpochSchema>;
