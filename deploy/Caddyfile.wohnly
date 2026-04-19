@@ -3,6 +3,15 @@
 
 # Wohnly API - reverse proxy to Hono
 api.wohnly.app {
+    # SSE path: disable buffering + long read timeout so the stream stays open
+    @sse path /api/stream
+    reverse_proxy @sse localhost:3001 {
+        flush_interval -1
+        transport http {
+            read_timeout 24h
+        }
+    }
+
     reverse_proxy localhost:3001
 }
 

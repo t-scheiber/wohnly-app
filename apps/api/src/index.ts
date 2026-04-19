@@ -23,6 +23,8 @@ import userRouter from "./routes/user.js";
 import webhooksRouter from "./routes/webhooks.js";
 import widgetsRouter from "./routes/widgets.js";
 import mealsRouter from "./routes/meals.js";
+import streamRouter from "./routes/stream.js";
+import { eventListener } from "./lib/events/listener.js";
 
 const app = new Hono<AppEnv>();
 
@@ -158,6 +160,7 @@ app.route("/api/user", userRouter);
 app.route("/api/webhooks", webhooksRouter);
 app.route("/api/widgets", widgetsRouter);
 app.route("/api/meals", mealsRouter);
+app.route("/api/stream", streamRouter);
 
 // Health check
 app.get("/api/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));
@@ -209,5 +212,10 @@ app.onError((err, c) => {
 
 const port = Number(process.env.PORT) || 3001;
 console.log(`Wohnly API starting on port ${port}`);
+
+eventListener.start().catch((err) => {
+  console.error("[events] failed to start listener", err);
+  process.exit(1);
+});
 
 serve({ fetch: app.fetch, port });
