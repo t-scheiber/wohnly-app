@@ -12,7 +12,6 @@ import { api, apiPost } from "@/lib/api/client";
 import {
   createHouseholdWithE2EE,
   ensureDeviceKeyMaterial,
-  ensureDeviceRegistered,
   fetchAndCacheHouseholdKey,
   requestDeviceEnrollment,
 } from "@/lib/crypto/e2ee-setup";
