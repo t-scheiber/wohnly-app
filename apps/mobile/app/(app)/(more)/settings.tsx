@@ -407,77 +407,13 @@ export default function SettingsScreen() {
           </SettingsSection>
         )}
 
-        {/* Devices & Security */}
-        <SettingsSection title={t("settings.devices")} colors={colors}>
-          {/* Pending devices needing approval */}
-          {pendingData?.devices && pendingData.devices.length > 0 && (
-            <>
-              <View style={{ padding: 12, paddingHorizontal: 16, backgroundColor: colors.background }}>
-                <Text style={{ fontSize: 12, fontWeight: "600", color: colors.destructive, textTransform: "uppercase" }}>
-                  {t("settings.pendingDevices")} ({pendingData.count})
-                </Text>
-              </View>
-              {pendingData.devices.map((device, i) => (
-                <View
-                  key={device.id}
-                  style={{
-                    padding: 16,
-                    borderBottomWidth: i < pendingData.devices.length - 1 ? 1 : 0,
-                    borderBottomColor: colors.border,
-                  }}
-                >
-                  <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 16, color: colors.text, fontWeight: "600" }}>
-                        {device.name || "Unknown"} — {device.user?.name || device.user?.email || ""}
-                      </Text>
-                      <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
-                        {t("settings.devicePending")}
-                      </Text>
-                    </View>
-                    <View style={{ flexDirection: "row", gap: 8 }}>
-                      <Pressable
-                        onPress={() => handleApproveDevice(device.id, device.publicKey)}
-                        disabled={approveDevice.isPending}
-                        style={({ pressed }) => ({
-                          backgroundColor: colors.primary,
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          paddingVertical: 6,
-                          opacity: approveDevice.isPending ? 0.5 : pressed ? 0.8 : 1,
-                        })}
-                      >
-                        <Text style={{ color: colors.primaryForeground, fontSize: 13, fontWeight: "600" }}>
-                          {t("settings.approveDevice")}
-                        </Text>
-                      </Pressable>
-                      <Pressable
-                        onPress={() => handleRejectDevice(device.id)}
-                        disabled={rejectDevice.isPending}
-                        style={({ pressed }) => ({
-                          borderWidth: 1,
-                          borderColor: colors.destructive,
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          paddingVertical: 6,
-                          opacity: rejectDevice.isPending ? 0.5 : pressed ? 0.8 : 1,
-                        })}
-                      >
-                        <Text style={{ color: colors.destructive, fontSize: 13, fontWeight: "600" }}>
-                          {t("settings.rejectDevice")}
-                        </Text>
-                      </Pressable>
-                    </View>
-                  </View>
-                </View>
-              ))}
-            </>
-          )}
+        {/* Access & Security — delegates to the new Access screen (Surface D) */}
+        <SettingsSection title={t("access.menu.title")} colors={colors}>
           <SettingsRow
             colors={colors}
-            label={t("settings.manageDevices")}
-            value={`${devicesData?.devices?.filter((d) => d.status === "approved").length ?? 0} ${t("devices.approved").toLowerCase()}`}
-            onPress={() => router.push("/(app)/(more)/devices" as any)}
+            label={t("access.menu.title")}
+            value={t("access.menu.subtitle")}
+            onPress={() => router.push("/(app)/(more)/access" as any)}
             isLast
           />
         </SettingsSection>

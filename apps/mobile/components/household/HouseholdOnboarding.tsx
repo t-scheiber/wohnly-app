@@ -7,12 +7,34 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Card } from "../ui/Card";
+import { WaitingScreen } from "@/components/access/WaitingScreen";
 import { api, apiPost } from "@/lib/api/client";
-import { createHouseholdWithE2EE, ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
+import {
+  createHouseholdWithE2EE,
+  ensureDeviceKeyMaterial,
+  ensureDeviceRegistered,
+  fetchAndCacheHouseholdKey,
+  requestDeviceEnrollment,
+} from "@/lib/crypto/e2ee-setup";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
-type Step = "choose" | "create" | "join" | "success" | "detected";
+type Step = "choose" | "create" | "join" | "success" | "detected" | "waiting";
+
+type PendingRequest = { requestId: string; verificationCode: string };
+
+function getDeviceDisplayName(): string {
+  if (Platform.OS === "web" && typeof navigator !== "undefined") {
+    const ua = navigator.userAgent;
+    if (ua.includes("Macintosh")) return "macOS";
+    if (ua.includes("Windows")) return "Windows";
+    if (ua.includes("Linux")) return "Linux";
+    return "Web";
+  }
+  if (Platform.OS === "ios") return "iPhone";
+  if (Platform.OS === "android") return "Android";
+  return Platform.OS;
+}
 
 interface HouseholdOnboardingProps {
   userName?: string;
@@ -32,6 +54,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   const [createdCode, setCreatedCode] = useState("");
   const [copied, setCopied] = useState(false);
   const [detectedHousehold, setDetectedHousehold] = useState<{ id: string; name: string } | null>(null);
+  const [pending, setPending] = useState<PendingRequest | null>(null);
 
   // Check if user is already in a household but hasn't linked this device
   useEffect(() => {
@@ -77,18 +100,35 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     if (!inviteCode.trim()) return;
     setLoading(true);
     try {
-      // Ensure device is registered before joining
-      try { await ensureDeviceRegistered(); } catch {}
+      const material = await ensureDeviceKeyMaterial();
+      const deviceName = getDeviceDisplayName();
 
-      const res = await apiPost<{ member: unknown; household: { id: string; name: string } }>(
-        "/api/households/join",
-        { inviteCode: inviteCode.trim() }
-      );
+      const res = await apiPost<
+        | {
+            joined: true;
+            membershipId: string;
+            deviceId: string;
+            householdId: string;
+            householdName: string;
+          }
+        | { pending: true; requestId: string; verificationCode: string; expiresAt: string }
+      >("/api/households/join", {
+        code: inviteCode.trim(),
+        requesterDevicePublicKey: material.publicKey,
+        requesterDeviceFingerprint: material.fingerprint,
+        requesterDeviceName: deviceName,
+      });
 
-      // Try to fetch and cache the household encryption key
+      if ("pending" in res) {
+        setPending({ requestId: res.requestId, verificationCode: res.verificationCode });
+        setStep("waiting");
+        return;
+      }
+
+      // Email-matched path: membership + device are already on the server. The owner's
+      // device will deliver an envelope via SSE; try to grab it now in case we're racing.
       try {
-        const { fetchAndCacheHouseholdKey } = await import("@/lib/crypto/e2ee-setup");
-        await fetchAndCacheHouseholdKey(res.household.id);
+        await fetchAndCacheHouseholdKey(res.householdId);
       } catch {}
 
       queryClient.invalidateQueries({ queryKey: ["members"] });
@@ -102,21 +142,21 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   };
 
   const handleLinkDevice = async () => {
+    if (!detectedHousehold) return;
     setLoading(true);
     try {
-      // 1. Ensure device is registered (generates local keys)
-      await ensureDeviceRegistered();
-      
-      // 2. Try to fetch existing keys (if another member already distributed them)
-      if (detectedHousehold) {
-        const { fetchAndCacheHouseholdKey } = await import("@/lib/crypto/e2ee-setup");
-        await fetchAndCacheHouseholdKey(detectedHousehold.id);
+      // If we already hold an envelope at the current epoch, no AccessRequest needed.
+      const alreadyHasKey = await fetchAndCacheHouseholdKey(detectedHousehold.id);
+      if (alreadyHasKey) {
+        queryClient.invalidateQueries({ queryKey: ["members"] });
+        queryClient.invalidateQueries({ queryKey: ["balances"] });
+        queryClient.invalidateQueries({ queryKey: ["household"] });
+        return;
       }
-
-      // 3. Move to dashboard
-      queryClient.invalidateQueries({ queryKey: ["members"] });
-      queryClient.invalidateQueries({ queryKey: ["balances"] });
-      queryClient.invalidateQueries({ queryKey: ["household"] });
+      // Otherwise create a DEVICE_ENROLLMENT AccessRequest and wait for approval.
+      const req = await requestDeviceEnrollment(detectedHousehold.id);
+      setPending({ requestId: req.id, verificationCode: req.verificationCode });
+      setStep("waiting");
     } catch (err: unknown) {
       showError(t("common.error"), err instanceof Error ? err.message : "Failed to link device");
     } finally {
@@ -147,6 +187,20 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     queryClient.invalidateQueries({ queryKey: ["balances"] });
     queryClient.invalidateQueries({ queryKey: ["household"] });
   };
+
+  // ── Step: Waiting for approval (join or device-enrollment) ──
+  if (step === "waiting" && pending) {
+    return (
+      <WaitingScreen
+        requestId={pending.requestId}
+        verificationCode={pending.verificationCode}
+        onCancel={() => {
+          setPending(null);
+          setStep(detectedHousehold ? "detected" : "choose");
+        }}
+      />
+    );
+  }
 
   // ── Step: Detected Household (Second Device Flow) ──
   if (step === "detected" && detectedHousehold) {

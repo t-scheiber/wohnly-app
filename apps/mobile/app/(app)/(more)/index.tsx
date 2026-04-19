@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { useTranslation } from "react-i18next";
-import { Settings, HelpCircle, ChevronRight } from "lucide-react-native";
+import { Settings, HelpCircle, ChevronRight, ShieldCheck } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
 
@@ -64,6 +64,13 @@ export default function MoreScreen() {
               label={t("more.settings")}
               sublabel={t("more.settingsSubtitle")}
               onPress={() => router.push("/(app)/(more)/settings")}
+              colors={colors}
+            />
+            <MenuItem
+              icon={<ShieldCheck size={20} color={colors.primary} />}
+              label={t("access.menu.title")}
+              sublabel={t("access.menu.subtitle")}
+              onPress={() => router.push("/(app)/(more)/access" as any)}
               colors={colors}
             />
             <MenuItem
