@@ -306,36 +306,13 @@ git commit -m "feat(db): access redesign schema (AccessRequest, EpochRotation, O
 
 ---
 
-### Task 2: DB reset (dev only) & Prisma migration
+### Task 2: DB reset (SKIPPED — handled at cutover)
 
-**Files:**
+**Status:** Skipped during implementation. No migration file is generated or committed.
 
-- Create: `apps/api/prisma/migrations/<timestamp>_access_redesign/migration.sql`
+**Rationale:** User chose clean-DB cutover (spec §7). At Task 51 we run `prisma db push --force-reset` against the VPS, which reads `schema.prisma` directly and recreates the DB from scratch. Migration history isn't needed because there is no data to preserve. Post-cutover, future schema changes should go through normal `prisma migrate dev` flow; the first such change will become the project's migration baseline.
 
-- [ ] **Step 1: Reset local dev DB and generate migration**
-
-```bash
-cd apps/api
-npx prisma migrate reset --force --skip-seed
-npx prisma migrate dev --name access_redesign
-```
-
-Expected: migration file created under `apps/api/prisma/migrations/`; `prisma migrate reset` wipes and reapplies. Verify the generated SQL includes `CREATE TABLE "AccessRequest"`, `CREATE TABLE "EpochRotation"`, `ALTER TABLE "HouseholdMember" ... role`, and the unique-constraint change on `HouseholdKeyEnvelope`.
-
-- [ ] **Step 2: Sanity-check with Prisma Studio**
-
-```bash
-cd apps/api && npx prisma studio
-```
-
-Open `AccessRequest` and `EpochRotation` tables in the browser — they should appear with the documented columns. Close studio.
-
-- [ ] **Step 3: Commit migration**
-
-```bash
-git add apps/api/prisma/migrations/
-git commit -m "feat(db): migration for access redesign"
-```
+**What this means for intermediate tasks:** smoke-test steps in later tasks that assume a running API with a provisioned DB will note their tests as "verify at cutover" where they can't be run locally, or will be executed against the VPS via `ssh vps` when that's safe.
 
 ---
 
