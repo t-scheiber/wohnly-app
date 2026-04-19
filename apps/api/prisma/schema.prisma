@@ -13,22 +13,23 @@ datasource db {
 // ── Better Auth Tables ──────────────────────────────────────────────
 
 model User {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
   image         String?
-  lang          String    @default("en")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  lang          String   @default("en")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  sessions          Session[]
-  accounts          Account[]
-  devices           Device[]
-  preferences       UserPreferences?
-  subscription      UserSubscription?
-  pushTokens        PushToken[]
-  householdMembers  HouseholdMember[]
+  sessions         Session[]
+  accounts         Account[]
+  devices          Device[]
+  preferences      UserPreferences?
+  subscription     UserSubscription?
+  pushTokens       PushToken[]
+  householdMembers HouseholdMember[]
+  accessRequests   AccessRequest[]   @relation("AccessRequester")
 }
 
 model Session {
@@ -77,60 +78,63 @@ model Verification {
 // ── Household ───────────────────────────────────────────────────────
 
 model Household {
-  id            String   @id @default(cuid())
-  name          String
-  createdBy     String
-  inviteCode    String   @unique @default(cuid())
+  id             String    @id @default(cuid())
+  name           String
+  createdBy      String
+  inviteCode     String    @unique @default(cuid())
   trackExpenses  Boolean   @default(true)
   keyEpoch       Int       @default(1)
+  keyRotatedAt   DateTime?
   baseCurrency   String    @default("EUR")
   breakModeStart DateTime?
   breakModeEnd   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  members           HouseholdMember[]
-  todos             Todo[]
-  chores            Chore[]
-  expenses          Expense[]
-  subscriptions     Subscription[]
-  invitations       HouseholdInvitation[]
-  leaveRequests     LeaveConfirmation[]
-  events            Event[]
-  calendarSyncs     CalendarSync[]
-  keyEnvelopes      HouseholdKeyEnvelope[]
-  encryptedItems    EncryptedItem[]
-  shoppingItems     ShoppingItem[]
-  mealPlans         MealPlan[]
-  deletionRequest   HouseholdDeletionRequest?
+  members         HouseholdMember[]
+  todos           Todo[]
+  chores          Chore[]
+  expenses        Expense[]
+  subscriptions   Subscription[]
+  invitations     HouseholdInvitation[]
+  leaveRequests   LeaveConfirmation[]
+  events          Event[]
+  calendarSyncs   CalendarSync[]
+  keyEnvelopes    HouseholdKeyEnvelope[]
+  encryptedItems  EncryptedItem[]
+  shoppingItems   ShoppingItem[]
+  mealPlans       MealPlan[]
+  deletionRequest HouseholdDeletionRequest?
+  accessRequests  AccessRequest[]
+  epochRotations  EpochRotation[]
 
   @@index([createdBy])
 }
 
 model HouseholdMember {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   userId      String
   householdId String
   displayName String?
   email       String?
-  role        String   @default("member") // "admin" | "member" | "limited"
-  points      Int      @default(0)
-  joinedAt    DateTime @default(now())
+  role        HouseholdRole @default(MEMBER)
+  points      Int           @default(0)
+  joinedAt    DateTime      @default(now())
 
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
 
-  todoAssignments        TodoAssignment[]
-  choreAssignments       ChoreAssignment[]
-  eventAttendees         EventAttendee[]
-  expenseSplits          ExpenseSplit[]
-  subscriptionSplits     SubscriptionSplit[]
-  nicknamesGiven         MemberNickname[] @relation("NicknameGiver")
-  nicknamesReceived      MemberNickname[] @relation("NicknameTarget")
-  leaveConfirmation      LeaveConfirmation?
-  deletionApprovals      HouseholdDeletionApproval[]
-  choreCompletions       ChoreCompletion[]
-  lineItemAssignments    ExpenseLineItemAssignment[]
+  todoAssignments     TodoAssignment[]
+  choreAssignments    ChoreAssignment[]
+  eventAttendees      EventAttendee[]
+  expenseSplits       ExpenseSplit[]
+  subscriptionSplits  SubscriptionSplit[]
+  nicknamesGiven      MemberNickname[]            @relation("NicknameGiver")
+  nicknamesReceived   MemberNickname[]            @relation("NicknameTarget")
+  leaveConfirmation   LeaveConfirmation?
+  deletionApprovals   HouseholdDeletionApproval[]
+  choreCompletions    ChoreCompletion[]
+  lineItemAssignments ExpenseLineItemAssignment[]
 
   @@unique([userId, householdId])
   @@index([userId])
@@ -157,13 +161,15 @@ model HouseholdInvitation {
   code             String    @unique @default(cuid())
   sentByUserId     String
   email            String?
+  invitedEmail     String?
   createdAt        DateTime  @default(now())
   expiresAt        DateTime?
   acceptedAt       DateTime?
   acceptedByUserId String?
   revokedAt        DateTime?
 
-  household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  household      Household       @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  accessRequests AccessRequest[]
 
   @@index([householdId])
   @@index([code])
@@ -221,18 +227,19 @@ model HouseholdDeletionApproval {
 // ── Todos ───────────────────────────────────────────────────────────
 
 model Todo {
-  id          String    @id @default(cuid())
-  householdId String
-  title       String
-  description String?
-  completed   Boolean   @default(false)
-  isPersonal  Boolean   @default(false)
-  creatorId   String
-  dueDate     DateTime?
-  encrypted   Boolean   @default(false)
-  nonce       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  householdId     String
+  title           String
+  description     String?
+  completed       Boolean   @default(false)
+  isPersonal      Boolean   @default(false)
+  creatorId       String
+  dueDate         DateTime?
+  encrypted       Boolean   @default(false)
+  nonce           String?
+  encryptionEpoch Int       @default(1)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   household   Household        @relation(fields: [householdId], references: [id], onDelete: Cascade)
   assignments TodoAssignment[]
@@ -258,17 +265,18 @@ model TodoAssignment {
 // ── Shopping ────────────────────────────────────────────────────────
 
 model ShoppingItem {
-  id          String   @id @default(cuid())
-  householdId String
-  name        String
-  quantity    String?
-  checked     Boolean  @default(false)
-  isPersonal  Boolean  @default(false)
-  addedBy     String
-  encrypted   Boolean  @default(false)
-  nonce       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(cuid())
+  householdId     String
+  name            String
+  quantity        String?
+  checked         Boolean  @default(false)
+  isPersonal      Boolean  @default(false)
+  addedBy         String
+  encrypted       Boolean  @default(false)
+  nonce           String?
+  encryptionEpoch Int      @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
 
@@ -279,25 +287,26 @@ model ShoppingItem {
 // ── Chores ──────────────────────────────────────────────────────────
 
 model Chore {
-  id            String    @id @default(cuid())
-  householdId   String
-  title         String
-  description   String?
-  frequency     String    // "daily" | "weekly" | "biweekly" | "monthly"
-  dayOfWeek     Int?      // 0-6 for weekly/biweekly chores
-  dayOfMonth    Int?      // 1-31 for monthly chores
-  rotate        Boolean   @default(false) // rotate assignees each cycle
-  rotateIndex   Int       @default(0)     // current position in rotation
-  effortWeight  Int       @default(2)     // 1=trivial, 2=light, 3=medium, 4=heavy, 5=major
-  completed     Boolean   @default(false)
-  lastCompleted DateTime?
-  lastDoneBy    String?
-  encrypted     Boolean   @default(false)
-  nonce         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  householdId     String
+  title           String
+  description     String?
+  frequency       String // "daily" | "weekly" | "biweekly" | "monthly"
+  dayOfWeek       Int? // 0-6 for weekly/biweekly chores
+  dayOfMonth      Int? // 1-31 for monthly chores
+  rotate          Boolean   @default(false) // rotate assignees each cycle
+  rotateIndex     Int       @default(0) // current position in rotation
+  effortWeight    Int       @default(2) // 1=trivial, 2=light, 3=medium, 4=heavy, 5=major
+  completed       Boolean   @default(false)
+  lastCompleted   DateTime?
+  lastDoneBy      String?
+  encrypted       Boolean   @default(false)
+  nonce           String?
+  encryptionEpoch Int       @default(1)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  household   Household          @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  household   Household         @relation(fields: [householdId], references: [id], onDelete: Cascade)
   assignments ChoreAssignment[]
   completions ChoreCompletion[]
 
@@ -309,7 +318,7 @@ model ChoreCompletion {
   id           String   @id @default(cuid())
   choreId      String
   memberId     String
-  effortWeight Int      // Snapshot of chore effort at completion time
+  effortWeight Int // Snapshot of chore effort at completion time
   completedAt  DateTime @default(now())
 
   chore  Chore           @relation(fields: [choreId], references: [id], onDelete: Cascade)
@@ -355,23 +364,24 @@ model Event {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  household    Household       @relation(fields: [householdId], references: [id], onDelete: Cascade)
-  attendees    EventAttendee[]
-  reminders    EventReminder[]
-  encrypted    Boolean         @default(false)
-  nonce        String?
-  calendarSync CalendarSync?   @relation(fields: [calendarSyncId], references: [id], onDelete: SetNull)
+  household       Household       @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  attendees       EventAttendee[]
+  reminders       EventReminder[]
+  encrypted       Boolean         @default(false)
+  nonce           String?
+  encryptionEpoch Int             @default(1)
+  calendarSync    CalendarSync?   @relation(fields: [calendarSyncId], references: [id], onDelete: SetNull)
 
   @@index([householdId, startDate, endDate])
   @@index([calendarSyncId])
 }
 
 model EventAttendee {
-  id       String   @id @default(cuid())
-  eventId  String
-  memberId String
-  status   String   @default("pending") // "pending" | "accepted" | "declined" | "tentative"
-  notified Boolean  @default(false)
+  id        String   @id @default(cuid())
+  eventId   String
+  memberId  String
+  status    String   @default("pending") // "pending" | "accepted" | "declined" | "tentative"
+  notified  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -399,11 +409,11 @@ model CalendarSync {
   id            String    @id @default(cuid())
   householdId   String
   userId        String
-  provider      String    // "google" | "apple" | "microsoft" | "caldav"
+  provider      String // "google" | "apple" | "microsoft" | "caldav"
   calendarId    String
   calendarName  String
-  accessToken   String?   // Encrypted (AES-256-GCM)
-  refreshToken  String?   // Encrypted
+  accessToken   String? // Encrypted (AES-256-GCM)
+  refreshToken  String? // Encrypted
   syncEnabled   Boolean   @default(true)
   lastSyncedAt  DateTime?
   syncFrequency Int       @default(15) // minutes
@@ -435,10 +445,11 @@ model Expense {
   date            DateTime @default(now())
   encrypted       Boolean  @default(false)
   nonce           String?
+  encryptionEpoch Int      @default(1)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  household   Household            @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  household   Household           @relation(fields: [householdId], references: [id], onDelete: Cascade)
   splits      ExpenseSplit[]
   attachments ExpenseAttachment[]
   lineItems   ExpenseLineItem[]
@@ -449,15 +460,16 @@ model Expense {
 }
 
 model ExpenseAttachment {
-  id        String   @id @default(cuid())
-  expenseId String
-  type      String   // "note" | "photo"
-  content   String   @db.Text // note text or base64 image data
-  mimeType  String?  // e.g. "image/jpeg"
-  fileName  String?
-  encrypted Boolean  @default(false)
-  nonce     String?
-  createdAt DateTime @default(now())
+  id              String   @id @default(cuid())
+  expenseId       String
+  type            String // "note" | "photo"
+  content         String   @db.Text // note text or base64 image data
+  mimeType        String? // e.g. "image/jpeg"
+  fileName        String?
+  encrypted       Boolean  @default(false)
+  nonce           String?
+  encryptionEpoch Int      @default(1)
+  createdAt       DateTime @default(now())
 
   expense Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
 
@@ -465,14 +477,15 @@ model ExpenseAttachment {
 }
 
 model ExpenseLineItem {
-  id        String  @id @default(cuid())
-  expenseId String
-  name      String
-  amount    Decimal @db.Decimal(10, 2)
-  encrypted Boolean @default(false)
-  nonce     String?
+  id              String  @id @default(cuid())
+  expenseId       String
+  name            String
+  amount          Decimal @db.Decimal(10, 2)
+  encrypted       Boolean @default(false)
+  nonce           String?
+  encryptionEpoch Int     @default(1)
 
-  expense     Expense                      @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  expense     Expense                     @relation(fields: [expenseId], references: [id], onDelete: Cascade)
   assignments ExpenseLineItemAssignment[]
 
   @@index([expenseId])
@@ -491,14 +504,14 @@ model ExpenseLineItemAssignment {
 }
 
 model ExpenseSplit {
-  id         String   @id @default(cuid())
+  id         String    @id @default(cuid())
   expenseId  String
   memberId   String
-  amount     Decimal  @db.Decimal(10, 2)
-  percentage Decimal? @db.Decimal(5, 2)
-  isPaid     Boolean  @default(false)
+  amount     Decimal   @db.Decimal(10, 2)
+  percentage Decimal?  @db.Decimal(5, 2)
+  isPaid     Boolean   @default(false)
   paidDate   DateTime?
-  createdAt  DateTime @default(now())
+  createdAt  DateTime  @default(now())
 
   expense Expense         @relation(fields: [expenseId], references: [id], onDelete: Cascade)
   member  HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
@@ -509,24 +522,25 @@ model ExpenseSplit {
 }
 
 model Subscription {
-  id          String   @id @default(cuid())
-  householdId String
-  name        String
-  description String?
-  amount      Decimal  @db.Decimal(10, 2)
-  currency    String   @default("EUR")
-  frequency   String   // "weekly" | "biweekly" | "monthly" | "quarterly" | "yearly"
-  billingDate DateTime?
-  category    String
-  createdBy   String
-  active      Boolean  @default(true)
-  splitType   String   @default("equal")
-  encrypted   Boolean  @default(false)
-  nonce       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String    @id @default(cuid())
+  householdId     String
+  name            String
+  description     String?
+  amount          Decimal   @db.Decimal(10, 2)
+  currency        String    @default("EUR")
+  frequency       String // "weekly" | "biweekly" | "monthly" | "quarterly" | "yearly"
+  billingDate     DateTime?
+  category        String
+  createdBy       String
+  active          Boolean   @default(true)
+  splitType       String    @default("equal")
+  encrypted       Boolean   @default(false)
+  nonce           String?
+  encryptionEpoch Int       @default(1)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  household Household            @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  household Household           @relation(fields: [householdId], references: [id], onDelete: Cascade)
   splits    SubscriptionSplit[]
 
   @@index([householdId])
@@ -557,13 +571,14 @@ model Device {
   id          String   @id @default(cuid())
   userId      String
   name        String?
-  publicKey   String   // X25519 public key (base64)
-  fingerprint String?  // Persistent device UUID — survives key loss
+  publicKey   String // X25519 public key (base64)
+  fingerprint String? // Persistent device UUID — survives key loss
   status      String   @default("pending") // "pending" | "approved" | "rejected"
   createdAt   DateTime @default(now())
 
-  user      User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  envelopes HouseholdKeyEnvelope[]
+  user          User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  envelopes     HouseholdKeyEnvelope[]
+  accessRequest AccessRequest?
 
   @@unique([userId, publicKey])
   @@index([userId])
@@ -572,32 +587,95 @@ model Device {
 }
 
 model HouseholdKeyEnvelope {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   householdId String
   deviceId    String
   sealedHK    String // Sealed household key (base64)
-  keyEpoch    Int    @default(1)
+  keyEpoch    Int      @default(1)
   createdAt   DateTime @default(now())
 
   household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
   device    Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 
-  @@unique([householdId, deviceId])
+  @@unique([householdId, deviceId, keyEpoch])
+  @@index([householdId, keyEpoch])
   @@index([householdId])
   @@index([deviceId])
 }
 
+enum AccessRequestKind {
+  DEVICE_ENROLLMENT
+  HOUSEHOLD_JOIN
+}
+
+enum AccessRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum HouseholdRole {
+  OWNER
+  MEMBER
+}
+
+model AccessRequest {
+  id                         String               @id @default(cuid())
+  householdId                String
+  household                  Household            @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  kind                       AccessRequestKind
+  requesterUserId            String
+  requester                  User                 @relation("AccessRequester", fields: [requesterUserId], references: [id], onDelete: Cascade)
+  requesterDevicePublicKey   String
+  requesterDeviceFingerprint String
+  requesterDeviceName        String?
+  resultingDeviceId          String?              @unique
+  resultingDevice            Device?              @relation(fields: [resultingDeviceId], references: [id], onDelete: SetNull)
+  invitationId               String?
+  invitation                 HouseholdInvitation? @relation(fields: [invitationId], references: [id], onDelete: SetNull)
+  verificationHash           String
+  attemptCount               Int                  @default(0)
+  status                     AccessRequestStatus  @default(PENDING)
+  expiresAt                  DateTime
+  approvedByUserId           String?
+  approvedAt                 DateTime?
+  rejectedAt                 DateTime?
+  createdAt                  DateTime             @default(now())
+
+  @@index([householdId, status])
+  @@index([requesterUserId, status])
+  @@index([expiresAt, status])
+  @@index([requesterUserId, requesterDeviceFingerprint])
+}
+
+model EpochRotation {
+  id                String    @id @default(cuid())
+  householdId       String
+  household         Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  fromEpoch         Int
+  toEpoch           Int
+  triggeredByUserId String
+  reason            String // MEMBER_REMOVED | DEVICE_REMOVED | MANUAL
+  status            String    @default("PENDING") // PENDING | COMMITTED | FAILED
+  committedAt       DateTime?
+  createdAt         DateTime  @default(now())
+
+  @@unique([householdId, toEpoch])
+  @@index([householdId, status])
+}
+
 model EncryptedItem {
-  id          String   @id @default(cuid())
-  householdId String
-  itemType    String
-  itemId      String
-  cipher      String   // Encrypted payload (base64)
-  nonce       String   // Nonce (base64)
-  metadata    Json?    // Unencrypted metadata for server queries
-  keyEpoch    Int      @default(1)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(cuid())
+  householdId     String
+  itemType        String
+  itemId          String
+  cipher          String // Encrypted payload (base64)
+  nonce           String // Nonce (base64)
+  metadata        Json? // Unencrypted metadata for server queries
+  encryptionEpoch Int      @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
 
@@ -611,7 +689,7 @@ model PushToken {
   id        String   @id @default(cuid())
   userId    String
   token     String   @unique
-  platform  String   // "ios" | "android" | "web"
+  platform  String // "ios" | "android" | "web"
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -646,7 +724,7 @@ model UserPreferences {
   expenseAlerts   Boolean @default(true)
   defaultCurrency String  @default("EUR")
   weekStartsOn    String  @default("monday") // "monday" | "sunday"
-  timeFormat      String  @default("24h")     // "24h" | "12h"
+  timeFormat      String  @default("24h") // "24h" | "12h"
   onboardingDone  Boolean @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -656,8 +734,8 @@ model UserSubscription {
   id            String    @id @default(cuid())
   userId        String    @unique
   status        String    @default("free") // "free" | "active" | "expired" | "cancelled"
-  plan          String?   // "lifetime"
-  provider      String?   // "revenuecat" | "stripe"
+  plan          String? // "lifetime"
+  provider      String? // "revenuecat" | "stripe"
   providerSubId String?
   expiresAt     DateTime?
   createdAt     DateTime  @default(now())
@@ -669,17 +747,18 @@ model UserSubscription {
 // ── Meal Planning ──────────────────────────────────────────────────
 
 model MealPlan {
-  id          String   @id @default(cuid())
-  householdId String
-  date        DateTime
-  mealType    String   // "breakfast" | "lunch" | "dinner" | "snack"
-  title       String
-  recipe      String?  @db.Text
-  ingredients Json?    // Array of { name, quantity?, unit? }
-  encrypted   Boolean  @default(false)
-  nonce       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(cuid())
+  householdId     String
+  date            DateTime
+  mealType        String // "breakfast" | "lunch" | "dinner" | "snack"
+  title           String
+  recipe          String?  @db.Text
+  ingredients     Json? // Array of { name, quantity?, unit? }
+  encrypted       Boolean  @default(false)
+  nonce           String?
+  encryptionEpoch Int      @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   household Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
 
@@ -691,7 +770,7 @@ model MealPlan {
 model ExchangeRate {
   id        String   @id @default(cuid())
   base      String
-  rates     Json     // { "USD": 1.08, "GBP": 0.86, ... }
+  rates     Json // { "USD": 1.08, "GBP": 0.86, ... }
   fetchedAt DateTime @default(now())
 
   @@index([base, fetchedAt])
