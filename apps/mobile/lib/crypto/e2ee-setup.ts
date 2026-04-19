@@ -1,12 +1,12 @@
 /**
- * E2EE setup helpers for household creation and joining.
- * Orchestrates device registration, key generation, sealing, and caching.
- * Works on all platforms (iOS, Android, Web).
+ * E2EE setup helpers for household creation and access (device enrollment + join).
+ * Orchestrates key material, seals for post-approval envelope upload, and caches
+ * the unsealed household key per epoch.
  */
 import { Platform } from "react-native";
 import { generateDeviceKeys, generateHouseholdKey } from "./keys";
 import { sealToDevice, sealedToBase64, openSealedHK, base64ToSealed } from "./seal";
-import { saveDeviceKeys, getDeviceKeys, hasDeviceKeys, getDeviceFingerprint } from "./device-storage";
+import { saveDeviceKeys, getDeviceKeys, getDeviceFingerprint } from "./device-storage";
 import { cacheHouseholdKey } from "./household-key-cache";
 import { apiPost, api } from "@/lib/api/client";
 import { isTauri } from "@/lib/auth/tauri";
@@ -29,88 +29,129 @@ function getDeviceName(): string {
   return Platform.OS;
 }
 
-/**
- * Ensure the current device is registered with the server.
- * If already registered, validates with the server (handles account deletion/recreation).
- * Otherwise generates new keys and registers.
- */
-export async function ensureDeviceRegistered(): Promise<{
-  deviceId: string;
+export interface DeviceKeyMaterial {
+  deviceId: string | null; // null until the first AccessRequest is approved
   publicKey: string;
   privateKey: Uint8Array;
-}> {
+  fingerprint: string;
+}
+
+/**
+ * Ensure the device has a keypair + fingerprint. Safe to call repeatedly;
+ * returns the existing keys if already present.
+ *
+ * Unlike the old flow, this does NOT register the device with the server —
+ * registration happens implicitly when an AccessRequest is approved and the
+ * server creates the Device row.
+ */
+export async function ensureDeviceKeyMaterial(): Promise<DeviceKeyMaterial> {
   const existing = await getDeviceKeys();
   const fingerprint = await getDeviceFingerprint();
-
   if (existing) {
-    // Validate cached keys with server — the register endpoint deduplicates
-    // by publicKey (and fingerprint). If the account was deleted and recreated,
-    // the server will assign a new deviceId which we update in the cache.
-    const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
+    return {
+      deviceId: existing.deviceId,
       publicKey: existing.publicKey,
-      name: getDeviceName(),
+      privateKey: existing.privateKey,
       fingerprint,
-    });
-
-    if (res.deviceId !== existing.deviceId) {
-      await saveDeviceKeys(res.deviceId, existing.publicKey, existing.privateKey);
-      return { deviceId: res.deviceId, publicKey: existing.publicKey, privateKey: existing.privateKey };
-    }
-
-    return existing;
+    };
   }
 
-  // Generate new keypair
   const { publicKey, privateKey } = await generateDeviceKeys();
-
-  // Register with server (deduplicates by fingerprint, then publicKey)
-  const res = await apiPost<{ deviceId: string; status: string }>("/api/devices/register", {
-    publicKey,
-    name: getDeviceName(),
-    fingerprint,
-  });
-
-  // Save to secure storage
-  await saveDeviceKeys(res.deviceId, publicKey, privateKey);
-
-  return { deviceId: res.deviceId, publicKey, privateKey };
+  // deviceId is empty until an approval produces a Device row on the server.
+  await saveDeviceKeys("", publicKey, privateKey);
+  return { deviceId: null, publicKey, privateKey, fingerprint };
 }
 
 /**
  * Create a new household with E2EE.
- * 1. Ensure device is registered
- * 2. Generate household key
- * 3. Seal household key to this device
- * 4. Send deviceId + sealedHK with household creation
- * 5. Cache the household key in memory
+ * The creator is implicitly OWNER and holds epoch 1 immediately.
+ *
+ * 1. Ensure device key material exists; register the device via the legacy
+ *    /api/devices/register endpoint so it gets a deviceId before we attach
+ *    the household envelope. (Task 22 removes this endpoint once Phase 6 is
+ *    fully off device-approval flows; until then creators still rely on it.)
+ * 2. Generate the household key at epoch 1 and seal it to this device.
+ * 3. POST /api/households with { deviceId, sealedHK }.
+ * 4. Cache the household key under (householdId, epoch=1).
  */
 export async function createHouseholdWithE2EE(name: string): Promise<{
   household: { id: string; inviteCode: string };
 }> {
-  const device = await ensureDeviceRegistered();
+  const material = await ensureDeviceKeyMaterial();
+  const reg = await apiPost<{ deviceId: string; status: string }>(
+    "/api/devices/register",
+    {
+      name: getDeviceName(),
+      publicKey: material.publicKey,
+      fingerprint: material.fingerprint,
+    },
+  );
+  if (reg.deviceId !== material.deviceId) {
+    await saveDeviceKeys(reg.deviceId, material.publicKey, material.privateKey);
+  }
+
   const householdKey = await generateHouseholdKey();
-  const sealed = await sealToDevice(householdKey, device.publicKey);
+  const sealed = await sealToDevice(householdKey, material.publicKey);
   const sealedHKBase64 = await sealedToBase64(sealed);
 
   const res = await apiPost<{ household: { id: string; inviteCode: string } }>(
     "/api/households",
     {
       name,
-      deviceId: device.deviceId,
+      deviceId: reg.deviceId,
       sealedHK: sealedHKBase64,
-    }
+    },
   );
-
-  // Cache the household key in memory for immediate use (new households start at epoch 1)
   cacheHouseholdKey(res.household.id, 1, householdKey);
+  return { household: res.household };
+}
 
-  return res;
+export type AccessRequestCreateResult = {
+  id: string;
+  verificationCode: string;
+  expiresAt: string;
+};
+
+/**
+ * Request enrollment of this device into an existing household the user
+ * already belongs to. The user reads the returned verificationCode on this
+ * device and types it into one of their other already-approved devices.
+ */
+export async function requestDeviceEnrollment(
+  householdId: string,
+): Promise<AccessRequestCreateResult> {
+  const device = await ensureDeviceKeyMaterial();
+  return apiPost<AccessRequestCreateResult>("/api/access/requests", {
+    kind: "DEVICE_ENROLLMENT",
+    householdId,
+    requesterDevicePublicKey: device.publicKey,
+    requesterDeviceFingerprint: device.fingerprint,
+    requesterDeviceName: getDeviceName(),
+  });
 }
 
 /**
- * After joining a household, fetch and decrypt the sealed household key for the
- * current epoch. If no envelope exists yet (device not yet approved at this epoch),
- * returns false so the caller can surface "awaiting distribution" UI.
+ * Request to join a household using an invitation code. The requester reads
+ * the verification code from their device and sends it (out-of-band) to an
+ * OWNER, who types it into their app to approve.
+ */
+export async function requestHouseholdJoin(
+  invitationCode: string,
+): Promise<AccessRequestCreateResult> {
+  const device = await ensureDeviceKeyMaterial();
+  return apiPost<AccessRequestCreateResult>("/api/access/requests", {
+    kind: "HOUSEHOLD_JOIN",
+    invitationCode,
+    requesterDevicePublicKey: device.publicKey,
+    requesterDeviceFingerprint: device.fingerprint,
+    requesterDeviceName: getDeviceName(),
+  });
+}
+
+/**
+ * After approval (SSE event or manual poll), fetch the sealed envelope at the
+ * current epoch, unseal it, and cache it. Returns false if no envelope exists
+ * yet (approval hasn't landed for this device at this epoch).
  */
 export async function fetchAndCacheHouseholdKey(householdId: string): Promise<boolean> {
   const device = await getDeviceKeys();
@@ -121,33 +162,53 @@ export async function fetchAndCacheHouseholdKey(householdId: string): Promise<bo
     const res = await api<{ envelopes: { sealedHK: string; keyEpoch: number }[] }>(
       `/api/households/${householdId}/envelopes/${state.currentEpoch}`,
     );
-
     if (res.envelopes.length === 0) return false;
     const sealed = await base64ToSealed(res.envelopes[0].sealedHK);
-    const householdKey = await openSealedHK(sealed, device.publicKey, device.privateKey);
-    cacheHouseholdKey(householdId, state.currentEpoch, householdKey);
+    const hk = await openSealedHK(sealed, device.publicKey, device.privateKey);
+    cacheHouseholdKey(householdId, state.currentEpoch, hk);
     return true;
   } catch {
-    // Envelope may not exist yet — key distribution event will trigger a retry
     return false;
   }
 }
 
 /**
- * Distribute the household key to a new device.
- * Called by an existing member who has the household key.
+ * Seal the household key we hold to a peer device's public key — used by
+ * `useKeyDistribution` when heal-forward reseals to devices missing the
+ * current epoch's envelope.
+ */
+export async function sealHKToDevice(
+  householdKey: Uint8Array,
+  targetDevicePublicKey: string,
+): Promise<string> {
+  const sealed = await sealToDevice(householdKey, targetDevicePublicKey);
+  return sealedToBase64(sealed);
+}
+
+/**
+ * Legacy alias — kept for callers that only care that device key material is
+ * ready. Does not register with the server; device rows are now created on
+ * AccessRequest approval.
+ */
+export const ensureDeviceRegistered = ensureDeviceKeyMaterial;
+
+/**
+ * Legacy direct-distribute helper — kept during the transition so the old
+ * pending-devices approve flow in settings.tsx still compiles. Task 40b
+ * replaces that flow with the new AccessRequest approval modal; this helper
+ * is expected to disappear once that lands.
  */
 export async function distributeKeyToDevice(
   householdId: string,
   householdKey: Uint8Array,
   targetDevicePublicKey: string,
-  targetDeviceId: string
+  targetDeviceId: string,
 ): Promise<void> {
-  const sealed = await sealToDevice(householdKey, targetDevicePublicKey);
-  const sealedHKBase64 = await sealedToBase64(sealed);
-
-  await apiPost("/api/households/distribute-keys", {
-    householdId,
-    envelopes: [{ deviceId: targetDeviceId, sealedHK: sealedHKBase64 }],
+  const sealedHK = await sealHKToDevice(householdKey, targetDevicePublicKey);
+  const state = await api<{ currentEpoch: number }>(`/api/households/${householdId}/key-state`);
+  await apiPost(`/api/households/${householdId}/envelopes`, {
+    deviceId: targetDeviceId,
+    sealedHK,
+    keyEpoch: state.currentEpoch,
   });
 }
