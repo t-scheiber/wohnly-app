@@ -1,12 +1,12 @@
 /**
  * Field-level encryption service for each data type.
  *
- * Each encrypt function bundles sensitive fields into a JSON string,
- * encrypts it with one encryptData call, and stores the cipher in the
- * primary text field (title/name). The nonce goes into the nonce column.
+ * Each encrypt function bundles sensitive fields into a JSON string, encrypts
+ * with one encryptData call, and stamps the row with the `encryptionEpoch` the
+ * key belongs to so later decryption can look up the right key after rotation.
  *
- * Each decrypt function checks the encrypted flag, decrypts the title/name
- * field, parses the JSON, and merges the sensitive fields back.
+ * Each decrypt function checks the encrypted flag, decrypts the primary field,
+ * parses the JSON payload, and merges the sensitive fields back.
  */
 import { encryptData, decryptData } from "./encryption";
 
@@ -14,14 +14,15 @@ import { encryptData, decryptData } from "./encryption";
 
 export async function encryptTodo(
   data: { title: string; description?: string | null },
-  hk: Uint8Array
-): Promise<{ title: string; description: null; nonce: string; encrypted: true }> {
+  hk: Uint8Array,
+  epoch: number
+): Promise<{ title: string; description: null; nonce: string; encrypted: true; encryptionEpoch: number }> {
   const payload = JSON.stringify({
     title: data.title,
     description: data.description ?? null,
   });
   const { cipher, nonce } = await encryptData(payload, hk);
-  return { title: cipher, description: null, nonce, encrypted: true };
+  return { title: cipher, description: null, nonce, encrypted: true, encryptionEpoch: epoch };
 }
 
 export async function decryptTodo<T extends { title: string; description?: string | null; encrypted?: boolean; nonce?: string | null }>(
@@ -38,14 +39,15 @@ export async function decryptTodo<T extends { title: string; description?: strin
 
 export async function encryptShoppingItem(
   data: { name: string; quantity?: string | null },
-  hk: Uint8Array
-): Promise<{ name: string; quantity: null; nonce: string; encrypted: true }> {
+  hk: Uint8Array,
+  epoch: number
+): Promise<{ name: string; quantity: null; nonce: string; encrypted: true; encryptionEpoch: number }> {
   const payload = JSON.stringify({
     name: data.name,
     quantity: data.quantity ?? null,
   });
   const { cipher, nonce } = await encryptData(payload, hk);
-  return { name: cipher, quantity: null, nonce, encrypted: true };
+  return { name: cipher, quantity: null, nonce, encrypted: true, encryptionEpoch: epoch };
 }
 
 export async function decryptShoppingItem<T extends { name: string; quantity?: string | null; encrypted?: boolean; nonce?: string | null }>(
@@ -62,14 +64,15 @@ export async function decryptShoppingItem<T extends { name: string; quantity?: s
 
 export async function encryptChore(
   data: { title: string; description?: string | null },
-  hk: Uint8Array
-): Promise<{ title: string; description: null; nonce: string; encrypted: true }> {
+  hk: Uint8Array,
+  epoch: number
+): Promise<{ title: string; description: null; nonce: string; encrypted: true; encryptionEpoch: number }> {
   const payload = JSON.stringify({
     title: data.title,
     description: data.description ?? null,
   });
   const { cipher, nonce } = await encryptData(payload, hk);
-  return { title: cipher, description: null, nonce, encrypted: true };
+  return { title: cipher, description: null, nonce, encrypted: true, encryptionEpoch: epoch };
 }
 
 export async function decryptChore<T extends { title: string; description?: string | null; encrypted?: boolean; nonce?: string | null }>(
@@ -86,15 +89,16 @@ export async function decryptChore<T extends { title: string; description?: stri
 
 export async function encryptEvent(
   data: { title: string; description?: string | null; location?: string | null },
-  hk: Uint8Array
-): Promise<{ title: string; description: null; location: null; nonce: string; encrypted: true }> {
+  hk: Uint8Array,
+  epoch: number
+): Promise<{ title: string; description: null; location: null; nonce: string; encrypted: true; encryptionEpoch: number }> {
   const payload = JSON.stringify({
     title: data.title,
     description: data.description ?? null,
     location: data.location ?? null,
   });
   const { cipher, nonce } = await encryptData(payload, hk);
-  return { title: cipher, description: null, location: null, nonce, encrypted: true };
+  return { title: cipher, description: null, location: null, nonce, encrypted: true, encryptionEpoch: epoch };
 }
 
 export async function decryptEvent<T extends { title: string; description?: string | null; location?: string | null; encrypted?: boolean; nonce?: string | null }>(
@@ -112,14 +116,15 @@ export async function decryptEvent<T extends { title: string; description?: stri
 
 export async function encryptExpense(
   data: { title: string; description?: string | null },
-  hk: Uint8Array
-): Promise<{ title: string; description: null; nonce: string; encrypted: true }> {
+  hk: Uint8Array,
+  epoch: number
+): Promise<{ title: string; description: null; nonce: string; encrypted: true; encryptionEpoch: number }> {
   const payload = JSON.stringify({
     title: data.title,
     description: data.description ?? null,
   });
   const { cipher, nonce } = await encryptData(payload, hk);
-  return { title: cipher, description: null, nonce, encrypted: true };
+  return { title: cipher, description: null, nonce, encrypted: true, encryptionEpoch: epoch };
 }
 
 export async function decryptExpense<T extends { title: string; description?: string | null; encrypted?: boolean; nonce?: string | null }>(
@@ -137,10 +142,11 @@ export async function decryptExpense<T extends { title: string; description?: st
 
 export async function encryptAttachment(
   content: string,
-  hk: Uint8Array
-): Promise<{ content: string; nonce: string; encrypted: true }> {
+  hk: Uint8Array,
+  epoch: number
+): Promise<{ content: string; nonce: string; encrypted: true; encryptionEpoch: number }> {
   const { cipher, nonce } = await encryptData(content, hk);
-  return { content: cipher, nonce, encrypted: true };
+  return { content: cipher, nonce, encrypted: true, encryptionEpoch: epoch };
 }
 
 export async function decryptAttachment<T extends { content: string; encrypted?: boolean; nonce?: string | null }>(
@@ -157,14 +163,15 @@ export async function decryptAttachment<T extends { content: string; encrypted?:
 
 export async function encryptSubscription(
   data: { name: string; description?: string | null },
-  hk: Uint8Array
-): Promise<{ name: string; description: null; nonce: string; encrypted: true }> {
+  hk: Uint8Array,
+  epoch: number
+): Promise<{ name: string; description: null; nonce: string; encrypted: true; encryptionEpoch: number }> {
   const payload = JSON.stringify({
     name: data.name,
     description: data.description ?? null,
   });
   const { cipher, nonce } = await encryptData(payload, hk);
-  return { name: cipher, description: null, nonce, encrypted: true };
+  return { name: cipher, description: null, nonce, encrypted: true, encryptionEpoch: epoch };
 }
 
 export async function decryptSubscription<T extends { name: string; description?: string | null; encrypted?: boolean; nonce?: string | null }>(

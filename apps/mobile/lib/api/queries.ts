@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, apiPost, apiPatch, apiDelete } from "./client";
-import { getEncryptionKey, requireEncryptionKey } from "@/lib/crypto/active-household";
+import { getEncryptionKey, requireEncryptionKey, getActiveKeyEpoch } from "@/lib/crypto/active-household";
 import {
   encryptTodo, decryptTodo,
   encryptShoppingItem, decryptShoppingItem,
@@ -139,9 +139,10 @@ export function useTodos() {
     queryKey: ["todos"],
     queryFn: async () => {
       const res = await api<{ todos: Todo[]; pagination: unknown }>("/api/todos");
-      const hk = getEncryptionKey();
-      if (!hk) return res;
-      const todos = await Promise.all(res.todos.map((t) => decryptTodo(t, hk)));
+      const todos = await Promise.all(res.todos.map((t) => {
+        const hk = getEncryptionKey(t.encryptionEpoch ?? 1);
+        return hk ? decryptTodo(t, hk) : t;
+      }));
       return { ...res, todos };
     },
   });
@@ -190,8 +191,9 @@ export function useCreateTodo() {
       if (isPersonal) {
         return apiPost("/api/personal-todos", body);
       }
-      const hk = requireEncryptionKey();
-      const enc = await encryptTodo(body, hk);
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
+      const enc = await encryptTodo(body, hk, epoch);
       return apiPost("/api/todos", { ...body, ...enc });
     },
     onSuccess: () => {
@@ -220,9 +222,10 @@ export function useUpdateTodo() {
       if (isPersonal) {
         return apiPatch(`/api/personal-todos/${id}`, data);
       }
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       if (data.title) {
-        const enc = await encryptTodo(data as { title: string; description?: string }, hk);
+        const enc = await encryptTodo(data as { title: string; description?: string }, hk, epoch);
         return apiPatch(`/api/todos/${id}`, { ...data, ...enc });
       }
       return apiPatch(`/api/todos/${id}`, data);
@@ -254,9 +257,10 @@ export function useShoppingList() {
     queryKey: ["shopping"],
     queryFn: async () => {
       const res = await api<{ items: ShoppingItem[] }>("/api/shopping");
-      const hk = getEncryptionKey();
-      if (!hk) return res;
-      const items = await Promise.all(res.items.map((i) => decryptShoppingItem(i, hk)));
+      const items = await Promise.all(res.items.map((i) => {
+        const hk = getEncryptionKey(i.encryptionEpoch ?? 1);
+        return hk ? decryptShoppingItem(i, hk) : i;
+      }));
       return { ...res, items };
     },
   });
@@ -303,8 +307,9 @@ export function useCreateShoppingItem() {
       if (data.isPersonal) {
         return apiPost("/api/shopping", data);
       }
-      const hk = requireEncryptionKey();
-      const enc = await encryptShoppingItem(data, hk);
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
+      const enc = await encryptShoppingItem(data, hk, epoch);
       return apiPost("/api/shopping", { ...data, ...enc });
     },
     onSuccess: () => {
@@ -329,9 +334,10 @@ export function useUpdateShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: { id: string; name?: string; quantity?: string }) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       if (data.name) {
-        const enc = await encryptShoppingItem(data as { name: string; quantity?: string }, hk);
+        const enc = await encryptShoppingItem(data as { name: string; quantity?: string }, hk, epoch);
         return apiPatch(`/api/shopping/${id}`, { ...data, ...enc });
       }
       return apiPatch(`/api/shopping/${id}`, data);
@@ -363,9 +369,10 @@ export function useChores() {
     queryKey: ["chores"],
     queryFn: async () => {
       const res = await api<{ chores: Chore[] }>("/api/chores");
-      const hk = getEncryptionKey();
-      if (!hk) return res;
-      const chores = await Promise.all(res.chores.map((c) => decryptChore(c, hk)));
+      const chores = await Promise.all(res.chores.map((c) => {
+        const hk = getEncryptionKey(c.encryptionEpoch ?? 1);
+        return hk ? decryptChore(c, hk) : c;
+      }));
       return { ...res, chores };
     },
   });
@@ -375,8 +382,9 @@ export function useCreateChore() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: { title: string; frequency: string; description?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
-      const hk = requireEncryptionKey();
-      const enc = await encryptChore(data, hk);
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
+      const enc = await encryptChore(data, hk, epoch);
       return apiPost("/api/chores", { ...data, ...enc });
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["chores"] }),
@@ -414,9 +422,10 @@ export function useUpdateChore() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: { id: string; title?: string; description?: string; frequency?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       if (data.title) {
-        const enc = await encryptChore(data as { title: string; description?: string }, hk);
+        const enc = await encryptChore(data as { title: string; description?: string }, hk, epoch);
         return apiPatch(`/api/chores/${id}`, { ...data, ...enc });
       }
       return apiPatch(`/api/chores/${id}`, data);
@@ -548,9 +557,10 @@ export function useEvents(startDate?: string, endDate?: string) {
     queryKey: ["events", startDate, endDate],
     queryFn: async () => {
       const res = await api<{ events: Event[] }>(`/api/events${query ? `?${query}` : ""}`);
-      const hk = getEncryptionKey();
-      if (!hk) return res;
-      const events = await Promise.all(res.events.map((e) => decryptEvent(e, hk)));
+      const events = await Promise.all(res.events.map((e) => {
+        const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
+        return hk ? decryptEvent(e, hk) : e;
+      }));
       return { ...res, events };
     },
   });
@@ -560,10 +570,12 @@ export function useCreateEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       const enc = await encryptEvent(
         { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
-        hk
+        hk,
+        epoch
       );
       return apiPost("/api/events", { ...data, ...enc });
     },
@@ -583,11 +595,13 @@ export function useUpdateEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       if (data.title) {
         const enc = await encryptEvent(
           { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
-          hk
+          hk,
+          epoch
         );
         return apiPatch(`/api/events/${id}`, { ...data, ...enc });
       }
@@ -604,9 +618,10 @@ export function useExpenses() {
     queryKey: ["expenses"],
     queryFn: async () => {
       const res = await api<{ expenses: Expense[] }>("/api/expenses");
-      const hk = getEncryptionKey();
-      if (!hk) return res;
-      const expenses = await Promise.all(res.expenses.map((e) => decryptExpense(e, hk)));
+      const expenses = await Promise.all(res.expenses.map((e) => {
+        const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
+        return hk ? decryptExpense(e, hk) : e;
+      }));
       return { ...res, expenses };
     },
   });
@@ -616,10 +631,12 @@ export function useCreateExpense() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       const enc = await encryptExpense(
         { title: data.title as string, description: data.description as string | null },
-        hk
+        hk,
+        epoch
       );
       return apiPost("/api/expenses", { ...data, ...enc });
     },
@@ -647,9 +664,10 @@ export function useExpenseAttachments(expenseId: string | null) {
     queryFn: async () => {
       if (!expenseId) return { attachments: [] };
       const res = await api<{ attachments: ExpenseAttachment[] }>(`/api/expenses/${expenseId}/attachments`);
-      const hk = getEncryptionKey();
-      if (!hk) return res;
-      const attachments = await Promise.all(res.attachments.map((a) => decryptAttachment(a, hk)));
+      const attachments = await Promise.all(res.attachments.map((a) => {
+        const hk = getEncryptionKey(a.encryptionEpoch ?? 1);
+        return hk ? decryptAttachment(a, hk) : a;
+      }));
       return { ...res, attachments };
     },
     enabled: !!expenseId,
@@ -666,8 +684,9 @@ export function useAddAttachment() {
       mimeType?: string;
       fileName?: string;
     }) => {
-      const hk = requireEncryptionKey();
-      const enc = await encryptAttachment(content, hk);
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
+      const enc = await encryptAttachment(content, hk, epoch);
       return apiPost(`/api/expenses/${expenseId}/attachments`, {
         type, mimeType, fileName, ...enc,
       });
@@ -753,11 +772,13 @@ export function useUpdateExpense() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       if (data.title) {
         const enc = await encryptExpense(
           { title: data.title as string, description: data.description as string | null },
-          hk
+          hk,
+          epoch
         );
         return apiPatch(`/api/expenses/${id}`, { ...data, ...enc });
       }
@@ -777,9 +798,10 @@ export function useSubscriptions() {
     queryKey: ["subscriptions"],
     queryFn: async () => {
       const res = await api<{ subscriptions: Subscription[] }>("/api/subscriptions");
-      const hk = getEncryptionKey();
-      if (!hk) return res;
-      const subscriptions = await Promise.all(res.subscriptions.map((s) => decryptSubscription(s, hk)));
+      const subscriptions = await Promise.all(res.subscriptions.map((s) => {
+        const hk = getEncryptionKey(s.encryptionEpoch ?? 1);
+        return hk ? decryptSubscription(s, hk) : s;
+      }));
       return { ...res, subscriptions };
     },
   });
@@ -789,10 +811,12 @@ export function useCreateSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       const enc = await encryptSubscription(
         { name: data.name as string, description: data.description as string | null },
-        hk
+        hk,
+        epoch
       );
       return apiPost("/api/subscriptions", { ...data, ...enc });
     },
@@ -818,11 +842,13 @@ export function useUpdateSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
-      const hk = requireEncryptionKey();
+      const epoch = getActiveKeyEpoch();
+      const hk = requireEncryptionKey(epoch);
       if (data.name) {
         const enc = await encryptSubscription(
           { name: data.name as string, description: data.description as string | null },
-          hk
+          hk,
+          epoch
         );
         return apiPatch(`/api/subscriptions/${id}`, { ...data, ...enc });
       }

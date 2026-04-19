@@ -41,6 +41,7 @@ export interface Todo {
   dueDate?: Date | null;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
   updatedAt: Date;
   assignments?: TodoAssignment[];
@@ -61,6 +62,7 @@ export interface ShoppingItem {
   addedBy: string;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -77,6 +79,7 @@ export interface Chore {
   lastDoneBy?: string | null;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
   updatedAt: Date;
   assignments?: ChoreAssignment[];
@@ -127,6 +130,7 @@ export interface Event {
   externalId?: string | null;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
   updatedAt: Date;
   attendees?: EventAttendee[];
@@ -162,6 +166,7 @@ export interface Expense {
   date: Date;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
   updatedAt: Date;
   splits?: ExpenseSplit[];
@@ -188,6 +193,7 @@ export interface ExpenseLineItem {
   amount: string; // Decimal as string
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   assignments?: { id: string; lineItemId: string; memberId: string }[];
 }
 
@@ -200,6 +206,7 @@ export interface ExpenseAttachment {
   fileName?: string | null;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
 }
 
@@ -218,6 +225,7 @@ export interface Subscription {
   splitType: SplitType;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
   updatedAt: Date;
   splits?: SubscriptionSplit[];
@@ -256,6 +264,7 @@ export interface MealPlan {
   ingredients?: MealPlanIngredient[] | null;
   encrypted?: boolean;
   nonce?: string | null;
+  encryptionEpoch?: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
