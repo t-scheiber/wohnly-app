@@ -189,9 +189,14 @@ app.post("/:householdId/epochs/rotate", async (c) => {
   return c.json({ ok: true });
 });
 
-// DELETE /api/households/:householdId/devices/:deviceId — remove a device.
-// Owners can remove any device in their household; users can remove their own.
-// Deletes the device and its envelopes, then triggers rotation.
+// DELETE /api/households/:householdId/devices/:deviceId — revoke a device's
+// access to THIS household.
+//
+// - Deletes only this household's envelopes for the device (the Device row
+//   itself stays; the device may still be enrolled in other households).
+// - Requires the device's owner to be a member of the targeted household.
+// - Owners can remove any device; non-owners can only remove their own.
+// - Triggers key rotation so future content at the new epoch is protected.
 app.delete("/:householdId/devices/:deviceId", async (c) => {
   const householdId = c.req.param("householdId") as string;
   const deviceId = c.req.param("deviceId") as string;
@@ -208,6 +213,16 @@ app.delete("/:householdId/devices/:deviceId", async (c) => {
     select: { role: true },
   });
   if (!myMember) return c.json({ error: "Not a member" }, 403);
+
+  // The target device's owner must belong to this household, otherwise
+  // an OWNER of any household could delete envelopes for unrelated devices.
+  const targetMember = await prisma.householdMember.findUnique({
+    where: { userId_householdId: { userId: device.userId, householdId } },
+    select: { id: true },
+  });
+  if (!targetMember)
+    return c.json({ error: "Device is not in this household" }, 404);
+
   const isSelf = device.userId === userId;
   if (!isSelf && myMember.role !== "OWNER") {
     return c.json({ error: "Cannot remove another member's device" }, 403);
@@ -217,7 +232,6 @@ app.delete("/:householdId/devices/:deviceId", async (c) => {
     await tx.householdKeyEnvelope.deleteMany({
       where: { householdId, deviceId },
     });
-    await tx.device.delete({ where: { id: deviceId } });
     await triggerRotation(tx, householdId, userId, "DEVICE_REMOVED");
     await publishEvent(tx, {
       type: "household.device.removed",
