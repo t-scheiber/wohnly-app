@@ -901,3 +901,177 @@ export function useInvitations() {
       ),
   });
 }
+
+// ── Access requests + keys + epochs (Phase 6) ──
+
+export type AccessRequestKind = "DEVICE_ENROLLMENT" | "HOUSEHOLD_JOIN";
+
+export interface AccessRequestSummary {
+  id: string;
+  householdId: string;
+  kind: AccessRequestKind;
+  requesterUserId: string;
+  requesterUserName?: string | null;
+  requesterUserEmail?: string | null;
+  requesterDeviceName?: string | null;
+  requesterDeviceFingerprint?: string | null;
+  requesterDevicePublicKey?: string | null;
+  invitationId?: string | null;
+  status: "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
+  expiresAt: string;
+  createdAt: string;
+  approvedByUserId?: string | null;
+  approvedAt?: string | null;
+  rejectedAt?: string | null;
+}
+
+export function usePendingRequests(scope: "incoming" | "outgoing" = "incoming") {
+  return useQuery({
+    queryKey: ["access-requests", scope],
+    queryFn: () =>
+      api<{ requests: AccessRequestSummary[] }>(`/api/access/requests?scope=${scope}`),
+    refetchOnReconnect: true,
+    refetchInterval: 30_000, // fallback if SSE is absent
+  });
+}
+
+export function useCreateAccessRequest() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: {
+      kind: AccessRequestKind;
+      householdId?: string;
+      invitationCode?: string;
+      requesterDevicePublicKey: string;
+      requesterDeviceFingerprint: string;
+      requesterDeviceName?: string;
+    }) =>
+      apiPost<{ id: string; verificationCode: string; expiresAt: string }>(
+        "/api/access/requests",
+        body,
+      ),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["access-requests"] }),
+  });
+}
+
+export function useApproveAccessRequest() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { id: string; verificationCode: string; sealedHK: string }) =>
+      apiPost<{ ok: boolean; deviceId: string }>(
+        `/api/access/requests/${args.id}/approve`,
+        { verificationCode: args.verificationCode, sealedHK: args.sealedHK },
+      ),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["access-requests"] });
+      qc.invalidateQueries({ queryKey: ["key-state"] });
+      qc.invalidateQueries({ queryKey: ["devices"] });
+      qc.invalidateQueries({ queryKey: ["members"] });
+    },
+  });
+}
+
+export function useRejectAccessRequest() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiPost<{ ok: boolean }>(`/api/access/requests/${id}/reject`, {}),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["access-requests"] }),
+  });
+}
+
+export function useResendAccessRequest() {
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiPost<{ verificationCode: string }>(`/api/access/requests/${id}/resend`, {}),
+  });
+}
+
+export function useKeyState(householdId: string | undefined) {
+  return useQuery({
+    queryKey: ["key-state", householdId],
+    enabled: !!householdId,
+    queryFn: () =>
+      api<{
+        currentEpoch: number;
+        myEpochs: number[];
+        missingAtEpoch: { deviceId: string; epoch: number }[];
+      }>(`/api/households/${householdId}/key-state`),
+    refetchOnReconnect: true,
+    refetchInterval: 60_000,
+  });
+}
+
+export function useUploadEnvelope() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: {
+      householdId: string;
+      deviceId: string;
+      sealedHK: string;
+      keyEpoch: number;
+    }) =>
+      apiPost(`/api/households/${args.householdId}/envelopes`, {
+        deviceId: args.deviceId,
+        sealedHK: args.sealedHK,
+        keyEpoch: args.keyEpoch,
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["key-state"] }),
+  });
+}
+
+export function useCommitEpoch() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: {
+      householdId: string;
+      fromEpoch: number;
+      toEpoch: number;
+      envelopes: { deviceId: string; sealedHK: string }[];
+    }) =>
+      apiPost(`/api/households/${args.householdId}/epochs/commit`, {
+        fromEpoch: args.fromEpoch,
+        toEpoch: args.toEpoch,
+        envelopes: args.envelopes,
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["key-state"] }),
+  });
+}
+
+export function useTriggerRotation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (householdId: string) =>
+      apiPost(`/api/households/${householdId}/epochs/rotate`, {}),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["key-state"] }),
+  });
+}
+
+export function useHouseholdDevicesNew(householdId: string | undefined) {
+  return useQuery({
+    queryKey: ["devices", householdId],
+    enabled: !!householdId,
+    queryFn: () =>
+      api<{
+        devices: {
+          id: string;
+          name: string | null;
+          userId: string;
+          fingerprint: string | null;
+          createdAt: string;
+        }[];
+      }>(`/api/households/${householdId}/devices`),
+  });
+}
+
+export function useRemoveHouseholdDevice() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { householdId: string; deviceId: string }) =>
+      apiDelete(`/api/households/${args.householdId}/devices/${args.deviceId}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["devices"] });
+      qc.invalidateQueries({ queryKey: ["key-state"] });
+    },
+  });
+}
