@@ -13,6 +13,7 @@ import { initRevenueCat } from "@/lib/payments/setup";
 import { useConsent } from "@/lib/hooks/useConsent";
 import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
 import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
+import { useServerEvents } from "@/lib/hooks/useServerEvents";
 import { registerForPushNotifications, addNotificationListeners } from "@/lib/notifications/setup";
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
@@ -117,6 +118,10 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       window.history.replaceState({}, "", window.location.pathname);
     }
   }, []);
+
+  // Stream server events — access/key/rotation notifications invalidate the
+  // relevant React Query caches so surfaces A–D react in real time.
+  useServerEvents(!!session?.user?.id);
 
   useEffect(() => {
     if (isPending) return;
