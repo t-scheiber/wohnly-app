@@ -12,21 +12,36 @@ app.use("*", requireAuth);
 
 const JOIN_REQUEST_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
-// POST /api/households - Create household
+// POST /api/households - Create a household + register the creator's device + seal the
+// household key for that device, all in one transaction. The creator is implicitly OWNER
+// and holds the key at epoch 1.
+//
+// Body: { name, publicKey, fingerprint, deviceName?, sealedHK }
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const user = c.get("user") as { id: string; name: string; email: string };
   const body = await c.req.json();
 
-  const { name, deviceId, sealedHK } = body;
-  if (!name) {
-    return c.json({ error: "name is required" }, 400);
-  }
-  if (!deviceId || !sealedHK) {
-    return c.json({ error: "deviceId and sealedHK are required — register a device first" }, 400);
-  }
+  const {
+    name,
+    publicKey,
+    fingerprint,
+    deviceName,
+    sealedHK,
+  } = body as {
+    name?: string;
+    publicKey?: string;
+    fingerprint?: string;
+    deviceName?: string;
+    sealedHK?: string;
+  };
 
-  const household = await prisma.$transaction(async (tx) => {
+  if (!name) return c.json({ error: "name is required" }, 400);
+  if (!publicKey) return c.json({ error: "publicKey is required" }, 400);
+  if (!fingerprint) return c.json({ error: "fingerprint is required" }, 400);
+  if (!sealedHK) return c.json({ error: "sealedHK is required" }, 400);
+
+  const result = await prisma.$transaction(async (tx) => {
     const h = await tx.household.create({
       data: {
         name,
@@ -43,32 +58,41 @@ app.post("/", async (c) => {
       include: { members: true },
     });
 
-    // Store sealed household key for the creating device (E2EE)
+    // Reuse an existing device row for this (userId, fingerprint) if we can — covers
+    // resigning into the same device after a sign-out — otherwise create a new one.
     let device = await tx.device.findFirst({
-      where: { id: deviceId, userId },
+      where: { userId, fingerprint },
     });
     if (!device) {
-      // Fallback: the client may have a stale deviceId — find any approved device for this user
-      device = await tx.device.findFirst({
-        where: { userId, status: "approved" },
-        orderBy: { createdAt: "desc" },
+      device = await tx.device.create({
+        data: {
+          userId,
+          name: deviceName ?? null,
+          publicKey,
+          fingerprint,
+          status: "approved",
+        },
+      });
+    } else if (device.publicKey !== publicKey) {
+      device = await tx.device.update({
+        where: { id: device.id },
+        data: { publicKey, name: deviceName ?? device.name, status: "approved" },
       });
     }
-    if (!device) {
-      throw new Error("No registered device found — please sign out and back in");
-    }
+
     await tx.householdKeyEnvelope.create({
       data: {
         householdId: h.id,
         deviceId: device.id,
+        keyEpoch: 1,
         sealedHK,
       },
     });
 
-    return h;
+    return { household: h, deviceId: device.id };
   });
 
-  return c.json({ household }, 201);
+  return c.json(result, 201);
 });
 
 // POST /api/households/join - Join via invitation.
@@ -127,6 +151,19 @@ app.post("/join", async (c) => {
             name: requesterDeviceName,
             publicKey: requesterDevicePublicKey,
             fingerprint: requesterDeviceFingerprint,
+            status: "approved",
+          },
+        });
+      } else if (device.publicKey !== requesterDevicePublicKey) {
+        // Fingerprint match + new pubkey (e.g. app reinstall). Drop stale envelopes
+        // sealed to the old key and refresh the row so future heal-forward seals
+        // to the current publicKey.
+        await tx.householdKeyEnvelope.deleteMany({ where: { deviceId: device.id } });
+        device = await tx.device.update({
+          where: { id: device.id },
+          data: {
+            publicKey: requesterDevicePublicKey,
+            name: requesterDeviceName ?? device.name,
             status: "approved",
           },
         });
@@ -254,65 +291,9 @@ app.patch("/settings", async (c) => {
   return c.json({ success: true, household });
 });
 
-// POST /api/households/distribute-keys - Distribute E2EE keys to devices
-app.post("/distribute-keys", async (c) => {
-  const userId = c.get("userId") as string;
-  const { householdId, envelopes } = await c.req.json();
-
-  if (!householdId || !Array.isArray(envelopes)) {
-    return c.json({ error: "householdId and envelopes array required" }, 400);
-  }
-
-  // Verify user is member
-  const member = await prisma.householdMember.findUnique({
-    where: { userId_householdId: { userId, householdId } },
-  });
-  if (!member) return c.json({ error: "Not a member" }, 403);
-
-  // Upsert each envelope (only for approved devices)
-  for (const env of envelopes) {
-    const device = await prisma.device.findUnique({ where: { id: env.deviceId } });
-    if (!device || device.status !== "approved") continue;
-
-    await prisma.householdKeyEnvelope.upsert({
-      where: {
-        householdId_deviceId_keyEpoch: { householdId, deviceId: env.deviceId, keyEpoch: 1 },
-      },
-      create: {
-        householdId,
-        deviceId: env.deviceId,
-        keyEpoch: 1,
-        sealedHK: env.sealedHK,
-      },
-      update: {
-        sealedHK: env.sealedHK,
-      },
-    });
-  }
-
-  return c.json({ success: true });
-});
-
-// GET /api/households/:id/envelopes - Get key envelope for a device
-app.get("/:id/envelopes", async (c) => {
-  const userId = c.get("userId") as string;
-  const householdId = c.req.param("id");
-  const deviceId = c.req.query("deviceId");
-
-  if (!deviceId) return c.json({ error: "deviceId query param required" }, 400);
-
-  // Verify membership
-  const member = await prisma.householdMember.findUnique({
-    where: { userId_householdId: { userId, householdId } },
-  });
-  if (!member) return c.json({ error: "Not a member" }, 403);
-
-  const envelope = await prisma.householdKeyEnvelope.findUnique({
-    where: { householdId_deviceId_keyEpoch: { householdId, deviceId, keyEpoch: 1 } },
-  });
-
-  return c.json({ envelope });
-});
+// NOTE: /distribute-keys and /:id/envelopes?deviceId=... were superseded by
+// POST /:id/envelopes (idempotent per epoch, see envelopes.ts) and GET
+// /:id/envelopes/:epoch, respectively.
 
 // GET /api/households/export — Full household data export
 app.get("/export", async (c) => {
