@@ -14,6 +14,10 @@ import { useConsent } from "@/lib/hooks/useConsent";
 import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
 import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
 import { useServerEvents } from "@/lib/hooks/useServerEvents";
+import { useKeyReconciliation } from "@/lib/hooks/useKeyReconciliation";
+import { useHousehold } from "@/lib/hooks/useHousehold";
+import { useMinVersion } from "@/lib/hooks/useMinVersion";
+import { ForceUpdateModal } from "@/components/app-update/ForceUpdateModal";
 import { registerForPushNotifications, addNotificationListeners } from "@/lib/notifications/setup";
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
@@ -123,6 +127,14 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   // relevant React Query caches so surfaces A–D react in real time.
   useServerEvents(!!session?.user?.id);
 
+  // On-foreground + 30-min re-query of key-state/access-requests in case SSE
+  // missed a beat while backgrounded.
+  const householdQ = useHousehold();
+  useKeyReconciliation(session?.user?.id ? householdQ.data?.householdId ?? undefined : undefined);
+
+  // Force-update gate — polls /api/app/min-version; blocks the app if below.
+  const { blocked: versionBlocked } = useMinVersion();
+
   useEffect(() => {
     if (isPending) return;
 
@@ -194,6 +206,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
           onComplete={() => setNamePromptDismissed(true)}
         />
       )}
+      <ForceUpdateModal visible={versionBlocked} />
     </>
   );
 }

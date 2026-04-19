@@ -502,6 +502,11 @@
     "itemsLeft": "{{count}} left",
     "moreItems": "+{{count}} more"
   },
+  "forceUpdate": {
+    "title": "Update required",
+    "body": "Please install the latest version of Wohnly to continue. This build is no longer compatible with the Wohnly service.",
+    "updateNow": "Update now"
+  },
   "access": {
     "menu": {
       "title": "Access & security",
