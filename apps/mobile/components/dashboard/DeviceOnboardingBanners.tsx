@@ -26,7 +26,9 @@ export function DeviceOnboardingBanners() {
   const [keyChecked, setKeyChecked] = useState(false);
 
   const householdId = household?.householdId ?? null;
-  const hasKey = householdId ? hasHouseholdKey(householdId) : false;
+  // Task 38 (Surface A) will replace this with epoch-aware key-state lookup.
+  // For now, fall back to epoch 1 to preserve current behavior.
+  const hasKey = householdId ? hasHouseholdKey(householdId, 1) : false;
 
   // Auto-fetch key when device is approved but key is missing (runs once)
   useEffect(() => {
