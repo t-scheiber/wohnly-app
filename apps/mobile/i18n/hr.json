@@ -307,20 +307,6 @@
     "itemsLeft": "{{count}} preostalo",
     "moreItems": "+{{count}} više"
   },
-  "devices": {
-    "approved": "Odobreno",
-    "pending": "Na čekanju",
-    "rejected": "Odbijeno",
-    "unnamed": "Uređaj bez imena",
-    "description": "Uređaji povezani s tvojim računom. Svaki odobreni uređaj čuva šifrirani primjerak ključa kućanstva za end-to-end šifriranje.",
-    "noDevices": "Još nema registriranih uređaja",
-    "renameDevice": "Preimenuj uređaj",
-    "removeDevice": "Ukloni uređaj",
-    "removeConfirm": "Ukloniti \"{{name}}\"? Ovaj uređaj će izgubiti pristup šifriranim podacima kućanstva.",
-    "deviceNamePlaceholder": "npr. Moj iPhone, Poslovni laptop",
-    "e2eeInfo": "End-to-end šifriranje",
-    "e2eeDescription": "Podaci tvog kućanstva šifrirani su ključevima kojima mogu pristupiti samo tvoji odobreni uređaji. Novi uređaji moraju biti odobreni od strane postojećeg uređaja prije nego što mogu dešifrirati podatke."
-  },
   "guide": {
     "financesBalance": "Troškovi koje dodate utječu na stanja kućanstva prikazana na nadzornoj ploči",
     "swipeDelete": "Prijeđite prstom ulijevo na bilo kojoj stavci da biste je izbrisali",
@@ -389,23 +375,7 @@
     "expenses": "Zabilježite zajedničke troškove i podijelite troškove među članovima",
     "subscriptions": "Pratite ponavljajuće pretplate s datumima obnove",
     "splits": "Pogledajte stanja da vidite tko što duguje",
-    "invitingMembers": "Pozivanje članova",
-    "invitingMembersDesc": "Dodajte svoje članove kućanstva kako bi svi mogli surađivati.",
-    "shareCode": "Idite na Postavke i dodirnite 'Pozovi članove' da podijelite svoj kod",
-    "shareLink": "Članovi se mogu pridružiti pomoću pozivnog koda ili veze",
-    "encryption": "Enkripcija i privatnost",
-    "encryptionDesc": "Vaši su podaci zaštićeni end-to-end enkripcijom.",
-    "e2ee": "Svi podaci o kućanstvu su šifrirani prije nego napustite svoj uređaj",
-    "deviceApproval": "Nove uređaje mora odobriti postojeći član",
-    "contactSupport": "Obratite se podršci",
-    "devicePendingBanner": "Ovaj uređaj čeka odobrenje. Odobrite ga na svom drugom uređaju za pristup dijeljenim podacima.",
-    "deviceApprovedBanner": "Ovaj uređaj je odobren! Dohvaćanje ključeva za šifriranje vašeg kućanstva...",
-    "missingKeysBanner": "Uređaj je odobren, ali nedostaju ključevi za šifriranje. Provjerite je li drugi uređaj otvoren za sinkronizaciju.",
-    "checkStatus": "Provjerite status",
-    "checkAndKeys": "Tipke za sinkronizaciju",
-    "pendingDeviceCount": "{{count}} uređaj(a) čeka na odobrenje",
-    "approveNow": "Odobri sada",
-    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved."
+    "contactSupport": "Obratite se podršci"
   },
   "finances": {
     "title": "Finances",
@@ -501,5 +471,87 @@
       "network": "Nije moguće spojiti se s poslužiteljem. Pokušajte ponovno."
     },
     "returnHome": "Natrag na Wohnly"
+  },
+  "access": {
+    "menu": {
+      "title": "Access & security",
+      "subtitle": "People, devices, and pending approvals"
+    },
+    "waiting": {
+      "heading": "Waiting for approval",
+      "instruction": "Open Wohnly on another of your devices (or ask a household owner) and type this 6-digit code.",
+      "codeA11y": "Your verification code is {{code}}",
+      "showDifferent": "Show a different code",
+      "cancel": "Cancel"
+    },
+    "approve": {
+      "joinTitle": "{{name}} wants to join",
+      "deviceTitle": "{{device}} wants to join this household",
+      "unknownDevice": "A new device",
+      "unknownUser": "Someone",
+      "instruction": "Enter the 6-digit code shown on their screen.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "wrongCode": "That code doesn't match. {{tries}} attempts left."
+    },
+    "banner": {
+      "joinPending": "{{name}} is asking to join",
+      "devicePending": "{{device}} is waiting to be approved",
+      "unknownDevice": "A new device"
+    },
+    "screen": {
+      "title": "Access",
+      "keyRotated": "Current encryption epoch: {{epoch}}",
+      "pending": "Pending ({{count}})",
+      "people": "People",
+      "devices": "Devices",
+      "joinRow": "{{name}} wants to join",
+      "deviceRow": "New device: {{device}}",
+      "roleOwner": "Owner",
+      "roleMember": "Member",
+      "you": "(you)",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "removeDeviceConfirm": "Remove this device? It will no longer be able to decrypt household data."
+    },
+    "errors": {
+      "noKey": "Your encryption key isn't loaded yet — try again in a moment.",
+      "noPubKey": "This request is missing device key material."
+    },
+    "help": {
+      "invitePeople": {
+        "title": "Inviting people",
+        "generateLink": "Generate an invite link from the Access screen. Only owners can send invites.",
+        "emailPreauth": "If you add the person's email when creating the invite, they join instantly once they sign in with that email.",
+        "manualApproval": "If the emails don't match, or no email was set, an owner must approve them with a 6-digit code.",
+        "ownerOnly": "By default, new members join as Members. You can promote anyone to Owner later."
+      },
+      "addDevice": {
+        "title": "Adding a device",
+        "signIn": "Sign in on the new device with your usual account.",
+        "codeCompare": "The new device shows a 6-digit code.",
+        "approveFromOther": "Open Wohnly on a device you're already using and enter the code to approve."
+      },
+      "encryption": {
+        "title": "Privacy & encryption",
+        "whatItMeans": "Everything your household shares is end-to-end encrypted. Even we can't read it.",
+        "codeComparison": "Every new device and every new person goes through a 6-digit code check. This protects you even if someone gets hold of an invite link.",
+        "rotation": "When someone leaves the household, the encryption key is rotated. Future content is protected from them.",
+        "disclosure": "They may still have copies of things they've already seen on their device — encryption can't take those back."
+      }
+    },
+    "reset": {
+      "entry": "Reset household (destructive)",
+      "title": "Reset household",
+      "warning": "This will permanently delete all encrypted content (todos, shopping lists, chores, expenses, events, subscriptions, meal plans) and remove every device. This cannot be undone. Only use this if you've lost access to your household and there's no one else to approve your device.",
+      "prompt": "Type the household name to confirm: {{name}}",
+      "confirm": "Delete everything",
+      "cancel": "Cancel"
+    }
+  },
+  "forceUpdate": {
+    "title": "Update required",
+    "body": "Please install the latest version of Wohnly to continue. This build is no longer compatible with the Wohnly service.",
+    "updateNow": "Update now"
   }
 }

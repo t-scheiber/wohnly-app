@@ -61,7 +61,7 @@ export function GettingStartedCard({
   const steps = [
     {
       id: "invite",
-      title: t("help.invitingMembers"),
+      title: t("access.help.invitePeople.title"),
       icon: <UserPlus size={18} color={memberCount > 1 ? colors.success : colors.primary} />,
       completed: memberCount > 1,
       onPress: handleShareInvite,

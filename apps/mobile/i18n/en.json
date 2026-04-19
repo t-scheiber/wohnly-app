@@ -291,20 +291,6 @@
     "manageDevices": "Manage Devices",
     "encryptedData": "Encrypted — open on your device to view"
   },
-  "devices": {
-    "approved": "Approved",
-    "pending": "Pending",
-    "rejected": "Rejected",
-    "unnamed": "Unnamed device",
-    "description": "Devices linked to your account. Each approved device holds an encrypted copy of your household key for end-to-end encryption.",
-    "noDevices": "No devices registered yet",
-    "renameDevice": "Rename Device",
-    "removeDevice": "Remove Device",
-    "removeConfirm": "Remove \"{{name}}\"? This device will lose access to encrypted household data.",
-    "deviceNamePlaceholder": "e.g. My iPhone, Work laptop",
-    "e2eeInfo": "End-to-End Encryption",
-    "e2eeDescription": "Your household data is encrypted with keys that only your approved devices can access. New devices must be approved by an existing device holder before they can decrypt data."
-  },
   "balances": {
     "owedToYou": "Owed to you",
     "youOwe": "You owe",
@@ -379,22 +365,6 @@
     "expenses": "Log shared expenses and split costs among members",
     "subscriptions": "Track recurring subscriptions with renewal dates",
     "splits": "View balances to see who owes what",
-    "invitingMembers": "Inviting Members",
-    "invitingMembersDesc": "Add your household members so everyone can collaborate.",
-    "shareCode": "Go to Settings and tap 'Invite Members' to share your code",
-    "shareLink": "Members can join using the invite code or link",
-    "encryption": "Encryption & Privacy",
-    "encryptionDesc": "Your data is protected with end-to-end encryption.",
-    "e2ee": "All household data is encrypted before leaving your device",
-    "deviceApproval": "New devices must be approved by an existing member",
-    "devicePendingBanner": "This device is pending approval. Please approve it on your other device to access shared data.",
-    "deviceApprovedBanner": "This device is approved! Fetching your household encryption keys...",
-    "missingKeysBanner": "Device approved, but missing encryption keys. Ensure another device is open to sync.",
-    "checkStatus": "Check Status",
-    "checkAndKeys": "Sync Keys",
-    "pendingDeviceCount": "{{count}} device(s) waiting for approval",
-    "approveNow": "Approve Now",
-    "enableNotificationsBanner": "Enable notifications to get alerted when this device is approved.",
     "contactSupport": "Contact Support"
   },
   "meals": {
@@ -552,6 +522,28 @@
     "errors": {
       "noKey": "Your encryption key isn't loaded yet — try again in a moment.",
       "noPubKey": "This request is missing device key material."
+    },
+    "help": {
+      "invitePeople": {
+        "title": "Inviting people",
+        "generateLink": "Generate an invite link from the Access screen. Only owners can send invites.",
+        "emailPreauth": "If you add the person's email when creating the invite, they join instantly once they sign in with that email.",
+        "manualApproval": "If the emails don't match, or no email was set, an owner must approve them with a 6-digit code.",
+        "ownerOnly": "By default, new members join as Members. You can promote anyone to Owner later."
+      },
+      "addDevice": {
+        "title": "Adding a device",
+        "signIn": "Sign in on the new device with your usual account.",
+        "codeCompare": "The new device shows a 6-digit code.",
+        "approveFromOther": "Open Wohnly on a device you're already using and enter the code to approve."
+      },
+      "encryption": {
+        "title": "Privacy & encryption",
+        "whatItMeans": "Everything your household shares is end-to-end encrypted. Even we can't read it.",
+        "codeComparison": "Every new device and every new person goes through a 6-digit code check. This protects you even if someone gets hold of an invite link.",
+        "rotation": "When someone leaves the household, the encryption key is rotated. Future content is protected from them.",
+        "disclosure": "They may still have copies of things they've already seen on their device — encryption can't take those back."
+      }
     },
     "reset": {
       "entry": "Reset household (destructive)",
