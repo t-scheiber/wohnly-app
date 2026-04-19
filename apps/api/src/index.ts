@@ -25,6 +25,8 @@ import widgetsRouter from "./routes/widgets.js";
 import mealsRouter from "./routes/meals.js";
 import streamRouter from "./routes/stream.js";
 import accessRouter from "./routes/access.js";
+import envelopesRouter from "./routes/envelopes.js";
+import epochsRouter from "./routes/epochs.js";
 import { eventListener } from "./lib/events/listener.js";
 import { startExpireAccessRequestsCron } from "./cron/expire-access-requests.js";
 
@@ -164,6 +166,10 @@ app.route("/api/widgets", widgetsRouter);
 app.route("/api/meals", mealsRouter);
 app.route("/api/stream", streamRouter);
 app.route("/api/access", accessRouter);
+// Multiple routers under /api/households — envelopes + epochs + the existing households router.
+// Hono composes them; each contributes its own sub-routes.
+app.route("/api/households", envelopesRouter);
+app.route("/api/households", epochsRouter);
 
 // Health check
 app.get("/api/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));

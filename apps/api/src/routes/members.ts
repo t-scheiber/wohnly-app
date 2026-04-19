@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
 import { sendLeaveConfirmationEmail } from "../lib/email.js";
+import { publishEvent } from "../lib/events/publisher.js";
+import { triggerRotation } from "./epochs.js";
 import type { AppEnv } from "../types.js";
 
 const app = new Hono<AppEnv>();
@@ -308,6 +310,22 @@ async function executeLeaveTransaction(
     await tx.householdMember.delete({
       where: { id: confirmation.memberId },
     });
+
+    // Trigger rotation + broadcast removal event, but only if the household
+    // survives this departure (last-member case deletes everything below).
+    if (memberCount > 1) {
+      await triggerRotation(
+        tx,
+        householdId,
+        confirmation.member.userId,
+        "MEMBER_REMOVED",
+      );
+      await publishEvent(tx, {
+        type: "household.member.removed",
+        householdId,
+        removedUserId: confirmation.member.userId,
+      });
+    }
 
     // If last member, delete the household entirely
     if (memberCount <= 1) {
