@@ -122,11 +122,33 @@ app.post("/join", async (c) => {
   if (!requesterDeviceFingerprint || typeof requesterDeviceFingerprint !== "string")
     return c.json({ error: "requesterDeviceFingerprint is required" }, 400);
 
-  const inv = await prisma.householdInvitation.findUnique({ where: { code } });
-  if (!inv) return c.json({ error: "Invalid invitation code" }, 404);
-  if (inv.revokedAt) return c.json({ error: "Invitation revoked" }, 410);
-  if (inv.expiresAt && inv.expiresAt < new Date())
-    return c.json({ error: "Invitation expired" }, 410);
+  // Resolve the code against either table. HouseholdInvitation.code is the new
+  // OWNER-issued (optionally email-preauthorized) invite; Household.inviteCode
+  // is the legacy stable share-code that the settings "Invite Members" button
+  // and dashboard getting-started card still display. Household.inviteCode
+  // matches always flow through the manual/PENDING path (no email preauth).
+  const real = await prisma.householdInvitation.findUnique({ where: { code } });
+  let invitationId: string | null;
+  let invitationHouseholdId: string;
+  let invitedEmail: string | null;
+  if (real) {
+    if (real.revokedAt) return c.json({ error: "Invitation revoked" }, 410);
+    if (real.expiresAt && real.expiresAt < new Date())
+      return c.json({ error: "Invitation expired" }, 410);
+    invitationId = real.id;
+    invitationHouseholdId = real.householdId;
+    invitedEmail = real.invitedEmail;
+  } else {
+    const stableMatch = await prisma.household.findUnique({
+      where: { inviteCode: code },
+      select: { id: true },
+    });
+    if (!stableMatch) return c.json({ error: "Invalid invitation code" }, 404);
+    invitationId = null;
+    invitationHouseholdId = stableMatch.id;
+    invitedEmail = null;
+  }
+  const inv = { id: invitationId, householdId: invitationHouseholdId, invitedEmail };
 
   const existingMember = await prisma.householdMember.findUnique({
     where: { userId_householdId: { userId, householdId: inv.householdId } },
@@ -177,10 +199,12 @@ app.post("/join", async (c) => {
           role: "MEMBER",
         },
       });
-      await tx.householdInvitation.update({
-        where: { id: inv.id },
-        data: { acceptedAt: new Date(), acceptedByUserId: userId },
-      });
+      if (inv.id) {
+        await tx.householdInvitation.update({
+          where: { id: inv.id },
+          data: { acceptedAt: new Date(), acceptedByUserId: userId },
+        });
+      }
       const reqId = `cr_${randomUUID()}`;
       const verificationCode = generateCode();
       await tx.accessRequest.create({
@@ -192,7 +216,7 @@ app.post("/join", async (c) => {
           requesterDevicePublicKey,
           requesterDeviceFingerprint,
           requesterDeviceName,
-          invitationId: inv.id,
+          invitationId: inv.id || null,
           verificationHash: hashCode(verificationCode, reqId),
           status: "APPROVED",
           approvedByUserId: userId,
@@ -237,7 +261,7 @@ app.post("/join", async (c) => {
         requesterDevicePublicKey,
         requesterDeviceFingerprint,
         requesterDeviceName,
-        invitationId: inv.id,
+        invitationId: inv.id || null,
         verificationHash: hashCode(verificationCode, reqId),
         expiresAt,
       },
