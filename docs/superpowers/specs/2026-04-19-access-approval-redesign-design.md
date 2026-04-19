@@ -424,6 +424,14 @@ Structured logs keyed by `householdId`, `requestId`, `userId` for: request creat
 
 A full rollback within a release cycle requires a DB restore from backup, since `migrate reset` is destructive. Rollback is assumed to be extremely unlikely given the pre-launch status; if it becomes realistic, we'd take a pre-deploy snapshot in Postgres before running `migrate reset`.
 
+### Assumptions to verify during planning
+
+Codebase-check items — quick greps at plan-writing time to confirm the spec's assumptions match reality. None require user input.
+
+- **Creator field on `Household`** — spec assumes either `Household.createdByUserId` exists, or the creator can be derived from the earliest `HouseholdMember.joinedAt`. Check `apps/api/prisma/schema.prisma`. Whichever is authoritative determines the exact Prisma query that assigns the initial `OWNER` role.
+- **Forced-update mechanism in mobile** — spec assumes a version-gate exists so old clients can be forced to update after the cutover. Search `apps/mobile/` for any existing version-check against the API, app-store-update prompt, or min-version enforcement. If absent, adding a minimal version gate becomes a sub-task of the implementation plan.
+- **SSE proxy buffering** — spec assumes Caddy and PM2 can be configured to not buffer `Content-Type: text/event-stream` responses. Check the repo's `Caddyfile` and any deployment docs under `.github/workflows/` or `docs/deployment/` to confirm the exact directive. If the existing config buffers by default, the plan needs to include a Caddy config change.
+
 ---
 
 ## 8. Help Content & Translations
