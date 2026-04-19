@@ -127,39 +127,36 @@ Reuses existing design tokens, button components, and typography from the broade
 
 ### 4. i18n
 
-Extend the existing `leaveHousehold` key in all 42 files under a new `page` sub-namespace:
+Add a new top-level `leaveHouseholdPage` namespace to all 42 files. A new namespace (rather than nesting under `household.leaveHousehold`) is used because `leaveHousehold` is already a single-string key inside the `household` namespace — it cannot double as a sub-namespace.
 
 ```jsonc
-"leaveHousehold": {
-  // ...existing keys untouched...
-  "page": {
-    "title": "…",
-    "confirmLeave": {
-      "heading": "Leave {{household}}?",
-      "body": "…",
-      "warning": "…",
-      "primary": "Yes, leave household"
-    },
-    "confirmCancel": {
-      "heading": "Cancel your request to leave {{household}}?",
-      "body": "…",
-      "primary": "Yes, cancel request"
-    },
-    "secondary": "Go back",
-    "success": {
-      "leave":  { "heading": "…", "body": "…" },
-      "cancel": { "heading": "…", "body": "…" }
-    },
-    "error": {
-      "missingToken":     "…",
-      "invalidToken":     "…",
-      "expired":          "…",
-      "alreadyConfirmed": "…",
-      "alreadyCancelled": "…",
-      "network":          "…"
-    },
-    "returnHome": "Back to Wohnly"
-  }
+"leaveHouseholdPage": {
+  "title": "…",
+  "confirmLeave": {
+    "heading": "Leave {{household}}?",
+    "body": "…",
+    "warning": "…",
+    "primary": "Yes, leave household"
+  },
+  "confirmCancel": {
+    "heading": "Cancel your request to leave {{household}}?",
+    "body": "…",
+    "primary": "Yes, cancel request"
+  },
+  "secondary": "Go back",
+  "success": {
+    "leave":  { "heading": "…", "body": "…" },
+    "cancel": { "heading": "…", "body": "…" }
+  },
+  "error": {
+    "missingToken":     "…",
+    "invalidToken":     "…",
+    "expired":          "…",
+    "alreadyConfirmed": "…",
+    "alreadyCancelled": "…",
+    "network":          "…"
+  },
+  "returnHome": "Back to Wohnly"
 }
 ```
 
