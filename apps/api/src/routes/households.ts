@@ -94,7 +94,7 @@ app.post("/join", async (c) => {
       householdId: household.id,
       displayName: user.name,
       email: user.email,
-      role: "admin", // Household creator is always admin
+      role: "OWNER",
     },
   });
 
@@ -144,11 +144,12 @@ app.post("/distribute-keys", async (c) => {
 
     await prisma.householdKeyEnvelope.upsert({
       where: {
-        householdId_deviceId: { householdId, deviceId: env.deviceId },
+        householdId_deviceId_keyEpoch: { householdId, deviceId: env.deviceId, keyEpoch: 1 },
       },
       create: {
         householdId,
         deviceId: env.deviceId,
+        keyEpoch: 1,
         sealedHK: env.sealedHK,
       },
       update: {
@@ -175,7 +176,7 @@ app.get("/:id/envelopes", async (c) => {
   if (!member) return c.json({ error: "Not a member" }, 403);
 
   const envelope = await prisma.householdKeyEnvelope.findUnique({
-    where: { householdId_deviceId: { householdId, deviceId } },
+    where: { householdId_deviceId_keyEpoch: { householdId, deviceId, keyEpoch: 1 } },
   });
 
   return c.json({ envelope });

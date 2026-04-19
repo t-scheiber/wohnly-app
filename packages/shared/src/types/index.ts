@@ -330,3 +330,33 @@ export interface ApiError {
   error: string;
   code?: string;
 }
+
+// Access & approval redesign
+
+export type HouseholdRole = "OWNER" | "MEMBER";
+
+export type AccessRequestKind = "DEVICE_ENROLLMENT" | "HOUSEHOLD_JOIN";
+
+export type AccessRequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
+
+export interface AccessRequestPublic {
+  id: string;
+  householdId: string;
+  kind: AccessRequestKind;
+  requesterUserId: string;
+  requesterDeviceName: string | null;
+  requesterDeviceFingerprint: string;
+  invitationId: string | null;
+  status: AccessRequestStatus;
+  expiresAt: string;
+  createdAt: string;
+  approvedByUserId: string | null;
+  approvedAt: string | null;
+  rejectedAt: string | null;
+}
+
+export interface AccessRequestApprover extends AccessRequestPublic {
+  requesterDevicePublicKey: string;
+  requesterUserName: string;
+  requesterUserEmail: string;
+}
