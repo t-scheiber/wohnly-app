@@ -172,7 +172,7 @@ model AccessRequest {
   requesterDevicePublicKey   String
   requesterDeviceFingerprint String
   requesterDeviceName        String?
-  resultingDeviceId          String?             @unique
+  resultingDeviceId          String?
   resultingDevice            Device?             @relation(fields: [resultingDeviceId], references: [id], onDelete: SetNull)
   invitationId               String?
   invitation                 HouseholdInvitation? @relation(fields: [invitationId], references: [id], onDelete: SetNull)
@@ -189,6 +189,7 @@ model AccessRequest {
   @@index([requesterUserId, status])
   @@index([expiresAt, status])
   @@index([requesterUserId, requesterDeviceFingerprint])
+  @@index([resultingDeviceId])
 }
 
 model EpochRotation {
@@ -242,10 +243,12 @@ Add inside the model:
 Add inside `model Device { ... }`:
 
 ```prisma
-  accessRequest AccessRequest? @relation
+  accessRequests AccessRequest[]
 ```
 
-Leave `status` in place until Task 16 deletes the old device routes (prevents incremental breakage).
+`AccessRequest.resultingDeviceId` is **not** unique — a single device can be the target of multiple approved requests over its lifetime (same fingerprint survives reinstall; same device joins multiple households). The back-relation is a list, not optional.
+
+Leave `status` in place until Task 22 deletes the old device routes (prevents incremental breakage).
 
 - [ ] **Step 7: Update `HouseholdKeyEnvelope` unique constraint**
 

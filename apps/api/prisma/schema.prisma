@@ -576,9 +576,9 @@ model Device {
   status      String   @default("pending") // "pending" | "approved" | "rejected"
   createdAt   DateTime @default(now())
 
-  user          User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  envelopes     HouseholdKeyEnvelope[]
-  accessRequest AccessRequest?
+  user           User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  envelopes      HouseholdKeyEnvelope[]
+  accessRequests AccessRequest[]
 
   @@unique([userId, publicKey])
   @@index([userId])
@@ -630,7 +630,7 @@ model AccessRequest {
   requesterDevicePublicKey   String
   requesterDeviceFingerprint String
   requesterDeviceName        String?
-  resultingDeviceId          String?              @unique
+  resultingDeviceId          String?
   resultingDevice            Device?              @relation(fields: [resultingDeviceId], references: [id], onDelete: SetNull)
   invitationId               String?
   invitation                 HouseholdInvitation? @relation(fields: [invitationId], references: [id], onDelete: SetNull)
@@ -647,6 +647,7 @@ model AccessRequest {
   @@index([requesterUserId, status])
   @@index([expiresAt, status])
   @@index([requesterUserId, requesterDeviceFingerprint])
+  @@index([resultingDeviceId])
 }
 
 model EpochRotation {
