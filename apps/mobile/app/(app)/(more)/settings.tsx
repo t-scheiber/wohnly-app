@@ -220,34 +220,26 @@ export default function SettingsScreen() {
   ];
 
   const handleLeaveHousehold = () => {
+    const onSuccess = () => {
+      Alert.alert(t("settings.leaveEmailSentTitle"), t("settings.leaveEmailSent"));
+    };
+    const onError = (err: unknown) => {
+      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
+    };
+
     if (Platform.OS === "web") {
       if (confirm(t("settings.leaveConfirm") + "\n\n" + t("settings.leaveDescription"))) {
-        leaveHousehold.mutate(undefined, {
-          onSuccess: () => {
-            Alert.alert(t("common.done"), t("settings.leaveDescription"));
-          },
-          onError: (err) => {
-            Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
-          },
-        });
+        leaveHousehold.mutate(undefined, { onSuccess, onError });
       }
       return;
     }
     Alert.alert(t("household.leaveHousehold"), t("settings.leaveConfirm") + "\n\n" + t("settings.leaveDescription"), [
       { text: t("common.cancel"), style: "cancel" },
       {
-        text: t("household.leaveHousehold"),
+        text: t("settings.leaveSendEmail"),
         style: "destructive",
         onPress: () => {
-          leaveHousehold.mutate(undefined, {
-            onSuccess: () => {
-              clearHouseholdKeys();
-              router.replace("/(app)/(dashboard)");
-            },
-            onError: (err) => {
-              Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
-            },
-          });
+          leaveHousehold.mutate(undefined, { onSuccess, onError });
         },
       },
     ]);
