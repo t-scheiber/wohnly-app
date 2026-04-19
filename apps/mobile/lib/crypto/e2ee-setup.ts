@@ -66,42 +66,31 @@ export async function ensureDeviceKeyMaterial(): Promise<DeviceKeyMaterial> {
  * Create a new household with E2EE.
  * The creator is implicitly OWNER and holds epoch 1 immediately.
  *
- * 1. Ensure device key material exists; register the device via the legacy
- *    /api/devices/register endpoint so it gets a deviceId before we attach
- *    the household envelope. (Task 22 removes this endpoint once Phase 6 is
- *    fully off device-approval flows; until then creators still rely on it.)
- * 2. Generate the household key at epoch 1 and seal it to this device.
- * 3. POST /api/households with { deviceId, sealedHK }.
- * 4. Cache the household key under (householdId, epoch=1).
+ * Server creates the Device row + envelope + household in one transaction
+ * from the body, so no pre-registration round-trip is needed.
  */
 export async function createHouseholdWithE2EE(name: string): Promise<{
   household: { id: string; inviteCode: string };
 }> {
   const material = await ensureDeviceKeyMaterial();
-  const reg = await apiPost<{ deviceId: string; status: string }>(
-    "/api/devices/register",
-    {
-      name: getDeviceName(),
-      publicKey: material.publicKey,
-      fingerprint: material.fingerprint,
-    },
-  );
-  if (reg.deviceId !== material.deviceId) {
-    await saveDeviceKeys(reg.deviceId, material.publicKey, material.privateKey);
-  }
-
   const householdKey = await generateHouseholdKey();
   const sealed = await sealToDevice(householdKey, material.publicKey);
   const sealedHKBase64 = await sealedToBase64(sealed);
 
-  const res = await apiPost<{ household: { id: string; inviteCode: string } }>(
-    "/api/households",
-    {
-      name,
-      deviceId: reg.deviceId,
-      sealedHK: sealedHKBase64,
-    },
-  );
+  const res = await apiPost<{
+    household: { id: string; inviteCode: string };
+    deviceId: string;
+  }>("/api/households", {
+    name,
+    publicKey: material.publicKey,
+    fingerprint: material.fingerprint,
+    deviceName: getDeviceName(),
+    sealedHK: sealedHKBase64,
+  });
+
+  if (res.deviceId !== material.deviceId) {
+    await saveDeviceKeys(res.deviceId, material.publicKey, material.privateKey);
+  }
   cacheHouseholdKey(res.household.id, 1, householdKey);
   return { household: res.household };
 }

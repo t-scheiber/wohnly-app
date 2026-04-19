@@ -5,12 +5,10 @@ import { useTranslation } from "react-i18next";
 import { Check, HelpCircle } from "lucide-react-native";
 import { authClient } from "@/lib/auth/client";
 import { isTauri, clearTauriCookie, openInBrowser } from "@/lib/auth/tauri";
-import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences, useHouseholdDevices, usePendingDevices, useApproveDevice, useRejectDevice } from "@/lib/api/queries";
+import { useHouseholdMembers, useSetNickname, useEntitlements, useLeaveHousehold, usePreferences } from "@/lib/api/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { api, apiPatch } from "@/lib/api/client";
 import { useHousehold } from "@/lib/hooks/useHousehold";
-import { useHouseholdKey } from "@/lib/hooks/useHouseholdKey";
-import { distributeKeyToDevice } from "@/lib/crypto/e2ee-setup";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { Colors } from "@/constants/Colors";
@@ -170,11 +168,6 @@ export default function SettingsScreen() {
   const { data: prefs } = usePreferences();
   const queryClient = useQueryClient();
   const { data: household } = useHousehold();
-  const { data: devicesData } = useHouseholdDevices();
-  const { data: pendingData } = usePendingDevices();
-  const approveDevice = useApproveDevice();
-  const rejectDevice = useRejectDevice();
-  const { key: householdKey } = useHouseholdKey(household?.householdId ?? null);
 
   const [langPickerOpen, setLangPickerOpen] = useState(false);
   const [themePickerOpen, setThemePickerOpen] = useState(false);
@@ -278,30 +271,6 @@ export default function SettingsScreen() {
       }
       const success = await restorePurchases();
       Alert.alert(t("settings.premium"), success ? t("settings.restoreSuccess") : t("settings.restoreNone"));
-    } catch (err) {
-      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
-    }
-  };
-
-  const handleApproveDevice = async (deviceId: string, publicKey: string) => {
-    try {
-      await approveDevice.mutateAsync(deviceId);
-      // Distribute the household key to the newly approved device
-      if (household?.householdId && householdKey) {
-        try {
-          await distributeKeyToDevice(household.householdId, householdKey, publicKey, deviceId);
-        } catch {
-          // Key distribution will be retried on next dashboard load
-        }
-      }
-    } catch (err) {
-      Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
-    }
-  };
-
-  const handleRejectDevice = async (deviceId: string) => {
-    try {
-      await rejectDevice.mutateAsync(deviceId);
     } catch (err) {
       Alert.alert(t("common.error"), err instanceof Error ? err.message : t("common.error"));
     }
