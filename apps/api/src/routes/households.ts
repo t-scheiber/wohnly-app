@@ -1,10 +1,16 @@
 import { Hono } from "hono";
+import { randomUUID } from "node:crypto";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
+import { publishEvent } from "../lib/events/publisher.js";
+import { generateCode, hashCode } from "../lib/verification.js";
+import { sendAccessRequestPush } from "../lib/access-push.js";
 import type { AppEnv } from "../types.js";
 
 const app = new Hono<AppEnv>();
 app.use("*", requireAuth);
+
+const JOIN_REQUEST_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 // POST /api/households - Create household
 app.post("/", async (c) => {
@@ -65,41 +71,166 @@ app.post("/", async (c) => {
   return c.json({ household }, 201);
 });
 
-// POST /api/households/join - Join via invite code
+// POST /api/households/join - Join via invitation.
+// Accepts { code, requesterDevicePublicKey, requesterDeviceFingerprint, requesterDeviceName? }.
+// Email-matched invitations auto-approve; unmatched or email-less invitations go to a
+// PENDING AccessRequest that an OWNER must approve.
 app.post("/join", async (c) => {
   const userId = c.get("userId") as string;
   const user = c.get("user") as { id: string; name: string; email: string };
-  const { inviteCode } = await c.req.json();
+  const body = await c.req.json();
+  const {
+    code,
+    requesterDevicePublicKey,
+    requesterDeviceFingerprint,
+    requesterDeviceName,
+  } = body as {
+    code?: string;
+    requesterDevicePublicKey?: string;
+    requesterDeviceFingerprint?: string;
+    requesterDeviceName?: string;
+  };
 
-  if (!inviteCode) {
-    return c.json({ error: "Invite code is required" }, 400);
+  if (!code || typeof code !== "string")
+    return c.json({ error: "code is required" }, 400);
+  if (!requesterDevicePublicKey || typeof requesterDevicePublicKey !== "string")
+    return c.json({ error: "requesterDevicePublicKey is required" }, 400);
+  if (!requesterDeviceFingerprint || typeof requesterDeviceFingerprint !== "string")
+    return c.json({ error: "requesterDeviceFingerprint is required" }, 400);
+
+  const inv = await prisma.householdInvitation.findUnique({ where: { code } });
+  if (!inv) return c.json({ error: "Invalid invitation code" }, 404);
+  if (inv.revokedAt) return c.json({ error: "Invitation revoked" }, 410);
+  if (inv.expiresAt && inv.expiresAt < new Date())
+    return c.json({ error: "Invitation expired" }, 410);
+
+  const existingMember = await prisma.householdMember.findUnique({
+    where: { userId_householdId: { userId, householdId: inv.householdId } },
+  });
+  if (existingMember) return c.json({ error: "Already a member" }, 409);
+
+  const emailMatches =
+    inv.invitedEmail &&
+    inv.invitedEmail.toLowerCase() === user.email.toLowerCase();
+
+  if (emailMatches) {
+    // Frictionless path: auto-approve inline. Owner device picks up the
+    // post-approval envelope distribution via the SSE event.
+    const result = await prisma.$transaction(async (tx) => {
+      let device = await tx.device.findFirst({
+        where: { userId, fingerprint: requesterDeviceFingerprint },
+      });
+      if (!device) {
+        device = await tx.device.create({
+          data: {
+            userId,
+            name: requesterDeviceName,
+            publicKey: requesterDevicePublicKey,
+            fingerprint: requesterDeviceFingerprint,
+            status: "approved",
+          },
+        });
+      }
+      const member = await tx.householdMember.create({
+        data: {
+          userId,
+          householdId: inv.householdId,
+          displayName: user.name,
+          email: user.email,
+          role: "MEMBER",
+        },
+      });
+      await tx.householdInvitation.update({
+        where: { id: inv.id },
+        data: { acceptedAt: new Date(), acceptedByUserId: userId },
+      });
+      const reqId = `cr_${randomUUID()}`;
+      const verificationCode = generateCode();
+      await tx.accessRequest.create({
+        data: {
+          id: reqId,
+          householdId: inv.householdId,
+          kind: "HOUSEHOLD_JOIN",
+          requesterUserId: userId,
+          requesterDevicePublicKey,
+          requesterDeviceFingerprint,
+          requesterDeviceName,
+          invitationId: inv.id,
+          verificationHash: hashCode(verificationCode, reqId),
+          status: "APPROVED",
+          approvedByUserId: userId,
+          approvedAt: new Date(),
+          resultingDeviceId: device.id,
+          expiresAt: new Date(Date.now() + JOIN_REQUEST_EXPIRY_MS),
+        },
+      });
+      await publishEvent(tx, {
+        type: "access.request.approved",
+        householdId: inv.householdId,
+        requestId: reqId,
+        requesterUserId: userId,
+        resultingDeviceId: device.id,
+      });
+      return {
+        joined: true as const,
+        membershipId: member.id,
+        deviceId: device.id,
+        householdId: inv.householdId,
+        householdName: (await tx.household.findUniqueOrThrow({
+          where: { id: inv.householdId },
+          select: { name: true },
+        })).name,
+      };
+    });
+    return c.json(result, 200);
   }
 
-  const household = await prisma.household.findUnique({
-    where: { inviteCode },
-    include: { members: true },
+  // Manual path: create PENDING AccessRequest; no HouseholdMember or Device yet.
+  const reqId = `cr_${randomUUID()}`;
+  const verificationCode = generateCode();
+  const expiresAt = new Date(Date.now() + JOIN_REQUEST_EXPIRY_MS);
+
+  await prisma.$transaction(async (tx) => {
+    await tx.accessRequest.create({
+      data: {
+        id: reqId,
+        householdId: inv.householdId,
+        kind: "HOUSEHOLD_JOIN",
+        requesterUserId: userId,
+        requesterDevicePublicKey,
+        requesterDeviceFingerprint,
+        requesterDeviceName,
+        invitationId: inv.id,
+        verificationHash: hashCode(verificationCode, reqId),
+        expiresAt,
+      },
+    });
+    await publishEvent(tx, {
+      type: "access.request.created",
+      householdId: inv.householdId,
+      requestId: reqId,
+      kind: "HOUSEHOLD_JOIN",
+      requesterUserId: userId,
+    });
   });
 
-  if (!household) {
-    return c.json({ error: "Invalid invite code" }, 404);
-  }
+  sendAccessRequestPush({
+    householdId: inv.householdId,
+    requestId: reqId,
+    kind: "HOUSEHOLD_JOIN",
+    requesterUserId: userId,
+    requesterDeviceName: requesterDeviceName ?? null,
+  }).catch((err) => console.error("[access-push] failed", err));
 
-  const existing = household.members.find((m) => m.userId === userId);
-  if (existing) {
-    return c.json({ error: "Already a member of this household" }, 400);
-  }
-
-  const member = await prisma.householdMember.create({
-    data: {
-      userId,
-      householdId: household.id,
-      displayName: user.name,
-      email: user.email,
-      role: "MEMBER",
+  return c.json(
+    {
+      pending: true,
+      requestId: reqId,
+      verificationCode,
+      expiresAt: expiresAt.toISOString(),
     },
-  });
-
-  return c.json({ member, household: { id: household.id, name: household.name } }, 201);
+    202,
+  );
 });
 
 // PATCH /api/households/settings - Update household settings
