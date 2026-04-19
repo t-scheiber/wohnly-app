@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, createContext, useContext } from "react";
-import { useColorScheme as useSystemColorScheme, Appearance } from "react-native";
+import { useColorScheme as useSystemColorScheme } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ThemeMode = "light" | "dark" | "system";
@@ -19,7 +19,10 @@ const ThemeContext = createContext<ThemeContextValue>({
 });
 
 export function useThemeProvider() {
-  const systemScheme = useSystemColorScheme() ?? "light";
+  const rawSystemScheme = useSystemColorScheme();
+  // react-native 0.83+ can return "unspecified"; collapse it to "light" so the
+  // downstream ColorScheme stays strictly "light" | "dark".
+  const systemScheme: "light" | "dark" = rawSystemScheme === "dark" ? "dark" : "light";
   const [mode, setModeState] = useState<ThemeMode>("system");
   const [loaded, setLoaded] = useState(false);
 

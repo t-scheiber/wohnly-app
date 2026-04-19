@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { ShieldAlert, ChevronRight } from "lucide-react-native";
