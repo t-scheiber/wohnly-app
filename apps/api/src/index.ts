@@ -28,6 +28,7 @@ import accessRouter from "./routes/access.js";
 import envelopesRouter from "./routes/envelopes.js";
 import epochsRouter from "./routes/epochs.js";
 import appVersionRouter from "./routes/app-version.js";
+import householdResetRouter from "./routes/household-reset.js";
 import { eventListener } from "./lib/events/listener.js";
 import { startExpireAccessRequestsCron } from "./cron/expire-access-requests.js";
 
@@ -171,6 +172,7 @@ app.route("/api/access", accessRouter);
 // Hono composes them; each contributes its own sub-routes.
 app.route("/api/households", envelopesRouter);
 app.route("/api/households", epochsRouter);
+app.route("/api/households", householdResetRouter);
 app.route("/api/app", appVersionRouter);
 
 // Health check
