@@ -61,76 +61,9 @@ export function useSetNickname() {
 }
 
 // ── Devices ──
-
-export function useHouseholdDevices() {
-  return useQuery({
-    queryKey: ["household-devices"],
-    queryFn: () => api<{ devices: Device[] }>("/api/devices/household?includeAll=true"),
-  });
-}
-
-export function usePendingDevices() {
-  return useQuery({
-    queryKey: ["pending-devices"],
-    queryFn: () => api<{ devices: Device[]; count: number }>("/api/devices/pending"),
-    refetchInterval: 30_000,
-  });
-}
-
-export function useApproveDevice() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (deviceId: string) =>
-      apiPost<{ success: boolean; device: Device }>("/api/devices/approve", { deviceId }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["household-devices"] });
-      qc.invalidateQueries({ queryKey: ["pending-devices"] });
-    },
-  });
-}
-
-export function useRejectDevice() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (deviceId: string) =>
-      apiPost("/api/devices/reject", { deviceId }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["household-devices"] });
-      qc.invalidateQueries({ queryKey: ["pending-devices"] });
-    },
-  });
-}
-
-export function useMyDevices() {
-  return useQuery({
-    queryKey: ["my-devices"],
-    queryFn: () => api<{ devices: Device[] }>("/api/devices/list"),
-  });
-}
-
-export function useRenameDevice() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: ({ deviceId, name }: { deviceId: string; name: string }) =>
-      apiPatch<{ device: Device }>(`/api/devices/${deviceId}`, { name }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["my-devices"] });
-      qc.invalidateQueries({ queryKey: ["household-devices"] });
-    },
-  });
-}
-
-export function useRemoveDevice() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (deviceId: string) =>
-      apiDelete(`/api/devices/${deviceId}`),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["my-devices"] });
-      qc.invalidateQueries({ queryKey: ["household-devices"] });
-    },
-  });
-}
+// Legacy /api/devices/* hooks removed in Task 22. Device listing for the
+// Access screen uses useHouseholdDevicesNew (household-scoped) and
+// useRemoveHouseholdDevice below; approval flows go through AccessRequests.
 
 // ── Todos ──
 
