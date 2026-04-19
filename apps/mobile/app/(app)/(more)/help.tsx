@@ -14,6 +14,7 @@ import {
   Lock,
   Mail,
   Repeat,
+  Smartphone,
 } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
@@ -175,26 +176,39 @@ export default function HelpScreen() {
         <HelpBullet text={t("help.splits")} colors={colors} />
       </AccordionSection>
 
-      {/* Inviting Members */}
+      {/* Inviting People */}
       <AccordionSection
         icon={<Users size={18} color={colors.primary} />}
-        title={t("help.invitingMembers")}
+        title={t("access.help.invitePeople.title")}
         colors={colors}
       >
-        <HelpText text={t("help.invitingMembersDesc")} colors={colors} />
-        <HelpBullet text={t("help.shareCode")} colors={colors} />
-        <HelpBullet text={t("help.shareLink")} colors={colors} />
+        <HelpBullet text={t("access.help.invitePeople.generateLink")} colors={colors} />
+        <HelpBullet text={t("access.help.invitePeople.emailPreauth")} colors={colors} />
+        <HelpBullet text={t("access.help.invitePeople.manualApproval")} colors={colors} />
+        <HelpBullet text={t("access.help.invitePeople.ownerOnly")} colors={colors} />
       </AccordionSection>
 
-      {/* Encryption */}
+      {/* Adding a device */}
       <AccordionSection
-        icon={<Lock size={18} color={colors.primary} />}
-        title={t("help.encryption")}
+        icon={<Smartphone size={18} color={colors.primary} />}
+        title={t("access.help.addDevice.title")}
         colors={colors}
       >
-        <HelpText text={t("help.encryptionDesc")} colors={colors} />
-        <HelpBullet text={t("help.e2ee")} colors={colors} />
-        <HelpBullet text={t("help.deviceApproval")} colors={colors} />
+        <HelpBullet text={t("access.help.addDevice.signIn")} colors={colors} />
+        <HelpBullet text={t("access.help.addDevice.codeCompare")} colors={colors} />
+        <HelpBullet text={t("access.help.addDevice.approveFromOther")} colors={colors} />
+      </AccordionSection>
+
+      {/* Privacy & Encryption */}
+      <AccordionSection
+        icon={<Lock size={18} color={colors.primary} />}
+        title={t("access.help.encryption.title")}
+        colors={colors}
+      >
+        <HelpBullet text={t("access.help.encryption.whatItMeans")} colors={colors} />
+        <HelpBullet text={t("access.help.encryption.codeComparison")} colors={colors} />
+        <HelpBullet text={t("access.help.encryption.rotation")} colors={colors} />
+        <HelpBullet text={t("access.help.encryption.disclosure")} colors={colors} />
       </AccordionSection>
 
       {/* Contact Support */}

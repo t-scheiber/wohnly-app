@@ -291,20 +291,6 @@
     "sunday": "Sonntag",
     "timeFormat": "Zeitformat"
   },
-  "devices": {
-    "approved": "Genehmigt",
-    "pending": "Ausstehend",
-    "rejected": "Abgelehnt",
-    "unnamed": "Unbenanntes Gerät",
-    "description": "Geräte, die mit deinem Konto verknüpft sind. Jedes genehmigte Gerät besitzt eine verschlüsselte Kopie deines Haushaltsschlüssels für Ende-zu-Ende-Verschlüsselung.",
-    "noDevices": "Noch keine Geräte registriert",
-    "renameDevice": "Gerät umbenennen",
-    "removeDevice": "Gerät entfernen",
-    "removeConfirm": "\"{{name}}\" entfernen? Dieses Gerät verliert den Zugriff auf verschlüsselte Haushaltsdaten.",
-    "deviceNamePlaceholder": "z.B. Mein iPhone, Arbeitslaptop",
-    "e2eeInfo": "Ende-zu-Ende-Verschlüsselung",
-    "e2eeDescription": "Deine Haushaltsdaten werden mit Schlüsseln verschlüsselt, auf die nur deine genehmigten Geräte zugreifen können. Neue Geräte müssen von einem bestehenden Geräteinhaber genehmigt werden."
-  },
   "balances": {
     "owedToYou": "Dir geschuldet",
     "youOwe": "Du schuldest",
@@ -379,23 +365,7 @@
     "expenses": "Erfasse gemeinsame Ausgaben und teile Kosten unter Mitgliedern auf",
     "subscriptions": "Verfolge Abonnements mit Verlängerungsdaten",
     "splits": "Sieh Salden ein, um zu sehen, wer wem was schuldet",
-    "invitingMembers": "Mitglieder einladen",
-    "invitingMembersDesc": "Füge Haushaltsmitglieder hinzu, damit alle zusammenarbeiten können.",
-    "shareCode": "Gehe zu den Einstellungen und tippe auf 'Mitglieder einladen', um deinen Code zu teilen",
-    "shareLink": "Mitglieder können per Einladungscode oder Link beitreten",
-    "encryption": "Verschlüsselung & Privatsphäre",
-    "encryptionDesc": "Deine Daten sind mit Ende-zu-Ende-Verschlüsselung geschützt.",
-    "e2ee": "Alle Haushaltsdaten werden verschlüsselt, bevor sie dein Gerät verlassen",
-    "deviceApproval": "Neue Geräte müssen von einem bestehenden Mitglied genehmigt werden",
-    "devicePendingBanner": "Dieses Gerät wartet auf Genehmigung. Bitte genehmige es auf deinem anderen Gerät, um auf geteilte Daten zuzugreifen.",
-    "deviceApprovedBanner": "Dieses Gerät wurde genehmigt! Lade Haushalts-Schlüssel...",
-    "missingKeysBanner": "Gerät genehmigt, aber Verschlüsselungs-Schlüssel fehlen. Stelle sicher, dass ein anderes Gerät geöffnet ist zum Synchronisieren.",
-    "checkStatus": "Status prüfen",
-    "checkAndKeys": "Synchronisieren",
-    "pendingDeviceCount": "{{count}} Gerät(e) warten auf Genehmigung",
-    "approveNow": "Jetzt prüfen",
-    "contactSupport": "Support kontaktieren",
-    "enableNotificationsBanner": "Aktiviere Benachrichtigungen, um informiert zu werden, wenn dieses Gerät genehmigt wird."
+    "contactSupport": "Support kontaktieren"
   },
   "meals": {
     "title": "Essensplan",
@@ -501,5 +471,87 @@
     "calendar": "Kalender",
     "finances": "Finanzen",
     "more": "Mehr"
+  },
+  "forceUpdate": {
+    "title": "Bitte aktualisiere Wohnly",
+    "body": "Diese Version ist veraltet. Aktualisiere, um Wohnly weiter zu nutzen.",
+    "updateNow": "Jetzt aktualisieren"
+  },
+  "access": {
+    "menu": {
+      "title": "Zugriff & Sicherheit",
+      "subtitle": "Personen, Geräte und ausstehende Freigaben"
+    },
+    "waiting": {
+      "heading": "Warte auf Freigabe",
+      "instruction": "Öffne Wohnly auf einem deiner anderen Geräte (oder bitte eine*n Haushaltsbesitzer*in) und gib diesen 6-stelligen Code ein.",
+      "codeA11y": "Dein Verifizierungscode lautet {{code}}",
+      "showDifferent": "Anderen Code anzeigen",
+      "cancel": "Abbrechen"
+    },
+    "approve": {
+      "joinTitle": "{{name}} möchte beitreten",
+      "deviceTitle": "{{device}} möchte diesem Haushalt beitreten",
+      "unknownDevice": "Ein neues Gerät",
+      "unknownUser": "Jemand",
+      "instruction": "Gib den 6-stelligen Code ein, der auf dem anderen Bildschirm angezeigt wird.",
+      "approve": "Freigeben",
+      "reject": "Ablehnen",
+      "wrongCode": "Der Code stimmt nicht. Noch {{tries}} Versuche."
+    },
+    "banner": {
+      "joinPending": "{{name}} möchte beitreten",
+      "devicePending": "{{device}} wartet auf Freigabe",
+      "unknownDevice": "Ein neues Gerät"
+    },
+    "screen": {
+      "title": "Zugriff",
+      "keyRotated": "Aktuelle Verschlüsselungs-Epoche: {{epoch}}",
+      "pending": "Ausstehend ({{count}})",
+      "people": "Personen",
+      "devices": "Geräte",
+      "joinRow": "{{name}} möchte beitreten",
+      "deviceRow": "Neues Gerät: {{device}}",
+      "roleOwner": "Besitzer*in",
+      "roleMember": "Mitglied",
+      "you": "(Du)",
+      "cancel": "Abbrechen",
+      "remove": "Entfernen",
+      "removeDeviceConfirm": "Dieses Gerät entfernen? Es kann dann keine Haushaltsdaten mehr entschlüsseln."
+    },
+    "errors": {
+      "noKey": "Dein Verschlüsselungsschlüssel ist noch nicht geladen – versuche es gleich noch einmal.",
+      "noPubKey": "Dieser Anfrage fehlt das Schlüsselmaterial des Geräts."
+    },
+    "help": {
+      "invitePeople": {
+        "title": "Personen einladen",
+        "generateLink": "Generiere einen Einladungslink im Zugriff-Bildschirm. Nur Besitzer*innen können Einladungen senden.",
+        "emailPreauth": "Wenn du beim Erstellen die E-Mail-Adresse hinterlegst, tritt die Person sofort bei, sobald sie sich mit dieser Adresse anmeldet.",
+        "manualApproval": "Passt die E-Mail nicht oder wurde keine hinterlegt, muss ein*e Besitzer*in mit einem 6-stelligen Code freigeben.",
+        "ownerOnly": "Neue Mitglieder treten standardmäßig als Mitglied bei. Du kannst sie später zu Besitzer*innen befördern."
+      },
+      "addDevice": {
+        "title": "Gerät hinzufügen",
+        "signIn": "Melde dich auf dem neuen Gerät mit deinem Konto an.",
+        "codeCompare": "Das neue Gerät zeigt einen 6-stelligen Code an.",
+        "approveFromOther": "Öffne Wohnly auf einem deiner bereits genutzten Geräte und gib den Code zur Freigabe ein."
+      },
+      "encryption": {
+        "title": "Datenschutz & Verschlüsselung",
+        "whatItMeans": "Alles, was dein Haushalt teilt, ist Ende-zu-Ende verschlüsselt. Selbst wir können es nicht lesen.",
+        "codeComparison": "Jedes neue Gerät und jede neue Person durchläuft eine 6-stellige Code-Prüfung. Das schützt dich auch, wenn jemand einen Einladungslink erhält.",
+        "rotation": "Wenn jemand den Haushalt verlässt, wird der Schlüssel rotiert. Zukünftige Inhalte bleiben geschützt.",
+        "disclosure": "Kopien bereits gesehener Inhalte können weiterhin auf deren Gerät sein – das kann Verschlüsselung nicht rückgängig machen."
+      }
+    },
+    "reset": {
+      "entry": "Haushalt zurücksetzen (unwiderruflich)",
+      "title": "Haushalt zurücksetzen",
+      "warning": "Dadurch werden alle verschlüsselten Inhalte (Aufgaben, Einkaufslisten, Hausarbeiten, Ausgaben, Termine, Abonnements, Essenspläne) endgültig gelöscht und alle Geräte entfernt. Dies kann nicht rückgängig gemacht werden. Nutze das nur, wenn du den Zugriff verloren hast und niemand dein Gerät freigeben kann.",
+      "prompt": "Tippe den Haushaltsnamen zur Bestätigung: {{name}}",
+      "confirm": "Alles löschen",
+      "cancel": "Abbrechen"
+    }
   }
 }
