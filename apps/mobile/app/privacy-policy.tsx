@@ -129,6 +129,15 @@ export default function PrivacyPolicyScreen() {
             X25519 key exchange and sealed cryptographic envelopes. When E2EE is enabled, your
             encrypted data cannot be read by our servers.
           </Paragraph>
+          <Paragraph colors={colors}>
+            New devices are approved by another of your own devices using a 6-digit code that
+            you compare between screens. New household members are approved by a household
+            owner (also with a 6-digit code), unless they sign in with a pre-authorised email
+            from the invitation, in which case they join immediately. When a member leaves or
+            is removed, Wohnly rotates the household&apos;s encryption key so any new content
+            is protected from them. Content they already viewed on their device cannot be
+            revoked — that&apos;s a limit of end-to-end encryption, not a choice we made.
+          </Paragraph>
         </Section>
 
         <Section title="5. Calendar & Device Permissions" colors={colors}>
