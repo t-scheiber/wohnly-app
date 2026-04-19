@@ -424,12 +424,47 @@ Structured logs keyed by `householdId`, `requestId`, `userId` for: request creat
 
 A full rollback within a release cycle requires a DB restore from backup, since `migrate reset` is destructive. Rollback is assumed to be extremely unlikely given the pre-launch status; if it becomes realistic, we'd take a pre-deploy snapshot in Postgres before running `migrate reset`.
 
-### Facts to verify during implementation planning
+---
 
-- Whether `Household.createdByUserId` exists, or creator is derived from earliest `joinedAt`. Determines how the initial `OWNER` role is assigned at household-create time.
-- Whether the mobile app has an existing forced-update mechanism (version gate), or whether this becomes a sub-task.
-- Exact Caddy / PM2 configuration needed to disable buffering for the SSE `Content-Type: text/event-stream` response path.
-- Whether an i18n translation workflow exists for the 42-locale `access` namespace, or whether translations must be commissioned before ship.
+## 8. Help Content & Translations
+
+The existing help surfaces describe the current (to-be-removed) flow. They must be rewritten and re-translated as part of this work, not left for later — users will hit the new ceremony immediately after cutover and need accurate copy.
+
+### Surfaces to update
+
+- **Help screen** ([apps/mobile/app/(app)/(more)/help.tsx](../../../apps/mobile/app/\(app\)/\(more\)/help.tsx)) — the `help.encryption` and `help.invitingMembers` sections describe device approval and invitations today in two lines each. Rewrite both to cover: the 6-digit code comparison, who can approve (owners for joins, own other devices for enrollment), the email-pre-auth frictionless path, the "Key rotated" indicator, and what happens when a member leaves (forward secrecy disclosure).
+- **More tab menu** ([apps/mobile/app/(app)/(more)/index.tsx](../../../apps/mobile/app/\(app\)/\(more\)/index.tsx)) — the existing "Devices" entry (subtitle currently describes device-only management) becomes **"Access"** with a new subtitle covering people + devices + pending.
+- **Settings references** ([apps/mobile/app/(app)/(more)/settings.tsx:420-483](../../../apps/mobile/app/\(app\)/\(more\)/settings.tsx#L420)) — the inline pending-devices block is deleted; its copy strings (`settings.devices.*`) go away as the logic moves to Surface D.
+- **Privacy policy** ([apps/mobile/app/privacy-policy.tsx](../../../apps/mobile/app/privacy-policy.tsx)) — if the privacy copy claims "devices are approved by an existing member" generically, it still reads correctly but is less precise than it could be. Update to reflect the owner-vs-self authority split and key rotation behavior. Minor rewrite, not a major change.
+
+### i18n namespace plan
+
+Two namespace changes:
+
+- **New namespace: `access`** — all strings for Surfaces A–D, the approval modal, the waiting screen, error messages, push-notification titles/bodies, role labels, and rotation disclosure copy. Estimated ~60 keys.
+- **Updated namespace: `help`** — replace the `encryption.*` and `invitingMembers.*` sub-trees entirely with the new copy. Estimated ~15 keys changed or added. Keys describing the now-removed polling flow (`devicePendingBanner`, `deviceApprovedBanner`, `missingKeysBanner`, `checkStatus`, `checkAndKeys`, `pendingDeviceCount`, `approveNow`, `enableNotificationsBanner`) are deleted — their semantics don't map onto the new tiered state model and the new strings live under `access`.
+- **Deleted namespace: `devices`** — current strings (`devices.approved`, `devices.pending`, `devices.description`, `devices.e2eeInfo`, `devices.removeDevice`, `devices.removeConfirm`, etc.) are replaced by equivalents under `access.*`. The namespace itself is removed from all 42 locale files.
+
+### Copy principles for the new strings
+
+- **No jargon.** Never say "envelope," "epoch," "sealed," "X25519," "MITM." Say "encryption key," "updated," "protected."
+- **Code comparison is the hook.** Every approval string mentions the code. "Ask them to read the code on their screen." Never just "tap approve."
+- **Owner vs member is visible but never gatekeepy.** Role labels appear on member cards, but restrictions are phrased as capability ("Only owners can approve new members"), not denial ("You can't do that").
+- **Forward-secrecy disclosure is plain.** When removing a member, the modal says: **"They may still have copies of things they've already seen on their device. New content will be protected."** No softening, no technical dodge.
+
+### Rollout pattern (matches the existing `leaveHouseholdPage` precedent)
+
+Following [the 2026-04-18 leaveHouseholdPage commits](../../../.git/COMMIT_EDITMSG):
+
+1. **One commit, English only** — adds the full `access` namespace to `i18n/en.json`; deletes `devices` namespace; updates `help` namespace. All new logic referenced by code from this point uses `t('access.…')`.
+2. **One commit, German** — add the `access` namespace to `i18n/de.json`, mirror the `help` and `devices` changes. Lets a second reviewer check that the key structure survives non-English grammar before fanning out.
+3. **One commit, remaining 40 locales** — batch-apply the same structure to all other `.json` files under `apps/mobile/i18n/`. No automated translation service exists in the repo (translations have historically been manual / author-generated per the workflow explored during planning), so this commit's translations must be either author-produced or machine-translated with human spot-checking across the top 10 languages before ship.
+
+No new i18n tooling is in scope for this spec. If the user's translation approach for leaveHouseholdPage worked, the same approach works here.
+
+### Verification
+
+Build-time: no translation-key linter exists in the repo (confirmed). Regressions where a `t('access.foo')` call has no corresponding key would surface as literal `"access.foo"` strings in the UI. Acceptable risk for v1, given the `access` namespace is self-contained and can be sight-checked by loading the app in English immediately after cutover.
 
 ---
 
