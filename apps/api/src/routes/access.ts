@@ -289,7 +289,11 @@ app.post(
       });
       const currentEpoch = hh.keyEpoch;
 
-      // Deduplicate device by (userId, fingerprint)
+      // Deduplicate device by (userId, fingerprint). If the same fingerprint
+      // returns with a new publicKey (app reinstall, SecureStore wiped), refresh
+      // the publicKey on the existing row and purge any envelopes that were
+      // sealed to the old key — the new private key can't open them anyway, and
+      // heal-forward would otherwise keep sealing to stale material.
       let device = await tx.device.findFirst({
         where: {
           userId: req.requesterUserId,
@@ -303,6 +307,16 @@ app.post(
             name: req.requesterDeviceName,
             publicKey: req.requesterDevicePublicKey,
             fingerprint: req.requesterDeviceFingerprint,
+            status: "approved",
+          },
+        });
+      } else if (device.publicKey !== req.requesterDevicePublicKey) {
+        await tx.householdKeyEnvelope.deleteMany({ where: { deviceId: device.id } });
+        device = await tx.device.update({
+          where: { id: device.id },
+          data: {
+            publicKey: req.requesterDevicePublicKey,
+            name: req.requesterDeviceName ?? device.name,
             status: "approved",
           },
         });

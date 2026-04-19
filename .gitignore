@@ -72,6 +72,6 @@ apps/api/prisma/migrations/**/migration_lock.toml
 banner.psd
 banner.png
 
-*listings/packages/shared/**/*.js
+packages/shared/**/*.js
 packages/shared/**/*.d.ts
 packages/shared/**/*.js.map
