@@ -29,8 +29,8 @@
     "sharp": "^0.34.5"
   },
   "overrides": {
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react": "19.2.5",
+    "react-dom": "19.2.5"
   },
   "devDependencies": {
     "@tauri-apps/api": "^2.10.1",
