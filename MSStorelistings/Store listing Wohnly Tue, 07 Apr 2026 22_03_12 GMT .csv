@@ -1,0 +1,88 @@
+﻿Field,Type,English,Bangla,Bulgarian,Chinese (Simplified),Croatian,Czech,Danish,Dutch,Estonian,Finnish,Filipino,French,German,Greek,Hindi,Icelandic,Hungarian,Indonesian,Italian,Japanese,Korean,Latvian,Lithuanian,Malay,Marathi,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Slovenian,Spanish,Kiswahili,Swedish,Tamil,Telugu,Thai,Turkish,Ukrainian,Vietnamese
+ProductName,Text,Wohnly,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Description,Text,"Wohnly is the all-in-one household management app that helps you and your family stay organized together. Whether you live with a partner, roommates, or family, Wohnly keeps everyone on the same page.
+
+Manage shared to-do lists, shopping lists, chores, expenses, meal plans, and a household calendar — all in one place. Every member of your household can contribute, check off tasks, and stay up to date in real time.
+
+Key highlights:
+
+Shared to-do lists and personal tasks
+Collaborative shopping lists
+Chore management with fair share analytics
+Expense tracking and splitting
+Meal planning with shopping list integration
+Household calendar for events and schedules
+Invite members with a simple code
+End-to-end encryption for your household data
+Beautiful dark and light themes
+Available in 42 languages
+Works across Windows, macOS, iOS, Android, and web
+Wohnly is free to use. Sign in with Google or Apple, create your household, and invite your family or roommates to get started.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+WhatsNew,Text,"Initial release for Windows. Includes full household management with todos, shopping lists, chores, expenses, meal planning, and calendar.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures1,Text,Shared to-do lists and personal tasks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures2,Text,Collaborative shopping lists,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures3,Text,Chore tracking with fair share analytics,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures4,Text,Expense tracking and bill splitting,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures5,Text,Meal planning with ingredient sync,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures6,Text,Household calendar and events,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures7,Text,End-to-end encrypted household data,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures8,Text,Real-time sync across all devices,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures9,Text,Available in 42 languages,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures10,Text,Dark and light themes,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures11,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures12,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures13,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures14,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures15,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures16,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures17,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures18,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures19,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ProductFeatures20,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ShortDescription,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SearchTerms1,Text,household management app,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SearchTerms2,Text,family organizer app,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SearchTerms3,Text,shared to-do lists,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SearchTerms4,Text,collaborative shopping lists,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SearchTerms5,Text,chore management app,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SearchTerms6,Text,expense tracking app,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SearchTerms7,Text,expense splitting app,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Applicable license terms,Text,"By using Wohnly, you agree to the Terms of Service and Privacy Policy available at https://wohnly.app/privacy-policy. Wohnly is provided ""as is"" without warranty of any kind. The software is free to use. Your household data is end-to-end encrypted and stored securely. You retain ownership of all content you create within the app.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Copyright,Text,Copyright 2026 Thomas Scheiber. All rights reserved.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+DevelopedBy,Text,Thomas Scheiber,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum1,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum2,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum3,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum4,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum5,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum6,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum7,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum8,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum9,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum10,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsMinimum11,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended1,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended2,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended3,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended4,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended5,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended6,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended7,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended8,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended9,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended10,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RequirementsRecommended11,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+StoreLogos1,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+StoreLogos2,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots1,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots2,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots3,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots4,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots5,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots6,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots7,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots8,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots9,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Screenshots10,Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+HeroArts,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Trailers,Text,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,88 @@
+﻿"Field","Type","Czech"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly je kompletní aplikace pro správu domácnosti, která pomáhá vám a vaší rodině zůstat organizovaní. Ať žijete s partnerem, spolubydlícími nebo rodinou, Wohnly zajistí, že všichni budou na stejné vlně.
+
+Spravujte sdílené seznamy úkolů, nákupní seznamy, domácí práce, výdaje, plány jídel a rodinný kalendář — vše na jednom místě. Každý člen domácnosti může přispívat, odškrtávat úkoly a být v reálném čase informován.
+
+Klíčové funkce:
+
+Sdílené seznamy úkolů a osobní úkoly
+Kolaborativní nákupní seznamy
+Správa domácích prací s analýzou spravedlivého rozdělení
+Sledování a sdílení výdajů
+Plánování jídel s integrací nákupního seznamu
+Rodinný kalendář pro události a plány
+Pozvání členů jednoduchým kódem
+Šifrování dat domácnosti od konce ke konci
+Krásná tmavá a světlá témata
+K dispozici ve 42 jazycích
+Funguje na Windows, macOS, iOS, Android a webu
+Wohnly je zdarma. Přihlaste se přes Google nebo Apple, vytvořte domácnost a pozvěte rodinu nebo spolubydlící."
+"WhatsNew","Text","Počáteční vydání pro Windows. Zahrnuje plnou správu domácnosti s úkoly, nákupními seznamy, domácími pracemi, výdaji, plánováním jídel a kalendářem."
+"ProductFeatures1","Text","Sdílené a osobní seznamy úkolů"
+"ProductFeatures2","Text","Kolaborativní nákupní seznamy"
+"ProductFeatures3","Text","Sledování domácích prací s analýzou"
+"ProductFeatures4","Text","Sledování výdajů a rozdělování účtů"
+"ProductFeatures5","Text","Plánování jídel se synchronizací ingrediencí"
+"ProductFeatures6","Text","Rodinný kalendář a události"
+"ProductFeatures7","Text","Data domácnosti šifrovaná od konce ke konci"
+"ProductFeatures8","Text","Synchronizace v reálném čase na všech zařízeních"
+"ProductFeatures9","Text","K dispozici ve 42 jazycích"
+"ProductFeatures10","Text","Tmavá a světlá témata"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly je aplikace pro správu domácnosti pro rodiny a spolubydlící — úkoly, nákupy, domácí práce, výdaje a plánování jídel na jednom místě."
+"SearchTerms1","Text","aplikace pro správu domácnosti"
+"SearchTerms2","Text","rodinný organizér"
+"SearchTerms3","Text","sdílené seznamy úkolů"
+"SearchTerms4","Text","kolaborativní nákupní seznam"
+"SearchTerms5","Text","správa domácích prací"
+"SearchTerms6","Text","sledování výdajů"
+"SearchTerms7","Text","rozdělování výdajů aplikace"
+"Applicable license terms","Text","Používáním Wohnly souhlasíte s Podmínkami použití a Zásadami ochrany osobních údajů dostupnými na https://wohnly.app/privacy-policy. Wohnly je poskytován „tak jak je"" bez záruky jakéhokoli druhu. Software je zdarma. Data vaší domácnosti jsou šifrována od konce ke konci a bezpečně uložena. Vlastnictví veškerého obsahu, který vytvoříte v aplikaci, zůstává vám."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

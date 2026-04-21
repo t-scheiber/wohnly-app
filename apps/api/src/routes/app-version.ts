@@ -3,7 +3,7 @@ import type { AppEnv } from "../types.js";
 
 const app = new Hono<AppEnv>();
 
-const MIN_VERSION = process.env.WOHNLY_MIN_APP_VERSION ?? "2.0.0";
+const MIN_VERSION = process.env.WOHNLY_MIN_APP_VERSION ?? "1.3.0";
 const CURRENT_VERSION = process.env.WOHNLY_CURRENT_APP_VERSION ?? MIN_VERSION;
 
 // GET /api/app/min-version — clients call this to detect they need to update.

@@ -1,0 +1,88 @@
+﻿"Field","Type","Thai"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly คือแอปบริหารจัดการบ้านแบบครบวงจรที่ช่วยให้คุณและครอบครัวอยู่เป็นระเบียบร่วมกัน ไม่ว่าคุณจะอยู่กับคู่ครอง เพื่อนร่วมห้อง หรือครอบครัว Wohnly ช่วยให้ทุกคนอยู่ในหน้าเดียวกัน
+
+จัดการรายการงานที่แชร์ รายการช้อปปิ้ง งานบ้าน ค่าใช้จ่าย แผนมื้ออาหาร และปฏิทินครัวเรือน ทั้งหมดในที่เดียว สมาชิกทุกคนในบ้านสามารถมีส่วนร่วม ติ๊กงานที่ทำเสร็จ และอัปเดตแบบเรียลไทม์
+
+คุณสมบัติหลัก:
+
+รายการงานร่วมและงานส่วนตัว
+รายการช้อปปิ้งแบบร่วมมือกัน
+บริหารงานบ้านพร้อมวิเคราะห์การแบ่งงานที่ยุติธรรม
+ติดตามและแบ่งปันค่าใช้จ่าย
+วางแผนมื้ออาหารพร้อมเชื่อมต่อรายการช้อปปิ้ง
+ปฏิทินครัวเรือนสำหรับกิจกรรมและตารางงาน
+เชิญสมาชิกด้วยรหัสง่ายๆ
+การเข้ารหัสแบบ end-to-end สำหรับข้อมูลครัวเรือน
+ธีมมืดและสว่างที่สวยงาม
+รองรับ 42 ภาษา
+ใช้งานได้บน Windows, macOS, iOS, Android และเว็บ
+Wohnly ใช้งานฟรี เข้าสู่ระบบด้วย Google หรือ Apple สร้างครัวเรือน แล้วเชิญครอบครัวหรือเพื่อนร่วมห้องเพื่อเริ่มต้น"
+"WhatsNew","Text","เปิดตัวครั้งแรกบน Windows รวมการบริหารจัดการบ้านแบบครบวงจรพร้อมงาน รายการช้อปปิ้ง งานบ้าน ค่าใช้จ่าย วางแผนมื้ออาหาร และปฏิทิน"
+"ProductFeatures1","Text","รายการงานร่วมและส่วนตัว"
+"ProductFeatures2","Text","รายการช้อปปิ้งแบบร่วมมือกัน"
+"ProductFeatures3","Text","ติดตามงานบ้านพร้อมวิเคราะห์"
+"ProductFeatures4","Text","ติดตามค่าใช้จ่ายและแบ่งบิล"
+"ProductFeatures5","Text","วางแผนมื้ออาหารพร้อมซิงค์วัตถุดิบ"
+"ProductFeatures6","Text","ปฏิทินครัวเรือนและกิจกรรม"
+"ProductFeatures7","Text","ข้อมูลครัวเรือนเข้ารหัส end-to-end"
+"ProductFeatures8","Text","ซิงค์แบบเรียลไทม์บนทุกอุปกรณ์"
+"ProductFeatures9","Text","รองรับ 42 ภาษา"
+"ProductFeatures10","Text","ธีมมืดและสว่าง"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly คือแอปบริหารบ้านสำหรับครอบครัวและเพื่อนร่วมห้อง — งาน ช้อปปิ้ง งานบ้าน ค่าใช้จ่าย และวางแผนมื้ออาหารในที่เดียว"
+"SearchTerms1","Text","แอปบริหารจัดการบ้าน"
+"SearchTerms2","Text","แอปจัดระเบียบครอบครัว"
+"SearchTerms3","Text","รายการงานร่วม"
+"SearchTerms4","Text","รายการช้อปปิ้งร่วมกัน"
+"SearchTerms5","Text","บริหารงานบ้าน"
+"SearchTerms6","Text","ติดตามค่าใช้จ่าย"
+"SearchTerms7","Text","แอปแบ่งค่าใช้จ่าย"
+"Applicable license terms","Text","การใช้งาน Wohnly ถือว่าคุณยอมรับข้อกำหนดการให้บริการและนโยบายความเป็นส่วนตัวที่ https://wohnly.app/privacy-policy Wohnly ให้บริการ ""ตามสภาพ"" โดยไม่มีการรับประกันใดๆ ซอฟต์แวร์นี้ใช้งานฟรี ข้อมูลครัวเรือนของคุณได้รับการเข้ารหัสแบบ end-to-end และจัดเก็บอย่างปลอดภัย คุณยังคงเป็นเจ้าของเนื้อหาทั้งหมดที่สร้างภายในแอป"
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

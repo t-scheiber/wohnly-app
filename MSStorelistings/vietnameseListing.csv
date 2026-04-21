@@ -1,0 +1,88 @@
+﻿"Field","Type","Vietnamese"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly là ứng dụng quản lý gia đình tất cả trong một giúp bạn và gia đình luôn có tổ chức cùng nhau. Dù bạn sống với bạn đời, bạn cùng phòng hay gia đình, Wohnly giữ tất cả mọi người trên cùng một trang.
+
+Quản lý danh sách công việc chia sẻ, danh sách mua sắm, việc nhà, chi phí, kế hoạch bữa ăn và lịch gia đình — tất cả ở một nơi. Mỗi thành viên trong nhà có thể đóng góp, kiểm tra công việc và cập nhật theo thời gian thực.
+
+Điểm nổi bật:
+
+Danh sách công việc chia sẻ và nhiệm vụ cá nhân
+Danh sách mua sắm cộng tác
+Quản lý việc nhà với phân tích chia sẻ công bằng
+Theo dõi và chia sẻ chi phí
+Lập kế hoạch bữa ăn tích hợp với danh sách mua sắm
+Lịch gia đình cho các sự kiện và lịch trình
+Mời thành viên bằng mã đơn giản
+Mã hóa đầu cuối đến đầu cuối cho dữ liệu gia đình
+Giao diện tối và sáng đẹp mắt
+Có sẵn trong 42 ngôn ngữ
+Hoạt động trên Windows, macOS, iOS, Android và web
+Wohnly miễn phí sử dụng. Đăng nhập bằng Google hoặc Apple, tạo gia đình của bạn và mời gia đình hoặc bạn cùng phòng để bắt đầu."
+"WhatsNew","Text","Bản phát hành đầu tiên cho Windows. Bao gồm quản lý gia đình đầy đủ với công việc, danh sách mua sắm, việc nhà, chi phí, lập kế hoạch bữa ăn và lịch."
+"ProductFeatures1","Text","Danh sách công việc chia sẻ và cá nhân"
+"ProductFeatures2","Text","Danh sách mua sắm cộng tác"
+"ProductFeatures3","Text","Theo dõi việc nhà với phân tích"
+"ProductFeatures4","Text","Theo dõi chi phí và chia hóa đơn"
+"ProductFeatures5","Text","Lập kế hoạch bữa ăn với đồng bộ nguyên liệu"
+"ProductFeatures6","Text","Lịch gia đình và sự kiện"
+"ProductFeatures7","Text","Dữ liệu gia đình mã hóa đầu cuối"
+"ProductFeatures8","Text","Đồng bộ thời gian thực trên tất cả thiết bị"
+"ProductFeatures9","Text","Có sẵn trong 42 ngôn ngữ"
+"ProductFeatures10","Text","Giao diện tối và sáng"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly là ứng dụng quản lý nhà cho gia đình và bạn cùng phòng — công việc, mua sắm, việc nhà, chi phí và kế hoạch bữa ăn ở một nơi."
+"SearchTerms1","Text","ứng dụng quản lý gia đình"
+"SearchTerms2","Text","ứng dụng tổ chức gia đình"
+"SearchTerms3","Text","danh sách công việc chia sẻ"
+"SearchTerms4","Text","danh sách mua sắm cộng tác"
+"SearchTerms5","Text","quản lý việc nhà"
+"SearchTerms6","Text","theo dõi chi phí"
+"SearchTerms7","Text","ứng dụng chia sẻ chi phí"
+"Applicable license terms","Text","Bằng cách sử dụng Wohnly, bạn đồng ý với Điều khoản Dịch vụ và Chính sách Quyền riêng tư có tại https://wohnly.app/privacy-policy. Wohnly được cung cấp ""như hiện có"" mà không có bảo đảm nào. Phần mềm miễn phí sử dụng. Dữ liệu gia đình của bạn được mã hóa đầu cuối và lưu trữ an toàn. Bạn giữ quyền sở hữu tất cả nội dung bạn tạo trong ứng dụng."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

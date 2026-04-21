@@ -1,0 +1,88 @@
+﻿"Field","Type","Ukrainian"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly — це комплексний застосунок для управління домогосподарством, який допомагає вам і вашій родині залишатися організованими разом. Чи живете ви з партнером, сусідами по кімнаті чи родиною, Wohnly тримає всіх на одній хвилі.
+
+Керуйте спільними списками завдань, списками покупок, домашніми обов'язками, витратами, планами харчування та домашнім календарем — усе в одному місці. Кожен член домогосподарства може долучатися, відзначати завдання виконаними та бути в курсі подій у режимі реального часу.
+
+Ключові можливості:
+
+Спільні списки завдань та особисті задачі
+Спільні списки покупок
+Управління домашніми обов'язками з аналізом справедливого розподілу
+Відстеження та розподіл витрат
+Планування харчування з інтеграцією списку покупок
+Домашній календар для заходів і розкладів
+Запрошення учасників простим кодом
+Наскрізне шифрування даних домогосподарства
+Гарні темна та світла теми
+Доступно 42 мовами
+Працює на Windows, macOS, iOS, Android та в браузері
+Wohnly безкоштовний. Увійдіть через Google або Apple, створіть домогосподарство та запросіть родину чи сусідів, щоб розпочати."
+"WhatsNew","Text","Перший випуск для Windows. Включає повне управління домогосподарством із завданнями, списками покупок, домашніми справами, витратами, плануванням харчування та календарем."
+"ProductFeatures1","Text","Спільні та особисті списки завдань"
+"ProductFeatures2","Text","Спільні списки покупок"
+"ProductFeatures3","Text","Відстеження домашніх обов'язків з аналітикою"
+"ProductFeatures4","Text","Облік витрат та розподіл рахунків"
+"ProductFeatures5","Text","Планування харчування із синхронізацією інгредієнтів"
+"ProductFeatures6","Text","Домашній календар та заходи"
+"ProductFeatures7","Text","Дані домогосподарства із наскрізним шифруванням"
+"ProductFeatures8","Text","Синхронізація в режимі реального часу на всіх пристроях"
+"ProductFeatures9","Text","Доступно 42 мовами"
+"ProductFeatures10","Text","Темна та світла теми"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly — застосунок для управління домом для родин і сусідів — завдання, покупки, домашні справи, витрати та планування харчування в одному місці."
+"SearchTerms1","Text","застосунок для управління домом"
+"SearchTerms2","Text","сімейний органайзер"
+"SearchTerms3","Text","спільні списки завдань"
+"SearchTerms4","Text","спільний список покупок"
+"SearchTerms5","Text","управління домашніми обов'язками"
+"SearchTerms6","Text","відстеження витрат"
+"SearchTerms7","Text","застосунок для розподілу витрат"
+"Applicable license terms","Text","Використовуючи Wohnly, ви погоджуєтеся з Умовами надання послуг та Політикою конфіденційності, доступними за адресою https://wohnly.app/privacy-policy. Wohnly надається «як є» без будь-яких гарантій. Програмне забезпечення є безкоштовним. Дані вашого домогосподарства зашифровані наскрізним шифруванням і надійно зберігаються. Ви зберігаєте право власності на весь вміст, створений у застосунку."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

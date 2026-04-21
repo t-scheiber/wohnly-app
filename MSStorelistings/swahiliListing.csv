@@ -1,0 +1,88 @@
+﻿"Field","Type","Swahili"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly ni programu yote-katika-moja ya usimamizi wa nyumba ambayo inakusaidia wewe na familia yako kukaa wapangiliwa pamoja. Iwe unaishi na mpenzi, wanachumba, au familia, Wohnly inaweka kila mtu kwenye ukurasa mmoja.
+
+Simamia orodha ya kufanya ya pamoja, orodha za manunuzi, kazi za nyumba, matumizi, mipango ya chakula, na kalenda ya nyumba — yote mahali pamoja. Kila mwanachama wa nyumba yako anaweza kuchangia, kutekeleza kazi, na kukaa updated kwa wakati halisi.
+
+Vipengele vikuu:
+
+Orodha za mambo ya kufanya zilizoshirikiwa na kazi za kibinafsi
+Orodha za manunuzi za pamoja
+Usimamizi wa kazi za nyumba na uchambuzi wa mgawanyo wa haki
+Ufuatiliaji na mgawanyo wa matumizi
+Mipango ya chakula na muunganiko wa orodha ya manunuzi
+Kalenda ya nyumba kwa matukio na ratiba
+Mwaliko wa wanachama kwa kanuni rahisi
+Usimbaji fiche wa mwisho-kwa-mwisho kwa data ya nyumba
+Mandhari mazuri ya giza na mwanga
+Inapatikana katika lugha 42
+Inafanya kazi kwenye Windows, macOS, iOS, Android, na wavuti
+Wohnly ni bure kutumia. Ingia kwa Google au Apple, unda nyumba yako, na mwalike familia au wanachumba kuanza."
+"WhatsNew","Text","Toleo la kwanza kwa Windows. Linajumuisha usimamizi kamili wa nyumba na mambo ya kufanya, orodha za manunuzi, kazi za nyumba, matumizi, mipango ya chakula, na kalenda."
+"ProductFeatures1","Text","Orodha za mambo ya kufanya zilizoshirikiwa na za kibinafsi"
+"ProductFeatures2","Text","Orodha za manunuzi za pamoja"
+"ProductFeatures3","Text","Ufuatiliaji wa kazi za nyumba na uchambuzi"
+"ProductFeatures4","Text","Ufuatiliaji wa matumizi na mgawanyo wa bili"
+"ProductFeatures5","Text","Mipango ya chakula na usawazishaji wa viungo"
+"ProductFeatures6","Text","Kalenda ya nyumba na matukio"
+"ProductFeatures7","Text","Data ya nyumba iliyosimbwa fiche mwisho-kwa-mwisho"
+"ProductFeatures8","Text","Usawazishaji wa wakati halisi kwenye vifaa vyote"
+"ProductFeatures9","Text","Inapatikana katika lugha 42"
+"ProductFeatures10","Text","Mandhari ya giza na mwanga"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly ni programu ya usimamizi wa nyumba kwa familia na wanachumba — kazi, manunuzi, majukumu ya nyumba, matumizi, na mipango ya chakula mahali pamoja."
+"SearchTerms1","Text","programu ya usimamizi wa nyumba"
+"SearchTerms2","Text","mpangaji wa familia"
+"SearchTerms3","Text","orodha ya kufanya ya pamoja"
+"SearchTerms4","Text","orodha ya manunuzi ya pamoja"
+"SearchTerms5","Text","usimamizi wa kazi za nyumba"
+"SearchTerms6","Text","ufuatiliaji wa matumizi"
+"SearchTerms7","Text","programu ya mgawanyo wa gharama"
+"Applicable license terms","Text","Kwa kutumia Wohnly, unakubaliana na Masharti ya Huduma na Sera ya Faragha zinazopatikana kwenye https://wohnly.app/privacy-policy. Wohnly hutolewa ""kama ilivyo"" bila dhamana yoyote. Programu hii ni bure kutumia. Data ya nyumba yako imesimbwa fiche mwisho-kwa-mwisho na kuhifadhiwa salama. Unabaki na umiliki wa maudhui yote unayounda ndani ya programu."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

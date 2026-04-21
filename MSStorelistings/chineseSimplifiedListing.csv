@@ -1,0 +1,88 @@
+﻿"Field","Type","Chinese (Simplified)"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly 是一款一体化家庭管理应用，帮助您和家人共同保持井井有条。无论您与伴侣、室友还是家人同住，Wohnly 都能让所有人保持同步。
+
+管理共享待办清单、购物清单、家务分工、费用、饮食计划和家庭日历——一切尽在一处。家庭每位成员都能参与贡献、勾选任务，并实时获取最新动态。
+
+主要亮点：
+
+共享待办清单与个人任务
+协作购物清单
+家务管理与公平分担分析
+费用追踪与分摊
+饮食计划与购物清单联动
+家庭日历，记录活动与日程
+通过简单邀请码添加成员
+家庭数据端对端加密
+精美的深色与浅色主题
+支持 42 种语言
+适用于 Windows、macOS、iOS、Android 及网页端
+Wohnly 完全免费。使用 Google 或 Apple 账号登录，创建您的家庭，邀请家人或室友即可开始使用。"
+"WhatsNew","Text","Windows 版首次发布，包含完整的家庭管理功能：待办事项、购物清单、家务分工、费用追踪、饮食计划和日历。"
+"ProductFeatures1","Text","共享与个人待办清单"
+"ProductFeatures2","Text","协作购物清单"
+"ProductFeatures3","Text","家务追踪与分担分析"
+"ProductFeatures4","Text","费用追踪与账单分摊"
+"ProductFeatures5","Text","饮食计划与食材同步"
+"ProductFeatures6","Text","家庭日历与活动管理"
+"ProductFeatures7","Text","家庭数据端对端加密"
+"ProductFeatures8","Text","全设备实时同步"
+"ProductFeatures9","Text","支持 42 种语言"
+"ProductFeatures10","Text","深色与浅色主题"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly 是面向家庭和室友的家庭管理应用——待办事项、购物、家务、费用与饮食计划，一站搞定。"
+"SearchTerms1","Text","家庭管理应用"
+"SearchTerms2","Text","家庭日程管理"
+"SearchTerms3","Text","共享待办清单"
+"SearchTerms4","Text","协作购物清单"
+"SearchTerms5","Text","家务管理应用"
+"SearchTerms6","Text","费用追踪应用"
+"SearchTerms7","Text","账单分摊应用"
+"Applicable license terms","Text","使用 Wohnly，即表示您同意 https://wohnly.app/privacy-policy 上的服务条款和隐私政策。Wohnly 按""现状""提供，不附带任何形式的保证。本软件免费使用。您的家庭数据经过端对端加密并安全存储。您对在应用内创建的所有内容保留完整所有权。"
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",
