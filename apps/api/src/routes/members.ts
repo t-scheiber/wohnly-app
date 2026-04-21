@@ -1,12 +1,31 @@
 import { Hono } from "hono";
-import { requireAuth } from "../middleware/auth.js";
-import { prisma } from "../lib/prisma.js";
 import { sendLeaveConfirmationEmail } from "../lib/email.js";
 import { publishEvent } from "../lib/events/publisher.js";
-import { triggerRotation } from "./epochs.js";
+import { prisma } from "../lib/prisma.js";
+import { requireAuth } from "../middleware/auth.js";
 import type { AppEnv } from "../types.js";
+import { triggerRotation } from "./epochs.js";
 
 const app = new Hono<AppEnv>();
+
+function isPlaceholderName(value: string | null | undefined): boolean {
+  const normalized = value?.trim().toLowerCase();
+  return !normalized || normalized === "unknown";
+}
+
+function resolveMemberDisplayName(member: {
+  displayName?: string | null;
+  email?: string | null;
+  user?: { name?: string | null } | null;
+}): string {
+  if (!isPlaceholderName(member.displayName)) {
+    return member.displayName!.trim();
+  }
+  if (!isPlaceholderName(member.user?.name)) {
+    return member.user!.name!.trim();
+  }
+  return member.email?.trim() || "Member";
+}
 
 // Public endpoints hit from email links — authenticate via signed token in
 // the query string. Must be registered before the requireAuth middleware so
@@ -14,15 +33,21 @@ const app = new Hono<AppEnv>();
 app.get("/confirm-leave", (c) => {
   const token = c.req.query("token");
   const appUrl = process.env.APP_URL || "https://wohnly.app";
-  if (!token) return c.redirect(`${appUrl}/leave-household?error=missing_token`);
-  return c.redirect(`${appUrl}/leave-household?token=${encodeURIComponent(token)}&mode=confirm`);
+  if (!token)
+    return c.redirect(`${appUrl}/leave-household?error=missing_token`);
+  return c.redirect(
+    `${appUrl}/leave-household?token=${encodeURIComponent(token)}&mode=confirm`,
+  );
 });
 
 app.get("/cancel-leave", (c) => {
   const token = c.req.query("token");
   const appUrl = process.env.APP_URL || "https://wohnly.app";
-  if (!token) return c.redirect(`${appUrl}/leave-household?error=missing_token`);
-  return c.redirect(`${appUrl}/leave-household?token=${encodeURIComponent(token)}&mode=cancel`);
+  if (!token)
+    return c.redirect(`${appUrl}/leave-household?error=missing_token`);
+  return c.redirect(
+    `${appUrl}/leave-household?token=${encodeURIComponent(token)}&mode=cancel`,
+  );
 });
 
 app.get("/leave-info", async (c) => {
@@ -35,9 +60,12 @@ app.get("/leave-info", async (c) => {
   });
 
   if (!confirmation) return c.json({ error: "invalid_token" }, 404);
-  if (confirmation.confirmedAt) return c.json({ error: "already_confirmed" }, 410);
-  if (confirmation.cancelledAt) return c.json({ error: "already_cancelled" }, 410);
-  if (confirmation.expiresAt < new Date()) return c.json({ error: "expired" }, 410);
+  if (confirmation.confirmedAt)
+    return c.json({ error: "already_confirmed" }, 410);
+  if (confirmation.cancelledAt)
+    return c.json({ error: "already_cancelled" }, 410);
+  if (confirmation.expiresAt < new Date())
+    return c.json({ error: "expired" }, 410);
 
   return c.json({
     householdName: confirmation.member.household.name,
@@ -51,13 +79,18 @@ app.post("/confirm-leave", async (c) => {
 
   const confirmation = await prisma.leaveConfirmation.findUnique({
     where: { confirmToken: token },
-    include: { member: { include: { household: { include: { members: true } } } } },
+    include: {
+      member: { include: { household: { include: { members: true } } } },
+    },
   });
 
   if (!confirmation) return c.json({ error: "invalid_token" }, 404);
-  if (confirmation.confirmedAt) return c.json({ error: "already_confirmed" }, 410);
-  if (confirmation.cancelledAt) return c.json({ error: "already_cancelled" }, 410);
-  if (confirmation.expiresAt < new Date()) return c.json({ error: "expired" }, 410);
+  if (confirmation.confirmedAt)
+    return c.json({ error: "already_confirmed" }, 410);
+  if (confirmation.cancelledAt)
+    return c.json({ error: "already_cancelled" }, 410);
+  if (confirmation.expiresAt < new Date())
+    return c.json({ error: "expired" }, 410);
 
   const householdId = confirmation.member.householdId;
   const memberCount = confirmation.member.household.members.length;
@@ -76,9 +109,12 @@ app.post("/cancel-leave", async (c) => {
   });
 
   if (!confirmation) return c.json({ error: "invalid_token" }, 404);
-  if (confirmation.confirmedAt) return c.json({ error: "already_confirmed" }, 410);
-  if (confirmation.cancelledAt) return c.json({ error: "already_cancelled" }, 410);
-  if (confirmation.expiresAt < new Date()) return c.json({ error: "expired" }, 410);
+  if (confirmation.confirmedAt)
+    return c.json({ error: "already_confirmed" }, 410);
+  if (confirmation.cancelledAt)
+    return c.json({ error: "already_cancelled" }, 410);
+  if (confirmation.expiresAt < new Date())
+    return c.json({ error: "expired" }, 410);
 
   await prisma.leaveConfirmation.update({
     where: { id: confirmation.id },
@@ -96,13 +132,18 @@ app.get("/list", async (c) => {
 
   const member = await prisma.householdMember.findFirst({
     where: { userId },
-    include: { household: { select: { id: true, name: true, inviteCode: true, trackExpenses: true } } },
+    include: {
+      household: {
+        select: { id: true, name: true, inviteCode: true, trackExpenses: true },
+      },
+    },
   });
   if (!member) return c.json({ error: "No household" }, 400);
 
   const members = await prisma.householdMember.findMany({
     where: { householdId: member.householdId },
     orderBy: { joinedAt: "asc" },
+    include: { user: { select: { name: true } } },
   });
 
   // Get nicknames this user has set
@@ -112,13 +153,18 @@ app.get("/list", async (c) => {
 
   const nicknameMap = new Map(nicknames.map((n) => [n.targetId, n.nickname]));
 
-  const enriched = members.map((m) => ({
+  const enriched = members.map(({ user, ...m }) => ({
     ...m,
+    displayName: resolveMemberDisplayName({ ...m, user }),
     nickname: nicknameMap.get(m.id) ?? null,
     isCurrentUser: m.userId === userId,
   }));
 
-  return c.json({ members: enriched, currentUserId: userId, household: member.household });
+  return c.json({
+    members: enriched,
+    currentUserId: userId,
+    household: member.household,
+  });
 });
 
 // GET /api/members/balances - Financial balances
@@ -135,6 +181,7 @@ app.get("/balances", async (c) => {
 
   const members = await prisma.householdMember.findMany({
     where: { householdId },
+    include: { user: { select: { name: true } } },
   });
 
   const expenses = await prisma.expense.findMany({
@@ -171,12 +218,13 @@ app.get("/balances", async (c) => {
       }
     }
 
-    const totalBalance = Math.round((expensesPaid - expensesOwed - subscriptionsOwed) * 100) / 100;
+    const totalBalance =
+      Math.round((expensesPaid - expensesOwed - subscriptionsOwed) * 100) / 100;
 
     return {
       memberId: m.id,
       userId: m.userId,
-      displayName: m.displayName,
+      displayName: resolveMemberDisplayName(m),
       email: m.email,
       role: m.role,
       expenses: {
@@ -199,6 +247,25 @@ app.get("/balances", async (c) => {
   });
 });
 
+// PATCH /api/members/me/display-name - Sync the signed-in user's household
+// member display name with the profile name shown in auth/settings UI.
+app.patch("/me/display-name", async (c) => {
+  const userId = c.get("userId") as string;
+  const { displayName } = await c.req.json();
+
+  if (!displayName || typeof displayName !== "string" || !displayName.trim()) {
+    return c.json({ error: "displayName is required" }, 400);
+  }
+
+  const normalized = displayName.trim();
+  await prisma.householdMember.updateMany({
+    where: { userId },
+    data: { displayName: normalized },
+  });
+
+  return c.json({ success: true, displayName: normalized });
+});
+
 // PATCH /api/members/nickname - Set nickname for a member
 app.patch("/nickname", async (c) => {
   const userId = c.get("userId") as string;
@@ -213,7 +280,8 @@ app.patch("/nickname", async (c) => {
     where: { id: memberId, householdId: giver.householdId },
   });
   if (!target) return c.json({ error: "Member not found" }, 404);
-  if (target.userId === userId) return c.json({ error: "Cannot set nickname for yourself" }, 400);
+  if (target.userId === userId)
+    return c.json({ error: "Cannot set nickname for yourself" }, 400);
 
   if (!nickname || nickname.trim() === "") {
     // Remove nickname
@@ -225,7 +293,11 @@ app.patch("/nickname", async (c) => {
 
   const result = await prisma.memberNickname.upsert({
     where: { giverId_targetId: { giverId: giver.id, targetId: target.id } },
-    create: { giverId: giver.id, targetId: target.id, nickname: nickname.trim() },
+    create: {
+      giverId: giver.id,
+      targetId: target.id,
+      nickname: nickname.trim(),
+    },
     update: { nickname: nickname.trim() },
   });
 
@@ -263,7 +335,8 @@ app.post("/leave", async (c) => {
   const appUrl = process.env.APP_URL || "https://wohnly.app";
   const confirmUrl = `${appUrl}/leave-household?token=${confirmation.confirmToken}&mode=confirm`;
   const cancelUrl = `${appUrl}/leave-household?token=${confirmation.confirmToken}&mode=cancel`;
-  const locale = (user as { language?: string }).language === "de" ? "de" : "en";
+  const locale =
+    (user as { language?: string }).language === "de" ? "de" : "en";
 
   await sendLeaveConfirmationEmail(
     email || user.email,
@@ -273,12 +346,23 @@ app.post("/leave", async (c) => {
     locale,
   );
 
-  return c.json({ success: true, message: "Confirmation created", token: confirmation.confirmToken }, 201);
+  return c.json(
+    {
+      success: true,
+      message: "Confirmation created",
+      token: confirmation.confirmToken,
+    },
+    201,
+  );
 });
 
 /** Shared transaction for both GET and POST confirm-leave handlers. */
 async function executeLeaveTransaction(
-  confirmation: { id: string; memberId: string; member: { userId: string; id: string } },
+  confirmation: {
+    id: string;
+    memberId: string;
+    member: { userId: string; id: string };
+  },
   householdId: string,
   memberCount: number,
 ) {
@@ -290,7 +374,12 @@ async function executeLeaveTransaction(
 
     // Clean up the leaving member's nicknames (given and received)
     await tx.memberNickname.deleteMany({
-      where: { OR: [{ giverId: confirmation.memberId }, { targetId: confirmation.memberId }] },
+      where: {
+        OR: [
+          { giverId: confirmation.memberId },
+          { targetId: confirmation.memberId },
+        ],
+      },
     });
 
     // Clean up the leaving member's devices and key envelopes
@@ -305,7 +394,9 @@ async function executeLeaveTransaction(
     }
 
     // Remove the member's push tokens so orphaned notifications don't send
-    await tx.pushToken.deleteMany({ where: { userId: confirmation.member.userId } });
+    await tx.pushToken.deleteMany({
+      where: { userId: confirmation.member.userId },
+    });
 
     await tx.householdMember.delete({
       where: { id: confirmation.memberId },
@@ -332,17 +423,23 @@ async function executeLeaveTransaction(
       await tx.householdKeyEnvelope.deleteMany({ where: { householdId } });
       await tx.todo.deleteMany({ where: { householdId } });
       await tx.shoppingItem.deleteMany({ where: { householdId } });
-      await tx.choreAssignment.deleteMany({ where: { chore: { householdId } } });
+      await tx.choreAssignment.deleteMany({
+        where: { chore: { householdId } },
+      });
       await tx.chore.deleteMany({ where: { householdId } });
       await tx.eventAttendee.deleteMany({ where: { event: { householdId } } });
       await tx.event.deleteMany({ where: { householdId } });
       await tx.expenseSplit.deleteMany({ where: { expense: { householdId } } });
       await tx.expense.deleteMany({ where: { householdId } });
-      await tx.subscriptionSplit.deleteMany({ where: { subscription: { householdId } } });
+      await tx.subscriptionSplit.deleteMany({
+        where: { subscription: { householdId } },
+      });
       await tx.subscription.deleteMany({ where: { householdId } });
       await tx.encryptedItem.deleteMany({ where: { householdId } });
       await tx.householdInvitation.deleteMany({ where: { householdId } });
-      await tx.leaveConfirmation.deleteMany({ where: { householdId, id: { not: confirmation.id } } });
+      await tx.leaveConfirmation.deleteMany({
+        where: { householdId, id: { not: confirmation.id } },
+      });
       await tx.household.delete({ where: { id: householdId } });
     }
   });
@@ -358,13 +455,20 @@ app.get("/leaderboard", async (c) => {
   const members = await prisma.householdMember.findMany({
     where: { householdId: member.householdId },
     orderBy: { points: "desc" },
-    select: { id: true, displayName: true, email: true, points: true, userId: true },
+    select: {
+      id: true,
+      displayName: true,
+      email: true,
+      points: true,
+      userId: true,
+      user: { select: { name: true } },
+    },
   });
 
   return c.json({
     leaderboard: members.map((m) => ({
       memberId: m.id,
-      displayName: m.displayName || m.email || "Member",
+      displayName: resolveMemberDisplayName(m),
       points: m.points,
       isCurrentUser: m.userId === userId,
     })),

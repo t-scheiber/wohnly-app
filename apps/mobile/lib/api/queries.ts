@@ -1,31 +1,41 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, apiPost, apiPatch, apiDelete } from "./client";
-import { getEncryptionKey, requireEncryptionKey, getActiveKeyEpoch } from "@/lib/crypto/active-household";
 import {
-  encryptTodo, decryptTodo,
-  encryptShoppingItem, decryptShoppingItem,
-  encryptChore, decryptChore,
-  encryptEvent, decryptEvent,
-  encryptExpense, decryptExpense,
-  encryptSubscription, decryptSubscription,
-  encryptAttachment, decryptAttachment,
+    getActiveKeyEpoch,
+    getEncryptionKey,
+    requireEncryptionKey,
+} from "@/lib/crypto/active-household";
+import {
+    decryptAttachment,
+    decryptChore,
+    decryptEvent,
+    decryptExpense,
+    decryptShoppingItem,
+    decryptSubscription,
+    decryptTodo,
+    encryptAttachment,
+    encryptChore,
+    encryptEvent,
+    encryptExpense,
+    encryptShoppingItem,
+    encryptSubscription,
+    encryptTodo,
 } from "@/lib/crypto/encrypt-service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
-  Todo,
-  ShoppingItem,
-  Chore,
-  Event,
-  Expense,
-  ExpenseAttachment,
-  Subscription,
-  MealPlan,
-  HouseholdMember,
-  HouseholdInvitation,
-  UserPreferences,
-  UserEntitlements,
-  MemberBalance,
-  Device,
+    Chore,
+    Event,
+    Expense,
+    ExpenseAttachment,
+    HouseholdInvitation,
+    HouseholdMember,
+    MealPlan,
+    MemberBalance,
+    ShoppingItem,
+    Subscription,
+    Todo,
+    UserEntitlements,
+    UserPreferences
 } from "@wohnly/shared";
+import { api, apiDelete, apiPatch, apiPost } from "./client";
 
 // ── Household & Members ──
 
@@ -33,9 +43,13 @@ export function useHouseholdMembers() {
   return useQuery({
     queryKey: ["members"],
     queryFn: () =>
-      api<{ members: (HouseholdMember & { nickname: string | null; isCurrentUser: boolean })[]; currentUserId: string }>(
-        "/api/members/list"
-      ),
+      api<{
+        members: (HouseholdMember & {
+          nickname: string | null;
+          isCurrentUser: boolean;
+        })[];
+        currentUserId: string;
+      }>("/api/members/list"),
   });
 }
 
@@ -43,9 +57,11 @@ export function useMemberBalances() {
   return useQuery({
     queryKey: ["balances"],
     queryFn: () =>
-      api<{ householdId: string; householdName: string; members: MemberBalance[] }>(
-        "/api/members/balances"
-      ),
+      api<{
+        householdId: string;
+        householdName: string;
+        members: MemberBalance[];
+      }>("/api/members/balances"),
   });
 }
 
@@ -71,11 +87,15 @@ export function useTodos() {
   return useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
-      const res = await api<{ todos: Todo[]; pagination: unknown }>("/api/todos");
-      const todos = await Promise.all(res.todos.map((t) => {
-        const hk = getEncryptionKey(t.encryptionEpoch ?? 1);
-        return hk ? decryptTodo(t, hk) : t;
-      }));
+      const res = await api<{ todos: Todo[]; pagination: unknown }>(
+        "/api/todos",
+      );
+      const todos = await Promise.all(
+        res.todos.map((t) => {
+          const hk = getEncryptionKey(t.encryptionEpoch ?? 1);
+          return hk ? decryptTodo(t, hk) : t;
+        }),
+      );
       return { ...res, todos };
     },
   });
@@ -101,8 +121,13 @@ export function useToggleTodo() {
       const prev = qc.getQueryData<{ todos: Todo[] }>([key]);
       qc.setQueryData<{ todos: Todo[] }>([key], (old) =>
         old
-          ? { ...old, todos: old.todos.map((t) => (t.id === todo.id ? { ...t, completed: !t.completed } : t)) }
-          : old
+          ? {
+              ...old,
+              todos: old.todos.map((t) =>
+                t.id === todo.id ? { ...t, completed: !t.completed } : t,
+              ),
+            }
+          : old,
       );
       return { prev, key };
     },
@@ -119,7 +144,13 @@ export function useToggleTodo() {
 export function useCreateTodo() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { title: string; description?: string; dueDate?: string; assigneeIds?: string[]; isPersonal?: boolean }) => {
+    mutationFn: async (data: {
+      title: string;
+      description?: string;
+      dueDate?: string;
+      assigneeIds?: string[];
+      isPersonal?: boolean;
+    }) => {
       const { isPersonal, ...body } = data;
       if (isPersonal) {
         return apiPost("/api/personal-todos", body);
@@ -151,14 +182,29 @@ export function useDeleteTodo() {
 export function useUpdateTodo() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, isPersonal, ...data }: { id: string; isPersonal?: boolean; title?: string; description?: string; dueDate?: string | null; assigneeIds?: string[] }) => {
+    mutationFn: async ({
+      id,
+      isPersonal,
+      ...data
+    }: {
+      id: string;
+      isPersonal?: boolean;
+      title?: string;
+      description?: string;
+      dueDate?: string | null;
+      assigneeIds?: string[];
+    }) => {
       if (isPersonal) {
         return apiPatch(`/api/personal-todos/${id}`, data);
       }
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       if (data.title) {
-        const enc = await encryptTodo(data as { title: string; description?: string }, hk, epoch);
+        const enc = await encryptTodo(
+          data as { title: string; description?: string },
+          hk,
+          epoch,
+        );
         return apiPatch(`/api/todos/${id}`, { ...data, ...enc });
       }
       return apiPatch(`/api/todos/${id}`, data);
@@ -173,8 +219,20 @@ export function useUpdateTodo() {
 export function useClearCompletedTodos() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ ids, isPersonal }: { ids: string[]; isPersonal?: boolean }) => {
-      await Promise.all(ids.map((id) => apiDelete(isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`)));
+    mutationFn: async ({
+      ids,
+      isPersonal,
+    }: {
+      ids: string[];
+      isPersonal?: boolean;
+    }) => {
+      await Promise.all(
+        ids.map((id) =>
+          apiDelete(
+            isPersonal ? `/api/personal-todos/${id}` : `/api/todos/${id}`,
+          ),
+        ),
+      );
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["todos"] });
@@ -190,10 +248,12 @@ export function useShoppingList() {
     queryKey: ["shopping"],
     queryFn: async () => {
       const res = await api<{ items: ShoppingItem[] }>("/api/shopping");
-      const items = await Promise.all(res.items.map((i) => {
-        const hk = getEncryptionKey(i.encryptionEpoch ?? 1);
-        return hk ? decryptShoppingItem(i, hk) : i;
-      }));
+      const items = await Promise.all(
+        res.items.map((i) => {
+          const hk = getEncryptionKey(i.encryptionEpoch ?? 1);
+          return hk ? decryptShoppingItem(i, hk) : i;
+        }),
+      );
       return { ...res, items };
     },
   });
@@ -202,7 +262,8 @@ export function useShoppingList() {
 export function usePersonalShoppingList() {
   return useQuery({
     queryKey: ["personal-shopping"],
-    queryFn: () => api<{ items: ShoppingItem[] }>("/api/shopping?personal=true"),
+    queryFn: () =>
+      api<{ items: ShoppingItem[] }>("/api/shopping?personal=true"),
   });
 }
 
@@ -215,16 +276,29 @@ export function useToggleShoppingItem() {
       await qc.cancelQueries({ queryKey: ["shopping"] });
       await qc.cancelQueries({ queryKey: ["personal-shopping"] });
       const prev = qc.getQueryData<{ items: ShoppingItem[] }>(["shopping"]);
-      const prevPersonal = qc.getQueryData<{ items: ShoppingItem[] }>(["personal-shopping"]);
+      const prevPersonal = qc.getQueryData<{ items: ShoppingItem[] }>([
+        "personal-shopping",
+      ]);
       const updater = (old: { items: ShoppingItem[] } | undefined) =>
-        old ? { ...old, items: old.items.map((i) => (i.id === item.id ? { ...i, checked: !i.checked } : i)) } : old;
+        old
+          ? {
+              ...old,
+              items: old.items.map((i) =>
+                i.id === item.id ? { ...i, checked: !i.checked } : i,
+              ),
+            }
+          : old;
       qc.setQueryData<{ items: ShoppingItem[] }>(["shopping"], updater);
-      qc.setQueryData<{ items: ShoppingItem[] }>(["personal-shopping"], updater);
+      qc.setQueryData<{ items: ShoppingItem[] }>(
+        ["personal-shopping"],
+        updater,
+      );
       return { prev, prevPersonal };
     },
     onError: (_err, _item, ctx) => {
       if (ctx?.prev) qc.setQueryData(["shopping"], ctx.prev);
-      if (ctx?.prevPersonal) qc.setQueryData(["personal-shopping"], ctx.prevPersonal);
+      if (ctx?.prevPersonal)
+        qc.setQueryData(["personal-shopping"], ctx.prevPersonal);
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey: ["shopping"] });
@@ -236,7 +310,11 @@ export function useToggleShoppingItem() {
 export function useCreateShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { name: string; quantity?: string; isPersonal?: boolean }) => {
+    mutationFn: async (data: {
+      name: string;
+      quantity?: string;
+      isPersonal?: boolean;
+    }) => {
       if (data.isPersonal) {
         return apiPost("/api/shopping", data);
       }
@@ -266,11 +344,22 @@ export function useDeleteShoppingItem() {
 export function useUpdateShoppingItem() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: { id: string; name?: string; quantity?: string }) => {
+    mutationFn: async ({
+      id,
+      ...data
+    }: {
+      id: string;
+      name?: string;
+      quantity?: string;
+    }) => {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       if (data.name) {
-        const enc = await encryptShoppingItem(data as { name: string; quantity?: string }, hk, epoch);
+        const enc = await encryptShoppingItem(
+          data as { name: string; quantity?: string },
+          hk,
+          epoch,
+        );
         return apiPatch(`/api/shopping/${id}`, { ...data, ...enc });
       }
       return apiPatch(`/api/shopping/${id}`, data);
@@ -302,10 +391,12 @@ export function useChores() {
     queryKey: ["chores"],
     queryFn: async () => {
       const res = await api<{ chores: Chore[] }>("/api/chores");
-      const chores = await Promise.all(res.chores.map((c) => {
-        const hk = getEncryptionKey(c.encryptionEpoch ?? 1);
-        return hk ? decryptChore(c, hk) : c;
-      }));
+      const chores = await Promise.all(
+        res.chores.map((c) => {
+          const hk = getEncryptionKey(c.encryptionEpoch ?? 1);
+          return hk ? decryptChore(c, hk) : c;
+        }),
+      );
       return { ...res, chores };
     },
   });
@@ -314,7 +405,15 @@ export function useChores() {
 export function useCreateChore() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { title: string; frequency: string; description?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
+    mutationFn: async (data: {
+      title: string;
+      frequency: string;
+      description?: string;
+      dayOfWeek?: number;
+      dayOfMonth?: number;
+      rotate?: boolean;
+      assigneeIds?: string[];
+    }) => {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       const enc = await encryptChore(data, hk, epoch);
@@ -327,12 +426,22 @@ export function useCreateChore() {
 export function useCompleteChore() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => apiPatch(`/api/chores/${id}`, { completed: true }),
+    mutationFn: (id: string) =>
+      apiPatch(`/api/chores/${id}`, { completed: true }),
     onMutate: async (id) => {
       await qc.cancelQueries({ queryKey: ["chores"] });
       const prev = qc.getQueryData<{ chores: Chore[] }>(["chores"]);
-      qc.setQueryData<{ chores: Chore[] }>(["chores"], (old: { chores: Chore[] } | undefined) =>
-        old ? { ...old, chores: old.chores.map((c) => c.id === id ? { ...c, lastDone: new Date() } : c) } : old
+      qc.setQueryData<{ chores: Chore[] }>(
+        ["chores"],
+        (old: { chores: Chore[] } | undefined) =>
+          old
+            ? {
+                ...old,
+                chores: old.chores.map((c) =>
+                  c.id === id ? { ...c, lastDone: new Date() } : c,
+                ),
+              }
+            : old,
       );
       return { prev };
     },
@@ -354,11 +463,27 @@ export function useDeleteChore() {
 export function useUpdateChore() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: { id: string; title?: string; description?: string; frequency?: string; dayOfWeek?: number; dayOfMonth?: number; rotate?: boolean; assigneeIds?: string[] }) => {
+    mutationFn: async ({
+      id,
+      ...data
+    }: {
+      id: string;
+      title?: string;
+      description?: string;
+      frequency?: string;
+      dayOfWeek?: number;
+      dayOfMonth?: number;
+      rotate?: boolean;
+      assigneeIds?: string[];
+    }) => {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       if (data.title) {
-        const enc = await encryptChore(data as { title: string; description?: string }, hk, epoch);
+        const enc = await encryptChore(
+          data as { title: string; description?: string },
+          hk,
+          epoch,
+        );
         return apiPatch(`/api/chores/${id}`, { ...data, ...enc });
       }
       return apiPatch(`/api/chores/${id}`, data);
@@ -371,15 +496,24 @@ export function useChoreAnalytics(period: "week" | "month" | "all" = "month") {
   return useQuery({
     queryKey: ["chore-analytics", period],
     queryFn: () =>
-      api<{ members: { memberId: string; displayName: string; completions: number; effortPoints: number; percentage: number }[]; period: string; totalEffort: number }>(
-        `/api/chores/analytics?period=${period}`
-      ),
+      api<{
+        members: {
+          memberId: string;
+          displayName: string;
+          completions: number;
+          effortPoints: number;
+          percentage: number;
+        }[];
+        period: string;
+        totalEffort: number;
+      }>(`/api/chores/analytics?period=${period}`),
   });
 }
 
 export function useNudgeChore() {
   return useMutation({
-    mutationFn: (choreId: string) => apiPost(`/api/chores/${choreId}/nudge`, {}),
+    mutationFn: (choreId: string) =>
+      apiPost(`/api/chores/${choreId}/nudge`, {}),
   });
 }
 
@@ -387,7 +521,9 @@ export function useShoppingSuggestions() {
   return useQuery({
     queryKey: ["shopping-suggestions"],
     queryFn: () =>
-      api<{ suggestions: { name: string; count: number }[] }>("/api/shopping/suggestions"),
+      api<{ suggestions: { name: string; count: number }[] }>(
+        "/api/shopping/suggestions",
+      ),
   });
 }
 
@@ -395,9 +531,13 @@ export function useBreakMode() {
   return useQuery({
     queryKey: ["break-mode"],
     queryFn: () =>
-      api<{ breakMode: { start: string; end: string | null; active: boolean } | null }>(
-        "/api/households/break-mode"
-      ),
+      api<{
+        breakMode: {
+          start: string;
+          end: string | null;
+          active: boolean;
+        } | null;
+      }>("/api/households/break-mode"),
   });
 }
 
@@ -419,9 +559,14 @@ export function useLeaderboard() {
   return useQuery({
     queryKey: ["leaderboard"],
     queryFn: () =>
-      api<{ leaderboard: { memberId: string; displayName: string; points: number; isCurrentUser: boolean }[] }>(
-        "/api/members/leaderboard"
-      ),
+      api<{
+        leaderboard: {
+          memberId: string;
+          displayName: string;
+          points: number;
+          isCurrentUser: boolean;
+        }[];
+      }>("/api/members/leaderboard"),
   });
 }
 
@@ -448,7 +593,8 @@ export function useMealPlans(from?: string, to?: string) {
 
   return useQuery({
     queryKey: ["meals", from, to],
-    queryFn: () => api<{ meals: MealPlan[] }>(`/api/meals${query ? `?${query}` : ""}`),
+    queryFn: () =>
+      api<{ meals: MealPlan[] }>(`/api/meals${query ? `?${query}` : ""}`),
   });
 }
 
@@ -471,7 +617,8 @@ export function useDeleteMealPlan() {
 export function useAddMealToShopping() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (mealId: string) => apiPost(`/api/meals/${mealId}/to-shopping`, {}),
+    mutationFn: (mealId: string) =>
+      apiPost(`/api/meals/${mealId}/to-shopping`, {}),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["shopping"] });
     },
@@ -489,11 +636,15 @@ export function useEvents(startDate?: string, endDate?: string) {
   return useQuery({
     queryKey: ["events", startDate, endDate],
     queryFn: async () => {
-      const res = await api<{ events: Event[] }>(`/api/events${query ? `?${query}` : ""}`);
-      const events = await Promise.all(res.events.map((e) => {
-        const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
-        return hk ? decryptEvent(e, hk) : e;
-      }));
+      const res = await api<{ events: Event[] }>(
+        `/api/events${query ? `?${query}` : ""}`,
+      );
+      const events = await Promise.all(
+        res.events.map((e) => {
+          const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
+          return hk ? decryptEvent(e, hk) : e;
+        }),
+      );
       return { ...res, events };
     },
   });
@@ -506,9 +657,13 @@ export function useCreateEvent() {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       const enc = await encryptEvent(
-        { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
+        {
+          title: data.title as string,
+          description: data.description as string | null,
+          location: data.location as string | null,
+        },
         hk,
-        epoch
+        epoch,
       );
       return apiPost("/api/events", { ...data, ...enc });
     },
@@ -527,14 +682,21 @@ export function useDeleteEvent() {
 export function useUpdateEvent() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...data
+    }: Record<string, unknown> & { id: string }) => {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       if (data.title) {
         const enc = await encryptEvent(
-          { title: data.title as string, description: data.description as string | null, location: data.location as string | null },
+          {
+            title: data.title as string,
+            description: data.description as string | null,
+            location: data.location as string | null,
+          },
           hk,
-          epoch
+          epoch,
         );
         return apiPatch(`/api/events/${id}`, { ...data, ...enc });
       }
@@ -551,10 +713,12 @@ export function useExpenses() {
     queryKey: ["expenses"],
     queryFn: async () => {
       const res = await api<{ expenses: Expense[] }>("/api/expenses");
-      const expenses = await Promise.all(res.expenses.map((e) => {
-        const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
-        return hk ? decryptExpense(e, hk) : e;
-      }));
+      const expenses = await Promise.all(
+        res.expenses.map((e) => {
+          const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
+          return hk ? decryptExpense(e, hk) : e;
+        }),
+      );
       return { ...res, expenses };
     },
   });
@@ -567,9 +731,12 @@ export function useCreateExpense() {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       const enc = await encryptExpense(
-        { title: data.title as string, description: data.description as string | null },
+        {
+          title: data.title as string,
+          description: data.description as string | null,
+        },
         hk,
-        epoch
+        epoch,
       );
       return apiPost("/api/expenses", { ...data, ...enc });
     },
@@ -585,7 +752,13 @@ export function useSettleUp() {
     queryKey: ["settle-up"],
     queryFn: () =>
       api<{
-        settlements: { from: string; to: string; fromName: string; toName: string; amount: number }[];
+        settlements: {
+          from: string;
+          to: string;
+          fromName: string;
+          toName: string;
+          amount: number;
+        }[];
         currency: string;
       }>("/api/expenses/settle-up"),
   });
@@ -596,11 +769,15 @@ export function useExpenseAttachments(expenseId: string | null) {
     queryKey: ["expense-attachments", expenseId],
     queryFn: async () => {
       if (!expenseId) return { attachments: [] };
-      const res = await api<{ attachments: ExpenseAttachment[] }>(`/api/expenses/${expenseId}/attachments`);
-      const attachments = await Promise.all(res.attachments.map((a) => {
-        const hk = getEncryptionKey(a.encryptionEpoch ?? 1);
-        return hk ? decryptAttachment(a, hk) : a;
-      }));
+      const res = await api<{ attachments: ExpenseAttachment[] }>(
+        `/api/expenses/${expenseId}/attachments`,
+      );
+      const attachments = await Promise.all(
+        res.attachments.map((a) => {
+          const hk = getEncryptionKey(a.encryptionEpoch ?? 1);
+          return hk ? decryptAttachment(a, hk) : a;
+        }),
+      );
       return { ...res, attachments };
     },
     enabled: !!expenseId,
@@ -610,7 +787,13 @@ export function useExpenseAttachments(expenseId: string | null) {
 export function useAddAttachment() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ expenseId, type, content, mimeType, fileName }: {
+    mutationFn: async ({
+      expenseId,
+      type,
+      content,
+      mimeType,
+      fileName,
+    }: {
       expenseId: string;
       type: "note" | "photo";
       content: string;
@@ -621,11 +804,16 @@ export function useAddAttachment() {
       const hk = requireEncryptionKey(epoch);
       const enc = await encryptAttachment(content, hk, epoch);
       return apiPost(`/api/expenses/${expenseId}/attachments`, {
-        type, mimeType, fileName, ...enc,
+        type,
+        mimeType,
+        fileName,
+        ...enc,
       });
     },
     onSuccess: (_data, vars) => {
-      qc.invalidateQueries({ queryKey: ["expense-attachments", vars.expenseId] });
+      qc.invalidateQueries({
+        queryKey: ["expense-attachments", vars.expenseId],
+      });
       qc.invalidateQueries({ queryKey: ["expenses"] });
     },
   });
@@ -634,16 +822,25 @@ export function useAddAttachment() {
 export function useDeleteAttachment() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ expenseId, attachmentId }: { expenseId: string; attachmentId: string }) =>
-      apiDelete(`/api/expenses/${expenseId}/attachments/${attachmentId}`),
+    mutationFn: ({
+      expenseId,
+      attachmentId,
+    }: {
+      expenseId: string;
+      attachmentId: string;
+    }) => apiDelete(`/api/expenses/${expenseId}/attachments/${attachmentId}`),
     onSuccess: (_data, vars) => {
-      qc.invalidateQueries({ queryKey: ["expense-attachments", vars.expenseId] });
+      qc.invalidateQueries({
+        queryKey: ["expense-attachments", vars.expenseId],
+      });
       qc.invalidateQueries({ queryKey: ["expenses"] });
     },
   });
 }
 
-export function useExpenseAnalytics(period: "week" | "month" | "year" = "month") {
+export function useExpenseAnalytics(
+  period: "week" | "month" | "year" = "month",
+) {
   return useQuery({
     queryKey: ["expense-analytics", period],
     queryFn: () =>
@@ -653,7 +850,12 @@ export function useExpenseAnalytics(period: "week" | "month" | "year" = "month")
         totalSpend: number;
         averagePerDay: number;
         byCategory: { category: string; total: number; percentage: number }[];
-        byMember: { memberId: string; displayName: string; totalPaid: number; totalOwed: number }[];
+        byMember: {
+          memberId: string;
+          displayName: string;
+          totalPaid: number;
+          totalOwed: number;
+        }[];
         overTime: { date: string; total: number }[];
       }>(`/api/expenses/analytics?period=${period}`),
   });
@@ -664,7 +866,7 @@ export function useExchangeRates(base?: string) {
     queryKey: ["exchange-rates", base],
     queryFn: () =>
       api<{ base: string; rates: Record<string, number>; fetchedAt: string }>(
-        `/api/expenses/rates?base=${base || "EUR"}`
+        `/api/expenses/rates?base=${base || "EUR"}`,
       ),
     staleTime: 1000 * 60 * 60, // 1 hour
     enabled: !!base,
@@ -674,14 +876,16 @@ export function useExchangeRates(base?: string) {
 export function useBaseCurrency() {
   return useQuery({
     queryKey: ["base-currency"],
-    queryFn: () => api<{ baseCurrency: string }>("/api/households/base-currency"),
+    queryFn: () =>
+      api<{ baseCurrency: string }>("/api/households/base-currency"),
   });
 }
 
 export function useSetBaseCurrency() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (currency: string) => apiPatch("/api/households/base-currency", { currency }),
+    mutationFn: (currency: string) =>
+      apiPatch("/api/households/base-currency", { currency }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["base-currency"] });
       qc.invalidateQueries({ queryKey: ["expense-analytics"] });
@@ -704,14 +908,20 @@ export function useDeleteExpense() {
 export function useUpdateExpense() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...data
+    }: Record<string, unknown> & { id: string }) => {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       if (data.title) {
         const enc = await encryptExpense(
-          { title: data.title as string, description: data.description as string | null },
+          {
+            title: data.title as string,
+            description: data.description as string | null,
+          },
           hk,
-          epoch
+          epoch,
         );
         return apiPatch(`/api/expenses/${id}`, { ...data, ...enc });
       }
@@ -730,11 +940,15 @@ export function useSubscriptions() {
   return useQuery({
     queryKey: ["subscriptions"],
     queryFn: async () => {
-      const res = await api<{ subscriptions: Subscription[] }>("/api/subscriptions");
-      const subscriptions = await Promise.all(res.subscriptions.map((s) => {
-        const hk = getEncryptionKey(s.encryptionEpoch ?? 1);
-        return hk ? decryptSubscription(s, hk) : s;
-      }));
+      const res = await api<{ subscriptions: Subscription[] }>(
+        "/api/subscriptions",
+      );
+      const subscriptions = await Promise.all(
+        res.subscriptions.map((s) => {
+          const hk = getEncryptionKey(s.encryptionEpoch ?? 1);
+          return hk ? decryptSubscription(s, hk) : s;
+        }),
+      );
       return { ...res, subscriptions };
     },
   });
@@ -747,9 +961,12 @@ export function useCreateSubscription() {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       const enc = await encryptSubscription(
-        { name: data.name as string, description: data.description as string | null },
+        {
+          name: data.name as string,
+          description: data.description as string | null,
+        },
         hk,
-        epoch
+        epoch,
       );
       return apiPost("/api/subscriptions", { ...data, ...enc });
     },
@@ -774,14 +991,20 @@ export function useDeleteSubscription() {
 export function useUpdateSubscription() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: Record<string, unknown> & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...data
+    }: Record<string, unknown> & { id: string }) => {
       const epoch = getActiveKeyEpoch();
       const hk = requireEncryptionKey(epoch);
       if (data.name) {
         const enc = await encryptSubscription(
-          { name: data.name as string, description: data.description as string | null },
+          {
+            name: data.name as string,
+            description: data.description as string | null,
+          },
           hk,
-          epoch
+          epoch,
         );
         return apiPatch(`/api/subscriptions/${id}`, { ...data, ...enc });
       }
@@ -816,7 +1039,8 @@ export function useEntitlements() {
 export function useLeaveHousehold() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: () => apiPost<{ success: boolean; token: string }>("/api/members/leave", {}),
+    mutationFn: () =>
+      apiPost<{ success: boolean; token: string }>("/api/members/leave", {}),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["members"] });
     },
@@ -829,9 +1053,10 @@ export function useInvitations() {
   return useQuery({
     queryKey: ["invitations"],
     queryFn: () =>
-      api<{ invitations: HouseholdInvitation[]; stats: Record<string, number> }>(
-        "/api/invitations/list"
-      ),
+      api<{
+        invitations: HouseholdInvitation[];
+        stats: Record<string, number>;
+      }>("/api/invitations/list"),
   });
 }
 
@@ -858,13 +1083,18 @@ export interface AccessRequestSummary {
   rejectedAt?: string | null;
 }
 
-export function usePendingRequests(scope: "incoming" | "outgoing" = "incoming") {
+export function usePendingRequests(
+  scope: "incoming" | "outgoing" = "incoming",
+  options?: { refetchIntervalMs?: number },
+) {
   return useQuery({
     queryKey: ["access-requests", scope],
     queryFn: () =>
-      api<{ requests: AccessRequestSummary[] }>(`/api/access/requests?scope=${scope}`),
+      api<{ requests: AccessRequestSummary[] }>(
+        `/api/access/requests?scope=${scope}`,
+      ),
     refetchOnReconnect: true,
-    refetchInterval: 30_000, // fallback if SSE is absent
+    refetchInterval: options?.refetchIntervalMs ?? 30_000, // fallback if SSE is absent
   });
 }
 
@@ -890,7 +1120,11 @@ export function useCreateAccessRequest() {
 export function useApproveAccessRequest() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (args: { id: string; verificationCode: string; sealedHK: string }) =>
+    mutationFn: (args: {
+      id: string;
+      verificationCode: string;
+      sealedHK: string;
+    }) =>
       apiPost<{ ok: boolean; deviceId: string }>(
         `/api/access/requests/${args.id}/approve`,
         { verificationCode: args.verificationCode, sealedHK: args.sealedHK },
@@ -916,7 +1150,10 @@ export function useRejectAccessRequest() {
 export function useResendAccessRequest() {
   return useMutation({
     mutationFn: (id: string) =>
-      apiPost<{ verificationCode: string }>(`/api/access/requests/${id}/resend`, {}),
+      apiPost<{ verificationCode: string }>(
+        `/api/access/requests/${id}/resend`,
+        {},
+      ),
   });
 }
 

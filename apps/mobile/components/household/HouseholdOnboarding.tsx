@@ -1,22 +1,30 @@
-import { useState, useEffect } from "react";
-import { View, Text, Alert, Share, Clipboard, Platform } from "react-native";
-import { useRouter } from "expo-router";
-import { useTranslation } from "react-i18next";
-import { Home, UserPlus, ArrowLeft, Copy, Check, Users, Link } from "lucide-react-native";
-import { useQueryClient } from "@tanstack/react-query";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
-import { Card } from "../ui/Card";
 import { WaitingScreen } from "@/components/access/WaitingScreen";
-import { api, apiPost } from "@/lib/api/client";
-import {
-  createHouseholdWithE2EE,
-  ensureDeviceKeyMaterial,
-  fetchAndCacheHouseholdKey,
-  requestDeviceEnrollment,
-} from "@/lib/crypto/e2ee-setup";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { api, apiPost } from "@/lib/api/client";
+import {
+    createHouseholdWithE2EE,
+    ensureDeviceKeyMaterial,
+    fetchAndCacheHouseholdKey,
+    requestDeviceEnrollment,
+} from "@/lib/crypto/e2ee-setup";
+import Clipboard from "@react-native-clipboard/clipboard";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+    ArrowLeft,
+    Check,
+    Copy,
+    Home,
+    Link,
+    UserPlus,
+    Users,
+} from "lucide-react-native";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Alert, Platform, Share, Text, View } from "react-native";
+import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
+import { Input } from "../ui/Input";
 
 type Step = "choose" | "create" | "join" | "success" | "detected" | "waiting";
 
@@ -42,7 +50,6 @@ interface HouseholdOnboardingProps {
 export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
-  const router = useRouter();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -52,7 +59,10 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   const [loading, setLoading] = useState(false);
   const [createdCode, setCreatedCode] = useState("");
   const [copied, setCopied] = useState(false);
-  const [detectedHousehold, setDetectedHousehold] = useState<{ id: string; name: string } | null>(null);
+  const [detectedHousehold, setDetectedHousehold] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [pending, setPending] = useState<PendingRequest | null>(null);
 
   // Check if user is already in a household but hasn't linked this device
@@ -89,7 +99,10 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       setCreatedCode(res.household.inviteCode);
       setStep("success");
     } catch (err: unknown) {
-      showError(t("common.error"), err instanceof Error ? err.message : "Failed to create household");
+      showError(
+        t("common.error"),
+        err instanceof Error ? err.message : "Failed to create household",
+      );
     } finally {
       setLoading(false);
     }
@@ -110,7 +123,12 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
             householdId: string;
             householdName: string;
           }
-        | { pending: true; requestId: string; verificationCode: string; expiresAt: string }
+        | {
+            pending: true;
+            requestId: string;
+            verificationCode: string;
+            expiresAt: string;
+          }
       >("/api/households/join", {
         code: inviteCode.trim(),
         requesterDevicePublicKey: material.publicKey,
@@ -119,7 +137,10 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       });
 
       if ("pending" in res) {
-        setPending({ requestId: res.requestId, verificationCode: res.verificationCode });
+        setPending({
+          requestId: res.requestId,
+          verificationCode: res.verificationCode,
+        });
         setStep("waiting");
         return;
       }
@@ -134,7 +155,10 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       queryClient.invalidateQueries({ queryKey: ["balances"] });
       queryClient.invalidateQueries({ queryKey: ["household"] });
     } catch (err: unknown) {
-      showError(t("common.error"), err instanceof Error ? err.message : "Failed to join household");
+      showError(
+        t("common.error"),
+        err instanceof Error ? err.message : "Failed to join household",
+      );
     } finally {
       setLoading(false);
     }
@@ -145,7 +169,9 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     setLoading(true);
     try {
       // If we already hold an envelope at the current epoch, no AccessRequest needed.
-      const alreadyHasKey = await fetchAndCacheHouseholdKey(detectedHousehold.id);
+      const alreadyHasKey = await fetchAndCacheHouseholdKey(
+        detectedHousehold.id,
+      );
       if (alreadyHasKey) {
         queryClient.invalidateQueries({ queryKey: ["members"] });
         queryClient.invalidateQueries({ queryKey: ["balances"] });
@@ -157,7 +183,10 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       setPending({ requestId: req.id, verificationCode: req.verificationCode });
       setStep("waiting");
     } catch (err: unknown) {
-      showError(t("common.error"), err instanceof Error ? err.message : "Failed to link device");
+      showError(
+        t("common.error"),
+        err instanceof Error ? err.message : "Failed to link device",
+      );
     } finally {
       setLoading(false);
     }
@@ -178,7 +207,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       await Share.share({
         message: `Join my household on Wohnly! Use code: ${createdCode}\n\nhttps://wohnly.app/join?code=${createdCode}`,
       });
-    } catch (_) {}
+    } catch {}
   };
 
   const handleDone = () => {
@@ -193,6 +222,11 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       <WaitingScreen
         requestId={pending.requestId}
         verificationCode={pending.verificationCode}
+        householdIdHint={detectedHousehold?.id}
+        onContinue={() => {
+          setPending(null);
+          handleDone();
+        }}
         onCancel={() => {
           setPending(null);
           setStep(detectedHousehold ? "detected" : "choose");
@@ -206,13 +240,38 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     return (
       <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
         <View style={{ alignItems: "center", marginBottom: 32 }}>
-          <View style={{ width: 80, height: 80, borderRadius: 24, backgroundColor: colors.primary + "15", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+          <View
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 24,
+              backgroundColor: colors.primary + "15",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 16,
+            }}
+          >
             <Link size={40} color={colors.primary} />
           </View>
-          <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text, textAlign: "center" }}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              color: colors.text,
+              textAlign: "center",
+            }}
+          >
             {t("household.detectedHousehold", { name: detectedHousehold.name })}
           </Text>
-          <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginTop: 12, lineHeight: 22 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: colors.textSecondary,
+              textAlign: "center",
+              marginTop: 12,
+              lineHeight: 22,
+            }}
+          >
             {t("household.linkDeviceDescription")}
           </Text>
         </View>
@@ -234,13 +293,38 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     return (
       <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
         <View style={{ alignItems: "center", marginBottom: 32 }}>
-          <View style={{ width: 80, height: 80, borderRadius: 24, backgroundColor: colors.primary + "15", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+          <View
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 24,
+              backgroundColor: colors.primary + "15",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 16,
+            }}
+          >
             <Users size={40} color={colors.primary} />
           </View>
-          <Text style={{ fontSize: 26, fontWeight: "bold", color: colors.text, textAlign: "center" }}>
+          <Text
+            style={{
+              fontSize: 26,
+              fontWeight: "bold",
+              color: colors.text,
+              textAlign: "center",
+            }}
+          >
             {t("household.getStarted")}
           </Text>
-          <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginTop: 8, lineHeight: 22 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: colors.textSecondary,
+              textAlign: "center",
+              marginTop: 8,
+              lineHeight: 22,
+            }}
+          >
             {userName ? `${t("dashboard.welcome")}, ${userName}! ` : ""}
             {t("household.getStartedDescription")}
           </Text>
@@ -248,37 +332,97 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
 
         <View style={{ gap: 12 }}>
           <Card variant="elevated" style={{ padding: 20 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
-              <View style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: colors.primary + "15", alignItems: "center", justifyContent: "center", marginRight: 12 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 12,
+              }}
+            >
+              <View
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  backgroundColor: colors.primary + "15",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: 12,
+                }}
+              >
                 <Home size={22} color={colors.primary} />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 17, fontWeight: "600", color: colors.text }}>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "600",
+                    color: colors.text,
+                  }}
+                >
                   {t("household.createNew")}
                 </Text>
-                <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: colors.textSecondary,
+                    marginTop: 2,
+                  }}
+                >
                   {t("household.createDescription")}
                 </Text>
               </View>
             </View>
-            <Button onPress={() => setStep("create")}>{t("household.create")}</Button>
+            <Button onPress={() => setStep("create")}>
+              {t("household.create")}
+            </Button>
           </Card>
 
           <Card variant="elevated" style={{ padding: 20 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
-              <View style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: "#3b82f6" + "15", alignItems: "center", justifyContent: "center", marginRight: 12 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 12,
+              }}
+            >
+              <View
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  backgroundColor: "#3b82f6" + "15",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: 12,
+                }}
+              >
                 <UserPlus size={22} color="#3b82f6" />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 17, fontWeight: "600", color: colors.text }}>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "600",
+                    color: colors.text,
+                  }}
+                >
                   {t("household.joinExisting")}
                 </Text>
-                <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: colors.textSecondary,
+                    marginTop: 2,
+                  }}
+                >
                   {t("household.joinDescription")}
                 </Text>
               </View>
             </View>
-            <Button variant="outline" onPress={() => setStep("join")}>{t("household.join")}</Button>
+            <Button variant="outline" onPress={() => setStep("join")}>
+              {t("household.join")}
+            </Button>
           </Card>
         </View>
       </View>
@@ -290,10 +434,22 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     return (
       <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
         <View style={{ alignItems: "center", marginBottom: 24 }}>
-          <View style={{ width: 64, height: 64, borderRadius: 20, backgroundColor: colors.primary + "15", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+          <View
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 20,
+              backgroundColor: colors.primary + "15",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 12,
+            }}
+          >
             <Home size={32} color={colors.primary} />
           </View>
-          <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}>
+          <Text
+            style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}
+          >
             {t("household.create")}
           </Text>
         </View>
@@ -307,13 +463,26 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
         />
 
         <View style={{ flexDirection: "row", gap: 12, marginTop: 12 }}>
-          <Button variant="ghost" onPress={() => setStep("choose")} style={{ flex: 1 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <Button
+            variant="ghost"
+            onPress={() => setStep("choose")}
+            style={{ flex: 1 }}
+          >
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
+            >
               <ArrowLeft size={16} color={colors.text} />
-              <Text style={{ color: colors.text, fontWeight: "600" }}>{t("common.back")}</Text>
+              <Text style={{ color: colors.text, fontWeight: "600" }}>
+                {t("common.back")}
+              </Text>
             </View>
           </Button>
-          <Button onPress={handleCreate} loading={loading} disabled={!householdName.trim()} style={{ flex: 2 }}>
+          <Button
+            onPress={handleCreate}
+            loading={loading}
+            disabled={!householdName.trim()}
+            style={{ flex: 2 }}
+          >
             {t("household.create")}
           </Button>
         </View>
@@ -326,10 +495,22 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     return (
       <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
         <View style={{ alignItems: "center", marginBottom: 24 }}>
-          <View style={{ width: 64, height: 64, borderRadius: 20, backgroundColor: "#3b82f6" + "15", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+          <View
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 20,
+              backgroundColor: "#3b82f6" + "15",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 12,
+            }}
+          >
             <UserPlus size={32} color="#3b82f6" />
           </View>
-          <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}>
+          <Text
+            style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}
+          >
             {t("household.join")}
           </Text>
         </View>
@@ -344,13 +525,26 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
         />
 
         <View style={{ flexDirection: "row", gap: 12, marginTop: 12 }}>
-          <Button variant="ghost" onPress={() => setStep("choose")} style={{ flex: 1 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <Button
+            variant="ghost"
+            onPress={() => setStep("choose")}
+            style={{ flex: 1 }}
+          >
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
+            >
               <ArrowLeft size={16} color={colors.text} />
-              <Text style={{ color: colors.text, fontWeight: "600" }}>{t("common.back")}</Text>
+              <Text style={{ color: colors.text, fontWeight: "600" }}>
+                {t("common.back")}
+              </Text>
             </View>
           </Button>
-          <Button onPress={handleJoin} loading={loading} disabled={!inviteCode.trim()} style={{ flex: 2 }}>
+          <Button
+            onPress={handleJoin}
+            loading={loading}
+            disabled={!inviteCode.trim()}
+            style={{ flex: 2 }}
+          >
             {t("household.join")}
           </Button>
         </View>
@@ -360,15 +554,47 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
 
   // ── Step: Success ──
   return (
-    <View style={{ flex: 1, justifyContent: "center", padding: 24, alignItems: "center" }}>
-      <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: colors.success + "20", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        padding: 24,
+        alignItems: "center",
+      }}
+    >
+      <View
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: 40,
+          backgroundColor: colors.success + "20",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: 20,
+        }}
+      >
         <Check size={40} color={colors.success} />
       </View>
 
-      <Text style={{ fontSize: 26, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
+      <Text
+        style={{
+          fontSize: 26,
+          fontWeight: "bold",
+          color: colors.text,
+          marginBottom: 8,
+        }}
+      >
         {t("household.created")}
       </Text>
-      <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginBottom: 24, lineHeight: 22 }}>
+      <Text
+        style={{
+          fontSize: 16,
+          color: colors.textSecondary,
+          textAlign: "center",
+          marginBottom: 24,
+          lineHeight: 22,
+        }}
+      >
         {t("household.shareCode")}
       </Text>
 
@@ -386,22 +612,46 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
           borderStyle: "dashed",
         }}
       >
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.primary, letterSpacing: 3, fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace" }}>
+        <Text
+          style={{
+            fontSize: 28,
+            fontWeight: "bold",
+            color: colors.primary,
+            letterSpacing: 3,
+            fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+          }}
+        >
           {createdCode}
         </Text>
       </View>
 
       <View style={{ width: "100%", gap: 10 }}>
         <Button onPress={handleShare}>
-          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 16 }}>
+          <Text
+            style={{
+              color: colors.primaryForeground,
+              fontWeight: "600",
+              fontSize: 16,
+            }}
+          >
             Share Invite Link
           </Text>
         </Button>
 
         <Button variant="outline" onPress={handleCopy}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            {copied ? <Check size={18} color={colors.success} /> : <Copy size={18} color={colors.text} />}
-            <Text style={{ color: copied ? colors.success : colors.text, fontWeight: "600", fontSize: 16 }}>
+            {copied ? (
+              <Check size={18} color={colors.success} />
+            ) : (
+              <Copy size={18} color={colors.text} />
+            )}
+            <Text
+              style={{
+                color: copied ? colors.success : colors.text,
+                fontWeight: "600",
+                fontSize: 16,
+              }}
+            >
               {copied ? "Copied!" : "Copy Code"}
             </Text>
           </View>
@@ -414,4 +664,3 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
     </View>
   );
 }
-

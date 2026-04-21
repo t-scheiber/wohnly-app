@@ -485,6 +485,10 @@
     "waiting": {
       "heading": "Waiting for approval",
       "instruction": "Open Wohnly on another of your devices (or ask a household owner) and type this 6-digit code.",
+      "finalizingHeading": "Approval received",
+      "finalizingBody": "Your device was approved. We're finishing setup now so you can start using Wohnly right away.",
+      "approvedHeading": "This device is ready",
+      "approvedBody": "Approval was successful and your household data is now available on this device.",
       "codeA11y": "Your verification code is {{code}}",
       "showDifferent": "Show a different code",
       "cancel": "Cancel"
