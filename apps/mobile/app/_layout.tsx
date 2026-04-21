@@ -1,26 +1,38 @@
-import { Slot, useRouter, useSegments } from "expo-router";
-import { useEffect, useState } from "react";
-import { View, Text, TextInput, Pressable, Modal, Alert, Platform } from "react-native";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { GestureHandlerRootView as _GestureHandlerRootView } from "react-native-gesture-handler";
-
-const GestureHandlerRootView = _GestureHandlerRootView as any;
-import { StatusBar } from "expo-status-bar";
-import { authClient } from "@/lib/auth/client";
-import { useTauriUpdater } from "@/lib/hooks/use-tauri-updater";
-import { initRevenueCat } from "@/lib/payments/setup";
-import { useConsent } from "@/lib/hooks/useConsent";
-import { useThemeProvider, useTheme, ThemeContext } from "@/lib/hooks/useTheme";
-import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
-import { useServerEvents } from "@/lib/hooks/useServerEvents";
-import { useKeyReconciliation } from "@/lib/hooks/useKeyReconciliation";
-import { useHousehold } from "@/lib/hooks/useHousehold";
-import { useMinVersion } from "@/lib/hooks/useMinVersion";
 import { ForceUpdateModal } from "@/components/app-update/ForceUpdateModal";
-import { registerForPushNotifications, addNotificationListeners } from "@/lib/notifications/setup";
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
+import { apiPatch } from "@/lib/api/client";
+import { authClient } from "@/lib/auth/client";
+import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
+import { useTauriUpdater } from "@/lib/hooks/use-tauri-updater";
+import { useConsent } from "@/lib/hooks/useConsent";
+import { useHousehold } from "@/lib/hooks/useHousehold";
+import { useKeyReconciliation } from "@/lib/hooks/useKeyReconciliation";
+import { useMinVersion } from "@/lib/hooks/useMinVersion";
+import { useServerEvents } from "@/lib/hooks/useServerEvents";
+import { ThemeContext, useTheme, useThemeProvider } from "@/lib/hooks/useTheme";
+import {
+    addNotificationListeners,
+    registerForPushNotifications,
+} from "@/lib/notifications/setup";
+import { initRevenueCat } from "@/lib/payments/setup";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Slot, useRouter, useSegments } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import {
+    Alert,
+    Modal,
+    Platform,
+    Pressable,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
+import { GestureHandlerRootView as _GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+const GestureHandlerRootView = _GestureHandlerRootView as any;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,7 +43,13 @@ const queryClient = new QueryClient({
   },
 });
 
-function NamePromptModal({ colorScheme, onComplete }: { colorScheme: "light" | "dark"; onComplete: () => void }) {
+function NamePromptModal({
+  colorScheme,
+  onComplete,
+}: {
+  colorScheme: "light" | "dark";
+  onComplete: () => void;
+}) {
   const colors = Colors[colorScheme];
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
@@ -42,9 +60,25 @@ function NamePromptModal({ colorScheme, onComplete }: { colorScheme: "light" | "
     setSaving(true);
     try {
       await authClient.updateUser({ name: trimmed });
+      try {
+        await apiPatch("/api/members/me/display-name", {
+          displayName: trimmed,
+        });
+      } catch {
+        // The dashboard also falls back to the auth profile name now, so a
+        // sync failure here should not block onboarding.
+      }
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["members"] }),
+        queryClient.invalidateQueries({ queryKey: ["balances"] }),
+        queryClient.invalidateQueries({ queryKey: ["leaderboard"] }),
+      ]);
       onComplete();
     } catch (err: unknown) {
-      Alert.alert("Error", err instanceof Error ? err.message : "Failed to save name");
+      Alert.alert(
+        "Error",
+        err instanceof Error ? err.message : "Failed to save name",
+      );
     } finally {
       setSaving(false);
     }
@@ -52,12 +86,42 @@ function NamePromptModal({ colorScheme, onComplete }: { colorScheme: "light" | "
 
   return (
     <Modal visible transparent animationType="fade">
-      <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" }}>
-        <View style={{ backgroundColor: colors.card, borderRadius: 20, width: "85%", maxWidth: 380, padding: 24 }}>
-          <Text style={{ fontSize: 22, fontWeight: "800", color: colors.text, textAlign: "center", marginBottom: 8 }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: colors.card,
+            borderRadius: 20,
+            width: "85%",
+            maxWidth: 380,
+            padding: 24,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: "800",
+              color: colors.text,
+              textAlign: "center",
+              marginBottom: 8,
+            }}
+          >
             What&apos;s your name?
           </Text>
-          <Text style={{ fontSize: 15, color: colors.textSecondary, textAlign: "center", marginBottom: 20 }}>
+          <Text
+            style={{
+              fontSize: 15,
+              color: colors.textSecondary,
+              textAlign: "center",
+              marginBottom: 20,
+            }}
+          >
             Your household members will see this name so they can identify you.
           </Text>
           <TextInput
@@ -90,7 +154,13 @@ function NamePromptModal({ colorScheme, onComplete }: { colorScheme: "light" | "
               opacity: saving || !name.trim() ? 0.5 : pressed ? 0.8 : 1,
             })}
           >
-            <Text style={{ color: colors.primaryForeground, fontSize: 16, fontWeight: "700" }}>
+            <Text
+              style={{
+                color: colors.primaryForeground,
+                fontSize: 16,
+                fontWeight: "700",
+              }}
+            >
               {saving ? "Saving..." : "Continue"}
             </Text>
           </Pressable>
@@ -130,7 +200,9 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   // On-foreground + 30-min re-query of key-state/access-requests in case SSE
   // missed a beat while backgrounded.
   const householdQ = useHousehold();
-  useKeyReconciliation(session?.user?.id ? householdQ.data?.householdId ?? undefined : undefined);
+  useKeyReconciliation(
+    session?.user?.id ? (householdQ.data?.householdId ?? undefined) : undefined,
+  );
 
   // Force-update gate — polls /api/app/min-version; blocks the app if below.
   const { blocked: versionBlocked } = useMinVersion();
@@ -140,7 +212,10 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
     const inAuthGroup = segments[0] === "(auth)";
     const first = segments[0] as string | undefined;
-    const isPublicPage = first === "privacy-policy" || first === "support" || first === "leave-household";
+    const isPublicPage =
+      first === "privacy-policy" ||
+      first === "support" ||
+      first === "leave-household";
 
     if (!session && !inAuthGroup && !isPublicPage) {
       router.replace("/(auth)/sign-in");
@@ -225,12 +300,24 @@ export default function RootLayout() {
   if (!theme.loaded) return null;
 
   return (
-    <ThemeContext.Provider value={{ mode: theme.mode, colorScheme: theme.colorScheme, setMode: theme.setMode }}>
+    <ThemeContext.Provider
+      value={{
+        mode: theme.mode,
+        colorScheme: theme.colorScheme,
+        setMode: theme.setMode,
+      }}
+    >
       <GestureHandlerRootView style={{ flex: 1 }}>
         {Platform.OS === "web" ? (
           <QueryClientProvider client={queryClient}>
             <AuthGate>
-              <View style={{ flex: 1, alignItems: "center", backgroundColor: Colors[theme.colorScheme].background }}>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  backgroundColor: Colors[theme.colorScheme].background,
+                }}
+              >
                 <View style={{ flex: 1, width: "100%", maxWidth: 600 }}>
                   <Slot />
                 </View>
@@ -241,7 +328,9 @@ export default function RootLayout() {
           <SafeAreaProvider>
             <QueryClientProvider client={queryClient}>
               <AuthGate>
-                <StatusBar style={theme.colorScheme === "dark" ? "light" : "dark"} />
+                <StatusBar
+                  style={theme.colorScheme === "dark" ? "light" : "dark"}
+                />
                 <Slot />
               </AuthGate>
             </QueryClientProvider>
