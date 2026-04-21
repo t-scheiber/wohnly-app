@@ -1,0 +1,88 @@
+﻿"Field","Type","Japanese"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnlyは、あなたと家族が一緒に整理整頓できるオールインワンの家庭管理アプリです。パートナー、ルームメイト、または家族と暮らしていても、Wohnlyは全員を同じ認識でつなぎます。
+
+共有タスクリスト、買い物リスト、家事、支出、献立、家庭カレンダーをひとつの場所で管理できます。家族全員が作業に参加し、タスクを完了し、リアルタイムで最新情報を確認できます。
+
+主な機能：
+
+共有タスクリストと個人タスク
+共同買い物リスト
+公平な分担分析付きの家事管理
+支出の追跡と分割
+買い物リスト連携付きの献立計画
+イベントとスケジュールの家庭カレンダー
+シンプルなコードでメンバーを招待
+家庭データのエンドツーエンド暗号化
+美しいダーク・ライトテーマ
+42言語対応
+Windows、macOS、iOS、Android、ウェブで動作
+Wohnlyは無料でお使いいただけます。GoogleまたはAppleでサインインし、家庭を作成して、家族やルームメイトを招待してはじめましょう。"
+"WhatsNew","Text","Windowsへの初回リリース。タスク、買い物リスト、家事、支出、献立計画、カレンダーを含む完全な家庭管理機能を搭載。"
+"ProductFeatures1","Text","共有・個人タスクリスト"
+"ProductFeatures2","Text","共同買い物リスト"
+"ProductFeatures3","Text","分析機能付きの家事管理"
+"ProductFeatures4","Text","支出追跡と費用分割"
+"ProductFeatures5","Text","食材同期付きの献立計画"
+"ProductFeatures6","Text","家庭カレンダーとイベント"
+"ProductFeatures7","Text","エンドツーエンド暗号化された家庭データ"
+"ProductFeatures8","Text","全デバイスでのリアルタイム同期"
+"ProductFeatures9","Text","42言語対応"
+"ProductFeatures10","Text","ダーク・ライトテーマ"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnlyは家族やルームメイトのための家庭管理アプリ。タスク、買い物、家事、支出、献立計画をひとつにまとめて。"
+"SearchTerms1","Text","家庭管理アプリ"
+"SearchTerms2","Text","家族オーガナイザーアプリ"
+"SearchTerms3","Text","共有タスクリスト"
+"SearchTerms4","Text","共同買い物リスト"
+"SearchTerms5","Text","家事管理アプリ"
+"SearchTerms6","Text","支出管理アプリ"
+"SearchTerms7","Text","費用分割アプリ"
+"Applicable license terms","Text","Wohnlyを使用することで、https://wohnly.app/privacy-policyで公開されている利用規約とプライバシーポリシーに同意したことになります。Wohnlyは「現状のまま」提供され、いかなる種類の保証もありません。ソフトウェアは無料でご利用いただけます。家庭データはエンドツーエンドで暗号化され、安全に保存されます。アプリ内で作成したすべてのコンテンツの所有権はユーザーに帰属します。"
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

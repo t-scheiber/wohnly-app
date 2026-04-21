@@ -1,0 +1,88 @@
+﻿"Field","Type","Finnish"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly on kattava kodinhallinnan sovellus, joka auttaa sinua ja perhettäsi pysymään järjestyksessä yhdessä. Asuit sitten kumppanin, kämppäkavereiden tai perheen kanssa, Wohnly pitää kaikki samalla sivulla.
+
+Hallinnoi jaettuja tehtävälistoja, ostoslistoja, kotitöitä, kuluja, ateriasuunnitelmia ja kotitalouskalenteria — kaikki yhdessä paikassa. Jokainen kotitaloutesi jäsen voi osallistua, rastittaa tehtäviä ja pysyä ajan tasalla reaaliajassa.
+
+Tärkeimmät ominaisuudet:
+
+Jaetut tehtävälistat ja henkilökohtaiset tehtävät
+Yhteistyölliset ostoslistat
+Kotitöiden hallinta reilu jako -analytiikalla
+Kulujen seuranta ja jako
+Ateriasuunnittelu ostoslistan integroinnilla
+Kotitalouskalenteri tapahtumille ja aikatauluille
+Kutsu jäseniä yksinkertaisella koodilla
+Päästä päähän -salaus kotitaloustiedoille
+Kauniit tummat ja vaaleat teemat
+Saatavilla 42 kielellä
+Toimii Windowsilla, macOS:llä, iOS:llä, Androidilla ja verkossa
+Wohnly on ilmainen. Kirjaudu sisään Google- tai Apple-tilillä, luo kotitaloutesi ja kutsu perhe tai kämppäkaverit mukaan."
+"WhatsNew","Text","Ensimmäinen julkaisu Windowsille. Sisältää täydellisen kodinhallinnan tehtävillä, ostoslistoilla, kotitöillä, kuluilla, ateriasuunnittelulla ja kalenterilla."
+"ProductFeatures1","Text","Jaetut ja henkilökohtaiset tehtävälistat"
+"ProductFeatures2","Text","Yhteistyölliset ostoslistat"
+"ProductFeatures3","Text","Kotitöiden seuranta analytiikalla"
+"ProductFeatures4","Text","Kulujen seuranta ja laskujen jako"
+"ProductFeatures5","Text","Ateriasuunnittelu ainesosien synkronoinnilla"
+"ProductFeatures6","Text","Kotitalouskalenteri ja tapahtumat"
+"ProductFeatures7","Text","Päästä päähän -salatut kotitaloustiedot"
+"ProductFeatures8","Text","Reaaliaikainen synkronointi kaikilla laitteilla"
+"ProductFeatures9","Text","Saatavilla 42 kielellä"
+"ProductFeatures10","Text","Tummat ja vaaleat teemat"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly on kodinhallinnan sovellus perheille ja kämppäkavereille — tehtävät, ostokset, kotityöt, kulut ja ateriasuunnittelu yhdessä paikassa."
+"SearchTerms1","Text","kodinhallinnan sovellus"
+"SearchTerms2","Text","perheorganisaattori"
+"SearchTerms3","Text","jaetut tehtävälistat"
+"SearchTerms4","Text","yhteistyöllinen ostoslista"
+"SearchTerms5","Text","kotitöiden hallinta"
+"SearchTerms6","Text","kulujen seuranta"
+"SearchTerms7","Text","kulujen jako sovellus"
+"Applicable license terms","Text","Käyttämällä Wohnlya hyväksyt palveluehdot ja tietosuojakäytännön, jotka ovat saatavilla osoitteessa https://wohnly.app/privacy-policy. Wohnly tarjotaan ""sellaisenaan"" ilman minkäänlaista takuuta. Ohjelmisto on ilmainen. Kotitaloustietosi on salattu päästä päähän ja tallennettu turvallisesti. Säilytät omistusoikeuden kaikkeen sovelluksessa luomaasi sisältöön."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

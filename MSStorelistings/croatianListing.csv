@@ -1,0 +1,88 @@
+﻿"Field","Type","Croatian"
+"ProductName","Text","Wohnly"
+"Description","Text","Wohnly je sveobuhvatna aplikacija za upravljanje kućanstvom koja pomaže vama i vašoj obitelji ostati organiziranima zajedno. Bez obzira živite li s partnerom, cimericom ili obitelji, Wohnly drži sve na istoj valnoj duljini.
+
+Upravljajte zajedničkim popisima zadataka, popisima za kupovinu, kućanskim poslovima, troškovima, planovima obroka i kalendarom kućanstva — sve na jednom mjestu. Svaki član kućanstva može doprinositi, označavati zadatke i biti u tijeku u stvarnom vremenu.
+
+Ključne značajke:
+
+Zajednički popisi zadataka i osobni zadaci
+Suradnički popisi za kupovinu
+Upravljanje kućanskim poslovima s analizom pravedne raspodjele
+Praćenje i dijeljenje troškova
+Planiranje obroka s integracijom popisa za kupovinu
+Kalendar kućanstva za događaje i rasporede
+Pozivanje članova jednostavnim kodom
+End-to-end enkripcija za podatke kućanstva
+Prekrasne tamne i svjetle teme
+Dostupno na 42 jezika
+Radi na Windowsu, macOS-u, iOS-u, Androidu i webu
+Wohnly je besplatan. Prijavite se s Googleom ili Appleom, stvorite svoje kućanstvo i pozovite obitelj ili cimere za početak."
+"WhatsNew","Text","Početno izdanje za Windows. Uključuje potpuno upravljanje kućanstvom s zadacima, popisima za kupovinu, kućanskim poslovima, troškovima, planiranjem obroka i kalendarom."
+"ProductFeatures1","Text","Zajednički i osobni popisi zadataka"
+"ProductFeatures2","Text","Suradnički popisi za kupovinu"
+"ProductFeatures3","Text","Praćenje kućanskih poslova s analizom"
+"ProductFeatures4","Text","Praćenje troškova i dijeljenje računa"
+"ProductFeatures5","Text","Planiranje obroka s sinkronizacijom sastojaka"
+"ProductFeatures6","Text","Kalendar kućanstva i događaji"
+"ProductFeatures7","Text","End-to-end šifrirani podaci kućanstva"
+"ProductFeatures8","Text","Sinkronizacija u stvarnom vremenu na svim uređajima"
+"ProductFeatures9","Text","Dostupno na 42 jezika"
+"ProductFeatures10","Text","Tamne i svjetle teme"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Wohnly je aplikacija za upravljanje kućanstvom za obitelji i cimere — zadaci, kupovina, kućanski poslovi, troškovi i planiranje obroka na jednom mjestu."
+"SearchTerms1","Text","aplikacija za upravljanje kućanstvom"
+"SearchTerms2","Text","obiteljski organizator"
+"SearchTerms3","Text","zajednički popisi zadataka"
+"SearchTerms4","Text","suradnički popis za kupovinu"
+"SearchTerms5","Text","upravljanje kućanskim poslovima"
+"SearchTerms6","Text","praćenje troškova"
+"SearchTerms7","Text","aplikacija za dijeljenje troškova"
+"Applicable license terms","Text","Korištenjem Wohnlyja, prihvaćate Uvjete pružanja usluge i Pravila privatnosti dostupna na https://wohnly.app/privacy-policy. Wohnly se pruža ""takav kakav jest"" bez ikakvih jamstava. Softver je besplatan za korištenje. Podaci vašeg kućanstva su end-to-end šifrirani i sigurno pohranjeni. Zadržavate vlasništvo nad svim sadržajem koji stvorite unutar aplikacije."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

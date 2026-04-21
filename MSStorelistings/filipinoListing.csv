@@ -1,0 +1,88 @@
+﻿"Field","Type","Filipino"
+"ProductName","Text","Wohnly"
+"Description","Text","Ang Wohnly ay ang all-in-one na app para sa pamamahala ng tahanan na tumutulong sa inyo at sa inyong pamilya na manatiling organisado nang magkasama. Kahit nakatira kayo kasama ang kasosyo, mga kasama sa silid, o pamilya, pinapanatili ng Wohnly ang lahat sa parehong pahina.
+
+Pamahalaan ang mga ibinahaging listahan ng gawain, listahan ng pamimili, trabaho sa bahay, gastusin, plano sa pagkain, at kalendaryo ng sambahayan — lahat sa isang lugar. Ang bawat miyembro ng inyong sambahayan ay maaaring mag-ambag, mag-tsek ng mga gawain, at manatiling updated sa real time.
+
+Mga pangunahing tampok:
+
+Mga ibinahaging listahan ng gawain at personal na gawain
+Mga collaborative na listahan ng pamimili
+Pamamahala ng trabaho sa bahay na may fair share analytics
+Pagsubaybay at paghahati ng gastusin
+Pagpaplano ng pagkain na may integrasyon sa listahan ng pamimili
+Kalendaryo ng sambahayan para sa mga kaganapan at iskedyul
+Imbitahan ang mga miyembro gamit ang simpleng code
+End-to-end na pag-encrypt para sa datos ng sambahayan
+Magagandang madilim at maliwanag na tema
+Available sa 42 wika
+Gumagana sa Windows, macOS, iOS, Android, at web
+Libre ang Wohnly. Mag-sign in gamit ang Google o Apple, lumikha ng inyong sambahayan, at imbitahan ang pamilya o mga kasama para makapagsimula."
+"WhatsNew","Text","Unang release para sa Windows. Kasama ang buong pamamahala ng sambahayan na may mga gawain, listahan ng pamimili, trabaho sa bahay, gastusin, pagpaplano ng pagkain, at kalendaryo."
+"ProductFeatures1","Text","Ibinahagi at personal na listahan ng gawain"
+"ProductFeatures2","Text","Mga collaborative na listahan ng pamimili"
+"ProductFeatures3","Text","Pagsubaybay ng trabaho sa bahay na may analytics"
+"ProductFeatures4","Text","Pagsubaybay ng gastusin at paghahati ng bayarin"
+"ProductFeatures5","Text","Pagpaplano ng pagkain na may pag-sync ng sangkap"
+"ProductFeatures6","Text","Kalendaryo ng sambahayan at mga kaganapan"
+"ProductFeatures7","Text","End-to-end na naka-encrypt na datos ng sambahayan"
+"ProductFeatures8","Text","Real-time na pag-sync sa lahat ng device"
+"ProductFeatures9","Text","Available sa 42 wika"
+"ProductFeatures10","Text","Madilim at maliwanag na tema"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","Ang Wohnly ay ang app para sa pamamahala ng tahanan para sa mga pamilya at kasama sa silid — mga gawain, pamimili, trabaho sa bahay, gastusin, at pagpaplano ng pagkain sa isang lugar."
+"SearchTerms1","Text","app para sa pamamahala ng tahanan"
+"SearchTerms2","Text","family organizer app"
+"SearchTerms3","Text","ibinahaging listahan ng gawain"
+"SearchTerms4","Text","collaborative na listahan ng pamimili"
+"SearchTerms5","Text","pamamahala ng trabaho sa bahay"
+"SearchTerms6","Text","pagsubaybay ng gastusin"
+"SearchTerms7","Text","app para sa paghahati ng gastusin"
+"Applicable license terms","Text","Sa paggamit ng Wohnly, sumasang-ayon kayo sa Mga Tuntunin ng Serbisyo at Patakaran sa Privacy na makukuha sa https://wohnly.app/privacy-policy. Ang Wohnly ay ibinibigay nang ""tulad ng"" nang walang anumang garantiya. Ang software ay libre gamitin. Ang datos ng inyong sambahayan ay naka-encrypt nang end-to-end at ligtas na nakaimbak. Pinapanatili ninyo ang pagmamay-ari ng lahat ng nilalaman na nilikha ninyo sa loob ng app."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",

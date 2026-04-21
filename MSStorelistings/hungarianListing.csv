@@ -1,0 +1,88 @@
+﻿"Field","Type","Hungarian"
+"ProductName","Text","Wohnly"
+"Description","Text","A Wohnly egy mindent-egyben háztartás-kezelő alkalmazás, amely segít neked és a családodnak együtt szervezett maradni. Akár partnerrel, szobatársakkal vagy családdal élsz, a Wohnly mindenkit egy lapon tart.
+
+Kezeld a megosztott teendőlistákat, bevásárlólistákat, háztartási feladatokat, kiadásokat, étkezési terveket és a háztartási naptárt — mindent egy helyen. A háztartásod minden tagja hozzájárulhat, bejelölheti a feladatokat, és valós időben naprakész lehet.
+
+Főbb jellemzők:
+
+Megosztott teendőlisták és személyes feladatok
+Közös bevásárlólisták
+Háztartási feladatok kezelése méltányos elosztás elemzéssel
+Kiadások követése és megosztása
+Étkezéstervezés bevásárlólista integrációval
+Háztartási naptár eseményekhez és ütemtervekhez
+Tagok meghívása egyszerű kóddal
+Végpontok közötti titkosítás a háztartási adatokhoz
+Gyönyörű sötét és világos témák
+42 nyelven elérhető
+Működik Windows, macOS, iOS, Android és web felületeken
+A Wohnly ingyenesen használható. Jelentkezz be Google-lal vagy Apple-lel, hozd létre a háztartásod, és hívd meg a családot vagy a szobatársakat az induláshoz."
+"WhatsNew","Text","Első kiadás Windowsra. Teljes háztartás-kezelést tartalmaz teendőkkel, bevásárlólistákkal, háztartási feladatokkal, kiadásokkal, étkezéstervezéssel és naptárral."
+"ProductFeatures1","Text","Megosztott és személyes teendőlisták"
+"ProductFeatures2","Text","Közös bevásárlólisták"
+"ProductFeatures3","Text","Háztartási feladatok követése elemzéssel"
+"ProductFeatures4","Text","Kiadások követése és számlamegosztás"
+"ProductFeatures5","Text","Étkezéstervezés hozzávaló szinkronizálással"
+"ProductFeatures6","Text","Háztartási naptár és események"
+"ProductFeatures7","Text","Végpontok közötti titkosított háztartási adatok"
+"ProductFeatures8","Text","Valós idejű szinkronizálás minden eszközön"
+"ProductFeatures9","Text","42 nyelven elérhető"
+"ProductFeatures10","Text","Sötét és világos témák"
+"ProductFeatures11","Text",
+"ProductFeatures12","Text",
+"ProductFeatures13","Text",
+"ProductFeatures14","Text",
+"ProductFeatures15","Text",
+"ProductFeatures16","Text",
+"ProductFeatures17","Text",
+"ProductFeatures18","Text",
+"ProductFeatures19","Text",
+"ProductFeatures20","Text",
+"ShortDescription","Text","A Wohnly háztartás-kezelő app családoknak és szobatársaknak — teendők, bevásárlás, háztartási feladatok, kiadások és étkezéstervezés egy helyen."
+"SearchTerms1","Text","háztartás-kezelő alkalmazás"
+"SearchTerms2","Text","családi szervező app"
+"SearchTerms3","Text","megosztott teendőlisták"
+"SearchTerms4","Text","közös bevásárlólista"
+"SearchTerms5","Text","háztartási feladatok kezelése"
+"SearchTerms6","Text","kiadások követése"
+"SearchTerms7","Text","kiadásmegosztó alkalmazás"
+"Applicable license terms","Text","A Wohnly használatával elfogadod a https://wohnly.app/privacy-policy oldalon elérhető Felhasználási feltételeket és az Adatvédelmi szabályzatot. A Wohnly ""jelenlegi állapotában"" kerül biztosításra, mindenféle garancia nélkül. A szoftver ingyenesen használható. A háztartási adataid végpontok közötti titkosítással védettek és biztonságosan tárolódnak. Megtartod a tulajdonjogát az alkalmazásban létrehozott összes tartalom felett."
+"Copyright","Text","Copyright 2026 Thomas Scheiber. All rights reserved."
+"DevelopedBy","Text","Thomas Scheiber"
+"RequirementsMinimum1","Text",
+"RequirementsMinimum2","Text",
+"RequirementsMinimum3","Text",
+"RequirementsMinimum4","Text",
+"RequirementsMinimum5","Text",
+"RequirementsMinimum6","Text",
+"RequirementsMinimum7","Text",
+"RequirementsMinimum8","Text",
+"RequirementsMinimum9","Text",
+"RequirementsMinimum10","Text",
+"RequirementsMinimum11","Text",
+"RequirementsRecommended1","Text",
+"RequirementsRecommended2","Text",
+"RequirementsRecommended3","Text",
+"RequirementsRecommended4","Text",
+"RequirementsRecommended5","Text",
+"RequirementsRecommended6","Text",
+"RequirementsRecommended7","Text",
+"RequirementsRecommended8","Text",
+"RequirementsRecommended9","Text",
+"RequirementsRecommended10","Text",
+"RequirementsRecommended11","Text",
+"StoreLogos1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"StoreLogos2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots1","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots2","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots3","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots4","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots5","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots6","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots7","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots8","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots9","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"Screenshots10","Provide the file name only if it is in the same folder. Provide relative path to image starting with the subfolder name otherwise",
+"HeroArts","Text",
+"Trailers","Text",
