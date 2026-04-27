@@ -20,7 +20,7 @@
     "date-fns": "^4.1.0",
     "expo-server-sdk": "^6.1.0",
     "hono": "^4.7.0",
-    "nodemailer": "^7.0.0",
+    "nodemailer": "^8.0.6",
     "pg": "^8.20.0",
     "prisma": "^6.9.0",
     "stripe": "^21.0.1",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.12.2",
-    "@types/nodemailer": "^6.4.0",
+    "@types/nodemailer": "^8.0.0",
     "@types/pg": "^8.20.0",
     "tsx": "^4.19.0",
     "typescript": "~5.9.3"
