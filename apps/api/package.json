@@ -23,7 +23,7 @@
     "nodemailer": "^8.0.6",
     "pg": "^8.20.0",
     "prisma": "^6.9.0",
-    "stripe": "^21.0.1",
+    "stripe": "^22.1.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {
