@@ -13,9 +13,9 @@
     "build:ios": "cd apps/mobile && eas build --local --platform ios --profile production",
     "build:android": "cd apps/mobile && eas build --local --platform android --profile production",
     "build:mobile": "npm run build:ios && npm run build:android",
-    "build:macos": "cd apps/desktop && npm run tauri build",
-    "build:windows": "cd apps/desktop && npm run tauri build",
-    "build:desktop": "cd apps/desktop && npm run tauri build",
+    "build:macos": "cd apps/desktop/tauri && npx tauri build",
+    "build:windows": "cd apps/desktop/tauri && npx tauri build",
+    "build:desktop": "cd apps/desktop/tauri && npx tauri build",
     "build:all": "npm run build:web && npm run build:mobile && npm run build:desktop",
     "release:all": "node scripts/rebuild-and-submit-all.mjs",
     "build-submit:all": "npm run release:all",
@@ -33,7 +33,13 @@
   },
   "overrides": {
     "react": "19.2.5",
-    "react-dom": "19.2.5"
+    "react-dom": "19.2.5",
+    "@prisma/dev": {
+      "@hono/node-server": "1.19.13"
+    },
+    "@xmldom/xmldom": "0.9.10",
+    "postcss": "8.5.10",
+    "uuid": "11.1.1"
   },
   "devDependencies": {
     "@tauri-apps/api": "^2.10.1",

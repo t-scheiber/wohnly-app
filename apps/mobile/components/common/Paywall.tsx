@@ -46,6 +46,11 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
       const success = await purchaseLifetime();
       if (success) {
         onPurchased?.();
+      } else {
+        Alert.alert(
+          "Purchase unavailable",
+          "We could not load products from the store. Check your connection and try again.",
+        );
       }
     } catch (err: unknown) {
       Alert.alert("Purchase Failed", err instanceof Error ? err.message : "Please try again");
