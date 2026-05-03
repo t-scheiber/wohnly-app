@@ -17,11 +17,12 @@ import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { useTheme } from "@/lib/hooks/useTheme";
-import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
+import { restorePurchases } from "@/lib/payments/setup";
 import { useQueryClient } from "@tanstack/react-query";
 import { File, Paths } from "expo-file-system";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
+import { RevenueCatPaywall } from "@/components/common/RevenueCatPaywall";
 import { Check } from "lucide-react-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -302,6 +303,7 @@ export default function SettingsScreen() {
   const [nicknameValue, setNicknameValue] = useState("");
   const [weekStartPickerOpen, setWeekStartPickerOpen] = useState(false);
   const [timeFormatPickerOpen, setTimeFormatPickerOpen] = useState(false);
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
   const handleSaveNickname = () => {
     setNickname.mutate(
@@ -398,21 +400,25 @@ export default function SettingsScreen() {
           "/api/webhooks/stripe/checkout",
           {},
         );
-        if (url) {
-          if (isTauri()) {
-            // Tauri: open in system browser (WebView can't navigate to external URLs)
-            await openInBrowser(url);
-          } else {
-            window.location.href = url;
-          }
+        if (!url) {
+          Alert.alert(
+            t("common.error"),
+            t(
+              "settings.checkoutCouldNotStart",
+              "Checkout could not be started. Please try again later.",
+            ),
+          );
+          return;
+        }
+        if (isTauri()) {
+          await openInBrowser(url);
+        } else {
+          window.location.href = url;
         }
         return;
       }
-      // Mobile: use RevenueCat
-      const success = await purchaseLifetime();
-      if (success) {
-        Alert.alert(t("settings.premium"), t("settings.purchaseSuccess"));
-      }
+      // Mobile: RevenueCat paywall (uses your RC dashboard products & layout)
+      setPaywallOpen(true);
     } catch (err) {
       Alert.alert(
         t("common.error"),
@@ -428,6 +434,9 @@ export default function SettingsScreen() {
         return;
       }
       const success = await restorePurchases();
+      if (success) {
+        await queryClient.invalidateQueries({ queryKey: ["entitlements"] });
+      }
       Alert.alert(
         t("settings.premium"),
         success ? t("settings.restoreSuccess") : t("settings.restoreNone"),
@@ -1068,6 +1077,28 @@ export default function SettingsScreen() {
           </Pressable>
         </Pressable>
       </Modal>
+
+      {Platform.OS !== "web" && (
+        <Modal
+          visible={paywallOpen}
+          animationType="slide"
+          presentationStyle="pageSheet"
+          onRequestClose={() => setPaywallOpen(false)}
+        >
+          <View style={{ flex: 1, backgroundColor: colors.background }}>
+            <RevenueCatPaywall
+              onPurchased={() => {
+                setPaywallOpen(false);
+                void queryClient.invalidateQueries({
+                  queryKey: ["entitlements"],
+                });
+                Alert.alert(t("settings.premium"), t("settings.purchaseSuccess"));
+              }}
+              onDismiss={() => setPaywallOpen(false)}
+            />
+          </View>
+        </Modal>
+      )}
     </>
   );
 }

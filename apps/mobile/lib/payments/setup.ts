@@ -53,14 +53,26 @@ export async function checkPremium(): Promise<boolean> {
 export async function purchaseLifetime(): Promise<boolean> {
   try {
     const offerings = await Purchases.getOfferings();
-    const lifetime = offerings.current?.lifetime;
+    const current = offerings.current;
 
-    if (!lifetime) {
-      console.error("No lifetime package found in offerings");
+    // Prefer lifetime, then common subscription slots, then any package from the current offering.
+    // RevenueCat only populates the slot that matches each package's type in the dashboard.
+    const pkg =
+      current?.lifetime ??
+      current?.annual ??
+      current?.monthly ??
+      current?.weekly ??
+      current?.sixMonth ??
+      current?.threeMonth ??
+      current?.twoMonth ??
+      current?.availablePackages?.[0];
+
+    if (!pkg) {
+      console.error("No purchasable package found in current RevenueCat offering");
       return false;
     }
 
-    const { customerInfo } = await Purchases.purchasePackage(lifetime);
+    const { customerInfo } = await Purchases.purchasePackage(pkg);
     return customerInfo.entitlements.active["Wohnly Pro"] !== undefined;
   } catch (err: unknown) {
     // User cancelled is not an error

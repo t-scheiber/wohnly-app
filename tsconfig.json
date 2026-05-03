@@ -11,6 +11,5 @@
     }
   ],
   "files": [],
-  "compilerOptions": {},
-  "extends": "expo/tsconfig.base"
+  "compilerOptions": {}
 }

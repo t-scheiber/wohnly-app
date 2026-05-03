@@ -277,6 +277,7 @@
     "leaveEmailSent": "We sent a confirmation link to your email. Click it to finish leaving the household.",
     "upgradeDescription": "Remove ads and support Wohnly development",
     "purchaseSuccess": "Welcome to Wohnly Pro!",
+    "checkoutCouldNotStart": "Checkout could not be started. Please try again later.",
     "restoreSuccess": "Purchases restored successfully",
     "restoreNone": "No previous purchases found",
     "devices": "Devices & Security",

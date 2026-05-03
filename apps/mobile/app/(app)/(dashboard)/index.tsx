@@ -75,7 +75,7 @@ export default function DashboardScreen() {
     { title: t("shopping.title"), icon: <ShoppingCart size={22} color="#fff" />, route: "/(app)/(lists)/shopping" as const, color: "#3b82f6" },
     { title: t("chores.title"), icon: <Sparkles size={22} color="#fff" />, route: "/(app)/(chores)" as const, color: "#6366f1" },
     { title: t("finances.title"), icon: <DollarSign size={22} color="#fff" />, route: "/(app)/(finances)" as const, color: "#10b981" },
-    { title: t("subscriptions.title"), icon: <CreditCard size={22} color="#fff" />, route: "/(app)/(finances)" as const, color: "#f59e0b" },
+    { title: t("subscriptions.title"), icon: <CreditCard size={22} color="#fff" />, route: "/(app)/(finances)?tab=subscriptions" as const, color: "#f59e0b" },
     { title: t("events.title"), icon: <CalendarDays size={22} color="#fff" />, route: "/(app)/(events)" as const, color: "#8b5cf6" },
   ];
 
