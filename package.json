@@ -32,8 +32,8 @@
     "sharp": "^0.34.5"
   },
   "overrides": {
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "@prisma/dev": {
       "@hono/node-server": "1.19.13"
     },
