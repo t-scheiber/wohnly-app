@@ -10,10 +10,10 @@ name = "wohnly_desktop_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.6.1", features = [] }
+tauri-build = { version = "2.6.2", features = [] }
 
 [dependencies]
-tauri = { version = "2.11.1", features = [] }
+tauri = { version = "2.11.2", features = [] }
 tauri-plugin-shell = "2.3.5"
 tauri-plugin-deep-link = "2.4.9"
 tauri-plugin-updater = "2.10.1"
