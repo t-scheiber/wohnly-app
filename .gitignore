@@ -61,6 +61,7 @@ apps/api/dist/
 # Tauri desktop build output
 apps/desktop/tauri/gen/
 apps/desktop/tauri/target/
+apps/desktop/release/
 
 # Prisma
 apps/api/prisma/migrations/**/migration_lock.toml

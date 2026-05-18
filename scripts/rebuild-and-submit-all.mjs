@@ -27,7 +27,11 @@ function run(command, commandArgs, options = {}) {
 }
 
 const branch = valueAfter("--branch", run("git", ["branch", "--show-current"], { capture: true }));
-const profile = valueAfter("--profile", "production");
+const requestedProfile = valueAfter("--profile", "production");
+if (requestedProfile !== "production") {
+  console.warn(`Ignoring --profile ${requestedProfile}; all mobile builds use production.`);
+}
+const profile = "production";
 const submit = args.has("--no-submit") ? "false" : "true";
 const allowDirty = args.has("--allow-dirty");
 
