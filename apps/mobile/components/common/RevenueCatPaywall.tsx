@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { View, Text, Platform } from "react-native";
-import RevenueCatUI from "react-native-purchases-ui";
-import { Button } from "../ui/Button";
+import { Platform, Text, View } from "react-native";
+import { Paywall } from "@/components/common/Paywall";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
@@ -11,9 +10,9 @@ interface RevenueCatPaywallProps {
 }
 
 /**
- * Presents the RevenueCat pre-built paywall.
- * This uses RevenueCat's remote paywall configuration — design it in the RC dashboard.
- * Falls back to our custom Paywall component on web.
+ * Native paywall using RevenueCat offerings + StoreKit / Play Billing.
+ * Uses the in-app Paywall UI (not RevenueCat Paywall templates) so purchases work
+ * once products are linked in the RevenueCat dashboard — no remote paywall required.
  */
 export function RevenueCatPaywall({ onPurchased, onDismiss }: RevenueCatPaywallProps) {
   const colorScheme = useColorScheme() ?? "light";
@@ -29,21 +28,7 @@ export function RevenueCatPaywall({ onPurchased, onDismiss }: RevenueCatPaywallP
     );
   }
 
-  return (
-    <RevenueCatUI.Paywall
-      onPurchaseCompleted={({ customerInfo }: { customerInfo: any }) => {
-        if (customerInfo.entitlements.active["Wohnly Pro"]) {
-          onPurchased?.();
-        }
-      }}
-      onRestoreCompleted={({ customerInfo }: { customerInfo: any }) => {
-        if (customerInfo.entitlements.active["Wohnly Pro"]) {
-          onPurchased?.();
-        }
-      }}
-      onDismiss={onDismiss}
-    />
-  );
+  return <Paywall onPurchased={onPurchased} onDismiss={onDismiss} />;
 }
 
 /**

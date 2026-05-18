@@ -17,7 +17,12 @@ import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { useTheme } from "@/lib/hooks/useTheme";
-import { restorePurchases } from "@/lib/payments/setup";
+import {
+  isPaywallPreviewEnabled,
+  isRevenueCatStoreSetupError,
+  restorePurchases,
+  validatePaywallReady,
+} from "@/lib/payments/setup";
 import { useQueryClient } from "@tanstack/react-query";
 import { File, Paths } from "expo-file-system";
 import { useRouter } from "expo-router";
@@ -418,6 +423,41 @@ export default function SettingsScreen() {
         return;
       }
       // Mobile: RevenueCat paywall (uses your RC dashboard products & layout)
+      const paywallCheck = await validatePaywallReady();
+      if (!paywallCheck.ok) {
+        let body: string;
+        switch (paywallCheck.reason) {
+          case "missing_api_key":
+            body = t("settings.premiumMissingRevenueCatKey");
+            break;
+          case "no_current_offering":
+          case "no_packages":
+          case "no_store_products":
+            body = t("settings.premiumOfferingNotConfigured");
+            break;
+          default: {
+            body = t("settings.premiumCouldNotLoadOfferings");
+            if (__DEV__ && paywallCheck.underlyingMessage) {
+              body += `\n\n(${paywallCheck.underlyingMessage})`;
+            }
+            break;
+          }
+        }
+
+        if (isPaywallPreviewEnabled()) {
+          Alert.alert(t("settings.premium"), body, [
+            { text: t("common.cancel"), style: "cancel" },
+            {
+              text: t("settings.previewPaywall"),
+              onPress: () => setPaywallOpen(true),
+            },
+          ]);
+          return;
+        }
+
+        Alert.alert(t("settings.premium"), body);
+        return;
+      }
       setPaywallOpen(true);
     } catch (err) {
       Alert.alert(
@@ -442,6 +482,10 @@ export default function SettingsScreen() {
         success ? t("settings.restoreSuccess") : t("settings.restoreNone"),
       );
     } catch (err) {
+      if (isRevenueCatStoreSetupError(err)) {
+        Alert.alert(t("settings.premium"), t("settings.premiumOfferingNotConfigured"));
+        return;
+      }
       Alert.alert(
         t("common.error"),
         err instanceof Error ? err.message : t("common.error"),
@@ -676,9 +720,20 @@ export default function SettingsScreen() {
               colors={colors}
               label={t("settings.restorePurchases")}
               onPress={handleRestore}
-              isLast
+              isLast={!isPaywallPreviewEnabled()}
             />
           )}
+          {!entitlements?.premium &&
+            Platform.OS !== "web" &&
+            isPaywallPreviewEnabled() && (
+              <SettingsRow
+                colors={colors}
+                label={t("settings.previewPaywall")}
+                value={t("settings.previewPaywallHint")}
+                onPress={() => setPaywallOpen(true)}
+                isLast
+              />
+            )}
         </SettingsSection>
 
         <SettingsSection title={t("help.helpAndTips")} colors={colors}>
