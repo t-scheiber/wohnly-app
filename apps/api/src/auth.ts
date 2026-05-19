@@ -36,6 +36,8 @@ export const auth = betterAuth({
     "https://wohnly.app",
     "https://www.wohnly.app",
     "https://api.wohnly.app",
+    // Sign in with Apple posts the OAuth callback from appleid.apple.com.
+    "https://appleid.apple.com",
     "http://localhost:8081",
     "http://localhost:19006",
     "tauri://localhost",
