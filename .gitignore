@@ -68,6 +68,7 @@ apps/api/prisma/migrations/**/migration_lock.toml
 
 # IDE
 .idea/
+AGENTS.md
 
 # Design assets
 banner.psd
