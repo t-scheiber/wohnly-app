@@ -14,7 +14,7 @@ const AD_UNIT_IDS = {
 };
 
 const ADSENSE_CLIENT_ID = "ca-pub-9336334259937355";
-const ADSENSE_SLOT_ID = process.env.EXPO_PUBLIC_ADSENSE_BANNER_SLOT;
+const ADSENSE_SLOT_ID = process.env.EXPO_PUBLIC_ADSENSE_BANNER_SLOT?.trim();
 const ADSENSE_SCRIPT_ID = "wohnly-adsense-script";
 
 let BannerAd: any = null;
@@ -34,6 +34,11 @@ function WebAdBanner() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!ADSENSE_SLOT_ID) {
+      if (__DEV__) console.warn("[Ads] Missing EXPO_PUBLIC_ADSENSE_BANNER_SLOT; web AdSense banner hidden.");
+      return;
+    }
+
     if (typeof document !== "undefined" && !document.getElementById(ADSENSE_SCRIPT_ID)) {
       const script = document.createElement("script");
       script.id = ADSENSE_SCRIPT_ID;
@@ -48,13 +53,15 @@ function WebAdBanner() {
     } catch {}
   }, []);
 
+  if (!ADSENSE_SLOT_ID) return null;
+
   return (
     <div ref={ref} style={{ textAlign: "center", padding: "4px 0" }}>
       <ins
         className="adsbygoogle"
         style={{ display: "block" }}
         data-ad-client={ADSENSE_CLIENT_ID}
-        {...(ADSENSE_SLOT_ID ? { "data-ad-slot": ADSENSE_SLOT_ID } : {})}
+        data-ad-slot={ADSENSE_SLOT_ID}
         data-ad-format="auto"
         data-full-width-responsive="true"
       />
