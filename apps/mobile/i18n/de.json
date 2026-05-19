@@ -275,7 +275,7 @@
     "purchaseSuccess": "Willkommen bei Wohnly Pro!",
     "restoreSuccess": "Käufe erfolgreich wiederhergestellt",
     "restoreNone": "Keine früheren Käufe gefunden",
-    "premiumMissingRevenueCatKey": "Dieser Build ist für In-App-Käufe nicht konfiguriert. Für die lokale Entwicklung EXPO_PUBLIC_REVENUECAT_IOS_KEY und EXPO_PUBLIC_REVENUECAT_ANDROID_KEY setzen (siehe apps/mobile/.env.example).",
+    "premiumMissingRevenueCatKey": "In-App-Käufe sind in dieser App-Version nicht verfügbar. Bitte das neueste Update aus dem App Store installieren oder den Support kontaktieren.",
     "premiumOfferingNotConfigured": "Abonnements sind für diesen App-Store noch nicht verfügbar. Im RevenueCat-Dashboard App-Store- bzw. Google-Play-Produkte zum aktuellen Angebot hinzufügen und mit dem Entitlement „Wohnly Pro“ verknüpfen.",
     "premiumCouldNotLoadOfferings": "Abo-Optionen konnten nicht geladen werden. Bitte Netzwerk prüfen und erneut versuchen.",
     "premiumWebOnly": "Premium-Käufe sind in der Wohnly-App für iOS und Android verfügbar.",

@@ -20,7 +20,11 @@
       "autoIncrement": true,
       "node": "22.16.0",
       "env": {
-        "EXPO_NO_CAPABILITY_SYNC": "1"
+        "EXPO_NO_CAPABILITY_SYNC": "1",
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_RAWeWdPXRbUnvPgaegDJzmpHCwO",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_drczxITwJXQiqAzjihMOBakvibf",
+        "EXPO_PUBLIC_REVENUECAT_IOS_PRODUCT_ID": "wohnly_pro_lifetime",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_PRODUCT_ID": "wohnly_pro_lifetime"
       }
     }
   },
