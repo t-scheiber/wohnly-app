@@ -193,9 +193,29 @@ export default function SignInScreen() {
           </View>
         </Pressable>
 
-        <Link href="/privacy-policy" style={styles.privacyLink}>
-          <Text style={[styles.privacyText, { color: colors.textSecondary }]}>Privacy Policy</Text>
-        </Link>
+        <View style={styles.legalLinks}>
+          <Link href="/privacy-policy" style={styles.legalLink}>
+            <Text style={[styles.legalText, { color: colors.textSecondary }]}>Privacy Policy</Text>
+          </Link>
+          <Text style={[styles.legalSeparator, { color: colors.textSecondary }]}>{"\u2022"}</Text>
+          <Link href="/terms-of-service" style={styles.legalLink}>
+            <Text style={[styles.legalText, { color: colors.textSecondary }]}>Terms</Text>
+          </Link>
+          <Text style={[styles.legalSeparator, { color: colors.textSecondary }]}>{"\u2022"}</Text>
+          <Link href="/support" style={styles.legalLink}>
+            <Text style={[styles.legalText, { color: colors.textSecondary }]}>Help & FAQ</Text>
+          </Link>
+        </View>
+
+        {Platform.OS === "web" && (
+          <View style={[styles.aboutCard, { borderColor: colors.border, backgroundColor: colors.card }]}>
+            <Text style={[styles.aboutTitle, { color: colors.text }]}>Household management, shared clearly</Text>
+            <Text style={[styles.aboutText, { color: colors.textSecondary }]}>
+              Wohnly helps roommates and families coordinate shared expenses, chores,
+              shopping lists, events, todos, and subscriptions in one private household space.
+            </Text>
+          </View>
+        )}
 
         {Platform.OS === "web" && !isTauri() && (() => {
           const os = getDesktopOS();
@@ -290,11 +310,40 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 10,
   },
-  privacyLink: {
+  legalLinks: {
+    alignSelf: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginBottom: 24,
+  },
+  legalLink: {
     alignSelf: "center",
   },
-  privacyText: {
+  legalText: {
     fontSize: 13,
+  },
+  legalSeparator: {
+    fontSize: 13,
+    marginHorizontal: 8,
+  },
+  aboutCard: {
+    borderWidth: 1,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 8,
+  },
+  aboutTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  aboutText: {
+    fontSize: 14,
+    lineHeight: 21,
+    textAlign: "center",
   },
   downloadSection: {
     marginTop: 32,
