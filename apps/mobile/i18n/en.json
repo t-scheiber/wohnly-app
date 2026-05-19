@@ -280,7 +280,7 @@
     "checkoutCouldNotStart": "Checkout could not be started. Please try again later.",
     "restoreSuccess": "Purchases restored successfully",
     "restoreNone": "No previous purchases found",
-    "premiumMissingRevenueCatKey": "This build is not configured for in-app purchases. For local development, set EXPO_PUBLIC_REVENUECAT_IOS_KEY and EXPO_PUBLIC_REVENUECAT_ANDROID_KEY (see apps/mobile/.env.example).",
+    "premiumMissingRevenueCatKey": "In-app purchases are not available in this build. Install the latest app update from the App Store, or contact support if the problem continues.",
     "premiumOfferingNotConfigured": "Subscriptions are not available yet for this app store. In the RevenueCat dashboard, add App Store or Google Play products to your current offering and attach them to the \"Wohnly Pro\" entitlement.",
     "premiumCouldNotLoadOfferings": "We could not load subscription options. Check your network connection and try again.",
     "premiumWebOnly": "Premium purchases are available in the Wohnly mobile app.",

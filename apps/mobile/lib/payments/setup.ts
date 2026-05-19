@@ -12,6 +12,17 @@ import { Platform } from "react-native";
 /** Must match RevenueCat entitlement identifier in the dashboard. */
 export const REVENUECAT_ENTITLEMENT_ID = "Wohnly Pro";
 
+/** RevenueCat public SDK keys (safe to ship in the client; override via EXPO_PUBLIC_*). */
+const REVENUECAT_PUBLIC_API_KEYS = {
+  ios: "appl_RAWeWdPXRbUnvPgaegDJzmpHCwO",
+  android: "goog_drczxITwJXQiqAzjihMOBakvibf",
+} as const;
+
+const DEFAULT_STORE_PRODUCT_IDS = {
+  ios: "wohnly_pro_lifetime",
+  android: "wohnly_pro_lifetime",
+} as const;
+
 /** Show paywall UI without a live store product (dev / App Store screenshot). */
 export function isPaywallPreviewEnabled(): boolean {
   return (
@@ -22,9 +33,11 @@ export function isPaywallPreviewEnabled(): boolean {
 export function getRevenueCatPublicApiKey(): string | undefined {
   if (Platform.OS === "web") return undefined;
   const raw = Platform.select({
-    ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY,
-    android: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY,
-    default: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY,
+    ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY ?? REVENUECAT_PUBLIC_API_KEYS.ios,
+    android:
+      process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY ?? REVENUECAT_PUBLIC_API_KEYS.android,
+    default:
+      process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY ?? REVENUECAT_PUBLIC_API_KEYS.android,
   });
   return typeof raw === "string" && raw.trim() !== "" ? raw.trim() : undefined;
 }
@@ -36,9 +49,14 @@ function getConfiguredOfferingIdentifier(): string | undefined {
 
 function getConfiguredStoreProductId(): string | undefined {
   const raw = Platform.select({
-    ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_PRODUCT_ID,
-    android: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_PRODUCT_ID,
-    default: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_PRODUCT_ID,
+    ios:
+      process.env.EXPO_PUBLIC_REVENUECAT_IOS_PRODUCT_ID ?? DEFAULT_STORE_PRODUCT_IDS.ios,
+    android:
+      process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_PRODUCT_ID ??
+      DEFAULT_STORE_PRODUCT_IDS.android,
+    default:
+      process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_PRODUCT_ID ??
+      DEFAULT_STORE_PRODUCT_IDS.android,
   });
   return typeof raw === "string" && raw.trim() !== "" ? raw.trim() : undefined;
 }
