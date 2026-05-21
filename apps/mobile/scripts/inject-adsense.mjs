@@ -1,6 +1,5 @@
 /**
- * Post-export script: injects SEO meta tags, structured data,
- * and Google AdSense into dist/index.html.
+ * Post-export script: injects SEO meta tags and structured data into dist/index.html.
  * Run after `npx expo export --platform web`.
  */
 import { readFileSync, writeFileSync } from "fs";

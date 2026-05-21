@@ -1,9 +1,15 @@
-import { useState } from "react";
-import { View, Text, Alert, Platform, Linking, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, Alert, Platform, ScrollView, Linking, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { Badge } from "../ui/Badge";
-import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
+import {
+  getPaywallPriceString,
+  isRevenueCatStoreSetupError,
+  purchaseLifetime,
+  restorePurchases,
+} from "@/lib/payments/setup";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
@@ -13,32 +19,41 @@ interface PaywallProps {
 }
 
 const proFeatures = [
-  { label: "Unlimited household members", included: true },
-  { label: "Recurring chore schedules", included: true },
-  { label: "Full events & calendar sync", included: true },
-  { label: "Complete expense history", included: true },
-  { label: "Subscription tracking", included: true },
-  { label: "End-to-end encryption", included: true },
-  { label: "Push notifications", included: true },
-  { label: "Dark mode", included: true },
-  { label: "No ads", included: true },
-];
+  "paywallFeatureMembers",
+  "paywallFeatureChores",
+  "paywallFeatureCalendar",
+  "paywallFeatureExpenses",
+  "paywallFeatureSubscriptions",
+  "paywallFeatureEncryption",
+  "paywallFeatureNotifications",
+  "paywallFeatureDarkMode",
+  "paywallFeatureNoAds",
+] as const;
 
 export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
+  const [priceString, setPriceString] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (Platform.OS === "web") return;
+    void getPaywallPriceString().then(setPriceString);
+  }, []);
 
   if (Platform.OS === "web") {
     return (
       <View style={{ padding: 24, alignItems: "center" }}>
         <Text style={{ color: colors.text, fontSize: 16 }}>
-          Pro purchases are available in the mobile app.
+          {t("settings.premiumWebOnly")}
         </Text>
       </View>
     );
   }
+
+  const displayPrice = priceString ?? t("settings.paywallPriceFallback");
 
   const handlePurchase = async () => {
     setPurchasing(true);
@@ -46,9 +61,18 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
       const success = await purchaseLifetime();
       if (success) {
         onPurchased?.();
+      } else {
+        Alert.alert(t("settings.pro"), t("settings.premiumCouldNotLoadOfferings"));
       }
     } catch (err: unknown) {
-      Alert.alert("Purchase Failed", err instanceof Error ? err.message : "Please try again");
+      if (isRevenueCatStoreSetupError(err)) {
+        Alert.alert(t("settings.pro"), t("settings.premiumOfferingNotConfigured"));
+        return;
+      }
+      Alert.alert(
+        t("common.error"),
+        err instanceof Error ? err.message : t("common.error"),
+      );
     } finally {
       setPurchasing(false);
     }
@@ -59,46 +83,53 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
     try {
       const success = await restorePurchases();
       if (success) {
-        Alert.alert("Restored!", "Your Pro access has been restored.");
+        Alert.alert(t("settings.pro"), t("settings.restoreSuccess"));
         onPurchased?.();
       } else {
-        Alert.alert("No Purchase Found", "We couldn't find a previous purchase to restore.");
+        Alert.alert(t("settings.pro"), t("settings.restoreNone"));
       }
     } catch (err: unknown) {
-      Alert.alert("Restore Failed", err instanceof Error ? err.message : "Please try again");
+      if (isRevenueCatStoreSetupError(err)) {
+        Alert.alert(t("settings.pro"), t("settings.premiumOfferingNotConfigured"));
+        return;
+      }
+      Alert.alert(
+        t("common.error"),
+        err instanceof Error ? err.message : t("common.error"),
+      );
     } finally {
       setRestoring(false);
     }
   };
 
   return (
-    <View style={{ padding: 24, gap: 20 }}>
-      {/* Header */}
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ padding: 24, gap: 20, paddingBottom: 40 }}
+    >
       <View style={{ alignItems: "center" }}>
-        <Badge variant="success">LIFETIME</Badge>
+        <Badge variant="success">{t("settings.paywallLifetimeBadge")}</Badge>
         <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text, marginTop: 12 }}>
-          Unlock Wohnly Pro
+          {t("settings.paywallTitle")}
         </Text>
         <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginTop: 8 }}>
-          One-time purchase, yours forever
+          {t("settings.paywallSubtitle")}
         </Text>
       </View>
 
-      {/* Price */}
       <View style={{ alignItems: "center" }}>
         <Text style={{ fontSize: 48, fontWeight: "bold", color: colors.primary }}>
-          $5.99
+          {displayPrice}
         </Text>
         <Text style={{ fontSize: 14, color: colors.textSecondary }}>
-          One-time payment · No subscription
+          {t("settings.paywallPriceNote")}
         </Text>
       </View>
 
-      {/* Features */}
       <Card>
-        {proFeatures.map((feature, i) => (
+        {proFeatures.map((key, i) => (
           <View
-            key={feature.label}
+            key={key}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -109,32 +140,31 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
             }}
           >
             <Text style={{ color: colors.success, fontSize: 16 }}>✓</Text>
-            <Text style={{ color: colors.text, fontSize: 15, flex: 1 }}>{feature.label}</Text>
+            <Text style={{ color: colors.text, fontSize: 15, flex: 1 }}>
+              {t(`settings.${key}`)}
+            </Text>
           </View>
         ))}
       </Card>
 
-      {/* Purchase button */}
       <Button onPress={handlePurchase} loading={purchasing} size="lg">
-        Get Wohnly Pro — $5.99
+        {t("settings.paywallCta", { price: displayPrice })}
       </Button>
 
-      {/* Restore */}
       <Button variant="ghost" onPress={handleRestore} loading={restoring} size="sm">
-        Restore Purchase
+        {t("settings.restorePurchases")}
       </Button>
 
-      {/* Dismiss */}
       {onDismiss && (
         <Button variant="ghost" onPress={onDismiss} size="sm">
-          Maybe Later
+          {t("settings.paywallMaybeLater")}
         </Button>
       )}
 
       {/* Legal */}
-      <View style={{ gap: 8, alignItems: "center" }}>
+      <View style={{ gap: 8, alignItems: "center", marginTop: 8 }}>
         <Text style={{ fontSize: 11, color: colors.textSecondary, textAlign: "center", lineHeight: 16 }}>
-          Payment is charged to your App Store / Google Play account. By purchasing, you agree to our Terms of Service (EULA) and Privacy Policy.
+          {t("settings.paywallLegal")}
         </Text>
         <View style={{ flexDirection: "row", gap: 16 }}>
           <TouchableOpacity onPress={() => Linking.openURL("https://www.apple.com/legal/internet-services/itunes/dev/stgula/")}>
@@ -149,6 +179,6 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }

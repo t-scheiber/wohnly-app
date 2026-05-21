@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Decimal } from "@prisma/client-runtime-utils";
 import { getExchangeRates, convertAmount } from "../lib/exchange-rates.js";
 import type { AppEnv } from "../types.js";
 

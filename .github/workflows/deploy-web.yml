@@ -27,10 +27,8 @@ jobs:
       - name: Export web build
         run: npx expo export --platform web
         working-directory: apps/mobile
-
-      - name: Inject AdSense script
-        run: node scripts/inject-adsense.mjs
-        working-directory: apps/mobile
+        env:
+          EXPO_PUBLIC_ADSENSE_BANNER_SLOT: ${{ vars.ADSENSE_BANNER_SLOT || secrets.ADSENSE_BANNER_SLOT }}
 
       - name: Upload web build to VPS
         uses: appleboy/scp-action@v0.1.7

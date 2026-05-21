@@ -19,11 +19,17 @@ import { useTheme } from "@/lib/hooks/useTheme";
 import { usePro } from "@/lib/hooks/usePro";
 import { Paywall } from "@/components/common/Paywall";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { restorePurchases } from "@/lib/payments/setup";
+import {
+  isPaywallPreviewEnabled,
+  isRevenueCatStoreSetupError,
+  restorePurchases,
+  validatePaywallReady,
+} from "@/lib/payments/setup";
 import { useQueryClient } from "@tanstack/react-query";
 import { File, Paths } from "expo-file-system";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
+import { RevenueCatPaywall } from "@/components/common/RevenueCatPaywall";
 import { Check } from "lucide-react-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -401,17 +407,59 @@ export default function SettingsScreen() {
           "/api/webhooks/stripe/checkout",
           {},
         );
-        if (url) {
-          if (isTauri()) {
-            // Tauri: open in system browser (WebView can't navigate to external URLs)
-            await openInBrowser(url);
-          } else {
-            window.location.href = url;
-          }
+        if (!url) {
+          Alert.alert(
+            t("common.error"),
+            t(
+              "settings.checkoutCouldNotStart",
+              "Checkout could not be started. Please try again later.",
+            ),
+          );
+          return;
+        }
+        if (isTauri()) {
+          await openInBrowser(url);
+        } else {
+          window.location.href = url;
         }
         return;
       }
       // Mobile: open custom Paywall modal sheet to comply with App Store guidelines
+      const paywallCheck = await validatePaywallReady();
+      if (!paywallCheck.ok) {
+        let body: string;
+        switch (paywallCheck.reason) {
+          case "missing_api_key":
+            body = t("settings.premiumMissingRevenueCatKey");
+            break;
+          case "no_current_offering":
+          case "no_packages":
+          case "no_store_products":
+            body = t("settings.premiumOfferingNotConfigured");
+            break;
+          default: {
+            body = t("settings.premiumCouldNotLoadOfferings");
+            if (__DEV__ && paywallCheck.underlyingMessage) {
+              body += `\n\n(${paywallCheck.underlyingMessage})`;
+            }
+            break;
+          }
+        }
+
+        if (isPaywallPreviewEnabled()) {
+          Alert.alert(t("settings.pro"), body, [
+            { text: t("common.cancel"), style: "cancel" },
+            {
+              text: t("settings.previewPaywall"),
+              onPress: () => setPaywallModalOpen(true),
+            },
+          ]);
+          return;
+        }
+
+        Alert.alert(t("settings.pro"), body);
+        return;
+      }
       setPaywallModalOpen(true);
     } catch (err) {
       Alert.alert(
@@ -428,11 +476,18 @@ export default function SettingsScreen() {
         return;
       }
       const success = await restorePurchases();
+      if (success) {
+        await queryClient.invalidateQueries({ queryKey: ["entitlements"] });
+      }
       Alert.alert(
         t("settings.pro"),
         success ? t("settings.restoreSuccess") : t("settings.restoreNone"),
       );
     } catch (err) {
+      if (isRevenueCatStoreSetupError(err)) {
+        Alert.alert(t("settings.premium"), t("settings.premiumOfferingNotConfigured"));
+        return;
+      }
       Alert.alert(
         t("common.error"),
         err instanceof Error ? err.message : t("common.error"),
@@ -667,9 +722,20 @@ export default function SettingsScreen() {
               colors={colors}
               label={t("settings.restorePurchases")}
               onPress={handleRestore}
-              isLast
+              isLast={!isPaywallPreviewEnabled()}
             />
           )}
+          {!isPro &&
+            Platform.OS !== "web" &&
+            isPaywallPreviewEnabled() && (
+              <SettingsRow
+                colors={colors}
+                label={t("settings.previewPaywall")}
+                value={t("settings.previewPaywallHint")}
+                onPress={() => setPaywallModalOpen(true)}
+                isLast
+              />
+            )}
         </SettingsSection>
 
         <SettingsSection title={t("help.helpAndTips")} colors={colors}>
@@ -1069,25 +1135,27 @@ export default function SettingsScreen() {
         </Pressable>
       </Modal>
 
-      {/* Paywall Modal */}
-      <Modal
-        visible={paywallModalOpen}
-        transparent={false}
-        animationType="slide"
-        onRequestClose={() => setPaywallModalOpen(false)}
-      >
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-          <ScrollView style={{ flex: 1 }}>
+      {Platform.OS !== "web" && (
+        <Modal
+          visible={paywallModalOpen}
+          animationType="slide"
+          presentationStyle="pageSheet"
+          onRequestClose={() => setPaywallModalOpen(false)}
+        >
+          <View style={{ flex: 1, backgroundColor: colors.background }}>
             <Paywall
               onPurchased={() => {
                 setPaywallModalOpen(false);
-                queryClient.invalidateQueries({ queryKey: ["entitlements"] });
+                void queryClient.invalidateQueries({
+                  queryKey: ["entitlements"],
+                });
+                Alert.alert(t("settings.pro"), t("settings.purchaseSuccess"));
               }}
               onDismiss={() => setPaywallModalOpen(false)}
             />
-          </ScrollView>
-        </SafeAreaView>
-      </Modal>
+          </View>
+        </Modal>
+      )}
     </>
   );
 }
