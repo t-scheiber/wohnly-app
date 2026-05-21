@@ -243,6 +243,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     const first = segments[0] as string | undefined;
     const isPublicPage =
       first === "privacy-policy" ||
+      first === "terms-of-service" ||
       first === "support" ||
       first === "leave-household";
 

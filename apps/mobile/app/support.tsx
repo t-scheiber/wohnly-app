@@ -143,9 +143,15 @@ export default function SupportScreen() {
           </Paragraph>
         </Section>
 
-        <View style={{ marginTop: 16, marginBottom: 48 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginTop: 16, marginBottom: 48 }}>
           <Link href="/privacy-policy" style={{ color: colors.primary, fontSize: 15 }}>
             Privacy Policy
+          </Link>
+          <Text style={{ color: colors.textSecondary, fontSize: 15 }}>
+            {"\u2022"}
+          </Text>
+          <Link href="/terms-of-service" style={{ color: colors.primary, fontSize: 15 }}>
+            Terms of Service
           </Link>
         </View>
       </ScrollView>

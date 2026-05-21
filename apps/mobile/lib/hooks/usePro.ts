@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform } from "react-native";
+import { REVENUECAT_ENTITLEMENT_ID } from "@/lib/payments/setup";
 import Purchases from "react-native-purchases";
 import type { CustomerInfo } from "react-native-purchases";
 import { useEntitlements } from "@/lib/api/queries";
@@ -25,7 +26,7 @@ export function usePro() {
   const { data: entitlements, isLoading: apiLoading } = useEntitlements(!!session);
 
   const checkEntitlement = useCallback((info: CustomerInfo) => {
-    const active = info.entitlements.active["Wohnly Pro"] !== undefined;
+    const active = info.entitlements.active[REVENUECAT_ENTITLEMENT_ID] !== undefined;
     setRcPro(active);
     setCustomerInfo(info);
     setRcLoading(false);

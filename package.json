@@ -9,19 +9,20 @@
     "dev:api": "npm run dev --workspace=apps/api",
     "dev:mobile": "npm run start --workspace=apps/mobile",
     "build:api": "npm run build --workspace=apps/api",
-    "build:web": "cd apps/mobile && npx expo export --platform web && node scripts/inject-adsense.mjs",
+    "build:web": "cd apps/mobile && npx expo export --platform web",
     "build:ios": "cd apps/mobile && eas build --local --platform ios --profile production",
     "build:android": "cd apps/mobile && eas build --local --platform android --profile production",
     "build:mobile": "npm run build:ios && npm run build:android",
-    "build:macos": "cd apps/desktop && npm run tauri build",
-    "build:windows": "cd apps/desktop && npm run tauri build",
-    "build:desktop": "cd apps/desktop && npm run tauri build",
+    "build:macos": "cd apps/desktop/tauri && npx tauri build",
+    "build:windows": "cd apps/desktop/tauri && npx tauri build",
+    "build:desktop": "cd apps/desktop/tauri && npx tauri build",
     "build:all": "npm run build:web && npm run build:mobile && npm run build:desktop",
     "release:all": "node scripts/rebuild-and-submit-all.mjs",
     "build-submit:all": "npm run release:all",
     "api:health": "node scripts/check-api-health.mjs",
     "submit:ios": "cd apps/mobile && eas submit --platform ios --latest",
     "submit:android": "cd apps/mobile && eas submit --platform android --latest",
+    "submit:macos-mas": "bash scripts/submit-macos-mas.sh",
     "typecheck": "npx tsc --noEmit -p apps/mobile/tsconfig.json",
     "lint": "npm run lint --workspaces --if-present",
     "db:migrate": "npm run db:migrate --workspace=apps/api",
@@ -32,12 +33,18 @@
     "sharp": "^0.34.5"
   },
   "overrides": {
-    "react": "19.2.5",
-    "react-dom": "19.2.5"
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "@prisma/dev": {
+      "@hono/node-server": "1.19.13"
+    },
+    "@xmldom/xmldom": "0.9.10",
+    "postcss": "8.5.15",
+    "uuid": "14.0.0"
   },
   "devDependencies": {
-    "@tauri-apps/api": "^2.10.1",
-    "@tauri-apps/cli": "^2.10.1",
+    "@tauri-apps/api": "^2.11.0",
+    "@tauri-apps/cli": "^2.11.0",
     "@tauri-apps/plugin-deep-link": "^2.4.8",
     "@tauri-apps/plugin-process": "^2.3.1",
     "@tauri-apps/plugin-shell": "^2.3.5",

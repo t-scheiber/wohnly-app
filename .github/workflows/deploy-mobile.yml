@@ -11,14 +11,6 @@ on:
           - all
           - ios
           - android
-      profile:
-        description: "Build profile"
-        required: true
-        type: choice
-        options:
-          - production
-          - preview
-        default: production
       submit:
         description: "Submit to stores after build"
         required: false
@@ -32,7 +24,7 @@ on:
 
 jobs:
   manual-build:
-    name: Build ${{ inputs.platform }} (${{ inputs.profile }})
+    name: Build ${{ inputs.platform }} (production)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -56,14 +48,14 @@ jobs:
       - name: Build iOS
         if: ${{ !inputs.skip_build && (inputs.platform == 'ios' || inputs.platform == 'all') }}
         working-directory: apps/mobile
-        run: eas build --profile ${{ inputs.profile }} --platform ios --non-interactive
+        run: eas build --profile production --platform ios --non-interactive
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
       - name: Build Android
         if: ${{ !inputs.skip_build && (inputs.platform == 'android' || inputs.platform == 'all') }}
         working-directory: apps/mobile
-        run: eas build --profile ${{ inputs.profile }} --platform android --non-interactive
+        run: eas build --profile production --platform android --non-interactive
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 

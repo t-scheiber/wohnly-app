@@ -200,6 +200,9 @@ jobs:
 
           security set-key-partition-list -S apple-tool:,apple:,codesign:,productbuild: -s -k "$KEYCHAIN_PASSWORD" mas.keychain
 
+          curl -fsSL -o AppleWWDRCAG3.cer https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer
+          security import AppleWWDRCAG3.cer -k mas.keychain -A
+
       - name: Write ASC API key
         run: |
           mkdir -p ~/.private_keys
@@ -276,7 +279,7 @@ jobs:
           security cms -D -i "$APP/Contents/embedded.provisionprofile" > embedded-profile.plist
 
           # Re-sign the .app with MAS certificate
-          codesign --deep --force --options runtime \
+          codesign --keychain mas.keychain --deep --force --options runtime \
             --sign "$MAS_APP_IDENTITY" \
             --entitlements entitlements.plist \
             "$APP"
@@ -288,6 +291,7 @@ jobs:
           productbuild \
             --component "$APP" /Applications \
             --sign "$MAS_INSTALLER_IDENTITY" \
+            --keychain mas.keychain \
             "$PKG"
 
           echo "Created signed pkg: $PKG"

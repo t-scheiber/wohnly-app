@@ -1,5 +1,5 @@
 import { prisma } from "./prisma.js";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Decimal } from "@prisma/client-runtime-utils";
 
 // EXPENSE SPLITS
 

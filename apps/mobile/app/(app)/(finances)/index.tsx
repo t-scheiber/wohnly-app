@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useLocalSearchParams } from "expo-router";
 import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal, ScrollView } from "react-native";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription, useMemberBalances, useHouseholdMembers } from "@/lib/api/queries";
@@ -35,8 +36,13 @@ export default function FinancesScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { tab: tabParam } = useLocalSearchParams<{ tab?: string }>();
 
   const [tab, setTab] = useState<"expenses" | "subscriptions">("expenses");
+
+  useEffect(() => {
+    if (tabParam === "subscriptions") setTab("subscriptions");
+  }, [tabParam]);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showSubForm, setShowSubForm] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
