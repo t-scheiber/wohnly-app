@@ -150,7 +150,7 @@ export default function SupportScreen() {
           <Text style={{ color: colors.textSecondary, fontSize: 15 }}>
             {"\u2022"}
           </Text>
-          <Link href="/terms-of-service" style={{ color: colors.primary, fontSize: 15 }}>
+          <Link href={"/terms-of-service" as any} style={{ color: colors.primary, fontSize: 15 }}>
             Terms of Service
           </Link>
         </View>
