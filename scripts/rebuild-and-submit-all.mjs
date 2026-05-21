@@ -82,7 +82,7 @@ const workflows = [
   {
     name: "Build & Submit Mobile",
     file: "deploy-mobile.yml",
-    fields: [`platform=all`, `profile=${profile}`, `submit=${submit}`, "skip_build=false"],
+    fields: [`platform=all`, `submit=${submit}`, "skip_build=false"],
   },
   {
     name: "Build & Deploy Desktop",
