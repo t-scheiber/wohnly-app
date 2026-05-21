@@ -9,6 +9,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "date-fns": "4.1.0",
     "zod": "^4.4.1"
   },
   "devDependencies": {
