@@ -261,8 +261,6 @@
     "setNickname": "Đặt biệt danh",
     "nicknamePlaceholder": "ví dụ: Tí, Bạn cùng phòng...",
     "deleteAccount": "Xóa tài khoản",
-    "premium": "Premium",
-    "upgradeToPremium": "Nâng cấp lên Premium",
     "restorePurchases": "Khôi phục giao dịch mua",
     "free": "Miễn phí",
     "active": "Đang hoạt động",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Tuần bắt đầu vào",
     "monday": "Thứ Hai",
     "sunday": "Chủ Nhật",
-    "timeFormat": "Định dạng thời gian"
+    "timeFormat": "Định dạng thời gian",
+    "pro": "Pro",
+    "upgradeToPro": "Nâng cấp lên Pro"
   },
   "balances": {
     "owedToYou": "Người khác nợ bạn",

@@ -261,8 +261,6 @@
     "setNickname": "Définir un surnom",
     "nicknamePlaceholder": "ex. Tommy, Coloc...",
     "deleteAccount": "Supprimer le compte",
-    "premium": "Premium",
-    "upgradeToPremium": "Passer à Premium",
     "restorePurchases": "Restaurer les achats",
     "free": "Gratuit",
     "active": "Actif",
@@ -289,7 +287,9 @@
     "weekStartsOn": "La semaine commence le",
     "monday": "Lundi",
     "sunday": "Dimanche",
-    "timeFormat": "Format de l'heure"
+    "timeFormat": "Format de l'heure",
+    "pro": "Pro",
+    "upgradeToPro": "Passer à Pro"
   },
   "balances": {
     "owedToYou": "On te doit",

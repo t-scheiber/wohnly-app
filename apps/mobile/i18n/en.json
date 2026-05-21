@@ -265,8 +265,6 @@
     "setNickname": "Set Nickname",
     "nicknamePlaceholder": "e.g. Tommy, Roomie...",
     "deleteAccount": "Delete Account",
-    "premium": "Premium",
-    "upgradeToPremium": "Upgrade to Premium",
     "restorePurchases": "Restore Purchases",
     "free": "Free",
     "active": "Active",
@@ -289,7 +287,9 @@
     "noDevices": "No devices registered yet",
     "devicePending": "Waiting for approval",
     "manageDevices": "Manage Devices",
-    "encryptedData": "Encrypted — open on your device to view"
+    "encryptedData": "Encrypted — open on your device to view",
+    "pro": "Pro",
+    "upgradeToPro": "Upgrade to Pro"
   },
   "balances": {
     "owedToYou": "Owed to you",

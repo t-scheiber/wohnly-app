@@ -261,8 +261,6 @@
     "setNickname": "ตั้งชื่อเล่น",
     "nicknamePlaceholder": "เช่น ต้อม, รูมเมท...",
     "deleteAccount": "ลบบัญชี",
-    "premium": "พรีเมียม",
-    "upgradeToPremium": "อัปเกรดเป็นพรีเมียม",
     "restorePurchases": "กู้คืนการซื้อ",
     "free": "ฟรี",
     "active": "ใช้งานอยู่",
@@ -289,7 +287,9 @@
     "weekStartsOn": "สัปดาห์เริ่มต้นวัน",
     "monday": "วันจันทร์",
     "sunday": "วันอาทิตย์",
-    "timeFormat": "รูปแบบเวลา"
+    "timeFormat": "รูปแบบเวลา",
+    "pro": "Pro",
+    "upgradeToPro": "อัปเกรดเป็นPro"
   },
   "balances": {
     "owedToYou": "เขาเป็นหนี้คุณ",

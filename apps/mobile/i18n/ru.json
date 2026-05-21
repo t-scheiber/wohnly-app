@@ -261,8 +261,6 @@
     "setNickname": "Задать прозвище",
     "nicknamePlaceholder": "напр. Томми, Сосед...",
     "deleteAccount": "Удалить аккаунт",
-    "premium": "Премиум",
-    "upgradeToPremium": "Перейти на Премиум",
     "restorePurchases": "Восстановить покупки",
     "free": "Бесплатно",
     "active": "Активна",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Неделя начинается с",
     "monday": "Понедельник",
     "sunday": "Воскресенье",
-    "timeFormat": "Формат времени"
+    "timeFormat": "Формат времени",
+    "pro": "Pro",
+    "upgradeToPro": "Перейти на Pro"
   },
   "balances": {
     "owedToYou": "Тебе должны",

@@ -261,8 +261,6 @@
     "setNickname": "Iestatīt iesauku",
     "nicknamePlaceholder": "piem. Tomsons, Istabene...",
     "deleteAccount": "Dzēst kontu",
-    "premium": "Premium",
-    "upgradeToPremium": "Uzlabot līdz Premium",
     "restorePurchases": "Atjaunot pirkumus",
     "free": "Bezmaksas",
     "active": "Aktīvs",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Nedēļa sākas",
     "monday": "Pirmdiena",
     "sunday": "Svētdiena",
-    "timeFormat": "Laika formāts"
+    "timeFormat": "Laika formāts",
+    "pro": "Pro",
+    "upgradeToPro": "Uzlabot līdz Pro"
   },
   "balances": {
     "owedToYou": "Parādā tev",

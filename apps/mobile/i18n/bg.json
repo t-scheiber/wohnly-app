@@ -261,8 +261,6 @@
     "setNickname": "Задай прякор",
     "nicknamePlaceholder": "напр. Томи, Съквартирант...",
     "deleteAccount": "Изтрий акаунта",
-    "premium": "Премиум",
-    "upgradeToPremium": "Преминаване към Премиум",
     "restorePurchases": "Възстанови покупките",
     "free": "Безплатно",
     "active": "Активен",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Седмицата започва в",
     "monday": "Понеделник",
     "sunday": "Неделя",
-    "timeFormat": "Времеви формат"
+    "timeFormat": "Времеви формат",
+    "pro": "Pro",
+    "upgradeToPro": "Преминаване към Pro"
   },
   "balances": {
     "owedToYou": "Дължат ти",

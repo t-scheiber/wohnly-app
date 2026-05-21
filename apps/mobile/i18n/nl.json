@@ -261,8 +261,6 @@
     "setNickname": "Bijnaam instellen",
     "nicknamePlaceholder": "bijv. Tommy, Huisgenoot...",
     "deleteAccount": "Account verwijderen",
-    "premium": "Premium",
-    "upgradeToPremium": "Upgraden naar Premium",
     "restorePurchases": "Aankopen herstellen",
     "free": "Gratis",
     "active": "Actief",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Week begint op",
     "monday": "Maandag",
     "sunday": "Zondag",
-    "timeFormat": "Tijdnotatie"
+    "timeFormat": "Tijdnotatie",
+    "pro": "Pro",
+    "upgradeToPro": "Upgraden naar Pro"
   },
   "balances": {
     "owedToYou": "Aan jou verschuldigd",

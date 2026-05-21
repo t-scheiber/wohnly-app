@@ -23,7 +23,7 @@ export function RevenueCatPaywall({ onPurchased, onDismiss }: RevenueCatPaywallP
     return (
       <View style={{ padding: 24, alignItems: "center" }}>
         <Text style={{ color: colors.text, fontSize: 16, textAlign: "center" }}>
-          Premium is available in the Wohnly mobile app.
+          Pro is available in the Wohnly mobile app.
         </Text>
       </View>
     );

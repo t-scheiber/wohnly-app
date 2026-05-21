@@ -11,6 +11,7 @@ import { useKeyReconciliation } from "@/lib/hooks/useKeyReconciliation";
 import { useMinVersion } from "@/lib/hooks/useMinVersion";
 import { useServerEvents } from "@/lib/hooks/useServerEvents";
 import { ThemeContext, useTheme, useThemeProvider } from "@/lib/hooks/useTheme";
+import { usePro } from "@/lib/hooks/usePro";
 import {
     addNotificationListeners,
     registerForPushNotifications,
@@ -170,6 +171,34 @@ function NamePromptModal({
   );
 }
 
+function AdSenseLoader() {
+  const { isPro } = usePro();
+
+  useEffect(() => {
+    if (Platform.OS !== "web") return;
+
+    const scriptId = "adsense-script";
+    const existingScript = document.getElementById(scriptId);
+
+    if (!isPro) {
+      if (!existingScript) {
+        const script = document.createElement("script");
+        script.id = scriptId;
+        script.async = true;
+        script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9336334259937355";
+        script.setAttribute("crossorigin", "anonymous");
+        document.head.appendChild(script);
+      }
+    } else {
+      if (existingScript) {
+        existingScript.remove();
+      }
+    }
+  }, [isPro]);
+
+  return null;
+}
+
 function AuthGate({ children }: { children: React.ReactNode }) {
   const { data: session, isPending } = authClient.useSession();
   const segments = useSegments();
@@ -274,6 +303,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <AdSenseLoader />
       {children}
       {needsName && (
         <NamePromptModal

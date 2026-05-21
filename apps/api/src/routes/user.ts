@@ -58,6 +58,7 @@ app.patch("/preferences", async (c) => {
   return c.json({ success: true, preferences: prefs });
 });
 
+
 // GET /api/user/entitlements
 app.get("/entitlements", async (c) => {
   const userId = c.get("userId") as string;
@@ -67,7 +68,7 @@ app.get("/entitlements", async (c) => {
   });
 
   return c.json({
-    premium: sub?.status === "active",
+    pro: sub?.status === "active",
     plan: sub?.plan ?? "free",
     provider: sub?.provider ?? null,
   });

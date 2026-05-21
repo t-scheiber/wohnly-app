@@ -5,7 +5,6 @@ import {
 } from "@/i18n";
 import { api, apiPatch, apiPost } from "@/lib/api/client";
 import {
-    useEntitlements,
     useHouseholdMembers,
     useLeaveHousehold,
     usePreferences,
@@ -17,7 +16,10 @@ import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { useTheme } from "@/lib/hooks/useTheme";
-import { purchaseLifetime, restorePurchases } from "@/lib/payments/setup";
+import { usePro } from "@/lib/hooks/usePro";
+import { Paywall } from "@/components/common/Paywall";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { restorePurchases } from "@/lib/payments/setup";
 import { useQueryClient } from "@tanstack/react-query";
 import { File, Paths } from "expo-file-system";
 import { useRouter } from "expo-router";
@@ -282,7 +284,7 @@ export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const { data: session } = authClient.useSession();
   const { data: membersData } = useHouseholdMembers();
-  const { data: entitlements } = useEntitlements();
+  const { isPro } = usePro();
   const setNickname = useSetNickname();
   const leaveHousehold = useLeaveHousehold();
   const notifications = useNotificationSettings();
@@ -302,6 +304,7 @@ export default function SettingsScreen() {
   const [nicknameValue, setNicknameValue] = useState("");
   const [weekStartPickerOpen, setWeekStartPickerOpen] = useState(false);
   const [timeFormatPickerOpen, setTimeFormatPickerOpen] = useState(false);
+  const [paywallModalOpen, setPaywallModalOpen] = useState(false);
 
   const handleSaveNickname = () => {
     setNickname.mutate(
@@ -408,11 +411,8 @@ export default function SettingsScreen() {
         }
         return;
       }
-      // Mobile: use RevenueCat
-      const success = await purchaseLifetime();
-      if (success) {
-        Alert.alert(t("settings.premium"), t("settings.purchaseSuccess"));
-      }
+      // Mobile: open custom Paywall modal sheet to comply with App Store guidelines
+      setPaywallModalOpen(true);
     } catch (err) {
       Alert.alert(
         t("common.error"),
@@ -429,7 +429,7 @@ export default function SettingsScreen() {
       }
       const success = await restorePurchases();
       Alert.alert(
-        t("settings.premium"),
+        t("settings.pro"),
         success ? t("settings.restoreSuccess") : t("settings.restoreNone"),
       );
     } catch (err) {
@@ -657,12 +657,12 @@ export default function SettingsScreen() {
             colors={colors}
             label={t("settings.subscription")}
             value={
-              entitlements?.premium ? t("settings.active") : t("settings.free")
+              isPro ? t("settings.active") : t("settings.free")
             }
-            onPress={entitlements?.premium ? undefined : handleUpgrade}
-            isLast={entitlements?.premium}
+            onPress={isPro ? undefined : handleUpgrade}
+            isLast={isPro}
           />
-          {!entitlements?.premium && Platform.OS !== "web" && (
+          {!isPro && Platform.OS !== "web" && (
             <SettingsRow
               colors={colors}
               label={t("settings.restorePurchases")}
@@ -1067,6 +1067,26 @@ export default function SettingsScreen() {
             </View>
           </Pressable>
         </Pressable>
+      </Modal>
+
+      {/* Paywall Modal */}
+      <Modal
+        visible={paywallModalOpen}
+        transparent={false}
+        animationType="slide"
+        onRequestClose={() => setPaywallModalOpen(false)}
+      >
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+          <ScrollView style={{ flex: 1 }}>
+            <Paywall
+              onPurchased={() => {
+                setPaywallModalOpen(false);
+                queryClient.invalidateQueries({ queryKey: ["entitlements"] });
+              }}
+              onDismiss={() => setPaywallModalOpen(false)}
+            />
+          </ScrollView>
+        </SafeAreaView>
       </Modal>
     </>
   );

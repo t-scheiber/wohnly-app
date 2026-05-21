@@ -261,8 +261,6 @@
     "setNickname": "Ange smeknamn",
     "nicknamePlaceholder": "t.ex. Tommy, Rumansen...",
     "deleteAccount": "Radera konto",
-    "premium": "Premium",
-    "upgradeToPremium": "Uppgradera till Premium",
     "restorePurchases": "Återställ köp",
     "free": "Gratis",
     "active": "Aktiv",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Veckan börjar",
     "monday": "Måndag",
     "sunday": "Söndag",
-    "timeFormat": "Tidsformat"
+    "timeFormat": "Tidsformat",
+    "pro": "Pro",
+    "upgradeToPro": "Uppgradera till Pro"
   },
   "balances": {
     "owedToYou": "Skyldig dig",

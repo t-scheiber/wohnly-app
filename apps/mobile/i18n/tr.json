@@ -261,8 +261,6 @@
     "setNickname": "Takma Ad Belirle",
     "nicknamePlaceholder": "örn. Memo, Ev Arkadaşı...",
     "deleteAccount": "Hesabı Sil",
-    "premium": "Premium",
-    "upgradeToPremium": "Premium'a Yükselt",
     "restorePurchases": "Satın Alımları Geri Yükle",
     "free": "Ücretsiz",
     "active": "Aktif",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Hafta başlangıcı",
     "monday": "Pazartesi",
     "sunday": "Pazar",
-    "timeFormat": "Saat biçimi"
+    "timeFormat": "Saat biçimi",
+    "pro": "Pro",
+    "upgradeToPro": "Pro'a Yükselt"
   },
   "balances": {
     "owedToYou": "Sana borçlu",

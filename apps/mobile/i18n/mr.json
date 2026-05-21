@@ -261,8 +261,6 @@
     "setNickname": "टोपणनाव ठेवा",
     "nicknamePlaceholder": "उदा. टॉमी, रूमी...",
     "deleteAccount": "अकाउंट हटवा",
-    "premium": "प्रीमियम",
-    "upgradeToPremium": "प्रीमियमला अपग्रेड करा",
     "restorePurchases": "खरेदी पुनर्संचयित करा",
     "free": "फ्री",
     "active": "सक्रिय",
@@ -289,7 +287,9 @@
     "weekStartsOn": "आठवडा सुरू होतो",
     "monday": "सोमवार",
     "sunday": "रविवार",
-    "timeFormat": "वेळ स्वरूप"
+    "timeFormat": "वेळ स्वरूप",
+    "pro": "Pro",
+    "upgradeToPro": "Proला अपग्रेड करा"
   },
   "balances": {
     "owedToYou": "तुम्हाला द्यायचे आहे",

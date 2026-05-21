@@ -261,8 +261,6 @@
     "setNickname": "Ορισμός ψευδωνύμου",
     "nicknamePlaceholder": "π.χ. Γιαννάκης, Συγκάτοικε...",
     "deleteAccount": "Διαγραφή λογαριασμού",
-    "premium": "Premium",
-    "upgradeToPremium": "Αναβάθμιση σε Premium",
     "restorePurchases": "Επαναφορά αγορών",
     "free": "Δωρεάν",
     "active": "Ενεργό",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Η εβδομάδα ξεκινά",
     "monday": "Δευτέρα",
     "sunday": "Κυριακή",
-    "timeFormat": "Μορφή ώρας"
+    "timeFormat": "Μορφή ώρας",
+    "pro": "Pro",
+    "upgradeToPro": "Αναβάθμιση σε Pro"
   },
   "balances": {
     "owedToYou": "Σου χρωστάνε",

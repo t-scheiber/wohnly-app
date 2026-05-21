@@ -261,8 +261,6 @@
     "setNickname": "Imposta soprannome",
     "nicknamePlaceholder": "es. Tommy, Coinqui...",
     "deleteAccount": "Elimina account",
-    "premium": "Premium",
-    "upgradeToPremium": "Passa a Premium",
     "restorePurchases": "Ripristina acquisti",
     "free": "Gratis",
     "active": "Attivo",
@@ -289,7 +287,9 @@
     "weekStartsOn": "La settimana inizia il",
     "monday": "Lunedì",
     "sunday": "Domenica",
-    "timeFormat": "Formato dell'ora"
+    "timeFormat": "Formato dell'ora",
+    "pro": "Pro",
+    "upgradeToPro": "Passa a Pro"
   },
   "balances": {
     "owedToYou": "Ti devono",

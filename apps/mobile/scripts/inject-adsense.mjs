@@ -72,16 +72,13 @@ const seoTags = `
     </script>
 `;
 
-// ── Google AdSense ──
-const adsenseScript = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9336334259937355" crossorigin="anonymous"></script>`;
-
 // Inject everything before </head>
-const injection = `${seoTags}\n    ${adsenseScript}\n  `;
+const injection = `${seoTags}\n  `;
 
 if (!html.includes('og:title')) {
   html = html.replace("</head>", `${injection}</head>`);
   writeFileSync(htmlPath, html);
-  console.log("Injected SEO tags and AdSense into dist/index.html");
+  console.log("Injected SEO tags into dist/index.html");
 } else {
   console.log("SEO tags already present in index.html");
 }

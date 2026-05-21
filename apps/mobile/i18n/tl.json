@@ -261,8 +261,6 @@
     "setNickname": "Maglagay ng Palayaw",
     "nicknamePlaceholder": "hal. Tommy, Roomie...",
     "deleteAccount": "Burahin ang Account",
-    "premium": "Premium",
-    "upgradeToPremium": "Mag-upgrade sa Premium",
     "restorePurchases": "I-restore ang mga Binili",
     "free": "Libre",
     "active": "Aktibo",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Ang linggo ay nagsisimula sa",
     "monday": "Lunes",
     "sunday": "Linggo",
-    "timeFormat": "Format ng oras"
+    "timeFormat": "Format ng oras",
+    "pro": "Pro",
+    "upgradeToPro": "Mag-upgrade sa Pro"
   },
   "balances": {
     "owedToYou": "Utang sa'yo",

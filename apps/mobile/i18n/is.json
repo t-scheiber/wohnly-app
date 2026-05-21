@@ -261,8 +261,6 @@
     "setNickname": "Setja gælunafn",
     "nicknamePlaceholder": "t.d. Tommi, Rúmmi...",
     "deleteAccount": "Eyða aðgangi",
-    "premium": "Premium",
-    "upgradeToPremium": "Uppfæra í Premium",
     "restorePurchases": "Endurheimta kaup",
     "free": "Ókeypis",
     "active": "Virk",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Vikan byrjar á",
     "monday": "Mánudagur",
     "sunday": "Sunnudagur",
-    "timeFormat": "Tímasnið"
+    "timeFormat": "Tímasnið",
+    "pro": "Pro",
+    "upgradeToPro": "Uppfæra í Pro"
   },
   "balances": {
     "owedToYou": "Skulda þér",

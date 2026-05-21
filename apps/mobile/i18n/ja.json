@@ -261,8 +261,6 @@
     "setNickname": "ニックネームを設定",
     "nicknamePlaceholder": "例：たっくん、ルームメイト...",
     "deleteAccount": "アカウントを削除",
-    "premium": "プレミアム",
-    "upgradeToPremium": "プレミアムにアップグレード",
     "restorePurchases": "購入を復元",
     "free": "無料",
     "active": "有効",
@@ -289,7 +287,9 @@
     "weekStartsOn": "週の開始曜日",
     "monday": "月曜日",
     "sunday": "日曜日",
-    "timeFormat": "時刻の表示形式"
+    "timeFormat": "時刻の表示形式",
+    "pro": "Pro",
+    "upgradeToPro": "Proにアップグレード"
   },
   "balances": {
     "owedToYou": "もらえるお金",

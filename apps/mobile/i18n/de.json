@@ -261,8 +261,6 @@
     "setNickname": "Spitzname setzen",
     "nicknamePlaceholder": "z.B. Tommy, Mitbewohner...",
     "deleteAccount": "Konto löschen",
-    "premium": "Premium",
-    "upgradeToPremium": "Auf Premium upgraden",
     "restorePurchases": "Käufe wiederherstellen",
     "free": "Kostenlos",
     "active": "Aktiv",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Woche beginnt am",
     "monday": "Montag",
     "sunday": "Sonntag",
-    "timeFormat": "Zeitformat"
+    "timeFormat": "Zeitformat",
+    "pro": "Pro",
+    "upgradeToPro": "Auf Pro upgraden"
   },
   "balances": {
     "owedToYou": "Dir geschuldet",

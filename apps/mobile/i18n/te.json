@@ -261,8 +261,6 @@
     "setNickname": "నిక్‌నేమ్ పెట్టు",
     "nicknamePlaceholder": "ఉదా. టామీ, రూమీ...",
     "deleteAccount": "అకౌంట్ తొలగించు",
-    "premium": "ప్రీమియం",
-    "upgradeToPremium": "ప్రీమియంకి అప్‌గ్రేడ్ చెయ్యి",
     "restorePurchases": "కొనుగోళ్ళను పునరుద్ధరించు",
     "free": "ఉచితం",
     "active": "యాక్టివ్",
@@ -289,7 +287,9 @@
     "weekStartsOn": "వారం ప్రారంభం",
     "monday": "సోమవారం",
     "sunday": "ఆదివారం",
-    "timeFormat": "సమయ రూపం"
+    "timeFormat": "సమయ రూపం",
+    "pro": "Pro",
+    "upgradeToPro": "Proకి అప్‌గ్రేడ్ చెయ్యి"
   },
   "balances": {
     "owedToYou": "నీకు ఇవ్వాల్సింది",

@@ -7,7 +7,7 @@
  */
 import { useEffect, useRef } from "react";
 import { View, Platform } from "react-native";
-import { usePremium } from "@/lib/hooks/usePremium";
+import { usePro } from "@/lib/hooks/usePro";
 
 const AD_UNIT_IDS = {
   ios: process.env.EXPO_PUBLIC_ADMOB_BANNER_IOS ?? "ca-app-pub-9336334259937355/6145690883",
@@ -54,11 +54,11 @@ interface AdBannerProps {
 }
 
 export function AdBanner({ style }: AdBannerProps) {
-  const { isPremium, isLoading } = usePremium();
+  const { isPro, isLoading } = usePro();
 
-  // Only hide ads for confirmed premium users.
+  // Only hide ads for confirmed Pro users.
   // Show ads while loading (default to showing ads).
-  if (isPremium && !isLoading) {
+  if (isPro && !isLoading) {
     return null;
   }
 
