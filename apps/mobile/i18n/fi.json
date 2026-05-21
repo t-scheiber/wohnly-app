@@ -261,8 +261,6 @@
     "setNickname": "Aseta lempinimi",
     "nicknamePlaceholder": "esim. Tommi, Kämppis...",
     "deleteAccount": "Poista tili",
-    "premium": "Premium",
-    "upgradeToPremium": "Päivitä Premiumiin",
     "restorePurchases": "Palauta ostokset",
     "free": "Ilmainen",
     "active": "Aktiivinen",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Viikko alkaa",
     "monday": "Maanantai",
     "sunday": "Sunnuntai",
-    "timeFormat": "Aikamuoto"
+    "timeFormat": "Aikamuoto",
+    "pro": "Pro",
+    "upgradeToPro": "Päivitä Proiin"
   },
   "balances": {
     "owedToYou": "Sinulle velkaa",

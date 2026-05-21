@@ -64,15 +64,6 @@ export default function Root({ children }: PropsWithChildren) {
           }
         }) }} />
 
-        {/* Google AdSense — auto ads for free-tier users on web/desktop */}
-        <script dangerouslySetInnerHTML={{ __html: `
-          var s = document.createElement('script');
-          s.async = true;
-          s.crossOrigin = 'anonymous';
-          s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9336334259937355';
-          document.head.appendChild(s);
-        ` }} />
-
         <ScrollViewStyleReset />
       </head>
       <body>{children}</body>

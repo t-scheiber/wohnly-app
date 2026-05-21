@@ -34,14 +34,14 @@ export async function initRevenueCat(userId: string) {
 /**
  * Check if the current user has the "Wohnly Pro" entitlement.
  */
-export async function checkPremium(): Promise<boolean> {
+export async function checkPro(): Promise<boolean> {
   if (Platform.OS === "web") return false;
 
   try {
     const customerInfo = await Purchases.getCustomerInfo();
     return customerInfo.entitlements.active["Wohnly Pro"] !== undefined;
   } catch (err) {
-    console.error("Failed to check premium status:", err);
+    console.error("Failed to check Pro status:", err);
     return false;
   }
 }
@@ -56,8 +56,7 @@ export async function purchaseLifetime(): Promise<boolean> {
     const lifetime = offerings.current?.lifetime;
 
     if (!lifetime) {
-      console.error("No lifetime package found in offerings");
-      return false;
+      throw new Error("No lifetime package found in offerings. Please check your RevenueCat dashboard configuration.");
     }
 
     const { customerInfo } = await Purchases.purchasePackage(lifetime);

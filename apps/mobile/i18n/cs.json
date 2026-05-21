@@ -261,8 +261,6 @@
     "setNickname": "Nastavit přezdívku",
     "nicknamePlaceholder": "např. Tomík, Spolubydla...",
     "deleteAccount": "Smazat účet",
-    "premium": "Premium",
-    "upgradeToPremium": "Upgradovat na Premium",
     "restorePurchases": "Obnovit nákupy",
     "free": "Zdarma",
     "active": "Aktivní",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Týden začíná v",
     "monday": "Pondělí",
     "sunday": "Neděle",
-    "timeFormat": "Formát času"
+    "timeFormat": "Formát času",
+    "pro": "Pro",
+    "upgradeToPro": "Upgradovat na Pro"
   },
   "balances": {
     "owedToYou": "Dluží ti",

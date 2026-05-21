@@ -261,8 +261,6 @@
     "setNickname": "Setează poreclă",
     "nicknamePlaceholder": "ex. Tommy, Coleg...",
     "deleteAccount": "Șterge contul",
-    "premium": "Premium",
-    "upgradeToPremium": "Treci la Premium",
     "restorePurchases": "Restaurează achizițiile",
     "free": "Gratuit",
     "active": "Activ",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Săptămâna începe",
     "monday": "Luni",
     "sunday": "Duminică",
-    "timeFormat": "Format oră"
+    "timeFormat": "Format oră",
+    "pro": "Pro",
+    "upgradeToPro": "Treci la Pro"
   },
   "balances": {
     "owedToYou": "Ți se datorează",

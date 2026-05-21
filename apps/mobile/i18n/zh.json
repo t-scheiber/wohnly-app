@@ -261,8 +261,6 @@
     "setNickname": "设置昵称",
     "nicknamePlaceholder": "例如：小明、室友...",
     "deleteAccount": "删除账号",
-    "premium": "高级版",
-    "upgradeToPremium": "升级到高级版",
     "restorePurchases": "恢复购买",
     "free": "免费",
     "active": "已激活",
@@ -289,7 +287,9 @@
     "weekStartsOn": "每周开始于",
     "monday": "星期一",
     "sunday": "星期日",
-    "timeFormat": "时间格式"
+    "timeFormat": "时间格式",
+    "pro": "Pro",
+    "upgradeToPro": "升级到Pro"
   },
   "balances": {
     "owedToYou": "别人欠你的",

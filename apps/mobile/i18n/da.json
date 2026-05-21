@@ -261,8 +261,6 @@
     "setNickname": "Sæt kaldenavn",
     "nicknamePlaceholder": "f.eks. Tommy, Roomie...",
     "deleteAccount": "Slet konto",
-    "premium": "Premium",
-    "upgradeToPremium": "Opgrader til Premium",
     "restorePurchases": "Gendan køb",
     "free": "Gratis",
     "active": "Aktiv",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Ugen starter",
     "monday": "Mandag",
     "sunday": "Søndag",
-    "timeFormat": "Tidsformat"
+    "timeFormat": "Tidsformat",
+    "pro": "Pro",
+    "upgradeToPro": "Opgrader til Pro"
   },
   "balances": {
     "owedToYou": "Skylder dig",

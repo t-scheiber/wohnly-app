@@ -295,7 +295,7 @@ export interface UserPreferences {
 }
 
 export interface UserEntitlements {
-  premium: boolean;
+  pro: boolean;
   plan: "free" | "lifetime" | null;
   provider: "revenuecat" | "stripe" | null;
 }

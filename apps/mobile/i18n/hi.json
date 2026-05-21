@@ -261,8 +261,6 @@
     "setNickname": "निकनेम रखो",
     "nicknamePlaceholder": "जैसे: टॉमी, रूममेट...",
     "deleteAccount": "अकाउंट डिलीट करो",
-    "premium": "प्रीमियम",
-    "upgradeToPremium": "प्रीमियम में अपग्रेड करो",
     "restorePurchases": "खरीदारी रिस्टोर करो",
     "free": "मुफ्त",
     "active": "एक्टिव",
@@ -289,7 +287,9 @@
     "weekStartsOn": "सप्ताह शुरू होता है",
     "monday": "सोमवार",
     "sunday": "रविवार",
-    "timeFormat": "समय प्रारूप"
+    "timeFormat": "समय प्रारूप",
+    "pro": "Pro",
+    "upgradeToPro": "Pro में अपग्रेड करो"
   },
   "balances": {
     "owedToYou": "तुम्हें मिलने हैं",

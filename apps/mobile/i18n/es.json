@@ -261,8 +261,6 @@
     "setNickname": "Establecer apodo",
     "nicknamePlaceholder": "ej. Tommy, Compi...",
     "deleteAccount": "Eliminar cuenta",
-    "premium": "Premium",
-    "upgradeToPremium": "Mejorar a Premium",
     "restorePurchases": "Restaurar compras",
     "free": "Gratis",
     "active": "Activo",
@@ -289,7 +287,9 @@
     "weekStartsOn": "La semana empieza el",
     "monday": "Lunes",
     "sunday": "Domingo",
-    "timeFormat": "Formato de hora"
+    "timeFormat": "Formato de hora",
+    "pro": "Pro",
+    "upgradeToPro": "Mejorar a Pro"
   },
   "balances": {
     "owedToYou": "Te deben",

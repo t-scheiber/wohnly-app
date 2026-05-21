@@ -261,8 +261,6 @@
     "setNickname": "Postavi nadimak",
     "nicknamePlaceholder": "npr. Tommy, Cimer...",
     "deleteAccount": "Obriši račun",
-    "premium": "Premium",
-    "upgradeToPremium": "Nadogradi na Premium",
     "restorePurchases": "Vrati kupnje",
     "free": "Besplatno",
     "active": "Aktivna",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Tjedan počinje u",
     "monday": "Ponedjeljak",
     "sunday": "Nedjelja",
-    "timeFormat": "Format vremena"
+    "timeFormat": "Format vremena",
+    "pro": "Pro",
+    "upgradeToPro": "Nadogradi na Pro"
   },
   "balances": {
     "owedToYou": "Duguju ti",

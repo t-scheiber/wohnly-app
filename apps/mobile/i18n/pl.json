@@ -261,8 +261,6 @@
     "setNickname": "Ustaw przezwisko",
     "nicknamePlaceholder": "np. Tommy, Współ...",
     "deleteAccount": "Usuń konto",
-    "premium": "Premium",
-    "upgradeToPremium": "Przejdź na Premium",
     "restorePurchases": "Przywróć zakupy",
     "free": "Bezpłatny",
     "active": "Aktywny",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Tydzień zaczyna się w",
     "monday": "Poniedziałek",
     "sunday": "Niedziela",
-    "timeFormat": "Format czasu"
+    "timeFormat": "Format czasu",
+    "pro": "Pro",
+    "upgradeToPro": "Przejdź na Pro"
   },
   "balances": {
     "owedToYou": "Należne tobie",

@@ -261,8 +261,6 @@
     "setNickname": "Becenév beállítása",
     "nicknamePlaceholder": "pl. Tommy, Szobatárs...",
     "deleteAccount": "Fiók törlése",
-    "premium": "Prémium",
-    "upgradeToPremium": "Váltás Prémiumra",
     "restorePurchases": "Vásárlások visszaállítása",
     "free": "Ingyenes",
     "active": "Aktív",
@@ -289,7 +287,9 @@
     "weekStartsOn": "A hét kezdőnapja",
     "monday": "Hétfő",
     "sunday": "Vasárnap",
-    "timeFormat": "Időformátum"
+    "timeFormat": "Időformátum",
+    "pro": "Pro",
+    "upgradeToPro": "Váltás Prora"
   },
   "balances": {
     "owedToYou": "Neked tartoznak",

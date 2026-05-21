@@ -60,10 +60,10 @@ app.post("/revenuecat", async (c) => {
 app.post("/stripe/checkout", requireAuth, async (c) => {
   const userId = c.get("userId") as string;
 
-  // Check if already premium
+  // Check if already pro
   const existing = await prisma.userSubscription.findUnique({ where: { userId } });
   if (existing?.status === "active") {
-    return c.json({ error: "Already premium" }, 400);
+    return c.json({ error: "Already pro" }, 400);
   }
 
   const user = await prisma.user.findUnique({ where: { id: userId } });

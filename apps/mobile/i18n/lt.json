@@ -261,8 +261,6 @@
     "setNickname": "Nustatyti slapyvardį",
     "nicknamePlaceholder": "pvz. Tomas, Kambariokas...",
     "deleteAccount": "Ištrinti paskyrą",
-    "premium": "Premium",
-    "upgradeToPremium": "Atnaujinti iki Premium",
     "restorePurchases": "Atkurti pirkinius",
     "free": "Nemokama",
     "active": "Aktyvi",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Savaitė prasideda",
     "monday": "Pirmadienis",
     "sunday": "Sekmadienis",
-    "timeFormat": "Laiko formatas"
+    "timeFormat": "Laiko formatas",
+    "pro": "Pro",
+    "upgradeToPro": "Atnaujinti iki Pro"
   },
   "balances": {
     "owedToYou": "Skolingi tau",

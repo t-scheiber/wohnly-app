@@ -261,8 +261,6 @@
     "setNickname": "ডাকনাম দাও",
     "nicknamePlaceholder": "যেমন টমি, রুমি...",
     "deleteAccount": "অ্যাকাউন্ট মুছে ফেলো",
-    "premium": "প্রিমিয়াম",
-    "upgradeToPremium": "প্রিমিয়ামে আপগ্রেড করো",
     "restorePurchases": "কেনাকাটা পুনরুদ্ধার করো",
     "free": "ফ্রি",
     "active": "সক্রিয়",
@@ -289,7 +287,9 @@
     "weekStartsOn": "সপ্তাহ শুরু হয়",
     "monday": "সোমবার",
     "sunday": "রবিবার",
-    "timeFormat": "সময়ের বিন্যাস"
+    "timeFormat": "সময়ের বিন্যাস",
+    "pro": "Pro",
+    "upgradeToPro": "Proে আপগ্রেড করো"
   },
   "balances": {
     "owedToYou": "তোমাকে দিতে হবে",

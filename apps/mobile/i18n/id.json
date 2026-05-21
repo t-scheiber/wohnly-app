@@ -261,8 +261,6 @@
     "setNickname": "Atur Nama Panggilan",
     "nicknamePlaceholder": "cth. Tom, Teman Kos...",
     "deleteAccount": "Hapus Akun",
-    "premium": "Premium",
-    "upgradeToPremium": "Upgrade ke Premium",
     "restorePurchases": "Pulihkan Pembelian",
     "free": "Gratis",
     "active": "Aktif",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Minggu dimulai pada",
     "monday": "Senin",
     "sunday": "Minggu",
-    "timeFormat": "Format waktu"
+    "timeFormat": "Format waktu",
+    "pro": "Pro",
+    "upgradeToPro": "Upgrade ke Pro"
   },
   "balances": {
     "owedToYou": "Orang lain utang ke kamu",

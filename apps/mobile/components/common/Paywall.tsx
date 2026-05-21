@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Alert, Platform } from "react-native";
+import { View, Text, Alert, Platform, Linking, TouchableOpacity } from "react-native";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { Badge } from "../ui/Badge";
@@ -12,7 +12,7 @@ interface PaywallProps {
   onDismiss?: () => void;
 }
 
-const premiumFeatures = [
+const proFeatures = [
   { label: "Unlimited household members", included: true },
   { label: "Recurring chore schedules", included: true },
   { label: "Full events & calendar sync", included: true },
@@ -34,7 +34,7 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
     return (
       <View style={{ padding: 24, alignItems: "center" }}>
         <Text style={{ color: colors.text, fontSize: 16 }}>
-          Premium purchases are available in the mobile app.
+          Pro purchases are available in the mobile app.
         </Text>
       </View>
     );
@@ -59,7 +59,7 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
     try {
       const success = await restorePurchases();
       if (success) {
-        Alert.alert("Restored!", "Your premium access has been restored.");
+        Alert.alert("Restored!", "Your Pro access has been restored.");
         onPurchased?.();
       } else {
         Alert.alert("No Purchase Found", "We couldn't find a previous purchase to restore.");
@@ -96,14 +96,14 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
 
       {/* Features */}
       <Card>
-        {premiumFeatures.map((feature, i) => (
+        {proFeatures.map((feature, i) => (
           <View
             key={feature.label}
             style={{
               flexDirection: "row",
               alignItems: "center",
               paddingVertical: 10,
-              borderBottomWidth: i < premiumFeatures.length - 1 ? 1 : 0,
+              borderBottomWidth: i < proFeatures.length - 1 ? 1 : 0,
               borderBottomColor: colors.border,
               gap: 10,
             }}
@@ -132,9 +132,23 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
       )}
 
       {/* Legal */}
-      <Text style={{ fontSize: 11, color: colors.textSecondary, textAlign: "center", lineHeight: 16 }}>
-        Payment is charged to your App Store / Google Play account. By purchasing, you agree to our Terms of Service and Privacy Policy.
-      </Text>
+      <View style={{ gap: 8, alignItems: "center" }}>
+        <Text style={{ fontSize: 11, color: colors.textSecondary, textAlign: "center", lineHeight: 16 }}>
+          Payment is charged to your App Store / Google Play account. By purchasing, you agree to our Terms of Service (EULA) and Privacy Policy.
+        </Text>
+        <View style={{ flexDirection: "row", gap: 16 }}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://www.apple.com/legal/internet-services/itunes/dev/stgula/")}>
+            <Text style={{ fontSize: 11, color: colors.primary, textDecorationLine: "underline" }}>
+              Terms of Use (EULA)
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Linking.openURL("https://wohnly.app/privacy")}>
+            <Text style={{ fontSize: 11, color: colors.primary, textDecorationLine: "underline" }}>
+              Privacy Policy
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }

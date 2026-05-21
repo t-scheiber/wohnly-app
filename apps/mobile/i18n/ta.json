@@ -261,8 +261,6 @@
     "setNickname": "புனைப்பெயர் வை",
     "nicknamePlaceholder": "உ.ம். டாமி, ரூமி...",
     "deleteAccount": "கணக்கை நீக்கு",
-    "premium": "பிரீமியம்",
-    "upgradeToPremium": "பிரீமியத்திற்கு மேம்படுத்து",
     "restorePurchases": "வாங்கியவற்றை மீட்டெடு",
     "free": "இலவசம்",
     "active": "செயலில் உள்ளது",
@@ -289,7 +287,9 @@
     "weekStartsOn": "வாரம் தொடங்குவது",
     "monday": "திங்கள்",
     "sunday": "ஞாயிறு",
-    "timeFormat": "நேர வடிவம்"
+    "timeFormat": "நேர வடிவம்",
+    "pro": "Pro",
+    "upgradeToPro": "பிரீமியத்திற்கு மேம்படுத்து"
   },
   "balances": {
     "owedToYou": "உனக்கு கொடுக்க வேண்டியது",

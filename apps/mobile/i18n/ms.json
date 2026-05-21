@@ -261,8 +261,6 @@
     "setNickname": "Tetapkan Nama Panggilan",
     "nicknamePlaceholder": "cth. Tom, Roomie...",
     "deleteAccount": "Padam Akaun",
-    "premium": "Premium",
-    "upgradeToPremium": "Naik Taraf ke Premium",
     "restorePurchases": "Pulihkan Pembelian",
     "free": "Percuma",
     "active": "Aktif",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Minggu bermula pada",
     "monday": "Isnin",
     "sunday": "Ahad",
-    "timeFormat": "Format masa"
+    "timeFormat": "Format masa",
+    "pro": "Pro",
+    "upgradeToPro": "Naik Taraf ke Pro"
   },
   "balances": {
     "owedToYou": "Orang hutang kau",

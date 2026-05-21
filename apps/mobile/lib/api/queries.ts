@@ -1026,11 +1026,12 @@ export function usePreferences() {
   });
 }
 
-export function useEntitlements() {
+export function useEntitlements(enabled: boolean = true) {
   return useQuery({
     queryKey: ["entitlements"],
     queryFn: () => api<UserEntitlements>("/api/user/entitlements"),
     staleTime: 5 * 60 * 1000,
+    enabled,
   });
 }
 

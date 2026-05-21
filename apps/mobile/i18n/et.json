@@ -261,8 +261,6 @@
     "setNickname": "Määra hüüdnimi",
     "nicknamePlaceholder": "nt Tommi, Kortsikaaslane...",
     "deleteAccount": "Kustuta konto",
-    "premium": "Premium",
-    "upgradeToPremium": "Uuenda Premiumile",
     "restorePurchases": "Taasta ostud",
     "free": "Tasuta",
     "active": "Aktiivne",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Nädal algab",
     "monday": "Esmaspäev",
     "sunday": "Pühapäev",
-    "timeFormat": "Ajaformaat"
+    "timeFormat": "Ajaformaat",
+    "pro": "Pro",
+    "upgradeToPro": "Uuenda Proile"
   },
   "balances": {
     "owedToYou": "Sulle võlgu",

@@ -261,8 +261,6 @@
     "setNickname": "Weka Jina la Utani",
     "nicknamePlaceholder": "mfano Tommy, Roomie...",
     "deleteAccount": "Futa Akaunti",
-    "premium": "Premium",
-    "upgradeToPremium": "Panda hadi Premium",
     "restorePurchases": "Rejesha Manunuzi",
     "free": "Bure",
     "active": "Inatumika",
@@ -289,7 +287,9 @@
     "weekStartsOn": "Wiki huanza",
     "monday": "Jumatatu",
     "sunday": "Jumapili",
-    "timeFormat": "Muundo wa saa"
+    "timeFormat": "Muundo wa saa",
+    "pro": "Pro",
+    "upgradeToPro": "Panda hadi Pro"
   },
   "balances": {
     "owedToYou": "Unadaiwa",
