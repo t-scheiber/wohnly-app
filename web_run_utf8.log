@@ -1,0 +1,297 @@
+﻿deploy-web	Set up job	´╗┐2026-05-21T14:03:29.3578081Z Current runner version: '2.334.0'
+deploy-web	Set up job	2026-05-21T14:03:29.3604289Z ##[group]Runner Image Provisioner
+deploy-web	Set up job	2026-05-21T14:03:29.3605415Z Hosted Compute Agent
+deploy-web	Set up job	2026-05-21T14:03:29.3606167Z Version: 20260213.493
+deploy-web	Set up job	2026-05-21T14:03:29.3606874Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+deploy-web	Set up job	2026-05-21T14:03:29.3608183Z Build Date: 2026-02-13T00:28:41Z
+deploy-web	Set up job	2026-05-21T14:03:29.3608993Z Worker ID: {f26e46d5-f415-46ac-9a5c-c68d9e8da3f3}
+deploy-web	Set up job	2026-05-21T14:03:29.3609789Z Azure Region: eastus
+deploy-web	Set up job	2026-05-21T14:03:29.3610517Z ##[endgroup]
+deploy-web	Set up job	2026-05-21T14:03:29.3612478Z ##[group]Operating System
+deploy-web	Set up job	2026-05-21T14:03:29.3613626Z Ubuntu
+deploy-web	Set up job	2026-05-21T14:03:29.3614274Z 24.04.4
+deploy-web	Set up job	2026-05-21T14:03:29.3614858Z LTS
+deploy-web	Set up job	2026-05-21T14:03:29.3615429Z ##[endgroup]
+deploy-web	Set up job	2026-05-21T14:03:29.3616036Z ##[group]Runner Image
+deploy-web	Set up job	2026-05-21T14:03:29.3616790Z Image: ubuntu-24.04
+deploy-web	Set up job	2026-05-21T14:03:29.3617647Z Version: 20260513.135.3
+deploy-web	Set up job	2026-05-21T14:03:29.3618844Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260513.135/images/ubuntu/Ubuntu2404-Readme.md
+deploy-web	Set up job	2026-05-21T14:03:29.3620659Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260513.135
+deploy-web	Set up job	2026-05-21T14:03:29.3621854Z ##[endgroup]
+deploy-web	Set up job	2026-05-21T14:03:29.3623211Z ##[group]GITHUB_TOKEN Permissions
+deploy-web	Set up job	2026-05-21T14:03:29.3625348Z Contents: read
+deploy-web	Set up job	2026-05-21T14:03:29.3626047Z Metadata: read
+deploy-web	Set up job	2026-05-21T14:03:29.3626763Z Packages: read
+deploy-web	Set up job	2026-05-21T14:03:29.3627604Z ##[endgroup]
+deploy-web	Set up job	2026-05-21T14:03:29.3629823Z Secret source: Actions
+deploy-web	Set up job	2026-05-21T14:03:29.3630994Z Prepare workflow directory
+deploy-web	Set up job	2026-05-21T14:03:29.3960777Z Prepare all required actions
+deploy-web	Set up job	2026-05-21T14:03:29.3998367Z Getting action download info
+deploy-web	Set up job	2026-05-21T14:03:29.7728154Z Download action repository 'actions/checkout@v6' (SHA:de0fac2e4500dabe0009e67214ff5f5447ce83dd)
+deploy-web	Set up job	2026-05-21T14:03:29.8934576Z Download action repository 'actions/setup-node@v6' (SHA:48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e)
+deploy-web	Set up job	2026-05-21T14:03:29.9858445Z Download action repository 'appleboy/scp-action@v0.1.7' (SHA:917f8b81dfc1ccd331fef9e2d61bdc6c8be94634)
+deploy-web	Set up job	2026-05-21T14:03:30.2295686Z Complete job name: deploy-web
+deploy-web	Build appleboy/scp-action@v0.1.7	´╗┐2026-05-21T14:03:30.2789118Z ##[group]Build container for action use: '/home/runner/work/_actions/appleboy/scp-action/v0.1.7/Dockerfile'.
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.2869568Z ##[command]/usr/bin/docker build -t 330c8d:16d9a3de2ce44bb4bddc3c8a8c89b5ce -f "/home/runner/work/_actions/appleboy/scp-action/v0.1.7/Dockerfile" "/home/runner/work/_actions/appleboy/scp-action/v0.1.7"
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.8940661Z #0 building with "default" instance using docker driver
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.8941656Z 
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.8942091Z #1 [internal] load build definition from Dockerfile
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.8943148Z #1 transferring dockerfile: 150B 0.0s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.8944058Z #1 DONE 0.0s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.8944453Z 
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:30.8944995Z #2 [internal] load metadata for ghcr.io/appleboy/drone-scp:1.6.14
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.2177284Z #2 DONE 0.5s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3234490Z 
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3235565Z #3 [internal] load .dockerignore
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3238481Z #3 transferring context: 2B done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3240729Z #3 DONE 0.0s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3241507Z 
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3242180Z #4 [internal] load build context
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3243729Z #4 transferring context: 187B done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3245303Z #4 DONE 0.0s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3245965Z 
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3248018Z #5 [1/2] FROM ghcr.io/appleboy/drone-scp:1.6.14@sha256:0e0597678b948b0aa09888c66ac75af904cce81baf6af955208527d259c61818
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3252370Z #5 resolve ghcr.io/appleboy/drone-scp:1.6.14@sha256:0e0597678b948b0aa09888c66ac75af904cce81baf6af955208527d259c61818 done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.3256687Z #5 extracting sha256:1207c741d8c9b028d98c4006013f9de959da3c55f85b91ed5e4583438a0112ca
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4319092Z #5 extracting sha256:1207c741d8c9b028d98c4006013f9de959da3c55f85b91ed5e4583438a0112ca 0.1s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4323313Z #5 sha256:1207c741d8c9b028d98c4006013f9de959da3c55f85b91ed5e4583438a0112ca 3.38MB / 3.38MB 0.1s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4328148Z #5 sha256:57fce42a8fe3138af514e9b1be611ec437fe87def8a6946cad1d6b7608188ce2 284.84kB / 284.84kB 0.1s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4332923Z #5 sha256:a7e706a435c2a53ff172ba5b50e2a06c2eaf63d2f764bdaabcca52d378beeb35 0B / 1.20kB 0.1s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4336854Z #5 sha256:c5ff66ca7e6bad6eb2c1b483c6c580ef147d04552f3bba4b13ac1b05cf474013 0B / 125B 0.1s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4341102Z #5 sha256:103b78775db928290fb85c370d3e47361a507a82b3b7c69c628783e018a9ffb8 0B / 2.49MB 0.1s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4345392Z #5 sha256:0e0597678b948b0aa09888c66ac75af904cce81baf6af955208527d259c61818 2.38kB / 2.38kB done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4350919Z #5 sha256:b49e06fc857838320ee2682058d609a527fd05056650f6f6387b8a320d25aed5 1.24kB / 1.24kB done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4356535Z #5 sha256:6e1933d0a1a550dee7c2be05d0c681372d8661e12dec2bd66f028fd3f2e1eccb 3.65kB / 3.65kB done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.4362190Z #5 extracting sha256:57fce42a8fe3138af514e9b1be611ec437fe87def8a6946cad1d6b7608188ce2
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.5422806Z #5 sha256:a7e706a435c2a53ff172ba5b50e2a06c2eaf63d2f764bdaabcca52d378beeb35 1.20kB / 1.20kB 0.3s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.5429257Z #5 sha256:103b78775db928290fb85c370d3e47361a507a82b3b7c69c628783e018a9ffb8 2.49MB / 2.49MB 0.1s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.5433856Z #5 extracting sha256:57fce42a8fe3138af514e9b1be611ec437fe87def8a6946cad1d6b7608188ce2 0.0s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.7413877Z #5 sha256:a7e706a435c2a53ff172ba5b50e2a06c2eaf63d2f764bdaabcca52d378beeb35 1.20kB / 1.20kB 0.4s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:31.7420288Z #5 sha256:c5ff66ca7e6bad6eb2c1b483c6c580ef147d04552f3bba4b13ac1b05cf474013 125B / 125B 0.4s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.3202217Z #5 extracting sha256:a7e706a435c2a53ff172ba5b50e2a06c2eaf63d2f764bdaabcca52d378beeb35
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.4306956Z #5 extracting sha256:a7e706a435c2a53ff172ba5b50e2a06c2eaf63d2f764bdaabcca52d378beeb35 done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.4308906Z #5 extracting sha256:c5ff66ca7e6bad6eb2c1b483c6c580ef147d04552f3bba4b13ac1b05cf474013 done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.4310646Z #5 extracting sha256:103b78775db928290fb85c370d3e47361a507a82b3b7c69c628783e018a9ffb8 0.0s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.4312067Z #5 DONE 1.2s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.4312555Z 
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.4313426Z #6 [2/2] COPY entrypoint.sh /bin/entrypoint.sh
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.4314458Z #6 DONE 0.0s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.5834159Z 
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.5834798Z #7 exporting to image
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:32.5835476Z #7 exporting layers
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:33.0047078Z #7 exporting layers 0.6s done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:33.0240567Z #7 writing image sha256:f32435d19ee8bbb7b58f6d43e000dd89a06160599685e24f020d3428d9ae99f6 done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:33.0241811Z #7 naming to docker.io/library/330c8d:16d9a3de2ce44bb4bddc3c8a8c89b5ce done
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:33.0242661Z #7 DONE 0.6s
+deploy-web	Build appleboy/scp-action@v0.1.7	2026-05-21T14:03:33.0310680Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	´╗┐2026-05-21T14:03:33.0597253Z ##[group]Run actions/checkout@v6
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0598236Z with:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0598496Z   repository: t-scheiber/wohnly-app
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0598933Z   token: ***
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0599154Z   ssh-strict: true
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0599393Z   ssh-user: git
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0599616Z   persist-credentials: true
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0599882Z   clean: true
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0600102Z   sparse-checkout-cone-mode: true
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0600393Z   fetch-depth: 1
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0600625Z   fetch-tags: false
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0600851Z   show-progress: true
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0601075Z   lfs: false
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0601272Z   submodules: false
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0601492Z   set-safe-directory: true
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.0601946Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1594202Z Syncing repository: t-scheiber/wohnly-app
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1595568Z ##[group]Getting Git version info
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1596026Z Working directory is '/home/runner/work/wohnly-app/wohnly-app'
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1596656Z [command]/usr/bin/git version
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1597014Z git version 2.54.0
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1610900Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1625870Z Temporarily overriding HOME='/home/runner/work/_temp/fd75a830-50a1-4aae-8d95-755da66b9aec' before making global git config changes
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1626768Z Adding repository directory to the temporary git global config as a safe directory
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1631792Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/wohnly-app/wohnly-app
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1678905Z Deleting the contents of '/home/runner/work/wohnly-app/wohnly-app'
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1683620Z ##[group]Initializing the repository
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1688709Z [command]/usr/bin/git init /home/runner/work/wohnly-app/wohnly-app
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1821699Z hint: Using 'master' as the name for the initial branch. This default branch name
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1822712Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1823394Z hint: to use in all of your new repositories, which will suppress this warning,
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1823926Z hint: call:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1824157Z hint:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1824493Z hint: 	git config --global init.defaultBranch <name>
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1824892Z hint:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1825275Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1825930Z hint: 'development'. The just-created branch can be renamed via this command:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1826415Z hint:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1826661Z hint: 	git branch -m <name>
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1826948Z hint:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1827559Z hint: Disable this message with "git config set advice.defaultBranchName false"
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1830809Z Initialized empty Git repository in /home/runner/work/wohnly-app/wohnly-app/.git/
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1841497Z [command]/usr/bin/git remote add origin https://github.com/t-scheiber/wohnly-app
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1919428Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1919969Z ##[group]Disabling automatic garbage collection
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1923644Z [command]/usr/bin/git config --local gc.auto 0
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1950785Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1951223Z ##[group]Setting up auth
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1952472Z Removing SSH command configuration
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1958706Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.1993799Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2359707Z Removing HTTP extra header
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2364888Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2395132Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2607685Z Removing includeIf entries pointing to credentials config files
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2614683Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2644112Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2864746Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2901724Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git.path /home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2931606Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2962021Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.2992297Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.3093188Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.3094024Z ##[group]Fetching the repository
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:33.3095086Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +acfe7f37af87499ba2c6d0d5150b4b43ab1210c6:refs/remotes/origin/main
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4399382Z From https://github.com/t-scheiber/wohnly-app
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4400093Z  * [new ref]         acfe7f37af87499ba2c6d0d5150b4b43ab1210c6 -> origin/main
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4443874Z [command]/usr/bin/git branch --list --remote origin/main
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4471433Z   origin/main
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4480850Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4502903Z acfe7f37af87499ba2c6d0d5150b4b43ab1210c6
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4506903Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4507739Z ##[group]Determining the checkout info
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4508549Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4512421Z [command]/usr/bin/git sparse-checkout disable
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4553621Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4579863Z ##[group]Checking out the ref
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.4584613Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.5640851Z Switched to a new branch 'main'
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.5643185Z branch 'main' set up to track 'origin/main'.
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.5657634Z ##[endgroup]
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.5708869Z [command]/usr/bin/git log -1 --format=%H
+deploy-web	Run actions/checkout@v6	2026-05-21T14:03:34.5733332Z acfe7f37af87499ba2c6d0d5150b4b43ab1210c6
+deploy-web	Run actions/setup-node@v6	´╗┐2026-05-21T14:03:34.5967876Z ##[group]Run actions/setup-node@v6
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.5968204Z with:
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.5968414Z   node-version: 24
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.5968642Z   check-latest: false
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.5969076Z   token: ***
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.5969307Z   package-manager-cache: true
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.5969565Z ##[endgroup]
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.7503752Z Found in cache @ /opt/hostedtoolcache/node/24.15.0/x64
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:34.7507946Z ##[group]Environment details
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:35.1786480Z node: v24.15.0
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:35.1786937Z npm: 11.12.1
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:35.1787269Z yarn: 1.22.22
+deploy-web	Run actions/setup-node@v6	2026-05-21T14:03:35.1788691Z ##[endgroup]
+deploy-web	Install dependencies (*** workspace)	´╗┐2026-05-21T14:03:35.1922046Z ##[group]Run npm ci
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:35.1922357Z [36;1mnpm ci[0m
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:35.1971488Z shell: /usr/bin/bash -e {0}
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:35.1971772Z ##[endgroup]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4795256Z npm error code EUSAGE
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4835481Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4837516Z npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4839057Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4839676Z npm error Missing: @emnapi/runtime@1.10.0 from lock file
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4840257Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4840710Z npm error Clean install a project
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4841192Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4841527Z npm error Usage:
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4841908Z npm error npm ci
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4842265Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4842628Z npm error Options:
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4843475Z npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4844764Z npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4846017Z npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4847430Z npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4849259Z npm error [--allow-git <all|none|***>] [--no-audit] [--no-bin-links] [--no-fund]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4850049Z npm error [--dry-run]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4850885Z npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4851982Z npm error [--workspaces] [--include-workspace-***] [--install-links]
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4852949Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4853397Z npm error   --install-strategy
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4854191Z npm error     Sets the strategy for installing packages in node_modules.
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4854850Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4855255Z npm error   --legacy-bundling
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4856162Z npm error     Instead of hoisting package installs in `node_modules`, install packages
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4856934Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4857514Z npm error   --global-style
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4858355Z npm error     Only install direct dependencies in the top level `node_modules`,
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4859073Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4859431Z npm error   --omit
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4860173Z npm error     Dependency types to omit from the installation tree on disk.
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4860856Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4861218Z npm error   --include
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4862058Z npm error     Option that allows for defining which types of dependencies to install.
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4862806Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4863232Z npm error   --strict-peer-deps
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4864064Z npm error     If set to `true`, and `--legacy-peer-deps` is not set, then _any_
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4864738Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4865170Z npm error   --foreground-scripts
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4865951Z npm error     Run all build scripts (ie, `preinstall`, `install`, and
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4866576Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4866961Z npm error   --ignore-scripts
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4867967Z npm error     If true, npm does not run scripts specified in package.json files.
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4868664Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4869037Z npm error   --allow-git
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4869868Z npm error     Limits the ability for npm to fetch dependencies from git references.
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4870593Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4870961Z npm error   --audit
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4871795Z npm error     When "true" submit audit reports alongside the current npm command to the
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4872547Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4872914Z npm error   --bin-links
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4873728Z npm error     Tells npm to create symlinks (or `.cmd` shims on Windows) for package
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4874444Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4874806Z npm error   --fund
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4875783Z npm error     When "true" displays the message at the end of each `npm install`
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4876474Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4876833Z npm error   --dry-run
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4877845Z npm error     Indicates that you don't want npm to make any changes and that it should
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4878597Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4878977Z npm error   -w|--workspace
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4879878Z npm error     Enable running a command in the context of the configured workspaces of the
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4880642Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4881012Z npm error   --workspaces
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4881815Z npm error     Set to true to run the command in the context of **all** configured
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4882570Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4883069Z npm error   --include-workspace-***
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4883993Z npm error     Include the workspace *** when workspaces are enabled for a command.
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4884712Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4885090Z npm error   --install-links
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4885948Z npm error     When set file: protocol dependencies will be packed and installed as
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4886671Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4886988Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4887820Z npm error aliases: clean-install, ic, install-clean, isntall-clean
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4888469Z npm error
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4888926Z npm error Run "npm help ci" for more info
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.4890097Z npm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-05-21T14_03_35_255Z-debug-0.log
+deploy-web	Install dependencies (*** workspace)	2026-05-21T14:03:36.5292815Z ##[error]Process completed with exit code 1.
+deploy-web	Post Run actions/checkout@v6	´╗┐2026-05-21T14:03:36.5400298Z Post job cleanup.
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6252546Z [command]/usr/bin/git version
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6291837Z git version 2.54.0
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6334447Z Temporarily overriding HOME='/home/runner/work/_temp/6a59c220-befe-430c-844b-7dac362341b2' before making global git config changes
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6336462Z Adding repository directory to the temporary git global config as a safe directory
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6340553Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/wohnly-app/wohnly-app
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6372625Z Removing SSH command configuration
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6379820Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6415559Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6649732Z Removing HTTP extra header
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6654593Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6688334Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6962076Z Removing includeIf entries pointing to credentials config files
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.6969137Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7006685Z includeif.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7008265Z includeif.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git/worktrees/*.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7009216Z includeif.gitdir:/github/workspace/.git.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7009991Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7029150Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7050714Z /home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7064014Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git.path /home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7105789Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git/worktrees/*.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7133930Z /home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7147892Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/wohnly-app/wohnly-app/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7187111Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7216340Z /github/runner_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7236116Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7266303Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7293664Z /github/runner_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7305824Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7345679Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy-web	Post Run actions/checkout@v6	2026-05-21T14:03:36.7630609Z Removing credentials config '/home/runner/work/_temp/git-credentials-99a3cd55-29a7-4c50-b192-4057e6c2731e.config'
+deploy-web	Complete job	´╗┐2026-05-21T14:03:36.7795831Z Cleaning up orphan processes
