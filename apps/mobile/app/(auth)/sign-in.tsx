@@ -198,11 +198,11 @@ export default function SignInScreen() {
             <Text style={[styles.legalText, { color: colors.textSecondary }]}>Privacy Policy</Text>
           </Link>
           <Text style={[styles.legalSeparator, { color: colors.textSecondary }]}>{"\u2022"}</Text>
-          <Link href="/terms-of-service" style={styles.legalLink}>
+          <Link href={"/terms-of-service" as any} style={styles.legalLink}>
             <Text style={[styles.legalText, { color: colors.textSecondary }]}>Terms</Text>
           </Link>
           <Text style={[styles.legalSeparator, { color: colors.textSecondary }]}>{"\u2022"}</Text>
-          <Link href="/support" style={styles.legalLink}>
+          <Link href={"/support" as any} style={styles.legalLink}>
             <Text style={[styles.legalText, { color: colors.textSecondary }]}>Help & FAQ</Text>
           </Link>
         </View>
