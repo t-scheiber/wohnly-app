@@ -32,6 +32,7 @@ on:
 jobs:
   build-web:
     name: Build web export
+    if: vars.DEPLOY_ENABLED != 'false'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
