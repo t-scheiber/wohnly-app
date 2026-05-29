@@ -24,6 +24,7 @@ jobs:
     timeout-minutes: 15
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
     steps:
       - name: Checkout Renovate branch
         uses: actions/checkout@v6
@@ -61,6 +62,14 @@ jobs:
               echo "needs_bun=true" >> "$GITHUB_OUTPUT"
               echo "bun install" > .renovate-install-command
               runner="bun run"
+            elif node -e "const s=JSON.stringify(require('./package.json').scripts||{}); process.exit(s.includes('bun ')?0:1)"; then
+              echo "needs_bun=true" >> "$GITHUB_OUTPUT"
+              if [ -f package-lock.json ]; then
+                echo "npm ci" > .renovate-install-command
+              else
+                echo "npm install" > .renovate-install-command
+              fi
+              runner="npm run"
             elif [ -f pnpm-lock.yaml ]; then
               echo "needs_pnpm=true" >> "$GITHUB_OUTPUT"
               echo "pnpm install --frozen-lockfile" > .renovate-install-command
@@ -122,7 +131,7 @@ jobs:
         if: steps.detect.outputs.needs_node == 'true'
         uses: actions/setup-node@v6
         with:
-          node-version: 24.14.0
+          node-version: 24.16.0
 
       - name: Set up Bun
         if: steps.detect.outputs.needs_bun == 'true'
@@ -132,7 +141,7 @@ jobs:
         if: steps.detect.outputs.needs_pnpm == 'true'
         uses: pnpm/action-setup@v6
         with:
-          version: 11.1.0
+          version: 11.3.0
 
       - name: Set up Java
         if: steps.detect.outputs.needs_java == 'true'
