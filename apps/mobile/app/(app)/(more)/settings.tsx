@@ -11,14 +11,13 @@ import {
     useSetNickname,
 } from "@/lib/api/queries";
 import { authClient } from "@/lib/auth/client";
-import { clearTauriCookie, isTauri, openInBrowser } from "@/lib/auth/tauri";
+import { clearTauriCookie, isTauri } from "@/lib/auth/tauri";
 import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { usePro } from "@/lib/hooks/usePro";
 import { Paywall } from "@/components/common/Paywall";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   isPaywallPreviewEnabled,
   isRevenueCatStoreSetupError,
@@ -29,7 +28,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { File, Paths } from "expo-file-system";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
-import { RevenueCatPaywall } from "@/components/common/RevenueCatPaywall";
+import {
+  getDesktopStorePrice,
+  restoreDesktopPro,
+} from "@/lib/payments/desktop-store";
 import { Check } from "lucide-react-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -402,7 +404,17 @@ export default function SettingsScreen() {
   const handleUpgrade = async () => {
     try {
       if (Platform.OS === "web") {
-        // Web/Desktop: redirect to Stripe Checkout
+        if (isTauri()) {
+          const price = await getDesktopStorePrice();
+          if (!price) {
+            Alert.alert(t("settings.pro"), t("settings.premiumOfferingNotConfigured"));
+            return;
+          }
+          setPaywallModalOpen(true);
+          return;
+        }
+
+        // Public web app: redirect to Stripe Checkout.
         const { url } = await apiPost<{ url: string }>(
           "/api/webhooks/stripe/checkout",
           {},
@@ -417,11 +429,7 @@ export default function SettingsScreen() {
           );
           return;
         }
-        if (isTauri()) {
-          await openInBrowser(url);
-        } else {
-          window.location.href = url;
-        }
+        window.location.href = url;
         return;
       }
       // Mobile: open custom Paywall modal sheet to comply with App Store guidelines
@@ -472,7 +480,12 @@ export default function SettingsScreen() {
   const handleRestore = async () => {
     try {
       if (Platform.OS === "web") {
-        // Web users don't need restore — entitlements sync automatically from the API
+        if (!isTauri()) return;
+        const success = await restoreDesktopPro();
+        Alert.alert(
+          t("settings.pro"),
+          success ? t("settings.restoreSuccess") : t("settings.restoreNone"),
+        );
         return;
       }
       const success = await restorePurchases();
@@ -717,7 +730,7 @@ export default function SettingsScreen() {
             onPress={isPro ? undefined : handleUpgrade}
             isLast={isPro}
           />
-          {!isPro && Platform.OS !== "web" && (
+          {!isPro && (Platform.OS !== "web" || isTauri()) && (
             <SettingsRow
               colors={colors}
               label={t("settings.restorePurchases")}
@@ -1135,7 +1148,7 @@ export default function SettingsScreen() {
         </Pressable>
       </Modal>
 
-      {Platform.OS !== "web" && (
+      {(Platform.OS !== "web" || isTauri()) && (
         <Modal
           visible={paywallModalOpen}
           animationType="slide"

@@ -38,7 +38,8 @@
       },
       "android": {
         "serviceAccountKeyPath": "../../eas-submit_serviceaccount.json",
-        "track": "internal"
+        "track": "production",
+        "releaseStatus": "completed"
       }
     }
   }

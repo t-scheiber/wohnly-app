@@ -54,6 +54,9 @@ jobs:
       - name: Export web build
         working-directory: apps/mobile
         run: npx expo export --platform web
+        env:
+          EXPO_PUBLIC_ADSENSE_BANNER_SLOT: ${{ vars.ADSENSE_BANNER_SLOT || secrets.ADSENSE_BANNER_SLOT }}
+          EXPO_PUBLIC_DESKTOP_PRO_PRODUCT_ID: wohnly_pro_lifetime
 
       - name: Add PWA assets
         working-directory: apps/desktop
@@ -209,10 +212,26 @@ jobs:
           mkdir -p ~/.private_keys
           echo "${{ secrets.ASC_API_KEY_P8 }}" | base64 -d > ~/.private_keys/AuthKey_${{ secrets.ASC_API_KEY_ID }}.p8
 
+      - name: Generate Mac App Store provisioning profile
+        env:
+          ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
+          ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
+        run: |
+          jq -n \
+            --arg key_id "$ASC_API_KEY_ID" \
+            --arg issuer_id "$ASC_API_ISSUER_ID" \
+            --rawfile key ~/.private_keys/AuthKey_${ASC_API_KEY_ID}.p8 \
+            '{key_id: $key_id, issuer_id: $issuer_id, key: $key}' \
+            > asc-api-key.json
+          fastlane sigh \
+            --app_identifier app.wohnly \
+            --platform macos \
+            --api_key_path asc-api-key.json \
+            --filename Wohnly_MAS.provisionprofile
+
       - name: Re-sign, package, and upload to Mac App Store
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          MAS_PROVISIONING_PROFILE: ${{ secrets.APPLE_MAS_PROVISIONING_PROFILE }}
           ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
           ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
         run: |
@@ -237,12 +256,6 @@ jobs:
           hdiutil detach /tmp/wohnly-dmg
           APP="./Wohnly.app"
           echo "Found app: $APP"
-
-          if [ -z "$MAS_PROVISIONING_PROFILE" ]; then
-            echo "Error: APPLE_MAS_PROVISIONING_PROFILE secret is required for Mac App Store/TestFlight uploads."
-            echo "Add the base64-encoded Mac App Store provisioning profile for app.wohnly to this repository's secrets."
-            exit 1
-          fi
 
           # Find the MAS signing identities
           MAS_APP_IDENTITY=$(security find-identity -v -p codesigning mas.keychain | grep "3rd Party Mac Developer Application" | head -1 | sed 's/.*"\(.*\)".*/\1/')
@@ -275,7 +288,7 @@ jobs:
 
           # Main bundles uploaded for Mac TestFlight/App Store must include a
           # Mac App Store provisioning profile before they are signed.
-          echo "$MAS_PROVISIONING_PROFILE" | base64 --decode > "$APP/Contents/embedded.provisionprofile"
+          cp Wohnly_MAS.provisionprofile "$APP/Contents/embedded.provisionprofile"
           chmod 644 "$APP/Contents/embedded.provisionprofile"
           security cms -D -i "$APP/Contents/embedded.provisionprofile" > embedded-profile.plist
 
