@@ -221,7 +221,7 @@ jobs:
             --arg key_id "$ASC_API_KEY_ID" \
             --arg issuer_id "$ASC_API_ISSUER_ID" \
             --rawfile key ~/.private_keys/AuthKey_${ASC_API_KEY_ID}.p8 \
-            '{key_id: $key_id, issuer_id: $issuer_id, key: $key}' \
+            '{key_id: $key_id, issuer_id: $issuer_id, key: $key, in_house: false}' \
             > asc-api-key.json
           fastlane sigh \
             --app_identifier app.wohnly \
