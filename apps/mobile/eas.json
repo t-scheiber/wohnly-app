@@ -29,6 +29,13 @@
     }
   },
   "submit": {
+    "closed": {
+      "android": {
+        "serviceAccountKeyPath": "../../eas-submit_serviceaccount.json",
+        "track": "First Test",
+        "releaseStatus": "completed"
+      }
+    },
     "production": {
       "ios": {
         "ascAppId": "6761035211",
