@@ -12,6 +12,12 @@ import {
 } from "@/lib/payments/setup";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { isTauri } from "@/lib/auth/tauri";
+import {
+  getDesktopStorePrice,
+  purchaseDesktopPro,
+  restoreDesktopPro,
+} from "@/lib/payments/desktop-store";
 
 interface PaywallProps {
   onPurchased?: () => void;
@@ -39,11 +45,14 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
   const [priceString, setPriceString] = useState<string | null>(null);
 
   useEffect(() => {
-    if (Platform.OS === "web") return;
-    void getPaywallPriceString().then(setPriceString);
+    if (isTauri()) {
+      void getDesktopStorePrice().then(setPriceString).catch(() => setPriceString(null));
+    } else if (Platform.OS !== "web") {
+      void getPaywallPriceString().then(setPriceString);
+    }
   }, []);
 
-  if (Platform.OS === "web") {
+  if (Platform.OS === "web" && !isTauri()) {
     return (
       <View style={{ padding: 24, alignItems: "center" }}>
         <Text style={{ color: colors.text, fontSize: 16 }}>
@@ -58,7 +67,9 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
   const handlePurchase = async () => {
     setPurchasing(true);
     try {
-      const success = await purchaseLifetime();
+      const success = isTauri()
+        ? await purchaseDesktopPro()
+        : await purchaseLifetime();
       if (success) {
         onPurchased?.();
       } else {
@@ -81,7 +92,9 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
   const handleRestore = async () => {
     setRestoring(true);
     try {
-      const success = await restorePurchases();
+      const success = isTauri()
+        ? await restoreDesktopPro()
+        : await restorePurchases();
       if (success) {
         Alert.alert(t("settings.pro"), t("settings.restoreSuccess"));
         onPurchased?.();

@@ -1,5 +1,6 @@
 {
   "expo": {
+    "version": "1.3.4",
     "extra": {
       "eas": {
         "projectId": "1f4ce882-1b70-4606-8b77-48c02e3d523e"

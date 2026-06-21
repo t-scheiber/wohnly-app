@@ -171,7 +171,7 @@ function NamePromptModal({
   );
 }
 
-function AdSenseLoader() {
+function AdSenseLoader({ enabled }: { enabled: boolean }) {
   const { isPro } = usePro();
 
   useEffect(() => {
@@ -180,7 +180,7 @@ function AdSenseLoader() {
     const scriptId = "adsense-script";
     const existingScript = document.getElementById(scriptId);
 
-    if (!isPro) {
+    if (enabled && !isPro) {
       if (!existingScript) {
         const script = document.createElement("script");
         script.id = scriptId;
@@ -194,7 +194,7 @@ function AdSenseLoader() {
         existingScript.remove();
       }
     }
-  }, [isPro]);
+  }, [enabled, isPro]);
 
   return null;
 }
@@ -304,7 +304,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <AdSenseLoader />
+      <AdSenseLoader enabled={Boolean(session)} />
       {children}
       {needsName && (
         <NamePromptModal

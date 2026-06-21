@@ -14,8 +14,9 @@ const AD_UNIT_IDS = {
 };
 
 const ADSENSE_CLIENT_ID = "ca-pub-9336334259937355";
-const ADSENSE_SLOT_ID = process.env.EXPO_PUBLIC_ADSENSE_BANNER_SLOT?.trim();
-const ADSENSE_SCRIPT_ID = "wohnly-adsense-script";
+const ADSENSE_SLOT_ID =
+  process.env.EXPO_PUBLIC_ADSENSE_BANNER_SLOT?.trim() || "1409406277";
+const ADSENSE_SCRIPT_ID = "adsense-script";
 
 let BannerAd: any = null;
 let BannerAdSize: any = null;

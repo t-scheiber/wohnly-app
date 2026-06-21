@@ -5,6 +5,11 @@ import Purchases from "react-native-purchases";
 import type { CustomerInfo } from "react-native-purchases";
 import { useEntitlements } from "@/lib/api/queries";
 import { authClient } from "@/lib/auth/client";
+import { isTauri } from "@/lib/auth/tauri";
+import {
+  checkDesktopPro,
+  DESKTOP_PRO_CHANGED_EVENT,
+} from "@/lib/payments/desktop-store";
 
 /**
  * Hook to check and reactively track the user's Pro status.
@@ -19,6 +24,8 @@ export function usePro() {
   const [rcPro, setRcPro] = useState(false);
   const [rcLoading, setRcLoading] = useState(Platform.OS !== "web");
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
+  const [desktopPro, setDesktopPro] = useState(false);
+  const [desktopLoading, setDesktopLoading] = useState(isTauri());
 
   const { data: session } = authClient.useSession();
 
@@ -49,9 +56,28 @@ export function usePro() {
     Purchases.addCustomerInfoUpdateListener(checkEntitlement);
   }, [checkEntitlement, session]);
 
+  useEffect(() => {
+    if (!isTauri()) return;
+    if (!session) {
+      setDesktopPro(false);
+      setDesktopLoading(false);
+      return;
+    }
+
+    const refresh = () => checkDesktopPro()
+      .then(setDesktopPro)
+      .catch(() => setDesktopPro(false))
+      .finally(() => setDesktopLoading(false));
+
+    setDesktopLoading(true);
+    void refresh();
+    window.addEventListener(DESKTOP_PRO_CHANGED_EVENT, refresh);
+    return () => window.removeEventListener(DESKTOP_PRO_CHANGED_EVENT, refresh);
+  }, [session]);
+
   // Pro if EITHER RevenueCat or the API says so
-  const isPro = rcPro || (entitlements?.pro ?? false);
-  const isLoading = rcLoading || apiLoading;
+  const isPro = rcPro || desktopPro || (entitlements?.pro ?? false);
+  const isLoading = rcLoading || desktopLoading || apiLoading;
 
   return { isPro, isLoading, customerInfo };
 }

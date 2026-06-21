@@ -17,8 +17,20 @@ export function isTauri(): boolean {
 // can't bundle the plugin, so the runtime import() fails silently.
 // The IPC invoke is always available and works on both macOS and Windows.
 
-function tauriInvoke(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
+export function tauriInvoke<T = unknown>(
+  cmd: string,
+  args?: Record<string, unknown>,
+): Promise<T> {
   return (window as any).__TAURI_INTERNALS__.invoke(cmd, args);
+}
+
+/** True when the Tauri webview is running on macOS. */
+export function isMacTauri(): boolean {
+  return (
+    isTauri() &&
+    typeof navigator !== "undefined" &&
+    /Macintosh|Mac OS X/i.test(navigator.userAgent)
+  );
 }
 
 /** Open a URL in the system browser via Tauri shell plugin */
@@ -63,11 +75,12 @@ export function onDeepLink(
 }
 
 /**
- * Start the OAuth flow for Tauri by opening the system browser.
+ * Start the OAuth flow for Tauri.
  *
  * Flow:
  * 1. POST to the API to get the OAuth authorization URL
- * 2. Open the expo-authorization-proxy in the system browser
+ * 2. On macOS, open the proxy in ASWebAuthenticationSession. On Windows,
+ *    open it in the system browser.
  *    (this sets the state cookie in the browser context)
  * 3. User authenticates with the provider
  * 4. API callback redirects to wohnly://auth/callback?cookie=...
@@ -117,6 +130,20 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   }
 
   const proxyUrl = `${apiUrl}/api/auth/expo-authorization-proxy?authorizationURL=${encodeURIComponent(data.url)}`;
+
+  if (isMacTauri()) {
+    const callbackUrl = await tauriInvoke<string>("plugin:auth-session|start", {
+      authUrl: proxyUrl,
+      callbackUrlScheme: "wohnly",
+      ephemeral: false,
+    });
+    if (!handleTauriDeepLink(callbackUrl)) {
+      throw new Error("Sign-in completed without a valid session. Please try again.");
+    }
+    window.location.reload();
+    return;
+  }
+
   await openInBrowser(proxyUrl);
 }
 

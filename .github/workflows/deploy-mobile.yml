@@ -65,7 +65,6 @@ jobs:
 
       - name: Submit iOS to App Store
         if: inputs.submit && (inputs.platform == 'ios' || inputs.platform == 'all')
-        continue-on-error: true
         working-directory: apps/mobile
         run: eas submit --platform ios --non-interactive --latest 2>&1 | tee /tmp/ios-submit.log
 

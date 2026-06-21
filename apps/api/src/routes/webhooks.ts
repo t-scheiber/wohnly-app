@@ -19,17 +19,24 @@ app.post("/revenuecat", async (c) => {
   const authHeader = c.req.header("Authorization");
   const secret = process.env.REVENUECAT_WEBHOOK_SECRET;
 
-  if (secret && authHeader !== `Bearer ${secret}`) {
+  if (!secret && process.env.NODE_ENV === "production") {
+    console.error("REVENUECAT_WEBHOOK_SECRET is not configured");
+    return c.json({ error: "Webhook not configured" }, 503);
+  }
+
+  if (!secret || authHeader !== `Bearer ${secret}`) {
     return c.json({ error: "Unauthorized" }, 401);
   }
 
-  const event = await c.req.json();
+  const payload = await c.req.json();
+  const event = payload.event ?? payload;
   const userId = event.app_user_id;
 
   if (!userId) return c.json({ error: "Missing app_user_id" }, 400);
 
   switch (event.type) {
     case "INITIAL_PURCHASE":
+    case "NON_RENEWING_PURCHASE":
     case "RESTORATION":
       await prisma.userSubscription.upsert({
         where: { userId },

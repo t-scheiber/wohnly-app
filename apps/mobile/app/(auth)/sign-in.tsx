@@ -208,12 +208,40 @@ export default function SignInScreen() {
         </View>
 
         {Platform.OS === "web" && (
-          <View style={[styles.aboutCard, { borderColor: colors.border, backgroundColor: colors.card }]}>
-            <Text style={[styles.aboutTitle, { color: colors.text }]}>Household management, shared clearly</Text>
-            <Text style={[styles.aboutText, { color: colors.textSecondary }]}>
-              Wohnly helps roommates and families coordinate shared expenses, chores,
-              shopping lists, events, todos, and subscriptions in one private household space.
-            </Text>
+          <View style={styles.marketingContent}>
+            <View style={[styles.aboutCard, { borderColor: colors.border, backgroundColor: colors.card }]}>
+              <Text style={[styles.aboutTitle, { color: colors.text }]}>Household management, shared clearly</Text>
+              <Text style={[styles.aboutText, { color: colors.textSecondary }]}>
+                Wohnly gives roommates, couples, and families one private place to coordinate
+                the everyday work of a home. Shared expenses, rotating chores, shopping lists,
+                events, personal todos, meal plans, and recurring bills stay visible to the
+                people who need them without being scattered across chats and spreadsheets.
+              </Text>
+            </View>
+
+            <View style={styles.featureGrid}>
+              {[
+                ["Fair chores", "Create recurring chores, rotate assignments automatically, and keep a clear history of what was completed."],
+                ["Shared finances", "Record household spending, split costs between members, track balances, and keep subscriptions in view."],
+                ["Lists that stay in sync", "Build shopping and todo lists together so everyone sees additions and completed items as they happen."],
+                ["One household calendar", "Coordinate events, due dates, chore schedules, and billing dates, with optional device calendar sync."],
+              ].map(([title, description]) => (
+                <View key={title} style={[styles.featureCard, { borderColor: colors.border, backgroundColor: colors.card }]}>
+                  <Text style={[styles.featureTitle, { color: colors.text }]}>{title}</Text>
+                  <Text style={[styles.featureText, { color: colors.textSecondary }]}>{description}</Text>
+                </View>
+              ))}
+            </View>
+
+            <View style={[styles.aboutCard, { borderColor: colors.border, backgroundColor: colors.card }]}>
+              <Text style={[styles.aboutTitle, { color: colors.text }]}>Private by design</Text>
+              <Text style={[styles.aboutText, { color: colors.textSecondary }]}>
+                Supported household content is protected with end-to-end encryption before it
+                leaves your device. Wohnly also includes in-app account deletion, device access
+                approval, and household key recovery controls. The free version is supported by
+                advertising; a one-time Wohnly Pro purchase removes ads across supported devices.
+              </Text>
+            </View>
           </View>
         )}
 
@@ -333,6 +361,26 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     marginBottom: 8,
+  },
+  marketingContent: {
+    gap: 12,
+  },
+  featureGrid: {
+    gap: 12,
+  },
+  featureCard: {
+    borderWidth: 1,
+    borderRadius: 14,
+    padding: 14,
+  },
+  featureTitle: {
+    fontSize: 15,
+    fontWeight: "700",
+    marginBottom: 5,
+  },
+  featureText: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   aboutTitle: {
     fontSize: 16,
