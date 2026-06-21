@@ -227,7 +227,7 @@ jobs:
             --app_identifier app.wohnly \
             --platform macos \
             --api_key_path asc-api-key.json \
-            --filename Wohnly_MAS.provisionprofile
+            --filename Wohnly_MAS.mobileprovision
 
       - name: Re-sign, package, and upload to Mac App Store
         env:
@@ -288,7 +288,7 @@ jobs:
 
           # Main bundles uploaded for Mac TestFlight/App Store must include a
           # Mac App Store provisioning profile before they are signed.
-          cp Wohnly_MAS.provisionprofile "$APP/Contents/embedded.provisionprofile"
+          cp Wohnly_MAS.mobileprovision "$APP/Contents/embedded.provisionprofile"
           chmod 644 "$APP/Contents/embedded.provisionprofile"
           security cms -D -i "$APP/Contents/embedded.provisionprofile" > embedded-profile.plist
 
