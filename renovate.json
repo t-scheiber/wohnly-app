@@ -1,1 +1,17 @@
-{"$schema":"https://docs.renovatebot.com/renovate-schema.json","extends":["github>t-scheiber/renovate-config"],"dependencyDashboardTitle":"Renovate Dashboard"}
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>t-scheiber/renovate-config"
+  ],
+  "dependencyDashboardTitle": "Renovate Dashboard",
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**",
+    "**/examples/**",
+    "**/test/**",
+    "**/tests/**",
+    "**/fixtures/**",
+    "MSStorelistings/copy-listings.html"
+  ]
+}
