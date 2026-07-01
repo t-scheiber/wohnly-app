@@ -40,7 +40,7 @@
       "@hono/node-server": "2.0.4"
     },
     "@xmldom/xmldom": "0.9.10",
-    "postcss": "8.5.15",
+    "postcss": "8.5.16",
     "uuid": "14.0.0",
     "shell-quote": "1.8.4",
     "ws": "8.21.0",
