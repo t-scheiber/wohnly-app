@@ -81,7 +81,7 @@
     "eslint-config-expo": "~55.0.0",
     "expo-mcp": "~0.2.1",
     "shell-quote": "^1.8.4",
-    "typescript": "~5.9.3",
+    "typescript": "~6.0.3",
     "ws": "^8.21.0"
   },
   "private": true,
