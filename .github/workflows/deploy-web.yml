@@ -32,7 +32,7 @@ jobs:
           EXPO_PUBLIC_ADSENSE_BANNER_SLOT: ${{ vars.ADSENSE_BANNER_SLOT || secrets.ADSENSE_BANNER_SLOT }}
 
       - name: Upload web build to VPS
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
