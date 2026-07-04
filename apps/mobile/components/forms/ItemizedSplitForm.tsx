@@ -112,6 +112,7 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
             <TextInput
               value={item.name}
               onChangeText={(v: string) => updateItem(index, "name", v)}
+              accessibilityLabel={`${t("expenses.itemName", "Item name")} ${index + 1}`}
               placeholder="Item name"
               placeholderTextColor={colors.textSecondary}
               style={{
@@ -129,6 +130,7 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
             <TextInput
               value={item.amount}
               onChangeText={(v: string) => updateItem(index, "amount", v)}
+              accessibilityLabel={`${t("expenses.itemAmount", "Amount for item")} ${index + 1}`}
               placeholder="0.00"
               placeholderTextColor={colors.textSecondary}
               keyboardType="decimal-pad"
@@ -148,7 +150,9 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
             />
             <TouchableOpacity
               onPress={() => removeItem(index)}
-              style={{ justifyContent: "center", padding: 4 }}
+              accessibilityRole="button"
+              accessibilityLabel={`${t("expenses.removeItem", "Remove item")} ${index + 1}`}
+              style={{ justifyContent: "center", alignItems: "center", padding: 4, minWidth: 44, minHeight: 44 }}
             >
               <Trash2 size={18} color={colors.destructive} />
             </TouchableOpacity>
@@ -162,6 +166,9 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
                 <TouchableOpacity
                   key={member.id}
                   onPress={() => toggleAssignee(index, member.id)}
+                  accessibilityRole="checkbox"
+                  accessibilityLabel={member.nickname || member.displayName || (member as any).email || "Member"}
+                  accessibilityState={{ checked: isAssigned }}
                   style={{
                     paddingVertical: 4,
                     paddingHorizontal: 10,
@@ -188,6 +195,8 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
       {/* Add item button */}
       <TouchableOpacity
         onPress={addItem}
+        accessibilityRole="button"
+        accessibilityLabel={t("expenses.addItem", "Add Item")}
         style={{
           flexDirection: "row",
           alignItems: "center",

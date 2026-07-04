@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   TextInput,
   RefreshControl,
-  Modal,
   Pressable,
   Alert,
 } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { useTodos, usePersonalTodos, useCreateTodo, useToggleTodo, useDeleteTodo, useUpdateTodo, useClearCompletedTodos } from "@/lib/api/queries";
 import { AdBanner } from "@/components/common/AdBanner";
 import { Colors } from "@/constants/Colors";
@@ -132,6 +132,10 @@ export default function TodosScreen() {
         {selectMode.isSelectMode ? (
           <TouchableOpacity
             onPress={() => selectMode.toggleItem(item.id)}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: isSelected }}
+            accessibilityLabel={item.title}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               width: 24,
               height: 24,
@@ -149,6 +153,10 @@ export default function TodosScreen() {
         ) : (
           <TouchableOpacity
             onPress={() => handleToggle(item)}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: item.completed }}
+            accessibilityLabel={item.title}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               width: 24,
               height: 24,
@@ -169,6 +177,10 @@ export default function TodosScreen() {
         <Pressable
           onPress={() => handleToggle(item)}
           onLongPress={() => openEditModal(item)}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: item.completed }}
+          accessibilityLabel={item.title}
+          accessibilityHint={t("todos.editHint", "Long press to edit")}
           style={{ flex: 1 }}
         >
           <Text
@@ -213,6 +225,8 @@ export default function TodosScreen() {
           <TouchableOpacity
             key={key}
             onPress={() => setTab(key)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: tab === key }}
             style={{
               flex: 1,
               paddingVertical: 10,
@@ -281,6 +295,7 @@ export default function TodosScreen() {
       >
         <TextInput
           placeholder={t("todos.addTodo")}
+          accessibilityLabel={t("todos.addTodo")}
           placeholderTextColor={colors.textSecondary}
           value={newTitle}
           onChangeText={setNewTitle}
@@ -300,6 +315,8 @@ export default function TodosScreen() {
         <Pressable
           onPress={handleAdd}
           disabled={!newTitle.trim()}
+          accessibilityRole="button"
+          accessibilityState={{ disabled: !newTitle.trim() }}
           style={({ pressed }) => ({
             backgroundColor: newTitle.trim() ? colors.primary : colors.muted,
             borderRadius: 8,
@@ -316,7 +333,7 @@ export default function TodosScreen() {
       </View>
 
       {/* Edit modal */}
-      <Modal
+      <AppModal
         visible={!!editTodo}
         presentationStyle="pageSheet"
         animationType="slide"
@@ -325,7 +342,7 @@ export default function TodosScreen() {
         <View style={{ flex: 1, backgroundColor: colors.background, padding: 24 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
             <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>{t("todos.editTodo")}</Text>
-            <TouchableOpacity onPress={() => setEditTodo(null)}>
+            <TouchableOpacity onPress={() => setEditTodo(null)} accessibilityRole="button" hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
               <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("common.cancel")}</Text>
             </TouchableOpacity>
           </View>
@@ -354,7 +371,7 @@ export default function TodosScreen() {
             {t("common.save")}
           </Button>
         </View>
-      </Modal>
+      </AppModal>
     </View>
   );
 }

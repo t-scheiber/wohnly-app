@@ -17,7 +17,13 @@
     "seeAll": "See All",
     "gotIt": "Got it",
     "downloadOnThe": "Download on the",
-    "getItFrom": "Get it from"
+    "getItFrom": "Get it from",
+    "close": "Close",
+    "clear": "Clear",
+    "dismiss": "Dismiss",
+    "selectDate": "Select date",
+    "selectDateHint": "Opens a date picker",
+    "clearDate": "Clear date"
   },
   "auth": {
     "signIn": "Sign In",
@@ -581,5 +587,9 @@
       "confirm": "Delete everything",
       "cancel": "Cancel"
     }
+  },
+  "calendar": {
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
   }
 }

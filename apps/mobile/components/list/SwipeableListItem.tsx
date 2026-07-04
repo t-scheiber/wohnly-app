@@ -51,6 +51,8 @@ export default function SwipeableListItem({
   const renderRightActions = () => (
     <TouchableOpacity
       onPress={handleDelete}
+      accessibilityRole="button"
+      accessibilityLabel={deleteConfirmTitle}
       style={styles.deleteAction}
       activeOpacity={0.8}
     >
@@ -64,6 +66,15 @@ export default function SwipeableListItem({
       onPress={onPress}
       activeOpacity={0.7}
       disabled={!onPress}
+      accessibilityRole={onPress ? "button" : undefined}
+      accessibilityActions={
+        Platform.OS !== "web" && enabled
+          ? [{ name: "delete", label: deleteConfirmTitle }]
+          : undefined
+      }
+      onAccessibilityAction={(event) => {
+        if (event.nativeEvent.actionName === "delete") handleDelete();
+      }}
     >
       {children}
     </TouchableOpacity>

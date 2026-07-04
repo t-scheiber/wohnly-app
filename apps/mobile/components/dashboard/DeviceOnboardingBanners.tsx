@@ -38,6 +38,8 @@ export function DeviceOnboardingBanners() {
     <>
       <Pressable
         onPress={() => setOpenRequest(first)}
+        accessibilityRole="button"
+        accessibilityLabel={copy}
         style={[
           styles.banner,
           { backgroundColor: colors.primary + "10", borderColor: colors.primary + "30" },

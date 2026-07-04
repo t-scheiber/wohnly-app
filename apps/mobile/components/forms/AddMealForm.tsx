@@ -37,6 +37,7 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
   const [mealType, setMealType] = useState<string>("dinner");
   const [recipe, setRecipe] = useState("");
   const [ingredients, setIngredients] = useState<Ingredient[]>([{ name: "", quantity: "" }]);
+  const [fieldErrors, setFieldErrors] = useState<{ title?: string }>({});
 
   const createMeal = useCreateMealPlan();
 
@@ -54,7 +55,7 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      Alert.alert("Error", "Please enter a meal title");
+      setFieldErrors({ title: t("meals.enterTitle", "Please enter a meal title") });
       return;
     }
 
@@ -85,7 +86,11 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
         label="What are you making?"
         placeholder="e.g., Pasta Carbonara"
         value={title}
-        onChangeText={setTitle}
+        onChangeText={(v) => {
+          setTitle(v);
+          if (fieldErrors.title) setFieldErrors({});
+        }}
+        error={fieldErrors.title}
         autoFocus
       />
 
@@ -101,6 +106,9 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
             <TouchableOpacity
               key={mt.value}
               onPress={() => setMealType(mt.value)}
+              accessibilityRole="button"
+              accessibilityLabel={mt.label}
+              accessibilityState={{ selected: mealType === mt.value }}
               style={{
                 flex: 1,
                 paddingVertical: 10,
@@ -133,6 +141,7 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
             <TextInput
               value={ing.name}
               onChangeText={(v: string) => updateIngredient(i, "name", v)}
+              accessibilityLabel={`${t("meals.ingredient", "Ingredient")} ${i + 1}`}
               placeholder="Ingredient"
               placeholderTextColor={colors.textSecondary}
               style={{
@@ -150,6 +159,7 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
             <TextInput
               value={ing.quantity}
               onChangeText={(v: string) => updateIngredient(i, "quantity", v)}
+              accessibilityLabel={`${t("meals.ingredientQuantity", "Quantity for ingredient")} ${i + 1}`}
               placeholder="Qty"
               placeholderTextColor={colors.textSecondary}
               style={{
@@ -164,14 +174,21 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
                 color: colors.text,
               }}
             />
-            <TouchableOpacity onPress={() => removeIngredient(i)} style={{ justifyContent: "center" }}>
+            <TouchableOpacity
+              onPress={() => removeIngredient(i)}
+              accessibilityRole="button"
+              accessibilityLabel={`${t("meals.removeIngredient", "Remove ingredient")} ${i + 1}`}
+              style={{ justifyContent: "center", alignItems: "center", minWidth: 44, minHeight: 44 }}
+            >
               <Trash2 size={16} color={colors.destructive} />
             </TouchableOpacity>
           </View>
         ))}
         <TouchableOpacity
           onPress={addIngredient}
-          style={{ flexDirection: "row", alignItems: "center", gap: 6, paddingVertical: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel={t("meals.addIngredient", "Add Ingredient")}
+          style={{ flexDirection: "row", alignItems: "center", gap: 6, paddingVertical: 8, minHeight: 44 }}
         >
           <Plus size={16} color={colors.primary} />
           <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 13 }}>Add Ingredient</Text>

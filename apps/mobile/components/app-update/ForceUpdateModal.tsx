@@ -1,4 +1,5 @@
-import { Linking, Modal, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
@@ -14,7 +15,7 @@ export function ForceUpdateModal({ visible }: { visible: boolean }) {
   const { colorScheme } = useTheme();
   const colors = Colors[colorScheme];
   return (
-    <Modal visible={visible} animationType="fade">
+    <AppModal visible={visible} animationType="fade">
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <Text style={[styles.title, { color: colors.text }]}>
           {t("forceUpdate.title")}
@@ -23,6 +24,8 @@ export function ForceUpdateModal({ visible }: { visible: boolean }) {
           {t("forceUpdate.body")}
         </Text>
         <Pressable
+          accessibilityRole="link"
+          accessibilityLabel={t("forceUpdate.updateNow")}
           onPress={() => {
             const url = STORE_URL[Platform.OS] ?? STORE_URL.web;
             Linking.openURL(url).catch(() => {
@@ -34,7 +37,7 @@ export function ForceUpdateModal({ visible }: { visible: boolean }) {
           <Text style={styles.buttonText}>{t("forceUpdate.updateNow")}</Text>
         </Pressable>
       </View>
-    </Modal>
+    </AppModal>
   );
 }
 

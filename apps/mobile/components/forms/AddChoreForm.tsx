@@ -49,6 +49,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
   );
   const [rotate, setRotate] = useState((editItem as any)?.rotate ?? false);
   const [effortWeight, setEffortWeight] = useState(editItem?.effortWeight ?? 2);
+  const [fieldErrors, setFieldErrors] = useState<{ title?: string }>({});
 
   const createChore = useCreateChore();
   const updateChore = useUpdateChore();
@@ -59,7 +60,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      Alert.alert(t("common.error"), t("chores.enterTitle"));
+      setFieldErrors({ title: t("chores.enterTitle") });
       return;
     }
 
@@ -95,7 +96,11 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
         label={t("chores.title")}
         placeholder={t("chores.titlePlaceholder")}
         value={title}
-        onChangeText={setTitle}
+        onChangeText={(v) => {
+          setTitle(v);
+          if (fieldErrors.title) setFieldErrors({});
+        }}
+        error={fieldErrors.title}
       />
 
       <Input
@@ -236,6 +241,9 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
               <Pressable
                 key={level.value}
                 onPress={() => setEffortWeight(level.value)}
+                accessibilityRole="button"
+                accessibilityLabel={level.label}
+                accessibilityState={{ selected: isSelected }}
                 style={({ pressed }) => ({
                   flex: 1,
                   paddingVertical: 10,

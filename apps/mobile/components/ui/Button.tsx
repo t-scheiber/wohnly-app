@@ -16,6 +16,10 @@ interface ButtonProps {
   haptic?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  /** Screen reader label; defaults to the button text when children is a string */
+  accessibilityLabel?: string;
+  /** Extra context for screen readers when the action isn't obvious from the label */
+  accessibilityHint?: string;
 }
 
 const sizeStyles: Record<ButtonSize, { paddingVertical: number; paddingHorizontal: number; fontSize: number }> = {
@@ -34,6 +38,8 @@ export function Button({
   haptic = true,
   style,
   textStyle,
+  accessibilityLabel,
+  accessibilityHint,
 }: ButtonProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
@@ -50,7 +56,7 @@ export function Button({
       case "ghost":
         return { bg: "transparent", text: colors.text };
       case "destructive":
-        return { bg: colors.destructive, text: "#ffffff" };
+        return { bg: colors.destructive, text: colors.destructiveForeground };
     }
   };
 
@@ -66,12 +72,21 @@ export function Button({
       onPress={handlePress}
       disabled={disabled || loading}
       activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={
+        accessibilityLabel ?? (typeof children === "string" ? children : undefined)
+      }
+      accessibilityHint={accessibilityHint}
+      accessibilityState={{ disabled: disabled || loading, busy: loading }}
       style={[
         {
           backgroundColor: variantStyle.bg,
           borderRadius: 12,
           paddingVertical: sizeStyle.paddingVertical,
           paddingHorizontal: sizeStyle.paddingHorizontal,
+          // WCAG 2.5.5: keep touch targets at least 44x44pt
+          minHeight: 44,
+          minWidth: 44,
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "row",

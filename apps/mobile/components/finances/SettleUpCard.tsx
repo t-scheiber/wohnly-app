@@ -140,6 +140,13 @@ export function SettleUpCard() {
                 onPress={() => handleMarkAsPaid(s)}
                 disabled={createExpense.isPending}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={t("expenses.markAsPaidA11y", {
+                  defaultValue: "Mark payment of {{amount}} from {{from}} to {{to}} as paid",
+                  amount: formatCurrency(s.amount, currency),
+                  from: s.fromName,
+                  to: s.toName,
+                })}
                 style={{
                   backgroundColor: colors.success,
                   borderRadius: 10,

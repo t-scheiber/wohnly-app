@@ -39,6 +39,8 @@ function AccordionSection({
       <TouchableOpacity
         onPress={() => setExpanded(!expanded)}
         activeOpacity={0.6}
+        accessibilityRole="button"
+        accessibilityState={{ expanded }}
         style={styles.sectionHeader}
       >
         <View style={[styles.iconWrapper, { backgroundColor: colors.muted }]}>
@@ -215,6 +217,8 @@ export default function HelpScreen() {
       <TouchableOpacity
         onPress={() => Linking.openURL("mailto:support@wohnly.app")}
         activeOpacity={0.6}
+        accessibilityRole="link"
+        accessibilityLabel={t("help.contactSupport")}
         style={[styles.supportButton, { backgroundColor: colors.primary }]}
       >
         <Mail size={18} color={colors.primaryForeground} />

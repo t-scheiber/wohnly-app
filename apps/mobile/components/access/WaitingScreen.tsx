@@ -155,6 +155,8 @@ export function WaitingScreen({
         </Text>
         <Pressable
           onPress={onContinue}
+          accessibilityRole="button"
+          accessibilityLabel={t("household.continueToDashboard")}
           style={[styles.primary, { backgroundColor: colors.primary }]}
         >
           <Text style={styles.primaryText}>
@@ -197,6 +199,8 @@ export function WaitingScreen({
                 // No user-facing retry UI — resend failure is rare; surfaced via query error.
               }
             }}
+            accessibilityRole="button"
+            accessibilityLabel={t("access.waiting.showDifferent")}
             style={styles.secondary}
             disabled={resend.isPending}
           >
@@ -205,7 +209,12 @@ export function WaitingScreen({
             </Text>
           </Pressable>
           {onCancel && (
-            <Pressable onPress={onCancel} style={styles.secondary}>
+            <Pressable
+              onPress={onCancel}
+              accessibilityRole="button"
+              accessibilityLabel={t("access.waiting.cancel")}
+              style={styles.secondary}
+            >
               <Text
                 style={[styles.secondaryText, { color: colors.textSecondary }]}
               >

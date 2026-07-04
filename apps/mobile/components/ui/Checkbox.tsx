@@ -24,7 +24,18 @@ export function Checkbox({ checked, onCheckedChange, label, disabled }: Checkbox
       onPress={handlePress}
       disabled={disabled}
       activeOpacity={0.7}
-      style={{ flexDirection: "row", alignItems: "center", gap: 10, opacity: disabled ? 0.5 : 1 }}
+      accessibilityRole="checkbox"
+      accessibilityLabel={label}
+      accessibilityState={{ checked, disabled }}
+      // WCAG 2.5.5: expand the 22pt visual box to a 44pt touch target
+      hitSlop={{ top: 11, bottom: 11, left: 11, right: 11 }}
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        minHeight: 44,
+        opacity: disabled ? 0.5 : 1,
+      }}
     >
       <View
         style={{

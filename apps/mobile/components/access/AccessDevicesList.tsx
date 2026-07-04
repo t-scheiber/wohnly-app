@@ -73,6 +73,9 @@ export function AccessDevicesList({
             <Pressable
               key={d.id}
               onLongPress={() => confirmRemove(d.id, label)}
+              accessibilityRole="button"
+              accessibilityLabel={`${label}, ${owner}`}
+              accessibilityHint={t("access.screen.removeDeviceHint", "Long press to remove this device")}
               style={[
                 styles.row,
                 !isLast && { borderBottomWidth: 1, borderBottomColor: colors.border },

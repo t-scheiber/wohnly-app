@@ -127,7 +127,7 @@ export default function LeaveHouseholdScreen() {
         <Text style={{ fontSize: 48, color: colors.destructive, textAlign: "center", marginBottom: 16 }}>✕</Text>
         <Text style={{ fontSize: 22, fontWeight: "bold", color: colors.text, textAlign: "center", marginBottom: 12 }}>{t("leaveHouseholdPage.title")}</Text>
         <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginBottom: 32 }}>{message}</Text>
-        <Pressable onPress={goHome} style={{ backgroundColor: colors.tint, borderRadius: 10, padding: 16, alignItems: "center" }}>
+        <Pressable onPress={goHome} accessibilityRole="button" accessibilityLabel={t("leaveHouseholdPage.returnHome")} style={{ backgroundColor: colors.tint, borderRadius: 10, padding: 16, alignItems: "center" }}>
           <Text style={{ color: "#fff", fontWeight: "600", fontSize: 16 }}>{t("leaveHouseholdPage.returnHome")}</Text>
         </Pressable>
       </View>,
@@ -145,7 +145,7 @@ export default function LeaveHouseholdScreen() {
         <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center", marginBottom: 32 }}>
           {t(`leaveHouseholdPage.success.${section}.body`, { household: state.householdName })}
         </Text>
-        <Pressable onPress={goHome} style={{ backgroundColor: colors.tint, borderRadius: 10, padding: 16, alignItems: "center" }}>
+        <Pressable onPress={goHome} accessibilityRole="button" accessibilityLabel={t("leaveHouseholdPage.returnHome")} style={{ backgroundColor: colors.tint, borderRadius: 10, padding: 16, alignItems: "center" }}>
           <Text style={{ color: "#fff", fontWeight: "600", fontSize: 16 }}>{t("leaveHouseholdPage.returnHome")}</Text>
         </Pressable>
       </View>,
@@ -171,6 +171,8 @@ export default function LeaveHouseholdScreen() {
       <Pressable
         onPress={submit}
         disabled={submitting}
+        accessibilityRole="button"
+        accessibilityLabel={t(`leaveHouseholdPage.${section}.primary`)}
         style={({ pressed }) => ({
           backgroundColor: colors.destructive,
           borderRadius: 10,
@@ -189,6 +191,8 @@ export default function LeaveHouseholdScreen() {
       <Pressable
         onPress={goHome}
         disabled={submitting}
+        accessibilityRole="button"
+        accessibilityLabel={t("leaveHouseholdPage.secondary")}
         style={({ pressed }) => ({
           backgroundColor: colors.muted,
           borderRadius: 10,

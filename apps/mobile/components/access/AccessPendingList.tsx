@@ -36,6 +36,8 @@ export function AccessPendingList({
             <Pressable
               key={r.id}
               onPress={() => onTap(r)}
+              accessibilityRole="button"
+              accessibilityLabel={label}
               style={[
                 styles.row,
                 !isLast && { borderBottomWidth: 1, borderBottomColor: colors.border },

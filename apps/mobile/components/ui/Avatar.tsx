@@ -36,6 +36,8 @@ export function Avatar({ src, name = "?", size = 40 }: AvatarProps) {
     return (
       <Image
         source={{ uri: src }}
+        accessibilityLabel={name !== "?" ? name : undefined}
+        alt={name !== "?" ? name : ""}
         style={{ width: size, height: size, borderRadius: size / 2 }}
         contentFit="cover"
       />
@@ -44,6 +46,8 @@ export function Avatar({ src, name = "?", size = 40 }: AvatarProps) {
 
   return (
     <View
+      accessibilityRole="image"
+      accessibilityLabel={name !== "?" ? name : undefined}
       style={{
         width: size,
         height: size,

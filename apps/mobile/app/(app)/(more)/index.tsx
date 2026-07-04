@@ -19,6 +19,8 @@ function MenuItem({ icon, label, sublabel, onPress, colors }: MenuItemProps) {
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.6}
+      accessibilityRole="button"
+      accessibilityLabel={sublabel ? `${label}. ${sublabel}` : label}
       style={{
         flexDirection: "row",
         alignItems: "center",

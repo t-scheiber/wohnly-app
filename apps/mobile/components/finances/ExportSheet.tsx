@@ -86,6 +86,9 @@ export function ExportSheet({ onClose }: ExportSheetProps) {
         <View style={{ flexDirection: "row", gap: 8 }}>
           <TouchableOpacity
             onPress={() => setUseRange(false)}
+            accessibilityRole="button"
+            accessibilityLabel={t("expenses.exportAll", "All Time")}
+            accessibilityState={{ selected: !useRange }}
             style={{
               flex: 1,
               paddingVertical: 10,
@@ -100,6 +103,9 @@ export function ExportSheet({ onClose }: ExportSheetProps) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setUseRange(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t("expenses.exportCustomRange", "Custom")}
+            accessibilityState={{ selected: useRange }}
             style={{
               flex: 1,
               paddingVertical: 10,
