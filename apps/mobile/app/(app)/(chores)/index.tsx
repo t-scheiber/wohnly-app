@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import { View, Text, SectionList, TouchableOpacity, RefreshControl } from "react-native";
+import { View, Text, SectionList, TouchableOpacity, RefreshControl, Pressable } from "react-native";
 import { AppModal } from "@/components/ui/AppModal";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { startOfDay, isSameDay } from "date-fns";
@@ -134,11 +134,12 @@ export default function ChoresScreen() {
 
   const renderItem = ({ item, section }: { item: Chore; section: { title: string } }) => {
     const isToday = section.title === "Due Today";
+    const hasInlineActions = isToday && !isBreakActive;
 
     return (
       <SwipeableListItem
         onDelete={() => handleDelete(item.id)}
-        onPress={() => handleTapChore(item)}
+        onPress={hasInlineActions ? undefined : () => handleTapChore(item)}
         deleteConfirmTitle={t("chores.deleteChore")}
         deleteConfirmMessage={t("chores.deleteConfirm")}
       >
@@ -152,7 +153,12 @@ export default function ChoresScreen() {
             borderColor: isToday ? colors.primary + "40" : colors.border,
           }}
         >
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <Pressable
+            onPress={hasInlineActions ? () => handleTapChore(item) : undefined}
+            accessibilityRole={hasInlineActions ? "button" : undefined}
+            accessibilityLabel={hasInlineActions ? `${t("common.edit", "Edit")}: ${item.title}` : undefined}
+            style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+          >
             <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text, flex: 1 }}>
               {item.title}
             </Text>
@@ -168,7 +174,7 @@ export default function ChoresScreen() {
                 {formatSchedule(item)}
               </Text>
             </View>
-          </View>
+          </Pressable>
 
           {item.assignments && item.assignments.length > 0 && (
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8, flexWrap: "wrap" }}>

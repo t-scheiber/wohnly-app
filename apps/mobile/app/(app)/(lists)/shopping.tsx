@@ -177,12 +177,13 @@ export default function ShoppingScreen() {
 
         {/* Item text - tap to toggle, long press to edit */}
         <Pressable
-          onPress={() => handleToggle(item)}
-          onLongPress={() => openEditModal(item)}
-          accessibilityRole="checkbox"
-          accessibilityState={{ checked: item.checked }}
+          onPress={() => (selectMode.isSelectMode ? selectMode.toggleItem(item.id) : handleToggle(item))}
+          onLongPress={selectMode.isSelectMode ? undefined : () => openEditModal(item)}
+          importantForAccessibility={selectMode.isSelectMode ? "no" : "auto"}
+          accessibilityRole={selectMode.isSelectMode ? undefined : "checkbox"}
+          accessibilityState={selectMode.isSelectMode ? undefined : { checked: item.checked }}
           accessibilityLabel={item.name}
-          accessibilityHint={t("shopping.editHint", "Long press to edit")}
+          accessibilityHint={selectMode.isSelectMode ? undefined : t("shopping.editHint", "Long press to edit")}
           style={{ flex: 1 }}
         >
           <Text

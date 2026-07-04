@@ -52,7 +52,7 @@ export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProp
         setFieldErrors({ title: t("events.enterTitle", "Please enter a title") });
       }
       if (!startDate) {
-        Alert.alert("Error", "Please enter a title and start date");
+        Alert.alert(t("common.error", "Error"), t("events.enterStartDate", "Please select a start date"));
       }
       return;
     }

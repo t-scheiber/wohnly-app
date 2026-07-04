@@ -8,7 +8,7 @@ interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
 }
 
-export function Input({ label, error, containerStyle, style, ...props }: InputProps) {
+export function Input({ label, error, containerStyle, style, accessibilityLabel, accessibilityHint, ...props }: InputProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
 
@@ -24,10 +24,11 @@ export function Input({ label, error, containerStyle, style, ...props }: InputPr
         </Text>
       )}
       <TextInput
+        {...props}
         placeholderTextColor={colors.textSecondary}
-        accessibilityLabel={props.accessibilityLabel ?? label ?? props.placeholder}
+        accessibilityLabel={accessibilityLabel ?? label ?? props.placeholder}
         // Announce validation problems to screen readers (WCAG 3.3.1)
-        accessibilityHint={error ? error : props.accessibilityHint}
+        accessibilityHint={error ? error : accessibilityHint}
         aria-invalid={!!error}
         style={[
           {
@@ -42,7 +43,6 @@ export function Input({ label, error, containerStyle, style, ...props }: InputPr
           },
           style,
         ]}
-        {...props}
       />
       {error && (
         <Text
