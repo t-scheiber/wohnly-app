@@ -18,11 +18,17 @@ export default function JoinScreen() {
     code ? "" : "No invite code provided"
   );
 
+  // Adjust state during render when the invite code param changes
+  // (React docs pattern), so a late-arriving code restarts the flow.
+  const [prevCode, setPrevCode] = useState(code);
+  if (code !== prevCode) {
+    setPrevCode(code);
+    setStatus(code ? "loading" : "error");
+    setMessage(code ? "" : "No invite code provided");
+  }
+
   useEffect(() => {
     if (!code) return;
-
-    setStatus("loading");
-    setMessage("");
 
     (async () => {
       try {
