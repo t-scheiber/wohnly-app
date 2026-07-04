@@ -21,6 +21,11 @@ export function ExportSheet({ onClose }: ExportSheetProps) {
 
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
+  // Default range endpoints, computed once so render stays pure
+  const [defaultFromDate] = useState(
+    () => new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  );
+  const [defaultToDate] = useState(() => new Date());
   const [useRange, setUseRange] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -114,13 +119,13 @@ export function ExportSheet({ onClose }: ExportSheetProps) {
         <View style={{ gap: 12 }}>
           <DatePicker
             label={t("expenses.exportFrom", "From")}
-            value={fromDate ?? new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)}
+            value={fromDate ?? defaultFromDate}
             onChange={setFromDate}
             mode="date"
           />
           <DatePicker
             label={t("expenses.exportTo", "To")}
-            value={toDate ?? new Date()}
+            value={toDate ?? defaultToDate}
             onChange={setToDate}
             mode="date"
           />

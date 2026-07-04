@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform, Linking, AppState } from "react-native";
-import * as Calendar from "expo-calendar";
+import * as Calendar from "expo-calendar/legacy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const STORAGE_KEY = "wohnly:device-calendars";

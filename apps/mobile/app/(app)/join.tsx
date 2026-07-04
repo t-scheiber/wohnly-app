@@ -11,15 +11,24 @@ export default function JoinScreen() {
   const colors = Colors[colorScheme];
   const { code } = useLocalSearchParams<{ code: string }>();
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"loading" | "success" | "error">(() =>
+    code ? "loading" : "error"
+  );
+  const [message, setMessage] = useState(() =>
+    code ? "" : "No invite code provided"
+  );
+
+  // Adjust state during render when the invite code param changes
+  // (React docs pattern), so a late-arriving code restarts the flow.
+  const [prevCode, setPrevCode] = useState(code);
+  if (code !== prevCode) {
+    setPrevCode(code);
+    setStatus(code ? "loading" : "error");
+    setMessage(code ? "" : "No invite code provided");
+  }
 
   useEffect(() => {
-    if (!code) {
-      setStatus("error");
-      setMessage("No invite code provided");
-      return;
-    }
+    if (!code) return;
 
     (async () => {
       try {

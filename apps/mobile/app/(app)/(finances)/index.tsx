@@ -38,11 +38,16 @@ export default function FinancesScreen() {
   const { t } = useTranslation();
   const { tab: tabParam } = useLocalSearchParams<{ tab?: string }>();
 
-  const [tab, setTab] = useState<"expenses" | "subscriptions">("expenses");
+  const [tab, setTab] = useState<"expenses" | "subscriptions">(() =>
+    tabParam === "subscriptions" ? "subscriptions" : "expenses"
+  );
 
-  useEffect(() => {
+  // Adjust tab during render when the route param changes (React docs pattern)
+  const [prevTabParam, setPrevTabParam] = useState(tabParam);
+  if (tabParam !== prevTabParam) {
+    setPrevTabParam(tabParam);
     if (tabParam === "subscriptions") setTab("subscriptions");
-  }, [tabParam]);
+  }
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showSubForm, setShowSubForm] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
