@@ -79,6 +79,7 @@ export default function CalendarScreen() {
     ) {
       deviceCal.loadCalendars();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceCal.hasPermission, deviceCal.calendars]);
 
   // Fetch device events when month changes and device filter is on
@@ -93,6 +94,7 @@ export default function CalendarScreen() {
         endOfMonth(currentMonth),
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     currentMonth,
     filters.device,
@@ -100,7 +102,7 @@ export default function CalendarScreen() {
     deviceCal.hasPermission,
   ]);
 
-  const { markedDates, getItemsForDate, isLoading, refetch } = useCalendarData(
+  const { markedDates, getItemsForDate, refetch } = useCalendarData(
     currentMonth,
     filters,
     filters.device ? (deviceCal as any).deviceEvents : undefined,

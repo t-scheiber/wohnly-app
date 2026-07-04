@@ -24,6 +24,7 @@ let BannerAdSize: any = null;
 // Only import on native platforms
 if (Platform.OS !== "web") {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- conditional native-only module
     const ads = require("react-native-google-mobile-ads");
     BannerAd = ads.BannerAd;
     BannerAdSize = ads.BannerAdSize;

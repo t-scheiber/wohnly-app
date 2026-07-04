@@ -529,7 +529,7 @@ export default function SettingsScreen() {
       } else {
         await Share.share({ message });
       }
-    } catch (_) {}
+    } catch {}
   };
 
   const handleSignOut = () => {

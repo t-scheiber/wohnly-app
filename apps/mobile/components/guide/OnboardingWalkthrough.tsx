@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { View, Text, TouchableOpacity, Animated as RNAnimated, Platform, StyleSheet } from "react-native";
-
-const Animated = RNAnimated as any;
 import { ListTodo, Trash2, Pencil, Users, Laptop } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
@@ -9,6 +7,8 @@ import { useTheme } from "@/lib/hooks/useTheme";
 import { useReducedMotion } from "@/lib/hooks/useA11yPreferences";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { AppModal } from "@/components/ui/AppModal";
+
+const Animated = RNAnimated as any;
 
 interface Step {
   icon: React.ComponentType<{ size: number; color: string }>;

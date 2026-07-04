@@ -4,10 +4,8 @@
  * Web: no swipe, delete handled by select mode.
  */
 import { useRef } from "react";
-import { View, Text, TouchableOpacity, Platform, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { Trash2 } from "lucide-react-native";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { Colors } from "@/constants/Colors";
 import { confirmAction } from "@/lib/utils/confirm";
 import { notifyWarning } from "@/lib/utils/haptics";
 
@@ -15,6 +13,7 @@ import { notifyWarning } from "@/lib/utils/haptics";
 let Swipeable: typeof import("react-native-gesture-handler/ReanimatedSwipeable").default | null = null;
 if (Platform.OS !== "web") {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- conditional native-only module
     Swipeable = require("react-native-gesture-handler/ReanimatedSwipeable").default;
   } catch {}
 }
@@ -36,8 +35,6 @@ export default function SwipeableListItem({
   deleteConfirmMessage = "Are you sure you want to delete this item?",
   enabled = true,
 }: Props) {
-  const colorScheme = useColorScheme() ?? "light";
-  const colors = Colors[colorScheme];
   const swipeableRef = useRef<any>(null);
 
   const handleDelete = () => {

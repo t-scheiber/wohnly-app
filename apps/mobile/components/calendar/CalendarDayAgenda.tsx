@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { format } from "date-fns";
 import { de, enUS } from "date-fns/locale";
 import { Colors } from "@/constants/Colors";

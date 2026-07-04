@@ -1,7 +1,5 @@
 import { View, Text } from "react-native";
 import { Image } from "expo-image";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 
 interface AvatarProps {
   src?: string | null;
@@ -30,8 +28,6 @@ function getColor(name: string): string {
 }
 
 export function Avatar({ src, name = "?", size = 40 }: AvatarProps) {
-  const colorScheme = useColorScheme() ?? "light";
-
   if (src) {
     return (
       <Image

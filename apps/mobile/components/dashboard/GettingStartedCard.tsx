@@ -55,7 +55,7 @@ export function GettingStartedCard({
       } else {
         await Share.share({ message });
       }
-    } catch (_) {}
+    } catch {}
   };
 
   const steps = [

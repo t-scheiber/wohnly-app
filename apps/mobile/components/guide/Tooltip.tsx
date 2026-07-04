@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Animated as RNAnimated, Pressable, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-
-const Animated = RNAnimated as any;
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { useReducedMotion } from "@/lib/hooks/useA11yPreferences";
+
+const Animated = RNAnimated as any;
 
 interface TooltipProps {
   visible: boolean;

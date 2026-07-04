@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, RefreshControl, TouchableOpacity, Platform } from "react-native";
+import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { useState, useCallback } from "react";
 import { useRouter } from "expo-router";
 import { ScreenView } from "@/components/ui/ScreenView";

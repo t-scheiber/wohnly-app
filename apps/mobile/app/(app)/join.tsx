@@ -51,7 +51,7 @@ export default function JoinScreen() {
         setMessage(err instanceof Error ? err.message : "Failed to join household");
       }
     })();
-  }, [code]);
+  }, [code, router]);
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background, padding: 24 }}>

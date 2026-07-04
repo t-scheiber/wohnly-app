@@ -270,7 +270,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     if (session?.user?.id) {
       initRevenueCat(session.user.id);
     }
-  }, [session, isPending, segments]);
+  }, [session, isPending, segments, router]);
 
   // Register device for E2EE and push notifications on all platforms
   useEffect(() => {
@@ -304,7 +304,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
         router.push(data.url as any);
       }
     });
-  }, [session?.user?.id]);
+  }, [session?.user?.id, router]);
 
   if (isPending) return null;
 
@@ -338,7 +338,7 @@ export default function RootLayout() {
     if (Platform.OS === "web") {
       document.documentElement.lang = i18n.language;
     }
-  }, [i18n.language]);
+  });
 
   if (!theme.loaded) return null;
 

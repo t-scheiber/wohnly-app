@@ -103,7 +103,7 @@ export default function ChoresScreen() {
     }
     result.push({ title: t("chores.allChores"), data: chores });
     return result;
-  }, [data?.chores]);
+  }, [data?.chores, t]);
 
   const handleComplete = async (id: string) => {
     notifySuccess();

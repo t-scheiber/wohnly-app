@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { View, Text, FlatList, TouchableOpacity, RefreshControl, ScrollView } from "react-native";
 import { AppModal } from "@/components/ui/AppModal";
@@ -17,13 +17,18 @@ import { confirmAction } from "@/lib/utils/confirm";
 import { notifyWarning } from "@/lib/utils/haptics";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { formatCurrency, formatDate } from "@wohnly/shared";
+import {
+  formatCurrency,
+  formatDate,
+  getCategory,
+  EXPENSE_CATEGORIES,
+  type Expense,
+  type Subscription,
+} from "@wohnly/shared";
 import { AdBanner } from "@/components/common/AdBanner";
 import { HelpCircle, Info, TrendingUp, Wallet, Download, Paperclip, BarChart3 } from "lucide-react-native";
 import * as LucideIcons from "lucide-react-native";
 import { useTranslation } from "react-i18next";
-import { EXPENSE_CATEGORIES, getCategory } from "@wohnly/shared";
-import type { Expense, Subscription } from "@wohnly/shared";
 
 const frequencyLabels: Record<string, string> = {
   weekly: "Weekly",

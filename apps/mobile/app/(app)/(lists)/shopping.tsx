@@ -8,10 +8,10 @@ import {
   RefreshControl,
   Pressable,
   Alert,
+  ScrollView,
 } from "react-native";
 import { AppModal } from "@/components/ui/AppModal";
 import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem, useUpdateShoppingItem, useClearCheckedShopping, useShoppingSuggestions } from "@/lib/api/queries";
-import { ScrollView } from "react-native";
 import { AdBanner } from "@/components/common/AdBanner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";

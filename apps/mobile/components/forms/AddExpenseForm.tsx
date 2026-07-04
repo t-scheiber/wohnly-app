@@ -9,7 +9,7 @@ import { authClient } from "@/lib/auth/client";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
-import { EXPENSE_CATEGORIES, getCategory, CURRENCIES } from "@wohnly/shared";
+import { EXPENSE_CATEGORIES, CURRENCIES } from "@wohnly/shared";
 import * as LucideIcons from "lucide-react-native";
 import { Camera, Image as ImageIcon } from "lucide-react-native";
 import { ExpenseAttachments } from "../finances/ExpenseAttachments";

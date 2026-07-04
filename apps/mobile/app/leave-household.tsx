@@ -71,7 +71,7 @@ export default function LeaveHouseholdScreen() {
     return () => {
       cancelled = true;
     };
-  }, [token, params.error]);
+  }, [token, missingToken]);
 
   const goHome = () => router.replace("/");
 

@@ -61,7 +61,7 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
         mimeType: "image/jpeg",
         fileName: `receipt-${Date.now()}.jpg`,
       });
-    } catch (err) {
+    } catch {
       Alert.alert("Error", "Failed to pick photo");
     }
   };
@@ -98,7 +98,7 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
         mimeType: "image/jpeg",
         fileName: `receipt-${Date.now()}.jpg`,
       });
-    } catch (err) {
+    } catch {
       Alert.alert("Error", "Failed to take photo");
     }
   };
