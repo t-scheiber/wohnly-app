@@ -25,6 +25,7 @@
     "submit:android": "cd apps/mobile && eas submit --platform android --latest",
     "submit:macos-mas": "bash scripts/submit-macos-mas.sh",
     "typecheck": "npx tsc --noEmit -p apps/mobile/tsconfig.json",
+    "check:contrast": "node apps/mobile/scripts/check-contrast.mjs",
     "lint": "npm run lint --workspaces --if-present",
     "db:migrate": "npm run db:migrate --workspace=apps/api",
     "db:generate": "npm run db:generate --workspace=apps/api",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@emnapi/core": "1.10.0",
+    "eslint-plugin-react-native-a11y": "^3.5.1",
     "@emnapi/runtime": "1.10.0",
     "@napi-rs/wasm-runtime": "1.1.4",
     "@tauri-apps/api": "^2.11.0",

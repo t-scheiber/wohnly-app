@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, Modal, ScrollView } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, RefreshControl, ScrollView } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { useExpenses, useSubscriptions, useDeleteExpense, useDeleteSubscription, useMemberBalances, useHouseholdMembers } from "@/lib/api/queries";
 import { AddExpenseForm } from "@/components/forms/AddExpenseForm";
@@ -234,7 +235,17 @@ export default function FinancesScreen() {
       <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("finances.title")}</Text>
-          <TouchableOpacity onPress={() => setShowHelp(true)}>
+          <TouchableOpacity
+            onPress={() => setShowHelp(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t("help.helpAndTips")}
+            style={{
+              minWidth: 44,
+              minHeight: 44,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <HelpCircle size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
@@ -243,22 +254,34 @@ export default function FinancesScreen() {
             <>
               <TouchableOpacity
                 onPress={() => setShowAnalytics(true)}
+                accessibilityRole="button"
+                accessibilityLabel={t("finances.analytics")}
                 style={{
                   backgroundColor: colors.muted,
                   borderRadius: 10,
                   paddingHorizontal: 10,
                   paddingVertical: 8,
+                  minWidth: 44,
+                  minHeight: 44,
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <BarChart3 size={18} color={colors.textSecondary} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setShowExport(true)}
+                accessibilityRole="button"
+                accessibilityLabel={t("expenses.export")}
                 style={{
                   backgroundColor: colors.muted,
                   borderRadius: 10,
                   paddingHorizontal: 10,
                   paddingVertical: 8,
+                  minWidth: 44,
+                  minHeight: 44,
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <Download size={18} color={colors.textSecondary} />
@@ -267,6 +290,8 @@ export default function FinancesScreen() {
           )}
           <TouchableOpacity
             onPress={() => tab === "expenses" ? setShowExpenseForm(true) : setShowSubForm(true)}
+            accessibilityRole="button"
+            accessibilityLabel={tab === "expenses" ? t("expenses.addExpense") : t("subscriptions.addSubscription")}
             style={{
               backgroundColor: colors.primary,
               borderRadius: 10,
@@ -285,6 +310,8 @@ export default function FinancesScreen() {
           <TouchableOpacity
             key={tabKey}
             onPress={() => setTab(tabKey)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: tab === tabKey }}
             style={{
               flex: 1,
               paddingVertical: 10,
@@ -336,6 +363,8 @@ export default function FinancesScreen() {
         >
           <TouchableOpacity
             onPress={() => setCategoryFilter(null)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: !categoryFilter }}
             style={{
               paddingVertical: 6,
               paddingHorizontal: 12,
@@ -354,6 +383,8 @@ export default function FinancesScreen() {
               <TouchableOpacity
                 key={cat.id}
                 onPress={() => setCategoryFilter(isActive ? null : cat.id)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: isActive }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -449,11 +480,11 @@ export default function FinancesScreen() {
       />
 
       {/* Help Modal */}
-      <Modal visible={showHelp} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowHelp(false)}>
+      <AppModal visible={showHelp} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowHelp(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background, padding: 24 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
             <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}>{t("help.finances")}</Text>
-            <TouchableOpacity onPress={() => setShowHelp(false)}>
+            <TouchableOpacity onPress={() => setShowHelp(false)} accessibilityRole="button">
               <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 16 }}>{t("common.done")}</Text>
             </TouchableOpacity>
           </View>
@@ -505,10 +536,10 @@ export default function FinancesScreen() {
             </View>
           )}
         </View>
-      </Modal>
+      </AppModal>
 
       {/* Expense Modal (create + edit) */}
-      <Modal visible={isExpenseModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseExpenseModal}>
+      <AppModal visible={isExpenseModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseExpenseModal}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddExpenseForm
             editItem={editingExpense ?? undefined}
@@ -516,30 +547,30 @@ export default function FinancesScreen() {
             onCancel={handleCloseExpenseModal}
           />
         </View>
-      </Modal>
+      </AppModal>
 
       {/* Analytics Modal */}
-      <Modal visible={showAnalytics} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowAnalytics(false)}>
+      <AppModal visible={showAnalytics} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowAnalytics(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 16 }}>
             <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text }}>Spending Analytics</Text>
-            <TouchableOpacity onPress={() => setShowAnalytics(false)}>
+            <TouchableOpacity onPress={() => setShowAnalytics(false)} accessibilityRole="button">
               <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 16 }}>{t("common.done")}</Text>
             </TouchableOpacity>
           </View>
           <SpendingCharts />
         </View>
-      </Modal>
+      </AppModal>
 
       {/* Export Modal */}
-      <Modal visible={showExport} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowExport(false)}>
+      <AppModal visible={showExport} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowExport(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <ExportSheet onClose={() => setShowExport(false)} />
         </View>
-      </Modal>
+      </AppModal>
 
       {/* Subscription Modal (create + edit) */}
-      <Modal visible={isSubModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseSubModal}>
+      <AppModal visible={isSubModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseSubModal}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddSubscriptionForm
             editItem={editingSubscription ?? undefined}
@@ -547,7 +578,7 @@ export default function FinancesScreen() {
             onCancel={handleCloseSubModal}
           />
         </View>
-      </Modal>
+      </AppModal>
     </ScreenView>
   );
 }

@@ -180,12 +180,20 @@ export function Paywall({ onPurchased, onDismiss }: PaywallProps) {
           {t("settings.paywallLegal")}
         </Text>
         <View style={{ flexDirection: "row", gap: 16 }}>
-          <TouchableOpacity onPress={() => Linking.openURL("https://www.apple.com/legal/internet-services/itunes/dev/stgula/")}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL("https://www.apple.com/legal/internet-services/itunes/dev/stgula/")}
+            accessibilityRole="link"
+            accessibilityLabel="Terms of Use (EULA)"
+          >
             <Text style={{ fontSize: 11, color: colors.primary, textDecorationLine: "underline" }}>
               Terms of Use (EULA)
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL("https://wohnly.app/privacy")}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL("https://wohnly.app/privacy")}
+            accessibilityRole="link"
+            accessibilityLabel="Privacy Policy"
+          >
             <Text style={{ fontSize: 11, color: colors.primary, textDecorationLine: "underline" }}>
               Privacy Policy
             </Text>

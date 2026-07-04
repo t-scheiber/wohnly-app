@@ -72,6 +72,16 @@ export function ChoreAnalytics() {
             <TouchableOpacity
               key={p}
               onPress={() => setPeriod(p)}
+              accessibilityRole="button"
+              accessibilityLabel={
+                p === "week"
+                  ? t("chores.periodWeek", "Week")
+                  : p === "month"
+                    ? t("chores.periodMonth", "Month")
+                    : t("chores.periodAll", "All time")
+              }
+              accessibilityState={{ selected: period === p }}
+              hitSlop={{ top: 12, bottom: 12, left: 4, right: 4 }}
               style={{
                 paddingVertical: 4,
                 paddingHorizontal: 10,

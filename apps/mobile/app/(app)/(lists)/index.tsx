@@ -59,6 +59,8 @@ export default function ListsScreen() {
               key={item.label}
               onPress={() => router.push(item.route as any)}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={`${item.label}, ${item.sublabel}`}
               style={{
                 flexDirection: "row",
                 alignItems: "center",

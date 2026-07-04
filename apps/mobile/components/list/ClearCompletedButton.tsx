@@ -33,6 +33,8 @@ export default function ClearCompletedButton({
           onClear
         )
       }
+      accessibilityRole="button"
+      accessibilityLabel={`${label} (${completedCount})`}
       style={[styles.button, { backgroundColor: colors.card, borderColor: colors.border }]}
       activeOpacity={0.7}
     >
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
+    minHeight: 44,
     borderRadius: 8,
     borderWidth: 1,
     alignSelf: "center",

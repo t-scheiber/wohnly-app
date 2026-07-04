@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { View, Text, ScrollView, Alert, TouchableOpacity, Modal, Pressable, TextInput, FlatList } from "react-native";
+import { View, Text, ScrollView, Alert, TouchableOpacity, Pressable, TextInput, FlatList } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { DatePicker } from "../ui/DatePicker";
@@ -62,6 +63,8 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
   const [showItemizedForm, setShowItemizedForm] = useState(false);
   const [itemizedLineItems, setItemizedLineItems] = useState<LineItem[]>([]);
   const [scannedLineItems, setScannedLineItems] = useState<{ name: string; amount: number }[]>([]);
+
+  const [fieldErrors, setFieldErrors] = useState<{ title?: string; amount?: string }>({});
 
   const [scanning, setScanning] = useState(false);
   const scanAvailable = !isEditing && isScanAvailable();
@@ -168,13 +171,16 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
 
   const handleSubmit = async () => {
     if (!title.trim() || !amount) {
-      Alert.alert("Error", "Please fill in title and amount");
+      setFieldErrors({
+        title: !title.trim() ? t("expenses.enterTitle", "Please enter a title") : undefined,
+        amount: !amount ? t("expenses.enterAmount", "Please enter an amount") : undefined,
+      });
       return;
     }
 
     const numAmount = parseFloat(amount.replace(",", "."));
     if (isNaN(numAmount) || numAmount <= 0) {
-      Alert.alert("Error", "Please enter a valid amount");
+      setFieldErrors({ amount: t("expenses.invalidAmount", "Please enter a valid amount") });
       return;
     }
 
@@ -252,6 +258,8 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
           <TouchableOpacity
             onPress={() => handleScan("camera")}
             disabled={scanning}
+            accessibilityRole="button"
+            accessibilityLabel={t("expenses.scanReceipt", "Scan Receipt")}
             style={{
               flex: 1,
               flexDirection: "row",
@@ -271,6 +279,8 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
           <TouchableOpacity
             onPress={() => handleScan("gallery")}
             disabled={scanning}
+            accessibilityRole="button"
+            accessibilityLabel={t("expenses.scanFromGallery", "Scan receipt from gallery")}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -280,6 +290,8 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
               paddingVertical: 10,
               paddingHorizontal: 14,
               borderRadius: 8,
+              minWidth: 44,
+              minHeight: 44,
             }}
           >
             <ImageIcon size={18} color={colors.textSecondary} />
@@ -294,13 +306,19 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
             label={t("expenses.amount")}
             placeholder="0.00"
             value={amount}
-            onChangeText={setAmount}
+            onChangeText={(v) => {
+              setAmount(v);
+              if (fieldErrors.amount) setFieldErrors((prev) => ({ ...prev, amount: undefined }));
+            }}
             keyboardType="decimal-pad"
+            error={fieldErrors.amount}
             style={{ fontSize: 24, fontWeight: "600" }}
           />
         </View>
         <TouchableOpacity
           onPress={() => setCurrencyPickerOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel={`${t("expenses.selectCurrency", "Select currency")}, ${selectedCurrency.code}`}
           style={{
             backgroundColor: colors.muted,
             borderRadius: 10,
@@ -321,7 +339,11 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
         label={t("expenses.title") || "Title"}
         placeholder="e.g., Groceries"
         value={title}
-        onChangeText={setTitle}
+        onChangeText={(v) => {
+          setTitle(v);
+          if (fieldErrors.title) setFieldErrors((prev) => ({ ...prev, title: undefined }));
+        }}
+        error={fieldErrors.title}
       />
 
       {/* Category Chips */}
@@ -337,6 +359,9 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
               <TouchableOpacity
                 key={cat.id}
                 onPress={() => setCategory(isSelected ? "" : cat.id)}
+                accessibilityRole="button"
+                accessibilityLabel={t(`expenses.categories.${cat.id}`, cat.id)}
+                accessibilityState={{ selected: isSelected }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -377,6 +402,9 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
               <TouchableOpacity
                 key={member.id}
                 onPress={() => setPaidByMemberId(member.id)}
+                accessibilityRole="button"
+                accessibilityLabel={member.nickname || member.displayName || (member as any).email}
+                accessibilityState={{ selected: selectedPaidBy === member.id }}
                 style={{
                   paddingVertical: 8,
                   paddingHorizontal: 14,
@@ -417,6 +445,14 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
                   if (mode === "custom") initCustomSplits();
                   if (mode === "shares") initShares();
                 }}
+                accessibilityRole="button"
+                accessibilityLabel={
+                  mode === "equal" ? t("expenses.equal")
+                    : mode === "shares" ? t("expenses.shares", "Shares")
+                    : mode === "itemized" ? "Items"
+                    : "Custom"
+                }
+                accessibilityState={{ selected: splitMode === mode }}
                 style={{
                   flex: 1,
                   paddingVertical: 10,
@@ -473,6 +509,10 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
                   value={split.amount}
                   onChangeText={(v: string) => updateMemberSplit(split.memberId, v)}
                   keyboardType="decimal-pad"
+                  accessibilityLabel={t("expenses.amountFor", {
+                    defaultValue: "Amount for {{name}}",
+                    name: split.name,
+                  })}
                   placeholder="0.00"
                   placeholderTextColor={colors.textSecondary}
                   style={{
@@ -491,6 +531,12 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
                 />
                 <TouchableOpacity
                   onPress={() => autoFillRemaining(split.memberId)}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("expenses.fillRemainingFor", {
+                    defaultValue: "Fill remaining amount for {{name}}",
+                    name: split.name,
+                  })}
+                  hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
                   style={{
                     backgroundColor: colors.muted,
                     borderRadius: 6,
@@ -529,6 +575,12 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                   <TouchableOpacity
                     onPress={() => setMemberShares((prev) => prev.map((s) => s.memberId === ms.memberId ? { ...s, shares: Math.max(0, s.shares - 1) } : s))}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("expenses.decreaseSharesFor", {
+                      defaultValue: "Decrease shares for {{name}}",
+                      name: ms.name,
+                    })}
+                    hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
                     style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: colors.muted, alignItems: "center", justifyContent: "center" }}
                   >
                     <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text }}>-</Text>
@@ -538,6 +590,12 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
                   </Text>
                   <TouchableOpacity
                     onPress={() => setMemberShares((prev) => prev.map((s) => s.memberId === ms.memberId ? { ...s, shares: s.shares + 1 } : s))}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("expenses.increaseSharesFor", {
+                      defaultValue: "Increase shares for {{name}}",
+                      name: ms.name,
+                    })}
+                    hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
                     style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: colors.muted, alignItems: "center", justifyContent: "center" }}
                   >
                     <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text }}>+</Text>
@@ -588,15 +646,21 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
       </View>
 
       {/* Currency Picker Modal */}
-      <Modal visible={currencyPickerOpen} transparent animationType="fade" onRequestClose={() => setCurrencyPickerOpen(false)}>
-        <Pressable onPress={() => setCurrencyPickerOpen(false)} style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" }}>
-          <Pressable onPress={() => {}} style={{ backgroundColor: colors.card, borderRadius: 16, width: "85%", maxWidth: 360, maxHeight: "70%", overflow: "hidden" }}>
+      <AppModal visible={currencyPickerOpen} transparent animationType="fade" onRequestClose={() => setCurrencyPickerOpen(false)}>
+        <Pressable
+          onPress={() => setCurrencyPickerOpen(false)}
+          accessibilityRole="button"
+          accessibilityLabel={t("common.close", "Close")}
+          style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" }}
+        >
+          <Pressable onPress={() => {}} accessible={false} style={{ backgroundColor: colors.card, borderRadius: 16, width: "85%", maxWidth: 360, maxHeight: "70%", overflow: "hidden" }}>
             <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text, padding: 20, paddingBottom: 8 }}>
               Currency
             </Text>
             <View style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
               <TextInput
                 placeholder="Search..."
+                accessibilityLabel={t("common.search", "Search")}
                 placeholderTextColor={colors.textSecondary}
                 value={currencySearch}
                 onChangeText={setCurrencySearch}
@@ -618,6 +682,9 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
               renderItem={({ item }: { item: { code: string; name: string; symbol: string } }) => (
                 <TouchableOpacity
                   onPress={() => { setCurrency(item.code); setCurrencyPickerOpen(false); setCurrencySearch(""); }}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${item.name}, ${item.code}`}
+                  accessibilityState={{ selected: item.code === currency }}
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
@@ -638,10 +705,10 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
             />
           </Pressable>
         </Pressable>
-      </Modal>
+      </AppModal>
 
       {/* Itemized Split Modal */}
-      <Modal visible={showItemizedForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowItemizedForm(false)}>
+      <AppModal visible={showItemizedForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowItemizedForm(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <ItemizedSplitForm
             currency={currency}
@@ -658,7 +725,7 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
             }}
           />
         </View>
-      </Modal>
+      </AppModal>
     </ScrollView>
   );
 }

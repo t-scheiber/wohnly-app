@@ -12,6 +12,7 @@ import {
   format,
   addMonths,
   subMonths,
+  type Locale,
 } from "date-fns";
 import { de, enUS } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
@@ -42,6 +43,7 @@ const DayCell = memo(function DayCell({
   markers,
   onPress,
   colors,
+  locale,
 }: {
   date: Date;
   isCurrentMonth: boolean;
@@ -50,10 +52,14 @@ const DayCell = memo(function DayCell({
   markers?: DayMarkers;
   onPress: () => void;
   colors: (typeof Colors)["light"];
+  locale: Locale;
 }) {
   return (
     <TouchableOpacity
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={format(date, "PPPP", { locale })}
+      accessibilityState={{ selected: isSelected }}
       style={{
         flex: 1,
         aspectRatio: 1,
@@ -101,7 +107,7 @@ export function CalendarMonthView({
 }: CalendarMonthViewProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = i18n.language === "de" ? de : enUS;
 
   const monthStart = startOfMonth(currentMonth);
@@ -131,13 +137,28 @@ export function CalendarMonthView({
     <View style={{ paddingHorizontal: 12 }}>
       {/* Month header with navigation */}
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12, paddingHorizontal: 4 }}>
-        <TouchableOpacity onPress={() => onChangeMonth(subMonths(currentMonth, 1))} hitSlop={12}>
+        <TouchableOpacity
+          onPress={() => onChangeMonth(subMonths(currentMonth, 1))}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel={t("calendar.previousMonth", "Previous month")}
+          style={{ minWidth: 44, minHeight: 44, alignItems: "center", justifyContent: "center" }}
+        >
           <ChevronLeft size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text }}>
+        <Text
+          accessibilityRole="header"
+          style={{ fontSize: 18, fontWeight: "700", color: colors.text }}
+        >
           {format(currentMonth, "MMMM yyyy", { locale })}
         </Text>
-        <TouchableOpacity onPress={() => onChangeMonth(addMonths(currentMonth, 1))} hitSlop={12}>
+        <TouchableOpacity
+          onPress={() => onChangeMonth(addMonths(currentMonth, 1))}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel={t("calendar.nextMonth", "Next month")}
+          style={{ minWidth: 44, minHeight: 44, alignItems: "center", justifyContent: "center" }}
+        >
           <ChevronRight size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
@@ -168,6 +189,7 @@ export function CalendarMonthView({
                 markers={markedDates[key]}
                 onPress={() => onSelectDate(d)}
                 colors={colors}
+                locale={locale}
               />
             );
           })}

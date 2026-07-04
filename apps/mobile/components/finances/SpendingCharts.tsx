@@ -53,6 +53,9 @@ export function SpendingCharts() {
           <TouchableOpacity
             key={p}
             onPress={() => setPeriod(p)}
+            accessibilityRole="button"
+            accessibilityLabel={PERIOD_LABELS[p]}
+            accessibilityState={{ selected: period === p }}
             style={{
               flex: 1,
               paddingVertical: 10,

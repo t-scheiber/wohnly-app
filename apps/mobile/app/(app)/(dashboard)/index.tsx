@@ -121,6 +121,8 @@ export default function DashboardScreen() {
               key={action.title}
               onPress={() => router.push(action.route as any)}
               activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityLabel={action.title}
               style={{
                 flex: 1,
                 minWidth: "45%",
@@ -145,7 +147,11 @@ export default function DashboardScreen() {
               <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text }}>
                 {t("balances.totalBalance")}
               </Text>
-              <TouchableOpacity onPress={() => router.push("/(app)/(finances)" as any)}>
+              <TouchableOpacity
+                onPress={() => router.push("/(app)/(finances)" as any)}
+                accessibilityRole="button"
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              >
                 <Text style={{ fontSize: 14, color: colors.primary, fontWeight: "600" }}>{t("common.seeAll")}</Text>
               </TouchableOpacity>
             </View>

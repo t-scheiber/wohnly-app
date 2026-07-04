@@ -144,7 +144,11 @@ export default function TermsOfServiceScreen() {
           <Paragraph colors={colors}>
             If you have questions about these terms, contact us at:
           </Paragraph>
-          <TouchableOpacity onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}`)}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}`)}
+            accessibilityRole="link"
+            accessibilityLabel={`Email ${SUPPORT_EMAIL}`}
+          >
             <Text style={{ fontSize: 16, color: colors.primary, marginBottom: 8 }}>
               {SUPPORT_EMAIL}
             </Text>

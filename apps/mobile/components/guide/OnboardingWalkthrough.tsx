@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated as RNAnimated, Platform, StyleSheet, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Animated as RNAnimated, Platform, StyleSheet } from "react-native";
 
 const Animated = RNAnimated as any;
 import { ListTodo, Trash2, Pencil, Users, Laptop } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
+import { useReducedMotion } from "@/lib/hooks/useA11yPreferences";
 import { useOnboarding } from "@/hooks/useOnboarding";
+import { AppModal } from "@/components/ui/AppModal";
 
 interface Step {
   icon: React.ComponentType<{ size: number; color: string }>;
@@ -51,8 +53,13 @@ export function OnboardingWalkthrough() {
   const { showOnboarding, completeOnboarding } = useOnboarding();
   const [step, setStep] = useState(0);
   const [fadeAnim] = useState(() => new Animated.Value(1));
+  const reducedMotion = useReducedMotion();
 
   const animateTransition = (nextStep: number) => {
+    if (reducedMotion) {
+      setStep(nextStep);
+      return;
+    }
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 150,
@@ -85,7 +92,7 @@ export function OnboardingWalkthrough() {
   const IconComponent = current.icon;
 
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={handleSkip}>
+    <AppModal visible transparent animationType="fade" onRequestClose={handleSkip}>
       <View style={[styles.overlay, { backgroundColor: "rgba(0,0,0,0.85)" }]}>
         <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
           {/* Icon */}
@@ -105,7 +112,14 @@ export function OnboardingWalkthrough() {
         </Animated.View>
 
         {/* Dot indicators */}
-        <View style={styles.dots}>
+        <View
+          style={styles.dots}
+          accessibilityLabel={t("onboarding.progressA11y", {
+            defaultValue: "Step {{current}} of {{total}}",
+            current: step + 1,
+            total: STEPS.length,
+          })}
+        >
           {STEPS.map((_, i) => (
             <View
               key={i}
@@ -121,12 +135,21 @@ export function OnboardingWalkthrough() {
 
         {/* Buttons */}
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
+          <TouchableOpacity
+            onPress={handleSkip}
+            accessibilityRole="button"
+            accessibilityLabel={t("onboarding.skip")}
+            style={styles.skipButton}
+          >
             <Text style={styles.skipText}>{t("onboarding.skip")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={handleNext}
+            accessibilityRole="button"
+            accessibilityLabel={
+              step < STEPS.length - 1 ? t("onboarding.next") : t("onboarding.done")
+            }
             style={[styles.nextButton, { backgroundColor: colors.primary }]}
           >
             <Text style={[styles.nextText, { color: colors.primaryForeground }]}>
@@ -135,7 +158,7 @@ export function OnboardingWalkthrough() {
           </TouchableOpacity>
         </View>
       </View>
-    </Modal>
+    </AppModal>
   );
 }
 

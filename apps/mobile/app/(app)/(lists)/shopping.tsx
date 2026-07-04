@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   TextInput,
   RefreshControl,
-  Modal,
   Pressable,
   Alert,
 } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem, useUpdateShoppingItem, useClearCheckedShopping, useShoppingSuggestions } from "@/lib/api/queries";
 import { ScrollView } from "react-native";
 import { AdBanner } from "@/components/common/AdBanner";
@@ -134,6 +134,10 @@ export default function ShoppingScreen() {
         {selectMode.isSelectMode ? (
           <TouchableOpacity
             onPress={() => selectMode.toggleItem(item.id)}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: isSelected }}
+            accessibilityLabel={item.name}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               width: 24,
               height: 24,
@@ -151,6 +155,10 @@ export default function ShoppingScreen() {
         ) : (
           <TouchableOpacity
             onPress={() => handleToggle(item)}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: item.checked }}
+            accessibilityLabel={item.name}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               width: 24,
               height: 24,
@@ -171,6 +179,10 @@ export default function ShoppingScreen() {
         <Pressable
           onPress={() => handleToggle(item)}
           onLongPress={() => openEditModal(item)}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: item.checked }}
+          accessibilityLabel={item.name}
+          accessibilityHint={t("shopping.editHint", "Long press to edit")}
           style={{ flex: 1 }}
         >
           <Text
@@ -214,6 +226,8 @@ export default function ShoppingScreen() {
           <TouchableOpacity
             key={key}
             onPress={() => setTab(key)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: tab === key }}
             style={{
               flex: 1,
               paddingVertical: 10,
@@ -259,6 +273,8 @@ export default function ShoppingScreen() {
                 await createItem.mutateAsync({ name: s.name, isPersonal: false });
                 notifySuccess();
               }}
+              accessibilityRole="button"
+              accessibilityLabel={`${t("common.add")} ${s.name}`}
               style={{
                 paddingVertical: 6,
                 paddingHorizontal: 12,
@@ -313,6 +329,7 @@ export default function ShoppingScreen() {
       >
         <TextInput
           placeholder={t("shopping.addItem")}
+          accessibilityLabel={t("shopping.addItem")}
           placeholderTextColor={colors.textSecondary}
           value={newItem}
           onChangeText={setNewItem}
@@ -332,6 +349,8 @@ export default function ShoppingScreen() {
         <Pressable
           onPress={handleAdd}
           disabled={!newItem.trim()}
+          accessibilityRole="button"
+          accessibilityState={{ disabled: !newItem.trim() }}
           style={({ pressed }) => ({
             backgroundColor: newItem.trim() ? colors.primary : colors.muted,
             borderRadius: 8,
@@ -348,7 +367,7 @@ export default function ShoppingScreen() {
       </View>
 
       {/* Edit modal */}
-      <Modal
+      <AppModal
         visible={!!editItem}
         presentationStyle="pageSheet"
         animationType="slide"
@@ -357,7 +376,7 @@ export default function ShoppingScreen() {
         <View style={{ flex: 1, backgroundColor: colors.background, padding: 24 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
             <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>{t("shopping.editItem")}</Text>
-            <TouchableOpacity onPress={() => setEditItem(null)}>
+            <TouchableOpacity onPress={() => setEditItem(null)} accessibilityRole="button" hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
               <Text style={{ fontSize: 16, color: colors.textSecondary }}>{t("common.cancel")}</Text>
             </TouchableOpacity>
           </View>
@@ -384,7 +403,7 @@ export default function ShoppingScreen() {
             {t("common.save")}
           </Button>
         </View>
-      </Modal>
+      </AppModal>
     </View>
   );
 }

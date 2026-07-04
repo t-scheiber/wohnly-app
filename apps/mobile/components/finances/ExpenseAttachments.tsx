@@ -132,6 +132,8 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
         {Platform.OS !== "web" && (
           <TouchableOpacity
             onPress={handleTakePhoto}
+            accessibilityRole="button"
+            accessibilityLabel={t("expenses.attachments.takePhoto", "Take photo")}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -150,6 +152,8 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
         )}
         <TouchableOpacity
           onPress={handlePickPhoto}
+          accessibilityRole="button"
+          accessibilityLabel={t("expenses.attachments.addPhoto", "Add photo")}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -167,6 +171,9 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setShowNoteInput(!showNoteInput)}
+          accessibilityRole="button"
+          accessibilityLabel={t("expenses.attachments.addNote", "Add note")}
+          accessibilityState={{ expanded: showNoteInput }}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -190,6 +197,7 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
           <TextInput
             value={noteText}
             onChangeText={setNoteText}
+            accessibilityLabel={t("expenses.attachments.noteInput", "Note text")}
             placeholder="Add a note..."
             placeholderTextColor={colors.textSecondary}
             multiline
@@ -209,6 +217,8 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
           <TouchableOpacity
             onPress={handleAddNote}
             disabled={!noteText.trim()}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.add")}
             style={{
               backgroundColor: noteText.trim() ? colors.primary : colors.muted,
               borderRadius: 8,
@@ -226,18 +236,25 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
       {/* Photos grid */}
       {photos.length > 0 && (
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-          {photos.map((photo) => (
+          {photos.map((photo, index) => (
             <TouchableOpacity
               key={photo.id}
               onLongPress={() => handleDelete(photo.id)}
+              accessibilityRole="button"
+              accessibilityLabel={`${t("expenses.attachments.receipt", "Receipt attachment")} ${index + 1}`}
+              accessibilityHint={t("expenses.attachments.receiptHint", "Long press to delete")}
               style={{ position: "relative" }}
             >
               <Image
                 source={{ uri: `data:${photo.mimeType || "image/jpeg"};base64,${photo.content}` }}
+                accessibilityLabel={`${t("expenses.attachments.receipt", "Receipt attachment")} ${index + 1}`}
                 style={{ width: 80, height: 80, borderRadius: 8 }}
               />
               <TouchableOpacity
                 onPress={() => handleDelete(photo.id)}
+                accessibilityRole="button"
+                accessibilityLabel={`${t("expenses.attachments.deleteReceipt", "Delete receipt attachment")} ${index + 1}`}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                 style={{
                   position: "absolute",
                   top: -6,
@@ -274,7 +291,12 @@ export function ExpenseAttachments({ expenseId }: ExpenseAttachmentsProps) {
           <Text style={{ flex: 1, fontSize: 13, color: colors.text, lineHeight: 18 }}>
             {note.content}
           </Text>
-          <TouchableOpacity onPress={() => handleDelete(note.id)}>
+          <TouchableOpacity
+            onPress={() => handleDelete(note.id)}
+            accessibilityRole="button"
+            accessibilityLabel={t("expenses.attachments.deleteNote", "Delete note")}
+            hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+          >
             <Trash2 size={14} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>

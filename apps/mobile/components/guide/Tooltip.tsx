@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 const Animated = RNAnimated as any;
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
+import { useReducedMotion } from "@/lib/hooks/useA11yPreferences";
 
 interface TooltipProps {
   visible: boolean;
@@ -19,20 +20,30 @@ export function Tooltip({ visible, message, position, onDismiss }: TooltipProps)
   const colors = Colors[colorScheme];
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const [opacity] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
+    if (reducedMotion) {
+      opacity.setValue(visible ? 1 : 0);
+      return;
+    }
     Animated.timing(opacity, {
       toValue: visible ? 1 : 0,
       duration: 250,
       useNativeDriver: true,
     }).start();
-  }, [visible, opacity]);
+  }, [visible, opacity, reducedMotion]);
 
   if (!visible) return null;
 
   return (
-    <Pressable style={styles.backdrop} onPress={onDismiss}>
+    <Pressable
+      style={styles.backdrop}
+      onPress={onDismiss}
+      accessibilityRole="button"
+      accessibilityLabel={t("common.dismiss", "Dismiss")}
+    >
       <Animated.View
         style={[
           styles.container,
@@ -57,6 +68,8 @@ export function Tooltip({ visible, message, position, onDismiss }: TooltipProps)
           <Text style={[styles.message, { color: colors.text }]}>{message}</Text>
           <TouchableOpacity
             onPress={onDismiss}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.gotIt")}
             style={[styles.dismissButton, { backgroundColor: colors.primary }]}
           >
             <Text style={[styles.dismissText, { color: colors.primaryForeground }]}>{t("common.gotIt")}</Text>
@@ -118,6 +131,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 20,
+    minHeight: 44,
+    justifyContent: "center",
     alignSelf: "center",
   },
   dismissText: {

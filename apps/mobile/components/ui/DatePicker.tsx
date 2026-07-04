@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { de, enUS } from "date-fns/locale";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useReducedMotion } from "@/lib/hooks/useA11yPreferences";
 import { useTranslation } from "react-i18next";
 
 interface DatePickerProps {
@@ -32,8 +33,9 @@ export function DatePicker({
 }: DatePickerProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = i18n.language === "de" ? de : enUS;
+  const reducedMotion = useReducedMotion();
 
   const [show, setShow] = useState(false);
 
@@ -47,7 +49,7 @@ export function DatePicker({
   };
 
   const formatValue = () => {
-    if (!value) return placeholder ?? "Select date";
+    if (!value) return placeholder ?? t("common.selectDate", "Select date");
     if (mode === "datetime") {
       return format(value, "PPP p", { locale });
     }
@@ -59,32 +61,55 @@ export function DatePicker({
   return (
     <View style={{ marginBottom: 12 }}>
       {label && (
-        <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
+        <Text
+          accessibilityElementsHidden
+          importantForAccessibility="no"
+          style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}
+        >
           {label}
         </Text>
       )}
-      <TouchableOpacity
-        onPress={() => setShow(true)}
+      <View
         style={{
           backgroundColor: colors.card,
           borderWidth: 1,
-          borderColor: colors.border,
+          borderColor: colors.inputBorder,
           borderRadius: 10,
-          padding: 14,
           flexDirection: "row",
-          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 16, color: value ? colors.text : colors.textSecondary }}>
-          {formatValue()}
-        </Text>
+        <TouchableOpacity
+          onPress={() => setShow(true)}
+          accessibilityRole="button"
+          accessibilityLabel={label ?? t("common.selectDate", "Select date")}
+          accessibilityValue={value ? { text: formatValue() } : undefined}
+          accessibilityHint={t("common.selectDateHint", "Opens a date picker")}
+          style={{
+            flex: 1,
+            padding: 14,
+            minHeight: 44,
+            justifyContent: "center",
+          }}
+        >
+          <Text style={{ fontSize: 16, color: value ? colors.text : colors.textSecondary }}>
+            {formatValue()}
+          </Text>
+        </TouchableOpacity>
         {optional && value && onClear && (
-          <TouchableOpacity onPress={onClear} hitSlop={8}>
-            <Text style={{ fontSize: 14, color: colors.textSecondary }}>Clear</Text>
+          <TouchableOpacity
+            onPress={onClear}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.clearDate", "Clear date")}
+            style={{ paddingHorizontal: 14, minHeight: 44, justifyContent: "center" }}
+          >
+            <Text style={{ fontSize: 14, color: colors.textSecondary }}>
+              {t("common.clear", "Clear")}
+            </Text>
           </TouchableOpacity>
         )}
-      </TouchableOpacity>
+      </View>
 
       {show && Platform.OS === "android" && (
         <DateTimePicker
@@ -99,13 +124,21 @@ export function DatePicker({
       )}
 
       {show && Platform.OS === "ios" && (
-        <Modal transparent animationType="fade" onRequestClose={() => setShow(false)}>
+        <Modal
+          transparent
+          animationType={reducedMotion ? "none" : "fade"}
+          onRequestClose={() => setShow(false)}
+        >
           <Pressable
             onPress={() => setShow(false)}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.close", "Close")}
             style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "flex-end" }}
           >
             <Pressable
               onPress={() => {}}
+              accessibilityRole="none"
+              accessibilityViewIsModal
               style={{
                 backgroundColor: colors.card,
                 borderTopLeftRadius: 20,
@@ -114,8 +147,15 @@ export function DatePicker({
               }}
             >
               <View style={{ flexDirection: "row", justifyContent: "flex-end", padding: 16 }}>
-                <TouchableOpacity onPress={() => setShow(false)}>
-                  <Text style={{ fontSize: 16, fontWeight: "600", color: colors.primary }}>Done</Text>
+                <TouchableOpacity
+                  onPress={() => setShow(false)}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("common.done", "Done")}
+                  style={{ minHeight: 44, minWidth: 44, justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text style={{ fontSize: 16, fontWeight: "600", color: colors.primary }}>
+                    {t("common.done", "Done")}
+                  </Text>
                 </TouchableOpacity>
               </View>
               <DateTimePicker

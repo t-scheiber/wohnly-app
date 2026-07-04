@@ -151,6 +151,8 @@ export default function SignInScreen() {
         <Image
           source={require("@/assets/images/icon.png")}
           style={styles.icon}
+          accessibilityElementsHidden
+          importantForAccessibility="no"
         />
         <Text style={[styles.title, { color: colors.primary }]}>Wohnly</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -161,6 +163,8 @@ export default function SignInScreen() {
         <Pressable
           onPress={() => handleSocialSignIn("google")}
           disabled={loadingGoogle}
+          accessibilityRole="button"
+          accessibilityLabel={t("auth.continueWithGoogle", "Continue with Google")}
           style={({ pressed }) => [styles.googleBtn, { opacity: pressed ? 0.8 : 1 }]}
         >
           <View style={styles.oauthContent}>
@@ -179,6 +183,8 @@ export default function SignInScreen() {
         <Pressable
           onPress={() => handleSocialSignIn("apple")}
           disabled={loadingApple}
+          accessibilityRole="button"
+          accessibilityLabel={t("auth.continueWithApple", "Continue with Apple")}
           style={({ pressed }) => [styles.appleBtn, { opacity: pressed ? 0.8 : 1 }]}
         >
           <View style={styles.oauthContent}>
@@ -257,6 +263,8 @@ export default function SignInScreen() {
               <View style={[styles.downloadDivider, { backgroundColor: colors.border }]} />
               <Pressable
                 onPress={() => { if (typeof window !== "undefined") window.open(url, "_blank"); }}
+                accessibilityRole="link"
+                accessibilityLabel={`${subtitle} ${storeName}`}
                 style={({ pressed }) => [styles.storeBadge, { opacity: pressed ? 0.8 : 1 }]}
               >
                 <Logo size={20} color="#fff" />
