@@ -21,6 +21,9 @@ export default function JoinScreen() {
   useEffect(() => {
     if (!code) return;
 
+    setStatus("loading");
+    setMessage("");
+
     (async () => {
       try {
         // Register device for E2EE before joining

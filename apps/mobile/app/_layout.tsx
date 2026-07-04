@@ -210,6 +210,11 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   >(null);
   useConsent(); // GDPR consent for AdMob — runs once on app start
 
+  // Reset dismissal when session changes (new login)
+  useEffect(() => {
+    setNamePromptDismissedFor(null);
+  }, [session?.user?.id]);
+
   // Handle Stripe checkout return on web
   useEffect(() => {
     if (Platform.OS !== "web") return;
