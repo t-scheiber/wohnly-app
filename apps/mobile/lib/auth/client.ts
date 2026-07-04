@@ -1,4 +1,6 @@
 import { createAuthClient } from "better-auth/react";
+import type { BetterAuthClientPlugin } from "better-auth";
+import type { BetterFetchPlugin } from "@better-fetch/fetch";
 import { expoClient } from "@better-auth/expo/client";
 import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
@@ -41,86 +43,76 @@ function safeJsonParse(
  * - Injects the stored session cookie into every request
  * - Captures set-cookie headers from responses and stores them
  */
+const tauriFetchPlugin = {
+  id: "tauri-cookie",
+  name: "Tauri Cookie",
+  async init(url, options) {
+    // Check at request time, not module init time
+    if (!isTauriRuntime()) return { url, options };
+
+    const sessionToken = getTauriSessionToken();
+    options = options || {};
+    options.credentials = "omit";
+    options.headers = {
+      ...options.headers,
+      // Browser forbids setting Cookie header in fetch(),
+      // so send via custom header that the API converts to Cookie
+      ...(sessionToken ? { "x-session-token": sessionToken } : {}),
+    };
+    return { url, options };
+  },
+  hooks: {
+    async onSuccess(context) {
+      if (!isTauriRuntime()) return;
+
+      const setCookie = context.response.headers.get("set-cookie");
+      if (!setCookie) return;
+
+      const existing = localStorage.getItem(COOKIE_STORAGE_KEY);
+      const cookies: Record<
+        string,
+        { value: string; expires: string | null }
+      > = existing ? safeJsonParse(existing) : {};
+
+      for (const part of setCookie.split(/,\s*(?=[^\s;=]+=)/)) {
+        const trimmed = part.trim();
+        const eqIdx = trimmed.indexOf("=");
+        if (eqIdx === -1) continue;
+        const name = trimmed.substring(0, eqIdx).trim();
+        if (
+          !name ||
+          name.toLowerCase() === "expires" ||
+          name.toLowerCase() === "path" ||
+          name.toLowerCase() === "domain"
+        )
+          continue;
+        const rest = trimmed.substring(eqIdx + 1);
+        const semiIdx = rest.indexOf(";");
+        const value =
+          semiIdx === -1 ? rest.trim() : rest.substring(0, semiIdx).trim();
+
+        let expires: string | null = null;
+        const maxAgeMatch = rest.match(/max-age=(\d+)/i);
+        if (maxAgeMatch) {
+          const maxAge = parseInt(maxAgeMatch[1], 10);
+          if (maxAge <= 0) {
+            delete cookies[name];
+            continue;
+          }
+          expires = new Date(Date.now() + maxAge * 1000).toISOString();
+        }
+        cookies[name] = { value, expires };
+      }
+
+      localStorage.setItem(COOKIE_STORAGE_KEY, JSON.stringify(cookies));
+    },
+  },
+} satisfies BetterFetchPlugin;
+
 const tauriPlugin = {
   id: "tauri",
-  fetchPlugins: [
-    {
-      id: "tauri-cookie",
-      name: "Tauri Cookie",
-      async init(url: string, options: RequestInit | undefined) {
-        // Check at request time, not module init time
-        if (!isTauriRuntime()) return { url, options };
-
-        const sessionToken = getTauriSessionToken();
-        options = options || {};
-        options.credentials = "omit";
-        options.headers = {
-          ...options.headers,
-          // Browser forbids setting Cookie header in fetch(),
-          // so send via custom header that the API converts to Cookie
-          ...(sessionToken ? { "x-session-token": sessionToken } : {}),
-        };
-        return { url, options };
-      },
-      hooks: {
-        async onSuccess(context: {
-          response: Response;
-          data: unknown;
-        }) {
-          if (!isTauriRuntime()) return;
-
-          const setCookie = context.response.headers.get("set-cookie");
-          if (!setCookie) return;
-
-          const existing = localStorage.getItem(COOKIE_STORAGE_KEY);
-          const cookies: Record<
-            string,
-            { value: string; expires: string | null }
-          > = existing ? safeJsonParse(existing) : {};
-
-          for (const part of setCookie.split(/,\s*(?=[^\s;=]+=)/)) {
-            const trimmed = part.trim();
-            const eqIdx = trimmed.indexOf("=");
-            if (eqIdx === -1) continue;
-            const name = trimmed.substring(0, eqIdx).trim();
-            if (
-              !name ||
-              name.toLowerCase() === "expires" ||
-              name.toLowerCase() === "path" ||
-              name.toLowerCase() === "domain"
-            )
-              continue;
-            const rest = trimmed.substring(eqIdx + 1);
-            const semiIdx = rest.indexOf(";");
-            const value =
-              semiIdx === -1
-                ? rest.trim()
-                : rest.substring(0, semiIdx).trim();
-
-            let expires: string | null = null;
-            const maxAgeMatch = rest.match(/max-age=(\d+)/i);
-            if (maxAgeMatch) {
-              const maxAge = parseInt(maxAgeMatch[1], 10);
-              if (maxAge <= 0) {
-                delete cookies[name];
-                continue;
-              }
-              expires = new Date(
-                Date.now() + maxAge * 1000
-              ).toISOString();
-            }
-            cookies[name] = { value, expires };
-          }
-
-          localStorage.setItem(
-            COOKIE_STORAGE_KEY,
-            JSON.stringify(cookies)
-          );
-        },
-      },
-    },
-  ],
-};
+  fetchPlugins: [tauriFetchPlugin],
+} satisfies BetterAuthClientPlugin;
 
 export const authClient = createAuthClient({
   baseURL: apiUrl,
