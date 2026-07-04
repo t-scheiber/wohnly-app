@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Animated as RNAnimated, Pressable, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,7 @@ export function Tooltip({ visible, message, position, onDismiss }: TooltipProps)
   const colors = Colors[colorScheme];
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const opacity = useRef(new Animated.Value(0)).current;
+  const [opacity] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     Animated.timing(opacity, {
@@ -80,7 +80,11 @@ export function Tooltip({ visible, message, position, onDismiss }: TooltipProps)
 
 const styles = StyleSheet.create({
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: "rgba(0,0,0,0.3)",
     justifyContent: "center",
     alignItems: "center",

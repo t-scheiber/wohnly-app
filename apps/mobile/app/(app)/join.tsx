@@ -11,15 +11,15 @@ export default function JoinScreen() {
   const colors = Colors[colorScheme];
   const { code } = useLocalSearchParams<{ code: string }>();
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"loading" | "success" | "error">(() =>
+    code ? "loading" : "error"
+  );
+  const [message, setMessage] = useState(() =>
+    code ? "" : "No invite code provided"
+  );
 
   useEffect(() => {
-    if (!code) {
-      setStatus("error");
-      setMessage("No invite code provided");
-      return;
-    }
+    if (!code) return;
 
     (async () => {
       try {

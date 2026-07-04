@@ -53,8 +53,15 @@ export default function CalendarScreen() {
   const endDate = endOfMonth(currentMonth).toISOString();
   const { data: eventsData } = useEvents(startDate, endDate);
 
-  // Auto-enable device filter when permission granted and calendars selected
-  useEffect(() => {
+  // Auto-enable device filter when permission granted and calendars selected.
+  // Done as a render-time state adjustment (React docs pattern) instead of an
+  // effect, triggered whenever the permission/selection combination changes.
+  const deviceCalState = `${deviceCal.hasPermission}:${deviceCal.selectedIds.length}`;
+  const [prevDeviceCalState, setPrevDeviceCalState] = useState<string | null>(
+    null
+  );
+  if (deviceCalState !== prevDeviceCalState) {
+    setPrevDeviceCalState(deviceCalState);
     if (
       deviceCal.hasPermission &&
       deviceCal.selectedIds.length > 0 &&
@@ -62,7 +69,7 @@ export default function CalendarScreen() {
     ) {
       setFilters((prev) => ({ ...prev, device: true }));
     }
-  }, [deviceCal.hasPermission, deviceCal.selectedIds.length]);
+  }
 
   // Load device calendars on mount if permission exists
   useEffect(() => {

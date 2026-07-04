@@ -41,9 +41,8 @@ export function WaitingScreen({
   });
   const household = useHousehold();
   const [code, setCode] = useState(verificationCode);
-  const [status, setStatus] = useState<"waiting" | "finalizing" | "success">(
-    "waiting",
-  );
+  const [finalizeSucceeded, setFinalizeSucceeded] = useState(false);
+  const [retryNonce, setRetryNonce] = useState(0);
   const [resolvedHouseholdId, setResolvedHouseholdId] = useState<string | null>(
     householdIdHint ?? null,
   );
@@ -53,23 +52,16 @@ export function WaitingScreen({
     [outgoing.data?.requests, requestId],
   );
 
-  useEffect(() => {
-    if (request?.householdId && request.householdId !== resolvedHouseholdId) {
-      setResolvedHouseholdId(request.householdId);
-    }
-  }, [request?.householdId, resolvedHouseholdId]);
+  // Status is derived instead of synced via effects: once the outgoing
+  // request disappears (approved), we move to "finalizing" until the
+  // household key has been fetched successfully.
+  const status: "waiting" | "finalizing" | "success" = finalizeSucceeded
+    ? "success"
+    : outgoing.isPending || request
+      ? "waiting"
+      : "finalizing";
 
-  useEffect(() => {
-    if (status === "success" || outgoing.isPending) return;
-    if (request) {
-      if (status !== "waiting") setStatus("waiting");
-      return;
-    }
-    setResolvedHouseholdId(
-      (prev) => prev ?? household.data?.householdId ?? null,
-    );
-    setStatus("finalizing");
-  }, [household.data?.householdId, outgoing.isPending, request, status]);
+  const effectiveHouseholdId = request?.householdId ?? resolvedHouseholdId;
 
   useEffect(() => {
     if (status !== "finalizing") return;
@@ -78,7 +70,7 @@ export function WaitingScreen({
     const finalizeApproval = async () => {
       for (let attempt = 0; attempt < FINALIZE_ATTEMPTS; attempt++) {
         const householdId =
-          resolvedHouseholdId ?? household.data?.householdId ?? null;
+          effectiveHouseholdId ?? household.data?.householdId ?? null;
 
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ["household"] }),
@@ -111,7 +103,7 @@ export function WaitingScreen({
             await queryClient.invalidateQueries({
               queryKey: ["key-state", latestHouseholdId],
             });
-            setStatus("success");
+            setFinalizeSucceeded(true);
             return;
           }
         }
@@ -122,13 +114,20 @@ export function WaitingScreen({
     };
 
     finalizeApproval().catch(() => {
-      if (!cancelled) setStatus("waiting");
+      // Retry the finalize loop on unexpected failure
+      if (!cancelled) setRetryNonce((n) => n + 1);
     });
 
     return () => {
       cancelled = true;
     };
-  }, [household.data?.householdId, queryClient, resolvedHouseholdId, status]);
+  }, [
+    household.data?.householdId,
+    queryClient,
+    effectiveHouseholdId,
+    status,
+    retryNonce,
+  ]);
 
   if (status === "success") {
     return (
