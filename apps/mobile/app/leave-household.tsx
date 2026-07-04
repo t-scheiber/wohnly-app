@@ -46,17 +46,13 @@ export default function LeaveHouseholdScreen() {
   const token = typeof params.token === "string" ? params.token : undefined;
   const mode: Mode = params.mode === "cancel" ? "cancel" : "confirm";
 
-  const [state, setState] = useState<State>({ kind: "loading" });
+  const missingToken = params.error === "missing_token" || !token;
+  const [state, setState] = useState<State>(() =>
+    missingToken ? { kind: "error", code: "missing_token" } : { kind: "loading" }
+  );
 
   useEffect(() => {
-    if (params.error === "missing_token") {
-      setState({ kind: "error", code: "missing_token" });
-      return;
-    }
-    if (!token) {
-      setState({ kind: "error", code: "missing_token" });
-      return;
-    }
+    if (missingToken || !token) return;
     let cancelled = false;
     (async () => {
       try {

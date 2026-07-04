@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated as RNAnimated, Platform, StyleSheet, Modal } from "react-native";
 
 const Animated = RNAnimated as any;
@@ -50,7 +50,7 @@ export function OnboardingWalkthrough() {
   const { t } = useTranslation();
   const { showOnboarding, completeOnboarding } = useOnboarding();
   const [step, setStep] = useState(0);
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [fadeAnim] = useState(() => new Animated.Value(1));
 
   const animateTransition = (nextStep: number) => {
     Animated.timing(fadeAnim, {

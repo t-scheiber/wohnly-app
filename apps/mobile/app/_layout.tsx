@@ -204,8 +204,19 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
   const router = useRouter();
   const { colorScheme } = useTheme();
-  const [namePromptDismissed, setNamePromptDismissed] = useState(false);
+  // Tracks which user dismissed the name prompt, so a new login resets it
+  const [namePromptDismissedFor, setNamePromptDismissedFor] = useState<
+    string | null
+  >(null);
   useConsent(); // GDPR consent for AdMob — runs once on app start
+
+  // Reset dismissal when the session user changes (new login) — done as a
+  // render-time state adjustment (React docs pattern) instead of an effect.
+  const [prevUserId, setPrevUserId] = useState(session?.user?.id);
+  if (session?.user?.id !== prevUserId) {
+    setPrevUserId(session?.user?.id);
+    setNamePromptDismissedFor(null);
+  }
 
   // Handle Stripe checkout return on web
   useEffect(() => {
@@ -292,15 +303,13 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     });
   }, [session?.user?.id]);
 
-  // Reset dismissal when session changes (new login)
-  useEffect(() => {
-    setNamePromptDismissed(false);
-  }, [session?.user?.id]);
-
   if (isPending) return null;
 
   // Show name prompt if signed in but no name set
-  const needsName = session?.user && !session.user.name && !namePromptDismissed;
+  const needsName =
+    session?.user &&
+    !session.user.name &&
+    namePromptDismissedFor !== session.user.id;
 
   return (
     <>
@@ -309,7 +318,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       {needsName && (
         <NamePromptModal
           colorScheme={colorScheme}
-          onComplete={() => setNamePromptDismissed(true)}
+          onComplete={() => setNamePromptDismissedFor(session?.user?.id ?? null)}
         />
       )}
       <ForceUpdateModal visible={versionBlocked} />
