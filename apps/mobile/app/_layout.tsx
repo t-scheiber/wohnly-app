@@ -1,4 +1,5 @@
 import { ForceUpdateModal } from "@/components/app-update/ForceUpdateModal";
+import { AppModal } from "@/components/ui/AppModal";
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
 import { apiPatch } from "@/lib/api/client";
@@ -23,7 +24,6 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
     Alert,
-    Modal,
     Platform,
     Pressable,
     Text,
@@ -86,7 +86,7 @@ function NamePromptModal({
   };
 
   return (
-    <Modal visible transparent animationType="fade">
+    <AppModal visible transparent animationType="fade">
       <View
         style={{
           flex: 1,
@@ -128,6 +128,7 @@ function NamePromptModal({
           <TextInput
             value={name}
             onChangeText={setName}
+            accessibilityLabel="Your name"
             placeholder="Your name"
             placeholderTextColor={colors.textSecondary}
             autoFocus
@@ -147,6 +148,8 @@ function NamePromptModal({
           <Pressable
             onPress={handleSave}
             disabled={saving || !name.trim()}
+            accessibilityRole="button"
+            accessibilityLabel={saving ? "Saving..." : "Continue"}
             style={({ pressed }) => ({
               backgroundColor: colors.primary,
               borderRadius: 12,
@@ -167,7 +170,7 @@ function NamePromptModal({
           </Pressable>
         </View>
       </View>
-    </Modal>
+    </AppModal>
   );
 }
 
@@ -344,6 +347,7 @@ export default function RootLayout() {
       value={{
         mode: theme.mode,
         colorScheme: theme.colorScheme,
+        highContrast: theme.highContrast,
         setMode: theme.setMode,
       }}
     >

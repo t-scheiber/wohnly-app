@@ -65,6 +65,37 @@ export default function Root({ children }: PropsWithChildren) {
         }) }} />
 
         <ScrollViewStyleReset />
+
+        {/* Accessibility: visible keyboard focus indicators (WCAG 2.4.7)
+            and reduced-motion support for CSS-driven animations */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+:focus-visible {
+  outline: 2px solid #2e7d6e !important;
+  outline-offset: 2px !important;
+}
+@media (prefers-color-scheme: dark) {
+  :focus-visible {
+    outline-color: #7bc4b6 !important;
+  }
+}
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+`,
+          }}
+        />
       </head>
       <body>{children}</body>
     </html>

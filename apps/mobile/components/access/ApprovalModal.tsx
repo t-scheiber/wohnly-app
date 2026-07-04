@@ -1,4 +1,5 @@
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { VerificationCodeInput } from "./VerificationCodeInput";
@@ -83,7 +84,7 @@ export function ApprovalModal({
   const canSubmit = code.length === 6 && !approve.isPending;
 
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <AppModal visible transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: colors.card }]}>
           <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
@@ -92,7 +93,7 @@ export function ApprovalModal({
           </Text>
           <VerificationCodeInput value={code} onChange={setCode} error={!!error} />
           {error && (
-            <Text style={styles.error}>
+            <Text role="alert" accessibilityLiveRegion="polite" style={styles.error}>
               {triesLeft !== null
                 ? t("access.approve.wrongCode", { tries: triesLeft })
                 : error}
@@ -101,6 +102,8 @@ export function ApprovalModal({
           <Pressable
             onPress={handleApprove}
             disabled={!canSubmit}
+            accessibilityRole="button"
+            accessibilityLabel={t("access.approve.approve")}
             style={[
               styles.approve,
               { backgroundColor: colors.primary },
@@ -109,17 +112,28 @@ export function ApprovalModal({
           >
             <Text style={styles.approveText}>{t("access.approve.approve")}</Text>
           </Pressable>
-          <Pressable onPress={handleReject} style={styles.reject} disabled={reject.isPending}>
+          <Pressable
+            onPress={handleReject}
+            style={styles.reject}
+            disabled={reject.isPending}
+            accessibilityRole="button"
+            accessibilityLabel={t("access.approve.reject")}
+          >
             <Text style={styles.rejectText}>{t("access.approve.reject")}</Text>
           </Pressable>
-          <Pressable onPress={onClose} style={styles.cancel}>
+          <Pressable
+            onPress={onClose}
+            style={styles.cancel}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.cancel")}
+          >
             <Text style={{ color: colors.textSecondary, fontSize: 15 }}>
               {t("common.cancel")}
             </Text>
           </Pressable>
         </View>
       </View>
-    </Modal>
+    </AppModal>
   );
 }
 

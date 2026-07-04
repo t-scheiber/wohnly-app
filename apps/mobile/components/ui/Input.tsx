@@ -8,35 +8,50 @@ interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
 }
 
-export function Input({ label, error, containerStyle, style, ...props }: InputProps) {
+export function Input({ label, error, containerStyle, style, accessibilityLabel, accessibilityHint, ...props }: InputProps) {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
 
   return (
     <View style={[{ marginBottom: 12 }, containerStyle]}>
       {label && (
-        <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}>
+        <Text
+          accessibilityElementsHidden
+          importantForAccessibility="no"
+          style={{ fontSize: 14, fontWeight: "500", color: colors.text, marginBottom: 6 }}
+        >
           {label}
         </Text>
       )}
       <TextInput
+        {...props}
         placeholderTextColor={colors.textSecondary}
+        accessibilityLabel={accessibilityLabel ?? label ?? props.placeholder}
+        // Announce validation problems to screen readers (WCAG 3.3.1)
+        accessibilityHint={error ? error : accessibilityHint}
+        aria-invalid={!!error}
         style={[
           {
             backgroundColor: colors.card,
             borderWidth: 1,
-            borderColor: error ? colors.destructive : colors.border,
+            borderColor: error ? colors.destructive : colors.inputBorder,
             borderRadius: 12,
             padding: 14,
             fontSize: 16,
+            minHeight: 44,
             color: colors.text,
           },
           style,
         ]}
-        {...props}
       />
       {error && (
-        <Text style={{ fontSize: 12, color: colors.destructive, marginTop: 4 }}>{error}</Text>
+        <Text
+          role="alert"
+          accessibilityLiveRegion="polite"
+          style={{ fontSize: 13, color: colors.destructive, marginTop: 4 }}
+        >
+          {error}
+        </Text>
       )}
     </View>
   );

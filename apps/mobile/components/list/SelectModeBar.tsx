@@ -37,6 +37,9 @@ export default function SelectModeBar({
       <View style={[styles.bar, { borderBottomColor: colors.border }]}>
         <TouchableOpacity
           onPress={onToggleSelectMode}
+          accessibilityRole="button"
+          accessibilityLabel="Select items"
+          accessibilityHint="Enables multi-select mode for bulk actions"
           style={[styles.selectBtn, { backgroundColor: colors.card, borderColor: colors.border }]}
         >
           <Square size={16} color={colors.textSecondary} />
@@ -55,6 +58,8 @@ export default function SelectModeBar({
       <View style={styles.actions}>
         <TouchableOpacity
           onPress={onSelectAll}
+          accessibilityRole="button"
+          accessibilityLabel={selectedCount === totalCount ? "Deselect all" : "Select all"}
           style={styles.actionBtn}
         >
           <CheckSquare size={16} color={colors.primary} />
@@ -66,6 +71,8 @@ export default function SelectModeBar({
         {selectedCount > 0 && (
           <TouchableOpacity
             onPress={onDeleteSelected}
+            accessibilityRole="button"
+            accessibilityLabel={`Delete ${selectedCount} selected item${selectedCount === 1 ? "" : "s"}`}
             style={styles.actionBtn}
           >
             <Trash2 size={16} color="#dc2626" />
@@ -75,6 +82,8 @@ export default function SelectModeBar({
 
         <TouchableOpacity
           onPress={onCancel}
+          accessibilityRole="button"
+          accessibilityLabel="Cancel selection"
           style={styles.actionBtn}
         >
           <X size={16} color={colors.textSecondary} />
@@ -103,6 +112,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 6,
+    minHeight: 44,
     borderRadius: 8,
     borderWidth: 1,
   },
@@ -124,6 +134,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
     paddingVertical: 4,
+    minHeight: 44,
   },
   actionText: {
     fontSize: 13,

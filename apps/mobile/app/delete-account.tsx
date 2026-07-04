@@ -109,6 +109,7 @@ export default function DeleteAccountScreen() {
         <TextInput
           value={confirmText}
           onChangeText={setConfirmText}
+          accessibilityLabel="Type delete my account to confirm"
           placeholder="delete my account"
           placeholderTextColor={colors.textSecondary}
           autoCapitalize="none"
@@ -128,6 +129,8 @@ export default function DeleteAccountScreen() {
         <Pressable
           onPress={handleDelete}
           disabled={!canDelete || loading}
+          accessibilityRole="button"
+          accessibilityLabel="Permanently Delete Account"
           style={({ pressed }) => ({
             backgroundColor: canDelete ? colors.destructive : colors.muted,
             borderRadius: 10,
@@ -145,7 +148,7 @@ export default function DeleteAccountScreen() {
           )}
         </Pressable>
 
-        <Pressable onPress={() => router.back()} style={({ pressed }) => ({ padding: 16, alignItems: "center" as const, marginTop: 8, opacity: pressed ? 0.7 : 1 })}>
+        <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Cancel" style={({ pressed }) => ({ padding: 16, alignItems: "center" as const, marginTop: 8, opacity: pressed ? 0.7 : 1 })}>
           <Text style={{ color: colors.primary, fontSize: 16 }}>Cancel</Text>
         </Pressable>
       </ScrollView>

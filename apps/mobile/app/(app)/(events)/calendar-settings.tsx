@@ -49,6 +49,7 @@ export default function CalendarSettingsScreen() {
             {permissionDenied ? (
               <TouchableOpacity
                 onPress={openSettings}
+                accessibilityRole="button"
                 style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 14, alignItems: "center" }}
               >
                 <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>
@@ -58,6 +59,7 @@ export default function CalendarSettingsScreen() {
             ) : (
               <TouchableOpacity
                 onPress={requestPermission}
+                accessibilityRole="button"
                 style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 14, alignItems: "center" }}
               >
                 <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>
@@ -98,6 +100,7 @@ export default function CalendarSettingsScreen() {
                   }} />
                   <Text style={{ flex: 1, fontSize: 15, color: colors.text }}>{cal.title}</Text>
                   <Switch
+                    accessibilityLabel={cal.title}
                     value={selectedIds.includes(cal.id)}
                     onValueChange={() => toggleCalendar(cal.id)}
                     trackColor={{ false: colors.border, true: colors.primary }}

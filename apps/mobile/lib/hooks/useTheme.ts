@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback, createContext, useContext } from "react";
 import { useColorScheme as useSystemColorScheme } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setHighContrastEnabled } from "@/constants/Colors";
+import { useHighContrast } from "./useA11yPreferences";
 
 type ThemeMode = "light" | "dark" | "system";
 
 interface ThemeContextValue {
   mode: ThemeMode;
   colorScheme: "light" | "dark";
+  highContrast: boolean;
   setMode: (mode: ThemeMode) => void;
 }
 
@@ -15,6 +18,7 @@ const STORAGE_KEY = "wohnly_theme";
 const ThemeContext = createContext<ThemeContextValue>({
   mode: "system",
   colorScheme: "light",
+  highContrast: false,
   setMode: () => {},
 });
 
@@ -25,6 +29,10 @@ export function useThemeProvider() {
   const systemScheme: "light" | "dark" = rawSystemScheme === "dark" ? "dark" : "light";
   const [mode, setModeState] = useState<ThemeMode>("system");
   const [loaded, setLoaded] = useState(false);
+  const highContrast = useHighContrast();
+  // Flip the palette flag before children render, so every
+  // `Colors[colorScheme]` call site resolves the high-contrast variants.
+  setHighContrastEnabled(highContrast);
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then((stored) => {
@@ -42,7 +50,7 @@ export function useThemeProvider() {
 
   const colorScheme: "light" | "dark" = mode === "system" ? systemScheme : mode;
 
-  return { mode, colorScheme, setMode, loaded, ThemeContext };
+  return { mode, colorScheme, highContrast, setMode, loaded, ThemeContext };
 }
 
 export function useTheme() {

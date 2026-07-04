@@ -40,6 +40,7 @@ export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProp
   const [attendeeIds, setAttendeeIds] = useState<string[]>(
     editItem?.attendees?.map((a) => a.memberId) ?? []
   );
+  const [fieldErrors, setFieldErrors] = useState<{ title?: string }>({});
 
   const createEvent = useCreateEvent();
   const updateEvent = useUpdateEvent();
@@ -47,7 +48,12 @@ export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProp
 
   const handleSubmit = async () => {
     if (!title.trim() || !startDate) {
-      Alert.alert("Error", "Please enter a title and start date");
+      if (!title.trim()) {
+        setFieldErrors({ title: t("events.enterTitle", "Please enter a title") });
+      }
+      if (!startDate) {
+        Alert.alert(t("common.error", "Error"), t("events.enterStartDate", "Please select a start date"));
+      }
       return;
     }
 
@@ -85,7 +91,16 @@ export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProp
         {isEditing ? t("events.editEvent", "Edit Event") : t("events.addEvent")}
       </Text>
 
-      <Input label={t("events.title")} placeholder="Event name" value={title} onChangeText={setTitle} />
+      <Input
+        label={t("events.title")}
+        placeholder="Event name"
+        value={title}
+        onChangeText={(v) => {
+          setTitle(v);
+          if (fieldErrors.title) setFieldErrors({});
+        }}
+        error={fieldErrors.title}
+      />
       <Input label={`${t("events.location")} (optional)`} placeholder="Where?" value={location} onChangeText={setLocation} />
 
       <Checkbox checked={allDay} onCheckedChange={setAllDay} label={t("events.allDay")} />
@@ -120,6 +135,9 @@ export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProp
           <TouchableOpacity
             key={opt.value}
             onPress={() => setVisibility(opt.value)}
+            accessibilityRole="button"
+            accessibilityLabel={opt.label}
+            accessibilityState={{ selected: visibility === opt.value }}
             style={{
               flex: 1,
               paddingVertical: 10,

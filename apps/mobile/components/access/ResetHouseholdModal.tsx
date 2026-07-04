@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiPost } from "@/lib/api/client";
@@ -70,7 +71,7 @@ export function ResetHouseholdModal({
   const canSubmit = confirmName === householdName && !mutation.isPending;
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+    <AppModal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: colors.card }]}>
           <Text style={styles.title}>{t("access.reset.title")}</Text>
@@ -83,6 +84,7 @@ export function ResetHouseholdModal({
           <TextInput
             value={confirmName}
             onChangeText={setConfirmName}
+            accessibilityLabel={t("access.reset.prompt", { name: householdName })}
             style={[
               styles.input,
               {
@@ -96,23 +98,32 @@ export function ResetHouseholdModal({
             placeholderTextColor={colors.textSecondary}
           />
           {mutation.isError && (
-            <Text style={styles.error}>{mutation.error.message}</Text>
+            <Text role="alert" accessibilityLiveRegion="polite" style={styles.error}>
+              {mutation.error.message}
+            </Text>
           )}
           <Pressable
             onPress={() => mutation.mutate()}
             disabled={!canSubmit}
+            accessibilityRole="button"
+            accessibilityLabel={t("access.reset.confirm")}
             style={[styles.destructive, !canSubmit && styles.disabled]}
           >
             <Text style={styles.destructiveText}>{t("access.reset.confirm")}</Text>
           </Pressable>
-          <Pressable onPress={onClose} style={styles.cancel}>
+          <Pressable
+            onPress={onClose}
+            style={styles.cancel}
+            accessibilityRole="button"
+            accessibilityLabel={t("access.reset.cancel")}
+          >
             <Text style={{ color: colors.textSecondary, fontSize: 15 }}>
               {t("access.reset.cancel")}
             </Text>
           </Pressable>
         </View>
       </View>
-    </Modal>
+    </AppModal>
   );
 }
 

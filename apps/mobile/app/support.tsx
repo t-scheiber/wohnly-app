@@ -124,7 +124,11 @@ export default function SupportScreen() {
           <Paragraph colors={colors}>
             If you need further assistance, please reach out to us:
           </Paragraph>
-          <TouchableOpacity onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}`)}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}`)}
+            accessibilityRole="link"
+            accessibilityLabel={`Email ${SUPPORT_EMAIL}`}
+          >
             <Text style={{ fontSize: 16, color: colors.primary, marginBottom: 8 }}>
               {SUPPORT_EMAIL}
             </Text>

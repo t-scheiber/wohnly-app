@@ -55,41 +55,38 @@ export function MemberPicker({
         </Text>
       )}
       {allowSelectAll && members.length > 1 && (
-        <TouchableOpacity
-          onPress={toggleAll}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingVertical: 8,
-            marginBottom: 4,
-          }}
-        >
+        <View style={{ paddingVertical: 8, marginBottom: 4 }}>
           <Checkbox checked={allSelected} onCheckedChange={toggleAll} label="All members" />
-        </TouchableOpacity>
+        </View>
       )}
       <ScrollView horizontal={false}>
-        {members.map((member) => (
-          <TouchableOpacity
-            key={member.id}
-            onPress={() => toggleMember(member.id)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingVertical: 8,
-              gap: 10,
-            }}
-          >
-            <Checkbox
-              checked={selectedIds.includes(member.id)}
-              onCheckedChange={() => toggleMember(member.id)}
-            />
-            <Avatar name={member.displayName ?? "?"} size={28} />
-            <Text style={{ fontSize: 15, color: colors.text }}>
-              {member.displayName ?? "Member"}
-              {member.isCurrentUser ? " (You)" : ""}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {members.map((member) => {
+          const memberLabel = `${member.displayName ?? "Member"}${member.isCurrentUser ? " (You)" : ""}`;
+          const checked = selectedIds.includes(member.id);
+          return (
+            <TouchableOpacity
+              key={member.id}
+              onPress={() => toggleMember(member.id)}
+              accessibilityRole="checkbox"
+              accessibilityLabel={memberLabel}
+              accessibilityState={{ checked }}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                paddingVertical: 8,
+                minHeight: 44,
+                gap: 10,
+              }}
+            >
+              {/* Visual-only: the row itself is the accessible checkbox */}
+              <View pointerEvents="none" importantForAccessibility="no-hide-descendants">
+                <Checkbox checked={checked} onCheckedChange={() => toggleMember(member.id)} />
+              </View>
+              <Avatar name={member.displayName ?? "?"} size={28} />
+              <Text style={{ fontSize: 15, color: colors.text }}>{memberLabel}</Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );

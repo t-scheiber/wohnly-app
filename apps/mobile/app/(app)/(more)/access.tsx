@@ -74,6 +74,7 @@ export default function AccessScreen() {
           <View style={{ marginTop: 16 }}>
             <Pressable
               onPress={() => setResetOpen(true)}
+              accessibilityRole="button"
               style={{ padding: 16, alignItems: "center" }}
             >
               <Text style={{ color: "#d32f2f", fontWeight: "600" }}>

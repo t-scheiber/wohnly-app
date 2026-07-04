@@ -17,6 +17,7 @@ import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { usePro } from "@/lib/hooks/usePro";
+import { AppModal } from "@/components/ui/AppModal";
 import { Paywall } from "@/components/common/Paywall";
 import {
   isPaywallPreviewEnabled,
@@ -37,7 +38,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     Alert,
-    Modal,
     Platform,
     Pressable,
     ScrollView,
@@ -69,7 +69,7 @@ function PickerModal<T extends string>({
   colors: (typeof Colors)["light"];
 }) {
   return (
-    <Modal
+    <AppModal
       visible={visible}
       transparent
       animationType="fade"
@@ -77,6 +77,7 @@ function PickerModal<T extends string>({
     >
       <Pressable
         onPress={onClose}
+        accessible={false}
         style={{
           flex: 1,
           backgroundColor: "rgba(0,0,0,0.4)",
@@ -86,6 +87,7 @@ function PickerModal<T extends string>({
       >
         <Pressable
           onPress={() => {}}
+          accessible={false}
           style={{
             backgroundColor: colors.card,
             borderRadius: 16,
@@ -114,6 +116,8 @@ function PickerModal<T extends string>({
                   onSelect(opt.value);
                   onClose();
                 }}
+                accessibilityRole="button"
+                accessibilityState={{ selected: opt.value === selected }}
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -135,6 +139,7 @@ function PickerModal<T extends string>({
           </ScrollView>
           <TouchableOpacity
             onPress={onClose}
+            accessibilityRole="button"
             style={{
               padding: 16,
               borderTopWidth: 1,
@@ -154,7 +159,7 @@ function PickerModal<T extends string>({
           </TouchableOpacity>
         </Pressable>
       </Pressable>
-    </Modal>
+    </AppModal>
   );
 }
 
@@ -219,6 +224,7 @@ function SettingsRow({
     <Pressable
       onPress={onPress}
       disabled={!onPress && !right}
+      accessibilityRole={onPress ? "button" : "none"}
       style={({ pressed }) => ({
         flexDirection: "row" as const,
         justifyContent: "space-between" as const,
@@ -598,6 +604,7 @@ export default function SettingsScreen() {
                     setNicknameModalOpen(true);
                   }}
                   activeOpacity={isYou ? 1 : 0.6}
+                  accessibilityRole="button"
                   style={{
                     padding: 16,
                     borderBottomWidth: isLast ? 0 : 1,
@@ -695,6 +702,7 @@ export default function SettingsScreen() {
               isLast
               right={
                 <Switch
+                  accessibilityLabel={t("settings.notifications")}
                   value={notifications.enabled}
                   onValueChange={notifications.toggle}
                   disabled={notifications.loading}
@@ -896,7 +904,7 @@ export default function SettingsScreen() {
       />
 
       {/* Edit Name Modal */}
-      <Modal
+      <AppModal
         visible={nameModalOpen}
         transparent
         animationType="fade"
@@ -904,6 +912,7 @@ export default function SettingsScreen() {
       >
         <Pressable
           onPress={() => setNameModalOpen(false)}
+          accessible={false}
           style={{
             flex: 1,
             backgroundColor: "rgba(0,0,0,0.4)",
@@ -913,6 +922,7 @@ export default function SettingsScreen() {
         >
           <Pressable
             onPress={() => {}}
+            accessible={false}
             style={{
               backgroundColor: colors.card,
               borderRadius: 16,
@@ -934,6 +944,7 @@ export default function SettingsScreen() {
             <TextInput
               value={editName}
               onChangeText={setEditName}
+              accessibilityLabel={t("auth.name")}
               placeholder={t("auth.name")}
               placeholderTextColor={colors.textSecondary}
               autoFocus
@@ -953,6 +964,7 @@ export default function SettingsScreen() {
             <View style={{ flexDirection: "row", gap: 12 }}>
               <Pressable
                 onPress={() => setNameModalOpen(false)}
+                accessibilityRole="button"
                 style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
@@ -976,6 +988,7 @@ export default function SettingsScreen() {
               <Pressable
                 onPress={handleSaveName}
                 disabled={savingName || !editName.trim()}
+                accessibilityRole="button"
                 style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
@@ -999,10 +1012,10 @@ export default function SettingsScreen() {
             </View>
           </Pressable>
         </Pressable>
-      </Modal>
+      </AppModal>
 
       {/* Nickname Modal */}
-      <Modal
+      <AppModal
         visible={nicknameModalOpen}
         transparent
         animationType="fade"
@@ -1010,6 +1023,7 @@ export default function SettingsScreen() {
       >
         <Pressable
           onPress={() => setNicknameModalOpen(false)}
+          accessible={false}
           style={{
             flex: 1,
             backgroundColor: "rgba(0,0,0,0.4)",
@@ -1019,6 +1033,7 @@ export default function SettingsScreen() {
         >
           <Pressable
             onPress={() => {}}
+            accessible={false}
             style={{
               backgroundColor: colors.card,
               borderRadius: 16,
@@ -1049,6 +1064,7 @@ export default function SettingsScreen() {
             <TextInput
               value={nicknameValue}
               onChangeText={setNicknameValue}
+              accessibilityLabel={t("settings.setNickname")}
               placeholder={t("settings.nicknamePlaceholder")}
               placeholderTextColor={colors.textSecondary}
               autoFocus
@@ -1074,6 +1090,7 @@ export default function SettingsScreen() {
                       { onSuccess: () => setNicknameModalOpen(false) },
                     );
                   }}
+                  accessibilityRole="button"
                   style={({ pressed }) => ({
                     padding: 14,
                     borderRadius: 10,
@@ -1096,6 +1113,7 @@ export default function SettingsScreen() {
               )}
               <Pressable
                 onPress={() => setNicknameModalOpen(false)}
+                accessibilityRole="button"
                 style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
@@ -1119,6 +1137,7 @@ export default function SettingsScreen() {
               <Pressable
                 onPress={handleSaveNickname}
                 disabled={setNickname.isPending || !nicknameValue.trim()}
+                accessibilityRole="button"
                 style={({ pressed }) => ({
                   flex: 1,
                   padding: 14,
@@ -1146,10 +1165,10 @@ export default function SettingsScreen() {
             </View>
           </Pressable>
         </Pressable>
-      </Modal>
+      </AppModal>
 
       {(Platform.OS !== "web" || isTauri()) && (
-        <Modal
+        <AppModal
           visible={paywallModalOpen}
           animationType="slide"
           presentationStyle="pageSheet"
@@ -1167,7 +1186,7 @@ export default function SettingsScreen() {
               onDismiss={() => setPaywallModalOpen(false)}
             />
           </View>
-        </Modal>
+        </AppModal>
       )}
     </>
   );

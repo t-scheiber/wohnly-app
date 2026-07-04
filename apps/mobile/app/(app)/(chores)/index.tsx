@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
-import { View, Text, SectionList, TouchableOpacity, RefreshControl, Modal } from "react-native";
+import { View, Text, SectionList, TouchableOpacity, RefreshControl, Pressable } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { startOfDay, isSameDay } from "date-fns";
 import { useChores, useCompleteChore, useDeleteChore, useBreakMode, useNudgeChore } from "@/lib/api/queries";
@@ -133,11 +134,12 @@ export default function ChoresScreen() {
 
   const renderItem = ({ item, section }: { item: Chore; section: { title: string } }) => {
     const isToday = section.title === "Due Today";
+    const hasInlineActions = isToday && !isBreakActive;
 
     return (
       <SwipeableListItem
         onDelete={() => handleDelete(item.id)}
-        onPress={() => handleTapChore(item)}
+        onPress={hasInlineActions ? undefined : () => handleTapChore(item)}
         deleteConfirmTitle={t("chores.deleteChore")}
         deleteConfirmMessage={t("chores.deleteConfirm")}
       >
@@ -151,7 +153,12 @@ export default function ChoresScreen() {
             borderColor: isToday ? colors.primary + "40" : colors.border,
           }}
         >
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <Pressable
+            onPress={hasInlineActions ? () => handleTapChore(item) : undefined}
+            accessibilityRole={hasInlineActions ? "button" : undefined}
+            accessibilityLabel={hasInlineActions ? `${t("common.edit", "Edit")}: ${item.title}` : undefined}
+            style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+          >
             <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text, flex: 1 }}>
               {item.title}
             </Text>
@@ -167,7 +174,7 @@ export default function ChoresScreen() {
                 {formatSchedule(item)}
               </Text>
             </View>
-          </View>
+          </Pressable>
 
           {item.assignments && item.assignments.length > 0 && (
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8, flexWrap: "wrap" }}>
@@ -199,6 +206,8 @@ export default function ChoresScreen() {
             <View style={{ flexDirection: "row", gap: 8, marginTop: 12 }}>
               <TouchableOpacity
                 onPress={() => handleComplete(item.id)}
+                accessibilityRole="button"
+                accessibilityLabel={`${t("chores.markDone")}: ${item.title}`}
                 style={{
                   flex: 1,
                   backgroundColor: colors.success,
@@ -212,10 +221,14 @@ export default function ChoresScreen() {
               {item.assignments && item.assignments.length > 0 && (
                 <TouchableOpacity
                   onPress={() => nudgeChore.mutate(item.id)}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("chores.nudge", "Send a reminder")}
                   style={{
                     backgroundColor: colors.muted,
                     borderRadius: 8,
                     padding: 10,
+                    minWidth: 44,
+                    minHeight: 44,
                     alignItems: "center",
                     justifyContent: "center",
                   }}
@@ -239,6 +252,8 @@ export default function ChoresScreen() {
         </View>
         <TouchableOpacity
           onPress={() => setShowForm(true)}
+          accessibilityRole="button"
+          accessibilityHint={t("chores.addHint", "Opens the add chore form")}
           style={{
             backgroundColor: colors.primary,
             borderRadius: 10,
@@ -295,6 +310,8 @@ export default function ChoresScreen() {
       <TouchableOpacity
         onPress={() => setShowAnalytics(!showAnalytics)}
         activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityState={{ expanded: showAnalytics }}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -346,7 +363,7 @@ export default function ChoresScreen() {
       />
       <AdBanner />
 
-      <Modal visible={isModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseModal}>
+      <AppModal visible={isModalVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleCloseModal}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddChoreForm
             editItem={editingChore ?? undefined}
@@ -354,7 +371,7 @@ export default function ChoresScreen() {
             onCancel={handleCloseModal}
           />
         </View>
-      </Modal>
+      </AppModal>
     </ScreenView>
   );
 }

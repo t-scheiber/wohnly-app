@@ -96,7 +96,12 @@ export function GettingStartedCard({
     <View style={[styles.container, { backgroundColor: colors.card, borderColor: colors.border }]}>
       <View style={styles.headerRow}>
         <Text style={[styles.title, { color: colors.text }]}>{t("help.gettingStarted")}</Text>
-        <TouchableOpacity onPress={handleDismiss} hitSlop={12}>
+        <TouchableOpacity
+          onPress={handleDismiss}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel={t("common.dismiss", "Dismiss")}
+        >
           <X size={20} color={colors.textSecondary} />
         </TouchableOpacity>
       </View>
@@ -110,6 +115,9 @@ export function GettingStartedCard({
             key={step.id}
             onPress={step.onPress}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={step.title}
+            accessibilityState={{ selected: step.completed }}
             style={[styles.stepRow, { borderBottomColor: colors.border }]}
           >
             <View style={[styles.iconWrapper, { backgroundColor: step.completed ? colors.success + "15" : colors.muted }]}>

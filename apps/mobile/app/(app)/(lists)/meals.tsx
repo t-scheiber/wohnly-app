@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
-import { View, Text, SectionList, TouchableOpacity, RefreshControl, Modal, Alert } from "react-native";
+import { View, Text, SectionList, TouchableOpacity, RefreshControl, Alert } from "react-native";
+import { AppModal } from "@/components/ui/AppModal";
 import { useMealPlans, useDeleteMealPlan, useAddMealToShopping } from "@/lib/api/queries";
 import { AddMealForm } from "@/components/forms/AddMealForm";
 import SwipeableListItem from "@/components/list/SwipeableListItem";
@@ -115,10 +116,16 @@ export default function MealsScreen() {
             {(item.ingredients as any[])?.length > 0 && (
               <TouchableOpacity
                 onPress={() => handleAddToShopping(item)}
+                accessibilityRole="button"
+                accessibilityLabel={t("meals.addToShopping")}
                 style={{
                   backgroundColor: colors.success + "15",
                   borderRadius: 8,
                   padding: 8,
+                  minWidth: 44,
+                  minHeight: 44,
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <ShoppingCart size={18} color={colors.success} />
@@ -136,6 +143,8 @@ export default function MealsScreen() {
         <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("meals.title")}</Text>
         <TouchableOpacity
           onPress={() => setShowForm(true)}
+          accessibilityRole="button"
+          accessibilityHint={t("meals.addHint", "Opens the add meal form")}
           style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 8 }}
         >
           <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
@@ -158,14 +167,14 @@ export default function MealsScreen() {
         stickySectionHeadersEnabled={false}
       />
 
-      <Modal visible={showForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowForm(false)}>
+      <AppModal visible={showForm} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowForm(false)}>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <AddMealForm
             onSuccess={() => setShowForm(false)}
             onCancel={() => setShowForm(false)}
           />
         </View>
-      </Modal>
+      </AppModal>
     </View>
   );
 }

@@ -4,6 +4,7 @@ import { CalendarMonthView } from "@/components/calendar/CalendarMonthView";
 import { AdBanner } from "@/components/common/AdBanner";
 import { HelpButton } from "@/components/common/HelpButton";
 import { AddEventForm } from "@/components/forms/AddEventForm";
+import { AppModal } from "@/components/ui/AppModal";
 import { ScreenView } from "@/components/ui/ScreenView";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -17,7 +18,6 @@ import { Settings2 } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Modal,
   Platform,
   RefreshControl,
   ScrollView,
@@ -215,12 +215,22 @@ export default function CalendarScreen() {
                 router.push("/(app)/(events)/calendar-settings" as any)
               }
               hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={t("events.calendarSettings")}
+              style={{
+                minWidth: 44,
+                minHeight: 44,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <Settings2 size={22} color={colors.textSecondary} />
             </TouchableOpacity>
           )}
           <TouchableOpacity
             onPress={() => setShowForm(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t("events.addEvent")}
             style={{
               backgroundColor: colors.primary,
               borderRadius: 10,
@@ -257,6 +267,9 @@ export default function CalendarScreen() {
           <TouchableOpacity
             key={fb.key}
             onPress={() => toggleFilter(fb.key)}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: filters[fb.key] }}
+            accessibilityLabel={fb.label}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -326,7 +339,7 @@ export default function CalendarScreen() {
       <AdBanner />
 
       {/* Add/Edit Event Modal */}
-      <Modal
+      <AppModal
         visible={showForm || !!editingEvent}
         animationType="slide"
         presentationStyle="pageSheet"
@@ -339,7 +352,7 @@ export default function CalendarScreen() {
             onCancel={handleCloseModal}
           />
         </View>
-      </Modal>
+      </AppModal>
     </ScreenView>
   );
 }
