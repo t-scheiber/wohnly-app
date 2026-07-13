@@ -7,7 +7,10 @@ export default function Root({ children }: PropsWithChildren) {
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover, interactive-widget=resizes-content"
+        />
 
         {/* SEO */}
         <title>Wohnly — Household Management for Roommates &amp; Families</title>
@@ -74,6 +77,17 @@ export default function Root({ children }: PropsWithChildren) {
 :focus-visible {
   outline: 2px solid #2e7d6e !important;
   outline-offset: 2px !important;
+}
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+@supports (height: 100dvh) {
+  html, body, #root {
+    height: 100dvh;
+  }
 }
 @media (prefers-color-scheme: dark) {
   :focus-visible {

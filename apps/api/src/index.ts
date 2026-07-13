@@ -28,6 +28,7 @@ import envelopesRouter from "./routes/envelopes.js";
 import epochsRouter from "./routes/epochs.js";
 import appVersionRouter from "./routes/app-version.js";
 import householdResetRouter from "./routes/household-reset.js";
+import personalKeysRouter from "./routes/personal-keys.js";
 import { eventListener } from "./lib/events/listener.js";
 import { startExpireAccessRequestsCron } from "./cron/expire-access-requests.js";
 
@@ -166,6 +167,7 @@ app.route("/api/widgets", widgetsRouter);
 app.route("/api/meals", mealsRouter);
 app.route("/api/stream", streamRouter);
 app.route("/api/access", accessRouter);
+app.route("/api/personal-keys", personalKeysRouter);
 // Multiple routers under /api/households — envelopes + epochs + the existing households router.
 // Hono composes them; each contributes its own sub-routes.
 app.route("/api/households", envelopesRouter);

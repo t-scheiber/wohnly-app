@@ -80,7 +80,7 @@ app.post("/", async (c) => {
   const userId = c.get("userId") as string;
   const body = await c.req.json();
 
-  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce } = body;
+  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce, encryptionEpoch, encryptionScope } = body;
   if (!title?.trim() || !startDate) {
     return c.json({ error: "Title and startDate are required" }, 400);
   }
@@ -114,6 +114,16 @@ app.post("/", async (c) => {
       location: encrypted ? (location || null) : (location?.trim() || null),
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch:
+        encrypted && Number.isInteger(encryptionEpoch) && encryptionEpoch >= 1
+          ? encryptionEpoch
+          : 1,
+      encryptionScope:
+        encrypted &&
+        eventVisibility === "personal" &&
+        encryptionScope === "personal"
+          ? "personal"
+          : "household",
       startDate: new Date(startDate),
       endDate: endDate ? new Date(endDate) : null,
       allDay: allDay ?? false,
@@ -149,8 +159,15 @@ app.patch("/:id", async (c) => {
     where: { id: eventId, householdId: member.householdId },
   });
   if (!existing) return c.json({ error: "Event not found" }, 404);
+  if (existing.visibility === "personal" && existing.creatorId !== userId) {
+    return c.json({ error: "Event not found" }, 404);
+  }
 
-  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce } = body;
+  const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce, encryptionEpoch, encryptionScope } = body;
+  const nextVisibility = visibility ?? existing.visibility;
+  if (nextVisibility === "personal" && existing.creatorId !== userId) {
+    return c.json({ error: "Only the creator can make an event personal" }, 403);
+  }
 
   const event = await prisma.$transaction(async (tx) => {
     if (attendeeIds !== undefined) {
@@ -183,6 +200,17 @@ app.patch("/:id", async (c) => {
         ...(location !== undefined && { location: encrypted ? (location || null) : (location?.trim() || null) }),
         ...(encrypted !== undefined && { encrypted }),
         ...(nonce !== undefined && { nonce: nonce || null }),
+        ...(encryptionEpoch !== undefined &&
+          Number.isInteger(encryptionEpoch) &&
+          encryptionEpoch >= 1 && { encryptionEpoch }),
+        ...((encrypted !== undefined || visibility !== undefined) && {
+          encryptionScope:
+            encrypted !== false &&
+            nextVisibility === "personal" &&
+            encryptionScope === "personal"
+              ? "personal"
+              : "household",
+        }),
         ...(startDate !== undefined && { startDate: new Date(startDate) }),
         ...(endDate !== undefined && { endDate: endDate ? new Date(endDate) : null }),
         ...(allDay !== undefined && { allDay }),
@@ -213,6 +241,9 @@ app.delete("/:id", async (c) => {
     where: { id: eventId, householdId: member.householdId },
   });
   if (!existing) return c.json({ error: "Event not found" }, 404);
+  if (existing.visibility === "personal" && existing.creatorId !== userId) {
+    return c.json({ error: "Event not found" }, 404);
+  }
 
   await prisma.event.delete({ where: { id: eventId } });
   return c.json({ success: true });

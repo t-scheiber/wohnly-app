@@ -11,6 +11,12 @@ const htmlPath = resolve(__dirname, "../dist/index.html");
 
 let html = readFileSync(htmlPath, "utf8");
 
+// ── Mobile viewport + safe-area behavior ──
+html = html.replace(
+  /<meta name="viewport" content="[^"]*" \/>/,
+  '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover, interactive-widget=resizes-content" />',
+);
+
 // ── Replace the generic <title> ──
 html = html.replace(
   "<title>Wohnly</title>",
@@ -19,6 +25,19 @@ html = html.replace(
 
 // ── SEO meta tags ──
 const seoTags = `
+    <!-- Mobile viewport sizing and iOS safe-area support -->
+    <style id="wohnly-responsive-root">
+      html, body, #root {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        margin: 0;
+      }
+      @supports (height: 100dvh) {
+        html, body, #root { height: 100dvh; }
+      }
+    </style>
+
     <!-- SEO -->
     <meta name="description" content="Wohnly helps roommates and families manage shared expenses, chores, events, shopping lists, and more \u2014 all in one app. Available on iOS, Android, Web, and Desktop." />
     <meta name="keywords" content="household management, roommate app, shared expenses, chore tracker, family organizer, household chores, expense splitting, shopping list, shared calendar" />
@@ -76,8 +95,7 @@ const injection = `${seoTags}\n  `;
 
 if (!html.includes('og:title')) {
   html = html.replace("</head>", `${injection}</head>`);
-  writeFileSync(htmlPath, html);
-  console.log("Injected SEO tags into dist/index.html");
-} else {
-  console.log("SEO tags already present in index.html");
 }
+
+writeFileSync(htmlPath, html);
+console.log("Applied viewport and metadata to dist/index.html");

@@ -24,6 +24,7 @@ import * as LucideIcons from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { EXPENSE_CATEGORIES, getCategory } from "@wohnly/shared";
 import type { Expense, Subscription } from "@wohnly/shared";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 const frequencyLabels: Record<string, string> = {
   weekly: "Weekly",
@@ -37,6 +38,7 @@ export default function FinancesScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { isSmallPhone, screenPadding, titleFontSize } = useResponsiveLayout();
   const { tab: tabParam } = useLocalSearchParams<{ tab?: string }>();
 
   const [tab, setTab] = useState<"expenses" | "subscriptions">(() =>
@@ -232,9 +234,9 @@ export default function FinancesScreen() {
 
   return (
     <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
-      <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("finances.title")}</Text>
+      <View style={{ padding: screenPadding, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <View style={{ flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8} style={{ flexShrink: 1, fontSize: titleFontSize, fontWeight: "bold", color: colors.text }}>{t("finances.title")}</Text>
           <TouchableOpacity
             onPress={() => setShowHelp(true)}
             accessibilityRole="button"
@@ -249,7 +251,7 @@ export default function FinancesScreen() {
             <HelpCircle size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: "row", gap: 8 }}>
+        <View style={{ flexDirection: "row", gap: isSmallPhone ? 4 : 8 }}>
           {tab === "expenses" && (
             <>
               <TouchableOpacity
@@ -295,17 +297,17 @@ export default function FinancesScreen() {
             style={{
               backgroundColor: colors.primary,
               borderRadius: 10,
-              paddingHorizontal: 16,
+              paddingHorizontal: isSmallPhone ? 10 : 16,
               paddingVertical: 8,
             }}
           >
-            <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
+            <Text numberOfLines={1} style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: isSmallPhone ? 14 : 15 }}>+ {t("common.add")}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Tab switcher */}
-      <View style={{ flexDirection: "row", paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}>
+      <View style={{ flexDirection: "row", paddingHorizontal: screenPadding, paddingBottom: 8, gap: 8 }}>
         {(["expenses", "subscriptions"] as const).map((tabKey) => (
           <TouchableOpacity
             key={tabKey}
@@ -321,9 +323,13 @@ export default function FinancesScreen() {
             }}
           >
             <Text
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.75}
               style={{
                 color: tab === tabKey ? colors.primaryForeground : colors.text,
                 fontWeight: "600",
+                fontSize: isSmallPhone ? 13 : 14,
               }}
             >
               {tabKey === "expenses" ? t("expenses.title") : t("subscriptions.title")}
@@ -409,30 +415,30 @@ export default function FinancesScreen() {
 
       {/* Summary card */}
       {tab === "expenses" ? (
-        <View style={{ backgroundColor: colors.primary, padding: 20, marginHorizontal: 16, marginBottom: 8, borderRadius: 16 }}>
+        <View style={{ backgroundColor: colors.primary, padding: isSmallPhone ? 16 : 20, marginHorizontal: screenPadding, marginBottom: 8, borderRadius: 16 }}>
           <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>{t("expenses.totalExpenses")}</Text>
           {Object.keys(expenseTotals).length === 0 ? (
-            <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+            <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
               {formatCurrency(0)}
             </Text>
           ) : (
             Object.entries(expenseTotals).map(([currency, total]) => (
-              <Text key={currency} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+              <Text key={currency} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
                 {formatCurrency(total, currency)}
               </Text>
             ))
           )}
         </View>
       ) : (
-        <View style={{ backgroundColor: "#6366f1", padding: 20, marginHorizontal: 16, marginBottom: 8, borderRadius: 16 }}>
+        <View style={{ backgroundColor: "#6366f1", padding: isSmallPhone ? 16 : 20, marginHorizontal: screenPadding, marginBottom: 8, borderRadius: 16 }}>
           <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>{t("subscriptions.monthlyCost")}</Text>
           {Object.keys(subTotals).length === 0 ? (
-            <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+            <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
               {formatCurrency(0)}
             </Text>
           ) : (
             Object.entries(subTotals).map(([currency, total]) => (
-              <Text key={currency} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+              <Text key={currency} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
                 {formatCurrency(Math.round(total * 100) / 100, currency)}
               </Text>
             ))
@@ -449,7 +455,7 @@ export default function FinancesScreen() {
           data={expenses}
           renderItem={renderExpense}
           keyExtractor={(item: Expense) => item.id}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
+          contentContainerStyle={{ paddingHorizontal: screenPadding }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
           ListEmptyComponent={
             <View style={{ alignItems: "center", paddingVertical: 48 }}>
@@ -462,7 +468,7 @@ export default function FinancesScreen() {
           data={subscriptions}
           renderItem={renderSubscription}
           keyExtractor={(item: Subscription) => item.id}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
+          contentContainerStyle={{ paddingHorizontal: screenPadding }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
           ListEmptyComponent={
             <View style={{ alignItems: "center", paddingVertical: 48 }}>
@@ -582,4 +588,3 @@ export default function FinancesScreen() {
     </ScreenView>
   );
 }
-

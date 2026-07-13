@@ -15,6 +15,11 @@ import {
 } from "@/lib/crypto/household-key-cache";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
+import {
+  getCachedPersonalKey,
+  loadPersonalKeyFromStorage,
+} from "@/lib/crypto/personal-key-cache";
+import { getPersonalKeyState } from "@/lib/crypto/personal-key";
 
 export function ApprovalModal({
   request,
@@ -47,10 +52,31 @@ export function ApprovalModal({
         (await loadHouseholdKeyFromStorage(request.householdId, currentEpoch));
       if (!hk) throw new Error(t("access.errors.noKey"));
       const sealed = await sealHKToDevice(hk, pubKey);
+      let sealedPersonalKey: string | undefined;
+      if (request.kind === "DEVICE_ENROLLMENT") {
+        try {
+          const personalState = await getPersonalKeyState();
+          if (personalState.initialized) {
+            const personalKey =
+              getCachedPersonalKey(
+                personalState.userId,
+                personalState.currentEpoch,
+              ) ??
+              (await loadPersonalKeyFromStorage(
+                personalState.userId,
+                personalState.currentEpoch,
+              ));
+            if (personalKey) {
+              sealedPersonalKey = await sealHKToDevice(personalKey, pubKey);
+            }
+          }
+        } catch {}
+      }
       await approve.mutateAsync({
         id: request.id,
         verificationCode: code,
         sealedHK: sealed,
+        sealedPersonalKey,
       });
       setCode("");
       onClose();
@@ -84,7 +110,7 @@ export function ApprovalModal({
   const canSubmit = code.length === 6 && !approve.isPending;
 
   return (
-    <AppModal visible transparent animationType="slide" onRequestClose={onClose}>
+    <AppModal visible transparent animationType="slide" avoidKeyboard onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: colors.card }]}>
           <Text style={[styles.title, { color: colors.text }]}>{title}</Text>

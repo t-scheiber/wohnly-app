@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { ShoppingCart } from "lucide-react-native";
 import { startOfWeek, addDays, format } from "date-fns";
 import type { MealPlan } from "@wohnly/shared";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 const MEAL_EMOJI: Record<string, string> = {
   breakfast: "🌅",
@@ -22,6 +23,7 @@ export default function MealsScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { isSmallPhone, screenPadding, titleFontSize } = useResponsiveLayout();
 
   const [showForm, setShowForm] = useState(false);
 
@@ -139,15 +141,15 @@ export default function MealsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("meals.title")}</Text>
+      <View style={{ padding: screenPadding, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <Text numberOfLines={1} style={{ flex: 1, fontSize: titleFontSize, fontWeight: "bold", color: colors.text }}>{t("meals.title")}</Text>
         <TouchableOpacity
           onPress={() => setShowForm(true)}
           accessibilityRole="button"
           accessibilityHint={t("meals.addHint", "Opens the add meal form")}
-          style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 8 }}
+          style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: isSmallPhone ? 12 : 16, paddingVertical: 8 }}
         >
-          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
+          <Text numberOfLines={1} style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: isSmallPhone ? 14 : 15 }}>+ {t("common.add")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -162,7 +164,7 @@ export default function MealsScreen() {
           </View>
         )}
         keyExtractor={(item: MealPlan) => item.id}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+        contentContainerStyle={{ paddingHorizontal: screenPadding, paddingBottom: 100 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
         stickySectionHeadersEnabled={false}
       />

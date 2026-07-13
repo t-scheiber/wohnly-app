@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { formatCurrency, getCategory } from "@wohnly/shared";
 import { TrendingDown, TrendingUp, Wallet } from "lucide-react-native";
 import * as LucideIcons from "lucide-react-native";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 const PERIODS = ["week", "month", "year"] as const;
 const PERIOD_LABELS: Record<string, string> = { week: "This Week", month: "This Month", year: "This Year" };
@@ -15,6 +16,7 @@ export function SpendingCharts() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { isSmallPhone, screenPadding } = useResponsiveLayout();
 
   const [period, setPeriod] = useState<"week" | "month" | "year">("month");
   const { data, isLoading } = useExpenseAnalytics(period);
@@ -41,7 +43,7 @@ export function SpendingCharts() {
   const maxCategoryTotal = Math.max(...data.byCategory.map((c) => c.total), 1);
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 40 }}>
+    <ScrollView contentContainerStyle={{ padding: screenPadding, gap: 16, paddingBottom: 40 }}>
       {/* Period toggle — pill style */}
       <View style={{
         flexDirection: "row",
@@ -71,7 +73,7 @@ export function SpendingCharts() {
               } : {}),
             }}
           >
-            <Text style={{
+            <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{
               fontSize: 13,
               fontWeight: "700",
               color: period === p ? colors.text : colors.textSecondary,
@@ -89,19 +91,19 @@ export function SpendingCharts() {
       }}>
         <View style={{
           backgroundColor: colors.primary,
-          padding: 24,
+          padding: isSmallPhone ? 16 : 24,
           paddingBottom: 20,
         }}>
           <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: "600", letterSpacing: 0.5, textTransform: "uppercase" }}>
             Total Spending
           </Text>
-          <Text style={{ color: "#fff", fontSize: 36, fontWeight: "800", marginTop: 4, letterSpacing: -1 }}>
+          <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.65} style={{ color: "#fff", fontSize: 36, fontWeight: "800", marginTop: 4, letterSpacing: -1 }}>
             {formatCurrency(data.totalSpend, baseCurrency)}
           </Text>
         </View>
         <View style={{
           backgroundColor: colors.primary,
-          paddingHorizontal: 24,
+          paddingHorizontal: isSmallPhone ? 16 : 24,
           paddingBottom: 20,
           flexDirection: "row",
           gap: 24,
@@ -131,7 +133,7 @@ export function SpendingCharts() {
         borderRadius: 20,
         borderWidth: 1,
         borderColor: colors.border,
-        padding: 20,
+        padding: isSmallPhone ? 14 : 20,
       }}>
         <Text style={{ fontSize: 13, fontWeight: "700", color: colors.textSecondary, letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 16 }}>
           By Category
@@ -145,7 +147,7 @@ export function SpendingCharts() {
           return (
             <View key={cat.category} style={{ marginBottom: i < data.byCategory.length - 1 ? 16 : 0 }}>
               <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
                   <View style={{
                     width: 34,
                     height: 34,
@@ -156,14 +158,14 @@ export function SpendingCharts() {
                   }}>
                     {CatIcon && <CatIcon size={17} color={catInfo.color} />}
                   </View>
-                  <View>
-                    <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text }}>
+                  <View style={{ flex: 1, minWidth: 0 }}>
+                    <Text numberOfLines={1} style={{ fontSize: 14, fontWeight: "600", color: colors.text }}>
                       {t(`expenses.categories.${cat.category}`, cat.category)}
                     </Text>
                     <Text style={{ fontSize: 11, color: colors.textSecondary }}>{cat.percentage}%</Text>
                   </View>
                 </View>
-                <Text style={{ fontSize: 15, fontWeight: "800", color: colors.text, letterSpacing: -0.3 }}>
+                <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ marginLeft: 8, fontSize: 15, fontWeight: "800", color: colors.text, letterSpacing: -0.3 }}>
                   {formatCurrency(cat.total, baseCurrency)}
                 </Text>
               </View>

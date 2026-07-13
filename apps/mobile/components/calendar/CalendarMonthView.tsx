@@ -19,6 +19,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 export interface DayMarkers {
   events?: boolean;
@@ -108,6 +109,7 @@ export function CalendarMonthView({
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t, i18n } = useTranslation();
+  const { isSmallPhone } = useResponsiveLayout();
   const locale = i18n.language === "de" ? de : enUS;
 
   const monthStart = startOfMonth(currentMonth);
@@ -134,7 +136,7 @@ export function CalendarMonthView({
   }
 
   return (
-    <View style={{ paddingHorizontal: 12 }}>
+    <View style={{ paddingHorizontal: isSmallPhone ? 8 : 12 }}>
       {/* Month header with navigation */}
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12, paddingHorizontal: 4 }}>
         <TouchableOpacity
@@ -148,7 +150,16 @@ export function CalendarMonthView({
         </TouchableOpacity>
         <Text
           accessibilityRole="header"
-          style={{ fontSize: 18, fontWeight: "700", color: colors.text }}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.8}
+          style={{
+            flexShrink: 1,
+            textAlign: "center",
+            fontSize: isSmallPhone ? 16 : 18,
+            fontWeight: "700",
+            color: colors.text,
+          }}
         >
           {format(currentMonth, "MMMM yyyy", { locale })}
         </Text>

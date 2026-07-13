@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Alert, TouchableOpacity } from "react-native";
+import { View, Text, Alert, TouchableOpacity } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Checkbox } from "../ui/Checkbox";
@@ -10,6 +10,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import type { Event } from "@wohnly/shared";
+import { KeyboardAwareScrollView } from "../ui/KeyboardAware";
 
 type Visibility = "personal" | "household" | "custom";
 
@@ -86,7 +87,7 @@ export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProp
   ];
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
         {isEditing ? t("events.editEvent", "Edit Event") : t("events.addEvent")}
       </Text>
@@ -175,6 +176,6 @@ export function AddEventForm({ onSuccess, onCancel, editItem }: AddEventFormProp
           {isEditing ? t("common.save", "Save") : t("events.addEvent")}
         </Button>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

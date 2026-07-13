@@ -59,6 +59,7 @@ export interface ShoppingItem {
   name: string;
   quantity?: string | null;
   checked: boolean;
+  isPersonal?: boolean;
   addedBy: string;
   encrypted?: boolean;
   nonce?: string | null;
@@ -131,6 +132,7 @@ export interface Event {
   encrypted?: boolean;
   nonce?: string | null;
   encryptionEpoch?: number | null;
+  encryptionScope?: "household" | "personal";
   createdAt: Date;
   updatedAt: Date;
   attendees?: EventAttendee[];

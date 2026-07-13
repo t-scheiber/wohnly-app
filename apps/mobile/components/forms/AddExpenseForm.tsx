@@ -16,6 +16,7 @@ import { ExpenseAttachments } from "../finances/ExpenseAttachments";
 import { isScanAvailable, scanReceipt } from "@/lib/ocr/receipt-scanner";
 import { ItemizedSplitForm, type LineItem } from "./ItemizedSplitForm";
 import type { Expense } from "@wohnly/shared";
+import { KeyboardAwareScrollView } from "../ui/KeyboardAware";
 
 // CURRENCIES is now imported from @wohnly/shared
 
@@ -237,7 +238,7 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
         {isEditing ? t("expenses.editExpense", "Edit Expense") : t("expenses.addExpense")}
       </Text>
@@ -646,7 +647,7 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
       </View>
 
       {/* Currency Picker Modal */}
-      <AppModal visible={currencyPickerOpen} transparent animationType="fade" onRequestClose={() => setCurrencyPickerOpen(false)}>
+      <AppModal visible={currencyPickerOpen} transparent animationType="fade" avoidKeyboard onRequestClose={() => setCurrencyPickerOpen(false)}>
         <Pressable
           onPress={() => setCurrencyPickerOpen(false)}
           accessibilityRole="button"
@@ -726,6 +727,6 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
           />
         </View>
       </AppModal>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

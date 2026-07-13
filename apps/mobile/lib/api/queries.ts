@@ -1,8 +1,8 @@
 import {
-    getActiveKeyEpoch,
     getEncryptionKey,
-    requireEncryptionKey,
+    resolveActiveEncryptionKey,
 } from "@/lib/crypto/active-household";
+import { resolvePersonalEncryptionKey } from "@/lib/crypto/personal-key";
 import {
     decryptAttachment,
     decryptChore,
@@ -104,7 +104,23 @@ export function useTodos() {
 export function usePersonalTodos() {
   return useQuery({
     queryKey: ["personal-todos"],
-    queryFn: () => api<{ todos: Todo[] }>("/api/personal-todos"),
+    queryFn: async () => {
+      const res = await api<{ todos: Todo[] }>("/api/personal-todos");
+      const { key, epoch } = await resolvePersonalEncryptionKey();
+      const todos = await Promise.all(
+        res.todos.map((todo) =>
+          todo.encrypted ? decryptTodo(todo, key) : todo,
+        ),
+      );
+      const legacyTodos = res.todos.filter((todo) => !todo.encrypted);
+      await Promise.allSettled(
+        legacyTodos.map(async (todo) => {
+          const encrypted = await encryptTodo(todo, key, epoch);
+          await apiPatch(`/api/personal-todos/${todo.id}`, encrypted);
+        }),
+      );
+      return { ...res, todos };
+    },
   });
 }
 
@@ -153,10 +169,11 @@ export function useCreateTodo() {
     }) => {
       const { isPersonal, ...body } = data;
       if (isPersonal) {
-        return apiPost("/api/personal-todos", body);
+        const { key, epoch } = await resolvePersonalEncryptionKey();
+        const encrypted = await encryptTodo(body, key, epoch);
+        return apiPost("/api/personal-todos", { ...body, ...encrypted });
       }
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       const enc = await encryptTodo(body, hk, epoch);
       return apiPost("/api/todos", { ...body, ...enc });
     },
@@ -195,10 +212,21 @@ export function useUpdateTodo() {
       assigneeIds?: string[];
     }) => {
       if (isPersonal) {
+        if (data.title) {
+          const { key, epoch } = await resolvePersonalEncryptionKey();
+          const encrypted = await encryptTodo(
+            data as { title: string; description?: string },
+            key,
+            epoch,
+          );
+          return apiPatch(`/api/personal-todos/${id}`, {
+            ...data,
+            ...encrypted,
+          });
+        }
         return apiPatch(`/api/personal-todos/${id}`, data);
       }
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       if (data.title) {
         const enc = await encryptTodo(
           data as { title: string; description?: string },
@@ -262,8 +290,31 @@ export function useShoppingList() {
 export function usePersonalShoppingList() {
   return useQuery({
     queryKey: ["personal-shopping"],
-    queryFn: () =>
-      api<{ items: ShoppingItem[] }>("/api/shopping?personal=true"),
+    queryFn: async () => {
+      const res = await api<{ items: ShoppingItem[] }>(
+        "/api/shopping?personal=true",
+      );
+      const { key, epoch } = await resolvePersonalEncryptionKey();
+      const items = await Promise.all(
+        res.items.map((item) =>
+          item.encrypted ? decryptShoppingItem(item, key) : item,
+        ),
+      );
+
+      // One-time lazy migration for personal items created before per-user
+      // encryption existed. Failures remain eligible on the next refetch.
+      const legacyItems = res.items.filter((item) => !item.encrypted);
+      await Promise.allSettled(
+        legacyItems.map(async (item) => {
+          const encrypted = await encryptShoppingItem(item, key, epoch);
+          await apiPatch(`/api/shopping/${item.id}`, {
+            isPersonal: true,
+            ...encrypted,
+          });
+        }),
+      );
+      return { ...res, items };
+    },
   });
 }
 
@@ -316,10 +367,11 @@ export function useCreateShoppingItem() {
       isPersonal?: boolean;
     }) => {
       if (data.isPersonal) {
-        return apiPost("/api/shopping", data);
+        const { key, epoch } = await resolvePersonalEncryptionKey();
+        const encrypted = await encryptShoppingItem(data, key, epoch);
+        return apiPost("/api/shopping", { ...data, ...encrypted });
       }
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       const enc = await encryptShoppingItem(data, hk, epoch);
       return apiPost("/api/shopping", { ...data, ...enc });
     },
@@ -351,9 +403,21 @@ export function useUpdateShoppingItem() {
       id: string;
       name?: string;
       quantity?: string;
+      isPersonal?: boolean;
     }) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      if (data.isPersonal) {
+        if (data.name) {
+          const { key, epoch } = await resolvePersonalEncryptionKey();
+          const encrypted = await encryptShoppingItem(
+            data as { name: string; quantity?: string },
+            key,
+            epoch,
+          );
+          return apiPatch(`/api/shopping/${id}`, { ...data, ...encrypted });
+        }
+        return apiPatch(`/api/shopping/${id}`, data);
+      }
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       if (data.name) {
         const enc = await encryptShoppingItem(
           data as { name: string; quantity?: string },
@@ -414,8 +478,7 @@ export function useCreateChore() {
       rotate?: boolean;
       assigneeIds?: string[];
     }) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       const enc = await encryptChore(data, hk, epoch);
       return apiPost("/api/chores", { ...data, ...enc });
     },
@@ -476,8 +539,7 @@ export function useUpdateChore() {
       rotate?: boolean;
       assigneeIds?: string[];
     }) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       if (data.title) {
         const enc = await encryptChore(
           data as { title: string; description?: string },
@@ -639,8 +701,40 @@ export function useEvents(startDate?: string, endDate?: string) {
       const res = await api<{ events: Event[] }>(
         `/api/events${query ? `?${query}` : ""}`,
       );
+      const personalContext = res.events.some(
+        (event) => event.visibility === "personal",
+      )
+        ? await resolvePersonalEncryptionKey()
+        : null;
       const events = await Promise.all(
-        res.events.map((e) => {
+        res.events.map(async (e) => {
+          if (e.visibility === "personal" && personalContext) {
+            if (e.encrypted && e.encryptionScope === "personal") {
+              return decryptEvent(e, personalContext.key);
+            }
+
+            // Personal events created before the per-user key used either the
+            // household key or plaintext. Decrypt locally, then migrate them.
+            const legacyKey = e.encrypted
+              ? getEncryptionKey(e.encryptionEpoch ?? 1)
+              : null;
+            if (e.encrypted && !legacyKey) return e;
+            const decrypted = legacyKey
+              ? await decryptEvent(e, legacyKey)
+              : e;
+            try {
+              const encrypted = await encryptEvent(
+                decrypted,
+                personalContext.key,
+                personalContext.epoch,
+              );
+              await apiPatch(`/api/events/${e.id}`, {
+                ...encrypted,
+                encryptionScope: "personal",
+              });
+            } catch {}
+            return decrypted;
+          }
           const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
           return hk ? decryptEvent(e, hk) : e;
         }),
@@ -654,8 +748,10 @@ export function useCreateEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } =
+        data.visibility === "personal"
+          ? await resolvePersonalEncryptionKey()
+          : await resolveActiveEncryptionKey();
       const enc = await encryptEvent(
         {
           title: data.title as string,
@@ -665,7 +761,12 @@ export function useCreateEvent() {
         hk,
         epoch,
       );
-      return apiPost("/api/events", { ...data, ...enc });
+      return apiPost("/api/events", {
+        ...data,
+        ...enc,
+        encryptionScope:
+          data.visibility === "personal" ? "personal" : "household",
+      });
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
   });
@@ -686,8 +787,10 @@ export function useUpdateEvent() {
       id,
       ...data
     }: Record<string, unknown> & { id: string }) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } =
+        data.visibility === "personal"
+          ? await resolvePersonalEncryptionKey()
+          : await resolveActiveEncryptionKey();
       if (data.title) {
         const enc = await encryptEvent(
           {
@@ -698,7 +801,12 @@ export function useUpdateEvent() {
           hk,
           epoch,
         );
-        return apiPatch(`/api/events/${id}`, { ...data, ...enc });
+        return apiPatch(`/api/events/${id}`, {
+          ...data,
+          ...enc,
+          encryptionScope:
+            data.visibility === "personal" ? "personal" : "household",
+        });
       }
       return apiPatch(`/api/events/${id}`, data);
     },
@@ -728,8 +836,7 @@ export function useCreateExpense() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       const enc = await encryptExpense(
         {
           title: data.title as string,
@@ -800,8 +907,7 @@ export function useAddAttachment() {
       mimeType?: string;
       fileName?: string;
     }) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       const enc = await encryptAttachment(content, hk, epoch);
       return apiPost(`/api/expenses/${expenseId}/attachments`, {
         type,
@@ -912,8 +1018,7 @@ export function useUpdateExpense() {
       id,
       ...data
     }: Record<string, unknown> & { id: string }) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       if (data.title) {
         const enc = await encryptExpense(
           {
@@ -958,8 +1063,7 @@ export function useCreateSubscription() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       const enc = await encryptSubscription(
         {
           name: data.name as string,
@@ -995,8 +1099,7 @@ export function useUpdateSubscription() {
       id,
       ...data
     }: Record<string, unknown> & { id: string }) => {
-      const epoch = getActiveKeyEpoch();
-      const hk = requireEncryptionKey(epoch);
+      const { key: hk, epoch } = await resolveActiveEncryptionKey();
       if (data.name) {
         const enc = await encryptSubscription(
           {
@@ -1125,15 +1228,21 @@ export function useApproveAccessRequest() {
       id: string;
       verificationCode: string;
       sealedHK: string;
+      sealedPersonalKey?: string;
     }) =>
       apiPost<{ ok: boolean; deviceId: string }>(
         `/api/access/requests/${args.id}/approve`,
-        { verificationCode: args.verificationCode, sealedHK: args.sealedHK },
+        {
+          verificationCode: args.verificationCode,
+          sealedHK: args.sealedHK,
+          sealedPersonalKey: args.sealedPersonalKey,
+        },
       ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["access-requests"] });
       qc.invalidateQueries({ queryKey: ["key-state"] });
       qc.invalidateQueries({ queryKey: ["devices"] });
+      qc.invalidateQueries({ queryKey: ["personal-key-state"] });
       qc.invalidateQueries({ queryKey: ["members"] });
     },
   });

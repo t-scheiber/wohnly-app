@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Settings, HelpCircle, ChevronRight, ShieldCheck } from "lucide-react-native";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -47,12 +48,13 @@ export default function MoreScreen() {
   const colors = Colors[colorScheme];
   const router = useRouter();
   const { t } = useTranslation();
+  const { isSmallPhone, titleFontSize } = useResponsiveLayout();
   return (
     <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView>
         {/* Header */}
-        <View style={{ padding: 20, paddingBottom: 12 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("more.title")}</Text>
+        <View style={{ padding: isSmallPhone ? 16 : 20, paddingBottom: 12 }}>
+          <Text style={{ fontSize: titleFontSize, fontWeight: "bold", color: colors.text }}>{t("more.title")}</Text>
         </View>
 
         {/* Settings section */}
@@ -88,4 +90,3 @@ export default function MoreScreen() {
     </ScreenView>
   );
 }
-

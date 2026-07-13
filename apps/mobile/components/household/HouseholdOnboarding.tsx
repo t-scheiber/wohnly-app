@@ -25,6 +25,9 @@ import { Alert, Platform, Share, Text, View } from "react-native";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { Input } from "../ui/Input";
+import { KeyboardAwareScrollView } from "../ui/KeyboardAware";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
+import { saveDeviceKeys } from "@/lib/crypto/device-storage";
 
 type Step = "choose" | "create" | "join" | "success" | "detected" | "waiting";
 
@@ -52,6 +55,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const { isSmallPhone, screenPadding, titleFontSize } = useResponsiveLayout();
 
   const [step, setStep] = useState<Step>("choose");
   const [householdName, setHouseholdName] = useState("");
@@ -147,6 +151,11 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
 
       // Email-matched path: membership + device are already on the server. The owner's
       // device will deliver an envelope via SSE; try to grab it now in case we're racing.
+      await saveDeviceKeys(
+        res.deviceId,
+        material.publicKey,
+        material.privateKey,
+      );
       try {
         await fetchAndCacheHouseholdKey(res.householdId);
       } catch {}
@@ -238,24 +247,31 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
   // ── Step: Detected Household (Second Device Flow) ──
   if (step === "detected" && detectedHousehold) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
-        <View style={{ alignItems: "center", marginBottom: 32 }}>
+      <KeyboardAwareScrollView
+        trackWebViewport={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          padding: screenPadding,
+        }}
+      >
+        <View style={{ alignItems: "center", marginBottom: isSmallPhone ? 20 : 32 }}>
           <View
             style={{
-              width: 80,
-              height: 80,
-              borderRadius: 24,
+              width: isSmallPhone ? 64 : 80,
+              height: isSmallPhone ? 64 : 80,
+              borderRadius: isSmallPhone ? 20 : 24,
               backgroundColor: colors.primary + "15",
               alignItems: "center",
               justifyContent: "center",
               marginBottom: 16,
             }}
           >
-            <Link size={40} color={colors.primary} />
+            <Link size={isSmallPhone ? 32 : 40} color={colors.primary} />
           </View>
           <Text
             style={{
-              fontSize: 24,
+              fontSize: isSmallPhone ? 21 : 24,
               fontWeight: "bold",
               color: colors.text,
               textAlign: "center",
@@ -284,31 +300,38 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
             {t("common.back")}
           </Button>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 
   // ── Step: Choose ──
   if (step === "choose") {
     return (
-      <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
-        <View style={{ alignItems: "center", marginBottom: 32 }}>
+      <KeyboardAwareScrollView
+        trackWebViewport={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          padding: screenPadding,
+        }}
+      >
+        <View style={{ alignItems: "center", marginBottom: isSmallPhone ? 20 : 32 }}>
           <View
             style={{
-              width: 80,
-              height: 80,
-              borderRadius: 24,
+              width: isSmallPhone ? 64 : 80,
+              height: isSmallPhone ? 64 : 80,
+              borderRadius: isSmallPhone ? 20 : 24,
               backgroundColor: colors.primary + "15",
               alignItems: "center",
               justifyContent: "center",
               marginBottom: 16,
             }}
           >
-            <Users size={40} color={colors.primary} />
+            <Users size={isSmallPhone ? 32 : 40} color={colors.primary} />
           </View>
           <Text
             style={{
-              fontSize: 26,
+              fontSize: isSmallPhone ? 22 : 26,
               fontWeight: "bold",
               color: colors.text,
               textAlign: "center",
@@ -331,7 +354,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
         </View>
 
         <View style={{ gap: 12 }}>
-          <Card variant="elevated" style={{ padding: 20 }}>
+          <Card variant="elevated" style={{ padding: isSmallPhone ? 16 : 20 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -378,7 +401,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
             </Button>
           </Card>
 
-          <Card variant="elevated" style={{ padding: 20 }}>
+          <Card variant="elevated" style={{ padding: isSmallPhone ? 16 : 20 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -425,14 +448,17 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
             </Button>
           </Card>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 
   // ── Step: Create ──
   if (step === "create") {
     return (
-      <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
+      <KeyboardAwareScrollView
+        trackWebViewport={false}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: screenPadding }}
+      >
         <View style={{ alignItems: "center", marginBottom: 24 }}>
           <View
             style={{
@@ -486,14 +512,17 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
             {t("household.create")}
           </Button>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 
   // ── Step: Join ──
   if (step === "join") {
     return (
-      <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
+      <KeyboardAwareScrollView
+        trackWebViewport={false}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: screenPadding }}
+      >
         <View style={{ alignItems: "center", marginBottom: 24 }}>
           <View
             style={{
@@ -548,37 +577,38 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
             {t("household.join")}
           </Button>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 
   // ── Step: Success ──
   return (
-    <View
-      style={{
-        flex: 1,
+    <KeyboardAwareScrollView
+      trackWebViewport={false}
+      contentContainerStyle={{
+        flexGrow: 1,
         justifyContent: "center",
-        padding: 24,
+        padding: screenPadding,
         alignItems: "center",
       }}
     >
       <View
         style={{
-          width: 80,
-          height: 80,
-          borderRadius: 40,
+          width: isSmallPhone ? 64 : 80,
+          height: isSmallPhone ? 64 : 80,
+          borderRadius: isSmallPhone ? 32 : 40,
           backgroundColor: colors.success + "20",
           alignItems: "center",
           justifyContent: "center",
           marginBottom: 20,
         }}
       >
-        <Check size={40} color={colors.success} />
+        <Check size={isSmallPhone ? 32 : 40} color={colors.success} />
       </View>
 
       <Text
         style={{
-          fontSize: 26,
+          fontSize: isSmallPhone ? titleFontSize : 26,
           fontWeight: "bold",
           color: colors.text,
           marginBottom: 8,
@@ -603,7 +633,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
         style={{
           backgroundColor: colors.muted,
           borderRadius: 16,
-          padding: 20,
+          padding: isSmallPhone ? 16 : 20,
           width: "100%",
           alignItems: "center",
           marginBottom: 24,
@@ -614,7 +644,7 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
       >
         <Text
           style={{
-            fontSize: 28,
+            fontSize: isSmallPhone ? 24 : 28,
             fontWeight: "bold",
             color: colors.primary,
             letterSpacing: 3,
@@ -661,6 +691,6 @@ export function HouseholdOnboarding({ userName }: HouseholdOnboardingProps) {
           {t("household.continueToDashboard")}
         </Button>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }

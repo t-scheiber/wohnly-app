@@ -29,7 +29,7 @@ app.get("/", async (c) => {
 // POST /api/shopping
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const { name, quantity, isPersonal, encrypted, nonce } = await c.req.json();
+  const { name, quantity, isPersonal, encrypted, nonce, encryptionEpoch } = await c.req.json();
 
   if (!name?.trim()) return c.json({ error: "Item name is required" }, 400);
 
@@ -45,6 +45,10 @@ app.post("/", async (c) => {
       addedBy: userId,
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch:
+        encrypted && Number.isInteger(encryptionEpoch) && encryptionEpoch >= 1
+          ? encryptionEpoch
+          : 1,
     },
   });
 
@@ -64,6 +68,9 @@ app.patch("/:id", async (c) => {
     where: { id: itemId, householdId: member.householdId },
   });
   if (!existing) return c.json({ error: "Item not found" }, 404);
+  if (existing.isPersonal && existing.addedBy !== userId) {
+    return c.json({ error: "Item not found" }, 404);
+  }
 
   const item = await prisma.shoppingItem.update({
     where: { id: itemId },
@@ -73,6 +80,11 @@ app.patch("/:id", async (c) => {
       ...(body.checked !== undefined && { checked: body.checked }),
       ...(body.encrypted !== undefined && { encrypted: body.encrypted }),
       ...(body.nonce !== undefined && { nonce: body.nonce || null }),
+      ...(body.encryptionEpoch !== undefined &&
+        Number.isInteger(body.encryptionEpoch) &&
+        body.encryptionEpoch >= 1 && {
+          encryptionEpoch: body.encryptionEpoch,
+        }),
     },
   });
 
@@ -123,6 +135,9 @@ app.delete("/:id", async (c) => {
     where: { id: itemId, householdId: member.householdId },
   });
   if (!existing) return c.json({ error: "Item not found" }, 404);
+  if (existing.isPersonal && existing.addedBy !== userId) {
+    return c.json({ error: "Item not found" }, 404);
+  }
 
   await prisma.shoppingItem.delete({ where: { id: itemId } });
   return c.json({ success: true });

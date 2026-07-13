@@ -20,11 +20,12 @@ if (Platform.OS !== "web") {
 }
 
 export function useConsent() {
-  const [consentReady, setConsentReady] = useState(Platform.OS === "web");
+  const [consentReady, setConsentReady] = useState(
+    Platform.OS === "web" || !AdsConsent,
+  );
 
   useEffect(() => {
     if (Platform.OS === "web" || !AdsConsent) {
-      setConsentReady(true);
       return;
     }
 
@@ -55,4 +56,14 @@ export function useConsent() {
   }, []);
 
   return { consentReady };
+}
+
+/** Open Google's native ad diagnostics overlay in development builds. */
+export async function openAdInspector(): Promise<void> {
+  if (!__DEV__ || Platform.OS === "web" || !MobileAds) {
+    throw new Error("Ad Inspector is only available in native development builds.");
+  }
+  const ads = MobileAds();
+  await ads.initialize();
+  await ads.openAdInspector();
 }

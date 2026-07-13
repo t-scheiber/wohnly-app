@@ -24,7 +24,14 @@ app.get("/", async (c) => {
 // POST /api/personal-todos
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const { title, description, dueDate } = await c.req.json();
+  const {
+    title,
+    description,
+    dueDate,
+    encrypted,
+    nonce,
+    encryptionEpoch,
+  } = await c.req.json();
 
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
 
@@ -34,10 +41,16 @@ app.post("/", async (c) => {
   const todo = await prisma.todo.create({
     data: {
       householdId: member.householdId,
-      title: title.trim(),
-      description: description?.trim() || null,
+      title: encrypted ? title : title.trim(),
+      description: encrypted ? (description || null) : (description?.trim() || null),
       creatorId: userId,
       isPersonal: true,
+      encrypted: !!encrypted,
+      nonce: nonce || null,
+      encryptionEpoch:
+        encrypted && Number.isInteger(encryptionEpoch) && encryptionEpoch >= 1
+          ? encryptionEpoch
+          : 1,
       dueDate: dueDate ? new Date(dueDate) : null,
     },
   });
@@ -59,8 +72,21 @@ app.patch("/:id", async (c) => {
   const todo = await prisma.todo.update({
     where: { id: todoId },
     data: {
-      ...(body.title !== undefined && { title: body.title.trim() }),
-      ...(body.description !== undefined && { description: body.description?.trim() || null }),
+      ...(body.title !== undefined && {
+        title: body.encrypted ? body.title : body.title.trim(),
+      }),
+      ...(body.description !== undefined && {
+        description: body.encrypted
+          ? (body.description || null)
+          : (body.description?.trim() || null),
+      }),
+      ...(body.encrypted !== undefined && { encrypted: !!body.encrypted }),
+      ...(body.nonce !== undefined && { nonce: body.nonce || null }),
+      ...(body.encryptionEpoch !== undefined &&
+        Number.isInteger(body.encryptionEpoch) &&
+        body.encryptionEpoch >= 1 && {
+          encryptionEpoch: body.encryptionEpoch,
+        }),
       ...(body.completed !== undefined && { completed: body.completed }),
       ...(body.dueDate !== undefined && { dueDate: body.dueDate ? new Date(body.dueDate) : null }),
     },

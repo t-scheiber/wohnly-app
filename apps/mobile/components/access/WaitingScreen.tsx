@@ -1,14 +1,21 @@
 import { Colors } from "@/constants/Colors";
 import { usePendingRequests, useResendAccessRequest } from "@/lib/api/queries";
 import { fetchAndCacheHouseholdKey } from "@/lib/crypto/e2ee-setup";
+import {
+  getDeviceKeys,
+  saveDeviceKeys,
+} from "@/lib/crypto/device-storage";
+import { api } from "@/lib/api/client";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useTheme } from "@/lib/hooks/useTheme";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     ActivityIndicator,
     Pressable,
+    ScrollView,
     StyleSheet,
     Text,
     View,
@@ -34,6 +41,7 @@ export function WaitingScreen({
   const { t } = useTranslation();
   const { colorScheme } = useTheme();
   const colors = Colors[colorScheme];
+  const { isSmallPhone, screenPadding } = useResponsiveLayout();
   const queryClient = useQueryClient();
   const resend = useResendAccessRequest();
   const outgoing = usePendingRequests("outgoing", {
@@ -74,8 +82,30 @@ export function WaitingScreen({
 
     const finalizeApproval = async () => {
       for (let attempt = 0; attempt < FINALIZE_ATTEMPTS; attempt++) {
+        const approval = await api<{
+          status: "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
+          householdId: string;
+          resultingDeviceId: string | null;
+        }>(`/api/access/requests/${requestId}/status`);
+        if (approval.status === "APPROVED" && approval.resultingDeviceId) {
+          const localDevice = await getDeviceKeys();
+          if (
+            localDevice &&
+            localDevice.deviceId !== approval.resultingDeviceId
+          ) {
+            await saveDeviceKeys(
+              approval.resultingDeviceId,
+              localDevice.publicKey,
+              localDevice.privateKey,
+            );
+          }
+        }
+
         const householdId =
-          resolvedHouseholdId ?? household.data?.householdId ?? null;
+          resolvedHouseholdId ??
+          approval.householdId ??
+          household.data?.householdId ??
+          null;
 
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ["household"] }),
@@ -87,6 +117,7 @@ export function WaitingScreen({
           queryClient.invalidateQueries({ queryKey: ["members"] }),
           queryClient.invalidateQueries({ queryKey: ["balances"] }),
           queryClient.invalidateQueries({ queryKey: ["access-requests"] }),
+          queryClient.invalidateQueries({ queryKey: ["personal-key-state"] }),
         ]);
 
         const latestHouseholdId =
@@ -129,6 +160,7 @@ export function WaitingScreen({
   }, [
     household.data?.householdId,
     queryClient,
+    requestId,
     resolvedHouseholdId,
     status,
     retryNonce,
@@ -136,7 +168,10 @@ export function WaitingScreen({
 
   if (status === "success") {
     return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: colors.background }}
+        contentContainerStyle={[styles.container, { padding: screenPadding }]}
+      >
         <View
           style={[
             styles.successIcon,
@@ -163,12 +198,15 @@ export function WaitingScreen({
             {t("household.continueToDashboard")}
           </Text>
         </Pressable>
-      </View>
+      </ScrollView>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors.background }}
+      contentContainerStyle={[styles.container, { padding: screenPadding }]}
+    >
       <ActivityIndicator size="large" color={colors.primary} />
       <Text style={[styles.heading, { color: colors.text }]}>
         {status === "finalizing"
@@ -183,7 +221,10 @@ export function WaitingScreen({
       {status === "waiting" ? (
         <>
           <Text
-            style={[styles.code, { color: colors.text }]}
+            style={[
+              styles.code,
+              { color: colors.text, fontSize: isSmallPhone ? 38 : 48 },
+            ]}
             accessibilityLabel={t("access.waiting.codeA11y", {
               code: code.split("").join(" "),
             })}
@@ -224,16 +265,15 @@ export function WaitingScreen({
           )}
         </>
       ) : null}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 24,
     gap: 16,
   },
   heading: { fontSize: 22, fontWeight: "600", textAlign: "center" },

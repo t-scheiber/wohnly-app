@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, TextInput, Pressable, Alert, Platform, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, Pressable, Alert, Platform, ActivityIndicator } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -7,11 +7,15 @@ import { authClient } from "@/lib/auth/client";
 import { apiDelete } from "@/lib/api/client";
 import { isTauri, clearTauriCookie } from "@/lib/auth/tauri";
 import { clearDeviceKeys } from "@/lib/crypto/device-storage";
+import { clearPersonalKeys } from "@/lib/crypto/personal-key-cache";
+import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAware";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 export default function DeleteAccountScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const router = useRouter();
+  const { screenPadding, titleFontSize } = useResponsiveLayout();
   const { data: session } = authClient.useSession();
 
   const [confirmText, setConfirmText] = useState("");
@@ -30,6 +34,7 @@ export default function DeleteAccountScreen() {
         setDeleted(true);
         if (isTauri()) clearTauriCookie();
         await clearDeviceKeys();
+        clearPersonalKeys();
         await authClient.signOut().catch(() => {});
         setTimeout(() => router.replace("/(auth)/sign-in"), 3000);
       } catch (err: unknown) {
@@ -59,7 +64,7 @@ export default function DeleteAccountScreen() {
     return (
       <>
         <Stack.Screen options={{ title: "Account Deleted" }} />
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background, padding: 24 }}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background, padding: screenPadding }}>
           <Text style={{ fontSize: 48, marginBottom: 16 }}>✓</Text>
           <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>Account Deleted</Text>
           <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: "center" }}>
@@ -73,8 +78,8 @@ export default function DeleteAccountScreen() {
   return (
     <>
       <Stack.Screen options={{ title: "Delete Account", headerShown: true, headerStyle: { backgroundColor: colors.background }, headerTintColor: colors.text }} />
-      <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={{ padding: 24, maxWidth: 600, alignSelf: "center", width: "100%" }}>
-        <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.destructive, marginBottom: 16 }}>
+      <KeyboardAwareScrollView trackWebViewport={false} style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={{ padding: screenPadding, maxWidth: 600, alignSelf: "center", width: "100%" }}>
+        <Text style={{ fontSize: titleFontSize, fontWeight: "bold", color: colors.destructive, marginBottom: 16 }}>
           Delete Your Account
         </Text>
 
@@ -151,7 +156,7 @@ export default function DeleteAccountScreen() {
         <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Cancel" style={({ pressed }) => ({ padding: 16, alignItems: "center" as const, marginTop: 8, opacity: pressed ? 0.7 : 1 })}>
           <Text style={{ color: colors.primary, fontSize: 16 }}>Cancel</Text>
         </Pressable>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </>
   );
 }

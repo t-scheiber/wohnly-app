@@ -129,7 +129,9 @@ export async function getDeviceKeys(): Promise<DeviceKeyStore | null> {
     privateKeyB64 = await SecureStore.getItemAsync(DEVICE_PRIVATE_KEY);
   }
 
-  if (!deviceId || !publicKey || !privateKeyB64) return null;
+  // An empty deviceId is intentional while an approval request is pending.
+  // Keep returning the same keypair so the eventual envelope can be opened.
+  if (deviceId === null || !publicKey || !privateKeyB64) return null;
 
   return {
     deviceId,

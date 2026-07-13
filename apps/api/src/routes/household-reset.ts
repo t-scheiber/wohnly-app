@@ -80,6 +80,17 @@ app.post(
         await tx.device.deleteMany({ where: { id: { in: oldDeviceIds } } });
       }
 
+      // The destructive reset already removes the user's personal rows in
+      // this solo household. Reset the independent personal-key state too so
+      // the newly created device can safely bootstrap a fresh key.
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          personalKeyEpoch: { increment: 1 },
+          personalKeyInitializedAt: null,
+        },
+      });
+
       // Any other envelopes for this household (shouldn't exist since solo, but belt-and-braces).
       await tx.householdKeyEnvelope.deleteMany({ where: { householdId } });
 

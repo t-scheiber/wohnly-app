@@ -31,6 +31,7 @@ type CreateAccessRequest = z.infer<typeof createAccessRequestSchema>;
 const approveAccessRequestSchema = z.object({
   verificationCode: z.string().regex(/^\d{6}$/),
   sealedHK: z.string().min(1),
+  sealedPersonalKey: z.string().min(1).max(2048).optional(),
 });
 type ApproveAccessRequest = z.infer<typeof approveAccessRequestSchema>;
 
@@ -202,6 +203,23 @@ app.get("/requests", async (c) => {
   });
 });
 
+// GET /api/access/requests/:id/status — lets the requesting device persist
+// the server Device ID after approval without exposing approval details.
+app.get("/requests/:id/status", async (c) => {
+  const requestId = c.req.param("id");
+  const userId = c.get("userId");
+  const request = await prisma.accessRequest.findFirst({
+    where: { id: requestId, requesterUserId: userId },
+    select: {
+      status: true,
+      householdId: true,
+      resultingDeviceId: true,
+    },
+  });
+  if (!request) return c.json({ error: "Not found" }, 404);
+  return c.json(request);
+});
+
 // POST /api/access/requests/:id/approve
 app.post(
   "/requests/:id/approve",
@@ -312,6 +330,7 @@ app.post(
         });
       } else if (device.publicKey !== req.requesterDevicePublicKey) {
         await tx.householdKeyEnvelope.deleteMany({ where: { deviceId: device.id } });
+        await tx.personalKeyEnvelope.deleteMany({ where: { deviceId: device.id } });
         device = await tx.device.update({
           where: { id: device.id },
           data: {
@@ -338,6 +357,37 @@ app.post(
         },
         update: {},
       });
+
+      // A user approving their own second device can deliver their personal
+      // key in the same approval. Household join approvals involve another
+      // user, so the joiner's first device initializes its own key afterward.
+      if (req.kind === "DEVICE_ENROLLMENT" && body.sealedPersonalKey) {
+        const personalState = await tx.user.findUniqueOrThrow({
+          where: { id: req.requesterUserId },
+          select: {
+            personalKeyEpoch: true,
+            personalKeyInitializedAt: true,
+          },
+        });
+        if (personalState.personalKeyInitializedAt) {
+          await tx.personalKeyEnvelope.upsert({
+            where: {
+              userId_deviceId_keyEpoch: {
+                userId: req.requesterUserId,
+                deviceId: device.id,
+                keyEpoch: personalState.personalKeyEpoch,
+              },
+            },
+            create: {
+              userId: req.requesterUserId,
+              deviceId: device.id,
+              keyEpoch: personalState.personalKeyEpoch,
+              sealedKey: body.sealedPersonalKey,
+            },
+            update: {},
+          });
+        }
+      }
 
       if (req.kind === "HOUSEHOLD_JOIN") {
         await tx.householdMember.upsert({

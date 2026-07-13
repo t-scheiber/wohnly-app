@@ -13,8 +13,10 @@ import {
 import { authClient } from "@/lib/auth/client";
 import { clearTauriCookie, isTauri } from "@/lib/auth/tauri";
 import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
+import { clearPersonalKeys } from "@/lib/crypto/personal-key-cache";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
+import { openAdInspector } from "@/lib/hooks/useConsent";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { usePro } from "@/lib/hooks/usePro";
 import { AppModal } from "@/components/ui/AppModal";
@@ -529,13 +531,25 @@ export default function SettingsScreen() {
       } else {
         await Share.share({ message });
       }
-    } catch (_) {}
+    } catch {}
+  };
+
+  const handleOpenAdInspector = async () => {
+    try {
+      await openAdInspector();
+    } catch (err) {
+      Alert.alert(
+        "Ad Inspector",
+        err instanceof Error ? err.message : "Could not open Ad Inspector.",
+      );
+    }
   };
 
   const handleSignOut = () => {
     if (Platform.OS === "web") {
       if (confirm(t("settings.signOutConfirm"))) {
         clearHouseholdKeys();
+        clearPersonalKeys();
         if (isTauri()) clearTauriCookie();
         authClient.signOut().then(() => router.replace("/(auth)/sign-in"));
       }
@@ -548,6 +562,7 @@ export default function SettingsScreen() {
         style: "destructive",
         onPress: async () => {
           clearHouseholdKeys();
+          clearPersonalKeys();
           await authClient.signOut();
           router.replace("/(auth)/sign-in");
         },
@@ -806,6 +821,18 @@ export default function SettingsScreen() {
           />
         </SettingsSection>
 
+        {__DEV__ && Platform.OS !== "web" && (
+          <SettingsSection title="Development" colors={colors}>
+            <SettingsRow
+              colors={colors}
+              label="Open Ad Inspector"
+              value="Google Mobile Ads diagnostics"
+              onPress={handleOpenAdInspector}
+              isLast
+            />
+          </SettingsSection>
+        )}
+
         <SettingsSection title={t("settings.dangerZone")} colors={colors}>
           <SettingsRow
             colors={colors}
@@ -908,6 +935,7 @@ export default function SettingsScreen() {
         visible={nameModalOpen}
         transparent
         animationType="fade"
+        avoidKeyboard
         onRequestClose={() => setNameModalOpen(false)}
       >
         <Pressable
@@ -1019,6 +1047,7 @@ export default function SettingsScreen() {
         visible={nicknameModalOpen}
         transparent
         animationType="fade"
+        avoidKeyboard
         onRequestClose={() => setNicknameModalOpen(false)}
       >
         <Pressable

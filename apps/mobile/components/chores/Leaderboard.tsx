@@ -4,6 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import { Trophy, Medal, Award, Sparkles } from "lucide-react-native";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 const RANK_CONFIG = [
   { Icon: Trophy, color: "#f59e0b", bg: "#fef3c7", label: "1st" },
@@ -15,6 +16,7 @@ export function Leaderboard() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { isSmallPhone, screenPadding } = useResponsiveLayout();
 
   const { data } = useLeaderboard();
   const leaderboard = data?.leaderboard ?? [];
@@ -25,7 +27,7 @@ export function Leaderboard() {
 
   return (
     <View style={{
-      marginHorizontal: 16,
+      marginHorizontal: screenPadding,
       marginBottom: 12,
       borderRadius: 20,
       backgroundColor: colors.card,
@@ -38,7 +40,7 @@ export function Leaderboard() {
         flexDirection: "row",
         alignItems: "center",
         gap: 8,
-        paddingHorizontal: 20,
+        paddingHorizontal: isSmallPhone ? 14 : 20,
         paddingVertical: 14,
         borderBottomWidth: 1,
         borderBottomColor: colors.border,
@@ -62,8 +64,8 @@ export function Leaderboard() {
               flexDirection: "row",
               alignItems: "center",
               paddingVertical: 12,
-              paddingHorizontal: 20,
-              gap: 12,
+              paddingHorizontal: isSmallPhone ? 14 : 20,
+              gap: isSmallPhone ? 8 : 12,
               backgroundColor: member.isCurrentUser ? colors.primary + "08" : undefined,
               borderTopWidth: i > 0 ? 1 : 0,
               borderTopColor: colors.border,
@@ -98,7 +100,7 @@ export function Leaderboard() {
 
             {/* Name + progress bar */}
             <View style={{ flex: 1, gap: 4 }}>
-              <Text style={{
+              <Text numberOfLines={1} style={{
                 fontSize: 15,
                 fontWeight: member.isCurrentUser ? "700" : "500",
                 color: member.isCurrentUser ? colors.primary : colors.text,

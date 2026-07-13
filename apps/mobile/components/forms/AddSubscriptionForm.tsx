@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Alert } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { DatePicker } from "../ui/DatePicker";
@@ -8,6 +8,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import type { Subscription } from "@wohnly/shared";
+import { KeyboardAwareScrollView } from "../ui/KeyboardAware";
 
 const frequencies = [
   { label: "Weekly", value: "weekly" },
@@ -72,7 +73,7 @@ export function AddSubscriptionForm({ onSuccess, onCancel, editItem }: AddSubscr
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
         {isEditing ? t("subscriptions.editSubscription", "Edit Subscription") : t("subscriptions.addSubscription")}
       </Text>
@@ -115,6 +116,6 @@ export function AddSubscriptionForm({ onSuccess, onCancel, editItem }: AddSubscr
           {isEditing ? t("common.save", "Save") : t("subscriptions.addSubscription")}
         </Button>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

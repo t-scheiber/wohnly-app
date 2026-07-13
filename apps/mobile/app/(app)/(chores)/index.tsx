@@ -20,6 +20,7 @@ import { HelpButton } from "@/components/common/HelpButton";
 import { useTranslation } from "react-i18next";
 import { getChoreOccurrences } from "@wohnly/shared";
 import type { Chore } from "@wohnly/shared";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 const frequencyLabels: Record<string, string> = {
   daily: "Daily",
@@ -70,6 +71,7 @@ export default function ChoresScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { isSmallPhone, screenPadding, titleFontSize } = useResponsiveLayout();
 
   const { data, refetch } = useChores();
   const completeChore = useCompleteChore();
@@ -245,9 +247,9 @@ export default function ChoresScreen() {
 
   return (
     <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
-      <View style={{ padding: 16, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("chores.title")}</Text>
+      <View style={{ padding: screenPadding, paddingBottom: 8, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <View style={{ flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <Text numberOfLines={1} style={{ flexShrink: 1, fontSize: titleFontSize, fontWeight: "bold", color: colors.text }}>{t("chores.title")}</Text>
           <HelpButton />
         </View>
         <TouchableOpacity
@@ -257,11 +259,11 @@ export default function ChoresScreen() {
           style={{
             backgroundColor: colors.primary,
             borderRadius: 10,
-            paddingHorizontal: 16,
+            paddingHorizontal: isSmallPhone ? 12 : 16,
             paddingVertical: 8,
           }}
         >
-          <Text style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: 15 }}>+ {t("common.add")}</Text>
+          <Text numberOfLines={1} style={{ color: colors.primaryForeground, fontWeight: "600", fontSize: isSmallPhone ? 14 : 15 }}>+ {t("common.add")}</Text>
         </TouchableOpacity>
       </View>
 
