@@ -58,6 +58,10 @@ jobs:
           EXPO_PUBLIC_ADSENSE_BANNER_SLOT: ${{ vars.ADSENSE_BANNER_SLOT || secrets.ADSENSE_BANNER_SLOT }}
           EXPO_PUBLIC_DESKTOP_PRO_PRODUCT_ID: wohnly_pro_lifetime
 
+      - name: Apply web metadata and mobile viewport
+        working-directory: apps/mobile
+        run: node scripts/inject-adsense.mjs
+
       - name: Add PWA assets
         working-directory: apps/desktop
         run: bash build-pwa.sh

@@ -20,6 +20,7 @@ const ADSENSE_SCRIPT_ID = "adsense-script";
 
 let BannerAd: any = null;
 let BannerAdSize: any = null;
+let TestIds: any = null;
 
 // Only import on native platforms
 if (Platform.OS !== "web") {
@@ -27,6 +28,7 @@ if (Platform.OS !== "web") {
     const ads = require("react-native-google-mobile-ads");
     BannerAd = ads.BannerAd;
     BannerAdSize = ads.BannerAdSize;
+    TestIds = ads.TestIds;
   } catch {}
 }
 
@@ -91,11 +93,16 @@ export function AdBanner({ style }: AdBannerProps) {
   // Native: AdMob
   if (!BannerAd) return null;
 
-  const adUnitId = Platform.select({
-    ios: AD_UNIT_IDS.ios,
-    android: AD_UNIT_IDS.android,
-    default: AD_UNIT_IDS.android,
-  });
+  // Never request production inventory from development builds. Google's
+  // adaptive demo unit is safe to load, inspect, and click during QA.
+  const adUnitId =
+    __DEV__ && TestIds?.ADAPTIVE_BANNER
+      ? TestIds.ADAPTIVE_BANNER
+      : Platform.select({
+          ios: AD_UNIT_IDS.ios,
+          android: AD_UNIT_IDS.android,
+          default: AD_UNIT_IDS.android,
+        });
 
   return (
     <View style={[{ alignItems: "center", paddingVertical: 4 }, style]}>

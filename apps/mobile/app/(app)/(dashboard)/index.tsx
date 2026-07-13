@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, RefreshControl, TouchableOpacity, Platform } from "react-native";
+import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { useState, useCallback } from "react";
 import { useRouter } from "expo-router";
 import { ScreenView } from "@/components/ui/ScreenView";
@@ -7,7 +7,6 @@ import { CheckSquare, ShoppingCart, Sparkles, DollarSign, CalendarDays, CreditCa
 import { authClient } from "@/lib/auth/client";
 import { useMemberBalances, useHouseholdMembers, useShoppingList, useTodos, useChores } from "@/lib/api/queries";
 import { useHousehold } from "@/lib/hooks/useHousehold";
-import { useKeyDistribution } from "@/lib/hooks/useKeyDistribution";
 import { HouseholdOnboarding } from "@/components/household/HouseholdOnboarding";
 import { GettingStartedCard } from "@/components/dashboard/GettingStartedCard";
 import { DeviceOnboardingBanners } from "@/components/dashboard/DeviceOnboardingBanners";
@@ -17,15 +16,23 @@ import { Spinner } from "@/components/ui/Spinner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { formatCurrency } from "@wohnly/shared";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const router = useRouter();
   const { t } = useTranslation();
+  const {
+    isSmallPhone,
+    isTabletOrWider,
+    screenPadding,
+    cardPadding,
+    titleFontSize,
+  } = useResponsiveLayout();
+  const singleColumnActions = !isTabletOrWider;
   const { data: session } = authClient.useSession();
   const { data: household, isLoading: householdLoading } = useHousehold();
-  useKeyDistribution(); // Auto-distribute E2EE keys to new devices
   const { data: balances, refetch } = useMemberBalances();
   const { data: membersData, refetch: refetchMembers } = useHouseholdMembers();
   
@@ -83,7 +90,7 @@ export default function DashboardScreen() {
     <ScreenView style={{ backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ padding: 16, flexGrow: 1 }}
+        contentContainerStyle={{ padding: screenPadding, flexGrow: 1 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
         }
@@ -91,7 +98,14 @@ export default function DashboardScreen() {
         {/* Welcome */}
         <View style={{ marginBottom: 24 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
-            <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>
+            <Text
+              style={{
+                flexShrink: 1,
+                fontSize: titleFontSize,
+                fontWeight: "bold",
+                color: colors.text,
+              }}
+            >
               {t("dashboard.welcome")}{firstName ? `, ${firstName}` : ""}
             </Text>
             <HelpButton />
@@ -115,7 +129,14 @@ export default function DashboardScreen() {
         />
 
         {/* Quick Actions */}
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12, marginBottom: 32 }}>
+        <View
+          style={{
+            flexDirection: singleColumnActions ? "column" : "row",
+            flexWrap: singleColumnActions ? "nowrap" : "wrap",
+            gap: 12,
+            marginBottom: 32,
+          }}
+        >
           {quickActions.map((action) => (
             <TouchableOpacity
               key={action.title}
@@ -123,19 +144,31 @@ export default function DashboardScreen() {
               activeOpacity={0.8}
               accessibilityRole="button"
               accessibilityLabel={action.title}
-              style={{
-                flex: 1,
-                minWidth: "45%",
-                backgroundColor: action.color,
-                borderRadius: 16,
-                padding: 20,
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 10,
-              }}
+              style={[
+                {
+                  backgroundColor: action.color,
+                  borderRadius: 16,
+                  padding: singleColumnActions ? 16 : 20,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                },
+                singleColumnActions
+                  ? { width: "100%" }
+                  : { flexBasis: "45%", flexGrow: 1 },
+              ]}
             >
               {action.icon}
-              <Text style={{ color: "#fff", fontSize: 17, fontWeight: "600" }}>{action.title}</Text>
+              <Text
+                style={{
+                  flexShrink: 1,
+                  color: "#fff",
+                  fontSize: isSmallPhone ? 15 : 17,
+                  fontWeight: "600",
+                }}
+              >
+                {action.title}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -161,7 +194,7 @@ export default function DashboardScreen() {
                 style={{
                   backgroundColor: colors.card,
                   borderRadius: 12,
-                  padding: 16,
+                  padding: cardPadding,
                   marginBottom: 8,
                   borderWidth: 1,
                   borderColor: colors.border,
@@ -170,12 +203,16 @@ export default function DashboardScreen() {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
+                <Text numberOfLines={1} style={{ flex: 1, minWidth: 0, fontSize: 16, fontWeight: "600", color: colors.text }}>
                   {memberDisplayMap.get(member.memberId)?.name ?? member.displayName}
                   {memberDisplayMap.get(member.memberId)?.isYou ? ` (${t("settings.you")})` : ""}
                 </Text>
                 <Text
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  minimumFontScale={0.75}
                   style={{
+                    marginLeft: 8,
                     fontSize: 18,
                     fontWeight: "bold",
                     color: member.totalBalance > 0 ? colors.success : member.totalBalance < 0 ? colors.destructive : colors.textSecondary,
@@ -193,4 +230,3 @@ export default function DashboardScreen() {
     </ScreenView>
   );
 }
-

@@ -5,11 +5,22 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import { Colors } from "@/constants/Colors";
 import { CommonActions } from "@react-navigation/native";
+import { useKeyDistribution } from "@/lib/hooks/useKeyDistribution";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
+import { usePersonalKeyDistribution } from "@/lib/hooks/usePersonalKeyDistribution";
 
 export default function AppLayout() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
+  const { isSmallPhone } = useResponsiveLayout();
+
+  // Encryption belongs to the signed-in app lifecycle, not the dashboard.
+  // This keeps direct links and restored tabs ready after a cold start.
+  useKeyDistribution();
+  usePersonalKeyDistribution();
 
   return (
     <Tabs
@@ -31,18 +42,21 @@ export default function AppLayout() {
       })}
       screenOptions={{
         sceneStyle: { flex: 1 },
+        tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: colors.tabIconSelected,
         tabBarInactiveTintColor: colors.tabIconDefault,
         tabBarStyle: {
           backgroundColor: colors.background,
           borderTopColor: colors.border,
           borderTopWidth: 1,
-          height: Platform.OS === "ios" ? 88 : Platform.OS === "web" ? 76 : 64,
-          paddingBottom: Platform.OS === "ios" ? 28 : Platform.OS === "web" ? 14 : 8,
-          paddingTop: Platform.OS === "web" ? 12 : 8,
+          height:
+            (Platform.OS === "web" ? (isSmallPhone ? 58 : 64) : 56) +
+            Math.max(insets.bottom, Platform.OS === "web" ? 6 : 8),
+          paddingBottom: Math.max(insets.bottom, Platform.OS === "web" ? 6 : 8),
+          paddingTop: isSmallPhone ? 5 : 8,
         },
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: isSmallPhone ? 10 : 11,
           fontWeight: "600",
         },
         headerStyle: {

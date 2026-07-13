@@ -5,6 +5,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import { BarChart3 } from "lucide-react-native";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 const PERIODS = ["week", "month", "all"] as const;
 
@@ -15,6 +16,7 @@ export function ChoreAnalytics() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { isSmallPhone, screenPadding } = useResponsiveLayout();
 
   const [period, setPeriod] = useState<"week" | "month" | "all">("month");
   const { data } = useChoreAnalytics(period);
@@ -24,9 +26,9 @@ export function ChoreAnalytics() {
   if (members.length === 0) {
     return (
       <View style={{
-        marginHorizontal: 16,
+        marginHorizontal: screenPadding,
         marginBottom: 12,
-        padding: 24,
+        padding: isSmallPhone ? 18 : 24,
         borderRadius: 20,
         backgroundColor: colors.card,
         borderWidth: 1,
@@ -45,7 +47,7 @@ export function ChoreAnalytics() {
 
   return (
     <View style={{
-      marginHorizontal: 16,
+      marginHorizontal: screenPadding,
       marginBottom: 12,
       borderRadius: 20,
       overflow: "hidden",
@@ -53,13 +55,13 @@ export function ChoreAnalytics() {
       {/* Header */}
       <View style={{
         backgroundColor: colors.calendarChore,
-        paddingHorizontal: 20,
+        paddingHorizontal: isSmallPhone ? 14 : 20,
         paddingVertical: 14,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
       }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8, flexShrink: 1 }}>
           <BarChart3 size={20} color="#fff" />
           <Text style={{ fontSize: 17, fontWeight: "700", color: "#fff" }}>
             {t("chores.fairShare", "Fair Share")}
@@ -84,7 +86,7 @@ export function ChoreAnalytics() {
               hitSlop={{ top: 12, bottom: 12, left: 4, right: 4 }}
               style={{
                 paddingVertical: 4,
-                paddingHorizontal: 10,
+              paddingHorizontal: isSmallPhone ? 8 : 10,
                 borderRadius: 12,
                 backgroundColor: period === p ? "rgba(255,255,255,0.25)" : "transparent",
               }}
@@ -109,7 +111,7 @@ export function ChoreAnalytics() {
         borderColor: colors.border,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
-        padding: 20,
+        padding: isSmallPhone ? 14 : 20,
         gap: 14,
       }}>
         {/* Horizontal bar chart per member */}
@@ -120,14 +122,14 @@ export function ChoreAnalytics() {
           return (
             <View key={m.memberId} style={{ gap: 6 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
                   <View style={{
                     width: 8,
                     height: 8,
                     borderRadius: 4,
                     backgroundColor: barColor,
                   }} />
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text }}>
+                  <Text numberOfLines={1} style={{ flexShrink: 1, fontSize: 14, fontWeight: "600", color: colors.text }}>
                     {m.displayName}
                   </Text>
                 </View>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Alert, Switch, Pressable } from "react-native";
+import { View, Text, Alert, Switch, Pressable } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { MemberPicker } from "../common/MemberPicker";
@@ -8,6 +8,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import type { Chore } from "@wohnly/shared";
+import { KeyboardAwareScrollView } from "../ui/KeyboardAware";
 
 interface AddChoreFormProps {
   onSuccess?: () => void;
@@ -87,7 +88,7 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ padding: 16, gap: 4 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
         {isEditing ? t("chores.editChore") : t("chores.addChore")}
       </Text>
@@ -287,6 +288,6 @@ export function AddChoreForm({ onSuccess, onCancel, editItem }: AddChoreFormProp
           {isEditing ? t("common.save") : t("chores.addChore")}
         </Button>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

@@ -8,10 +8,11 @@ import {
   RefreshControl,
   Pressable,
   Alert,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { AppModal } from "@/components/ui/AppModal";
 import { useShoppingList, usePersonalShoppingList, useCreateShoppingItem, useToggleShoppingItem, useDeleteShoppingItem, useUpdateShoppingItem, useClearCheckedShopping, useShoppingSuggestions } from "@/lib/api/queries";
-import { ScrollView } from "react-native";
 import { AdBanner } from "@/components/common/AdBanner";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -24,11 +25,14 @@ import { Button } from "@/components/ui/Button";
 import { impactLight, notifySuccess } from "@/lib/utils/haptics";
 import { useTranslation } from "react-i18next";
 import type { ShoppingItem } from "@wohnly/shared";
+import { KeyboardAwareView } from "@/components/ui/KeyboardAware";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 export default function ShoppingScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
+  const { isSmallPhone: compact } = useResponsiveLayout();
 
   const [tab, setTab] = useState<"household" | "personal">("household");
   const [newItem, setNewItem] = useState("");
@@ -99,6 +103,7 @@ export default function ShoppingScreen() {
       id: editItem.id,
       name: editName.trim(),
       quantity: editQuantity.trim() || undefined,
+      isPersonal: editItem.isPersonal,
     });
     setEditItem(null);
   };
@@ -220,9 +225,11 @@ export default function ShoppingScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <KeyboardAwareView
+      style={{ flex: 1, backgroundColor: colors.background }}
+    >
       {/* Tab switcher */}
-      <View style={{ flexDirection: "row", padding: 16, gap: 8 }}>
+      <View style={{ flexDirection: "row", padding: compact ? 12 : 16, gap: 8 }}>
         {(["household", "personal"] as const).map((key) => (
           <TouchableOpacity
             key={key}
@@ -238,9 +245,13 @@ export default function ShoppingScreen() {
             }}
           >
             <Text
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.75}
               style={{
                 color: tab === key ? colors.primaryForeground : colors.text,
                 fontWeight: "600",
+                fontSize: compact ? 13 : 14,
               }}
             >
               {t(`todos.${key}`)}
@@ -298,6 +309,8 @@ export default function ShoppingScreen() {
         renderItem={renderItem}
         keyExtractor={(item: ShoppingItem) => item.id}
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
         }
@@ -321,7 +334,7 @@ export default function ShoppingScreen() {
       <View
         style={{
           flexDirection: "row",
-          padding: 16,
+          padding: compact ? 12 : 16,
           backgroundColor: colors.card,
           borderTopWidth: 1,
           borderTopColor: colors.border,
@@ -340,8 +353,9 @@ export default function ShoppingScreen() {
             flex: 1,
             backgroundColor: colors.background,
             borderRadius: 8,
-            padding: 12,
-            fontSize: 16,
+            padding: compact ? 10 : 12,
+            // Keep 16px on mobile web to prevent Safari's focus zoom.
+            fontSize: compact && Platform.OS !== "web" ? 15 : 16,
             color: colors.text,
             borderWidth: 1,
             borderColor: colors.border,
@@ -355,13 +369,20 @@ export default function ShoppingScreen() {
           style={({ pressed }) => ({
             backgroundColor: newItem.trim() ? colors.primary : colors.muted,
             borderRadius: 8,
-            paddingHorizontal: 16,
+            paddingHorizontal: compact ? 12 : 16,
             paddingVertical: 10,
             justifyContent: "center" as const,
             opacity: pressed ? 0.8 : 1,
           })}
         >
-          <Text style={{ color: newItem.trim() ? colors.primaryForeground : colors.textSecondary, fontWeight: "600" }}>
+          <Text
+            numberOfLines={1}
+            style={{
+              color: newItem.trim() ? colors.primaryForeground : colors.textSecondary,
+              fontWeight: "600",
+              fontSize: compact ? 14 : 16,
+            }}
+          >
             {t("common.add")}
           </Text>
         </Pressable>
@@ -374,7 +395,10 @@ export default function ShoppingScreen() {
         animationType="slide"
         onRequestClose={() => setEditItem(null)}
       >
-        <View style={{ flex: 1, backgroundColor: colors.background, padding: 24 }}>
+        <KeyboardAwareView
+          trackWebViewport
+          style={{ flex: 1, backgroundColor: colors.background, padding: compact ? 16 : 24 }}
+        >
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
             <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>{t("shopping.editItem")}</Text>
             <TouchableOpacity onPress={() => setEditItem(null)} accessibilityRole="button" hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
@@ -403,8 +427,8 @@ export default function ShoppingScreen() {
           >
             {t("common.save")}
           </Button>
-        </View>
+        </KeyboardAwareView>
       </AppModal>
-    </View>
+    </KeyboardAwareView>
   );
 }
