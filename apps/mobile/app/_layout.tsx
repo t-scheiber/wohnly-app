@@ -86,7 +86,7 @@ function NamePromptModal({
   };
 
   return (
-    <AppModal visible transparent animationType="fade">
+    <AppModal visible transparent animationType="fade" avoidKeyboard>
       <View
         style={{
           flex: 1,
@@ -331,6 +331,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
 export default function RootLayout() {
   const theme = useThemeProvider();
+  const [webViewportHeight, setWebViewportHeight] = useState<number>();
   useTauriUpdater();
 
   // Web document language handling
@@ -339,6 +340,23 @@ export default function RootLayout() {
       document.documentElement.lang = i18n.language;
     }
   }, [i18n.language]);
+
+  // Mobile browsers do not consistently resize the CSS layout viewport when
+  // the software keyboard opens. Follow visualViewport so navigators and
+  // bottom-anchored inputs stay inside the actually visible area.
+  useEffect(() => {
+    if (Platform.OS !== "web") return;
+    const viewport = window.visualViewport;
+    const update = () =>
+      setWebViewportHeight(Math.round(viewport?.height ?? window.innerHeight));
+    update();
+    viewport?.addEventListener("resize", update);
+    window.addEventListener("resize", update);
+    return () => {
+      viewport?.removeEventListener("resize", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   if (!theme.loaded) return null;
 
@@ -352,24 +370,26 @@ export default function RootLayout() {
       }}
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
-        {Platform.OS === "web" ? (
-          <QueryClientProvider client={queryClient}>
-            <AuthGate>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  backgroundColor: Colors[theme.colorScheme].background,
-                }}
-              >
-                <View style={{ flex: 1, width: "100%", maxWidth: 600 }}>
-                  <Slot />
+        <SafeAreaProvider>
+          {Platform.OS === "web" ? (
+            <QueryClientProvider client={queryClient}>
+              <AuthGate>
+                <View
+                  style={{
+                    flex: webViewportHeight ? undefined : 1,
+                    height: webViewportHeight,
+                    minHeight: 0,
+                    alignItems: "center",
+                    backgroundColor: Colors[theme.colorScheme].background,
+                  }}
+                >
+                  <View style={{ flex: 1, width: "100%", maxWidth: 600 }}>
+                    <Slot />
+                  </View>
                 </View>
-              </View>
-            </AuthGate>
-          </QueryClientProvider>
-        ) : (
-          <SafeAreaProvider>
+              </AuthGate>
+            </QueryClientProvider>
+          ) : (
             <QueryClientProvider client={queryClient}>
               <AuthGate>
                 <StatusBar
@@ -378,8 +398,8 @@ export default function RootLayout() {
                 <Slot />
               </AuthGate>
             </QueryClientProvider>
-          </SafeAreaProvider>
-        )}
+          )}
+        </SafeAreaProvider>
       </GestureHandlerRootView>
     </ThemeContext.Provider>
   );

@@ -7,12 +7,14 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AdBanner } from "@/components/common/AdBanner";
 import { HelpButton } from "@/components/common/HelpButton";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 export default function ListsScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const router = useRouter();
   const { t } = useTranslation();
+  const { isSmallPhone, titleFontSize } = useResponsiveLayout();
 
   const items = [
     {
@@ -48,8 +50,8 @@ export default function ListsScreen() {
   return (
     <ScreenView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView>
-        <View style={{ padding: 20, paddingBottom: 16, flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>{t("tabs.lists")}</Text>
+        <View style={{ padding: isSmallPhone ? 16 : 20, paddingBottom: 16, flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Text style={{ fontSize: titleFontSize, fontWeight: "bold", color: colors.text }}>{t("tabs.lists")}</Text>
           <HelpButton />
         </View>
 
@@ -64,7 +66,7 @@ export default function ListsScreen() {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                padding: 18,
+                padding: isSmallPhone ? 14 : 18,
                 backgroundColor: colors.card,
                 borderRadius: 16,
                 borderWidth: 1,
@@ -75,8 +77,8 @@ export default function ListsScreen() {
                 {item.icon}
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 17, fontWeight: "600", color: colors.text }}>{item.label}</Text>
-                <Text style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>{item.sublabel}</Text>
+                <Text style={{ fontSize: isSmallPhone ? 15 : 17, fontWeight: "600", color: colors.text }}>{item.label}</Text>
+                <Text style={{ fontSize: isSmallPhone ? 12 : 13, color: colors.textSecondary, marginTop: 2 }}>{item.sublabel}</Text>
               </View>
               <ChevronRight size={20} color={colors.textSecondary} />
             </TouchableOpacity>

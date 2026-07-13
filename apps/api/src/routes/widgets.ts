@@ -15,7 +15,14 @@ app.get("/todos", async (c) => {
   if (!member) return c.json(emptyCard("No household", "Join a household to see todos"));
 
   const todos = await prisma.todo.findMany({
-    where: { householdId: member.householdId, completed: false },
+    // Server-rendered widgets cannot decrypt E2EE personal content. Keep this
+    // endpoint to shared household todos and let native widgets use the
+    // locally-decrypted widget bridge.
+    where: {
+      householdId: member.householdId,
+      completed: false,
+      isPersonal: false,
+    },
     orderBy: { createdAt: "desc" },
     take: 8,
   });
@@ -93,6 +100,14 @@ app.get("/calendar", async (c) => {
     where: {
       householdId: member.householdId,
       startDate: { gte: dayStart, lte: dayEnd },
+      OR: [
+        { visibility: "household" },
+        { visibility: "personal", creatorId: userId },
+        {
+          visibility: "custom",
+          attendees: { some: { member: { userId } } },
+        },
+      ],
     },
     orderBy: { startDate: "asc" },
     take: 8,
@@ -211,7 +226,13 @@ app.get("/shopping", async (c) => {
   if (!member) return c.json(emptyCard("No household", "Join a household to see your shopping list"));
 
   const items = await prisma.shoppingItem.findMany({
-    where: { householdId: member.householdId, checked: false },
+    // Do not expose another member's personal items through a household
+    // widget. Personal items are rendered by the device after decryption.
+    where: {
+      householdId: member.householdId,
+      checked: false,
+      isPersonal: false,
+    },
     orderBy: { createdAt: "desc" },
     take: 8,
   });

@@ -13,6 +13,7 @@
  * invalidations from SSE to retrigger when state changes.
  */
 import { useEffect, useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   useKeyState as useKeyStateServer,
   useUploadEnvelope,
@@ -33,24 +34,29 @@ export function useKeyDistribution(): void {
   const householdId = household?.householdId ?? null;
   const keyState = useKeyStateServer(householdId ?? undefined);
   const upload = useUploadEnvelope();
+  const qc = useQueryClient();
   const runSignatureRef = useRef<string>("");
+  const currentEpoch = keyState.data?.currentEpoch;
+  const missingSignature = JSON.stringify(keyState.data?.missingAtEpoch ?? []);
 
   // Keep active-household module in sync so mutations can resolve the current key.
   useEffect(() => {
     setActiveHouseholdId(householdId);
-    if (keyState.data?.currentEpoch) setActiveKeyEpoch(keyState.data.currentEpoch);
-  }, [householdId, keyState.data?.currentEpoch]);
+    if (currentEpoch) {
+      setActiveKeyEpoch(currentEpoch);
+    }
+    if (!householdId) runSignatureRef.current = "";
+  }, [householdId, currentEpoch]);
 
   useEffect(() => {
-    if (!householdId || !keyState.data) return;
-    const { currentEpoch, missingAtEpoch } = keyState.data;
+    if (!householdId || !currentEpoch) return;
+    const missingAtEpoch: { deviceId: string; epoch: number }[] =
+      JSON.parse(missingSignature);
 
     // Build a stable signature so we only act once per distinct snapshot.
-    const sig = `${currentEpoch}:${missingAtEpoch.map((m) => `${m.deviceId}@${m.epoch}`).sort().join(",")}`;
+    const sig = `${householdId}:${currentEpoch}:${missingAtEpoch.map((m) => `${m.deviceId}@${m.epoch}`).sort().join(",")}`;
     if (sig === runSignatureRef.current) return;
     runSignatureRef.current = sig;
-
-    if (missingAtEpoch.length === 0) return;
 
     let cancelled = false;
     const run = async () => {
@@ -60,6 +66,7 @@ export function useKeyDistribution(): void {
 
       // Resolve the HK at the current epoch. If we don't hold it, we can't heal.
       let hk = getCachedHouseholdKey(householdId, currentEpoch);
+      const keyWasAlreadyInMemory = !!hk;
       if (!hk) hk = await loadHouseholdKeyFromStorage(householdId, currentEpoch);
       if (!hk) {
         // Try to pull our own envelope first — we might just not have unsealed yet.
@@ -67,6 +74,24 @@ export function useKeyDistribution(): void {
         if (!fetched) return;
         hk = getCachedHouseholdKey(householdId, currentEpoch);
         if (!hk) return;
+      }
+
+      // Queries can race this cold-start hydration and temporarily return the
+      // encrypted payload. Refetch active encrypted surfaces once the key is
+      // available in memory.
+      if (!keyWasAlreadyInMemory && !cancelled) {
+        const encryptedQueryRoots = new Set([
+          "todos",
+          "shopping",
+          "chores",
+          "events",
+          "expenses",
+          "subscriptions",
+        ]);
+        await qc.invalidateQueries({
+          predicate: (query) =>
+            encryptedQueryRoots.has(String(query.queryKey[0])),
+        });
       }
 
       for (const missing of missingAtEpoch) {
@@ -94,5 +119,5 @@ export function useKeyDistribution(): void {
     return () => {
       cancelled = true;
     };
-  }, [householdId, keyState.data?.currentEpoch, JSON.stringify(keyState.data?.missingAtEpoch ?? []), upload]);
+  }, [householdId, currentEpoch, missingSignature, upload, qc]);
 }

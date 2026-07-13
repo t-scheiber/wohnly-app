@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Alert, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, Alert, TouchableOpacity, TextInput } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { DatePicker } from "../ui/DatePicker";
@@ -8,6 +8,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import { Plus, Trash2 } from "lucide-react-native";
+import { KeyboardAwareScrollView } from "../ui/KeyboardAware";
 
 const MEAL_TYPES = [
   { value: "breakfast", label: "Breakfast", emoji: "🌅" },
@@ -77,7 +78,7 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 8 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ padding: 16, gap: 8 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
         Plan a Meal
       </Text>
@@ -214,6 +215,6 @@ export function AddMealForm({ onSuccess, onCancel, initialDate }: AddMealFormPro
           Add Meal
         </Button>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

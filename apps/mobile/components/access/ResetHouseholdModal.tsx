@@ -12,6 +12,7 @@ import {
   clearHouseholdKeys,
 } from "@/lib/crypto/household-key-cache";
 import { setActiveKeyEpoch } from "@/lib/crypto/active-household";
+import { clearPersonalKeys } from "@/lib/crypto/personal-key-cache";
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
 
@@ -56,6 +57,7 @@ export function ResetHouseholdModal({
       // and replace every cached household key with just the new one.
       await saveDeviceKeys(res.deviceId, publicKey, privateKey);
       clearHouseholdKeys();
+      clearPersonalKeys();
       cacheHouseholdKey(householdId, res.epoch, newHK);
       setActiveKeyEpoch(res.epoch);
 
@@ -71,7 +73,7 @@ export function ResetHouseholdModal({
   const canSubmit = confirmName === householdName && !mutation.isPending;
 
   return (
-    <AppModal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+    <AppModal visible={visible} transparent animationType="slide" avoidKeyboard onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: colors.card }]}>
           <Text style={styles.title}>{t("access.reset.title")}</Text>

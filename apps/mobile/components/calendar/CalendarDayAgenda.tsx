@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { format } from "date-fns";
 import { de, enUS } from "date-fns/locale";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import SwipeableListItem from "@/components/list/SwipeableListItem";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 export type CalendarItemType = "event" | "chore" | "subscription" | "device";
 
@@ -39,6 +40,7 @@ export function CalendarDayAgenda({ date, items, onEditItem, onDeleteItem }: Cal
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
   const { t, i18n } = useTranslation();
+  const { isSmallPhone, screenPadding } = useResponsiveLayout();
   const locale = i18n.language === "de" ? de : enUS;
 
   const colorForType = (type: CalendarItemType): string => {
@@ -56,7 +58,7 @@ export function CalendarDayAgenda({ date, items, onEditItem, onDeleteItem }: Cal
         style={{
           backgroundColor: colors.card,
           borderRadius: 10,
-          padding: 14,
+          padding: isSmallPhone ? 12 : 14,
           marginBottom: 8,
           borderWidth: 1,
           borderColor: colors.border,
@@ -120,7 +122,7 @@ export function CalendarDayAgenda({ date, items, onEditItem, onDeleteItem }: Cal
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={{ fontSize: 15, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: 16, paddingVertical: 10 }}>
+      <Text style={{ fontSize: 15, fontWeight: "600", color: colors.textSecondary, paddingHorizontal: screenPadding, paddingVertical: 10 }}>
         {format(date, "EEEE, d MMMM", { locale })}
       </Text>
 
@@ -129,7 +131,7 @@ export function CalendarDayAgenda({ date, items, onEditItem, onDeleteItem }: Cal
           <Text style={{ fontSize: 15, color: colors.textSecondary }}>{t("events.noEventsOnDay")}</Text>
         </View>
       ) : (
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: screenPadding, paddingBottom: 16 }}>
           {items.map(renderItem)}
         </ScrollView>
       )}

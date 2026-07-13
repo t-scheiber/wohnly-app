@@ -11,6 +11,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useDeleteEvent, useEvents } from "@/lib/api/queries";
 import { useCalendarData } from "@/lib/hooks/useCalendarData";
 import { useDeviceCalendars } from "@/lib/hooks/useDeviceCalendars";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 import type { Event } from "@wohnly/shared";
 import { endOfMonth, startOfMonth } from "date-fns";
 import { useRouter } from "expo-router";
@@ -33,6 +34,7 @@ export default function CalendarScreen() {
   const colors = Colors[colorScheme];
   const { t } = useTranslation();
   const router = useRouter();
+  const { isSmallPhone, screenPadding, titleFontSize } = useResponsiveLayout();
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -198,17 +200,17 @@ export default function CalendarScreen() {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          paddingHorizontal: 16,
+          paddingHorizontal: screenPadding,
           paddingVertical: 8,
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: colors.text }}>
+        <View style={{ flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <Text numberOfLines={1} style={{ flexShrink: 1, fontSize: titleFontSize, fontWeight: "bold", color: colors.text }}>
             {t("events.title")}
           </Text>
           <HelpButton />
         </View>
-        <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+        <View style={{ flexDirection: "row", gap: isSmallPhone ? 4 : 10, alignItems: "center" }}>
           {Platform.OS !== "web" && (
             <TouchableOpacity
               onPress={() =>
@@ -234,7 +236,7 @@ export default function CalendarScreen() {
             style={{
               backgroundColor: colors.primary,
               borderRadius: 10,
-              paddingHorizontal: 16,
+              paddingHorizontal: isSmallPhone ? 12 : 16,
               paddingVertical: 8,
             }}
           >
@@ -257,7 +259,7 @@ export default function CalendarScreen() {
         showsHorizontalScrollIndicator={false}
         style={{ flexGrow: 0 }}
         contentContainerStyle={{
-          paddingHorizontal: 16,
+          paddingHorizontal: screenPadding,
           gap: 8,
           paddingBottom: 8,
           alignItems: "center",

@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { useHouseholdMembers } from "@/lib/api/queries";
@@ -8,6 +8,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "react-i18next";
 import { formatCurrency } from "@wohnly/shared";
 import { Plus, Trash2 } from "lucide-react-native";
+import { KeyboardAwareScrollView } from "../ui/KeyboardAware";
 
 export interface LineItem {
   name: string;
@@ -91,7 +92,7 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
+    <KeyboardAwareScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color: colors.text }}>
         Split by Item
       </Text>
@@ -254,6 +255,6 @@ export function ItemizedSplitForm({ currency, initialItems, onConfirm, onCancel 
           Confirm Split
         </Button>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

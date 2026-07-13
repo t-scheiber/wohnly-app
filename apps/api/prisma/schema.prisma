@@ -12,23 +12,26 @@ datasource db {
 // ── Better Auth Tables ──────────────────────────────────────────────
 
 model User {
-  id            String   @id @default(cuid())
-  name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false)
-  image         String?
-  lang          String   @default("en")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                       String    @id @default(cuid())
+  name                     String
+  email                    String    @unique
+  emailVerified            Boolean   @default(false)
+  image                    String?
+  lang                     String    @default("en")
+  personalKeyEpoch         Int       @default(1)
+  personalKeyInitializedAt DateTime?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
 
-  sessions         Session[]
-  accounts         Account[]
-  devices          Device[]
-  preferences      UserPreferences?
-  subscription     UserSubscription?
-  pushTokens       PushToken[]
-  householdMembers HouseholdMember[]
-  accessRequests   AccessRequest[]   @relation("AccessRequester")
+  sessions             Session[]
+  accounts             Account[]
+  devices              Device[]
+  preferences          UserPreferences?
+  subscription         UserSubscription?
+  pushTokens           PushToken[]
+  householdMembers     HouseholdMember[]
+  accessRequests       AccessRequest[]       @relation("AccessRequester")
+  personalKeyEnvelopes PersonalKeyEnvelope[]
 }
 
 model Session {
@@ -369,6 +372,7 @@ model Event {
   encrypted       Boolean         @default(false)
   nonce           String?
   encryptionEpoch Int             @default(1)
+  encryptionScope String          @default("household") // "household" | "personal"
   calendarSync    CalendarSync?   @relation(fields: [calendarSyncId], references: [id], onDelete: SetNull)
 
   @@index([householdId, startDate, endDate])
@@ -575,9 +579,10 @@ model Device {
   status      String   @default("pending") // "pending" | "approved" | "rejected"
   createdAt   DateTime @default(now())
 
-  user           User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  envelopes      HouseholdKeyEnvelope[]
-  accessRequests AccessRequest[]
+  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  envelopes            HouseholdKeyEnvelope[]
+  personalKeyEnvelopes PersonalKeyEnvelope[]
+  accessRequests       AccessRequest[]
 
   @@unique([userId, publicKey])
   @@index([userId])
@@ -599,6 +604,22 @@ model HouseholdKeyEnvelope {
   @@unique([householdId, deviceId, keyEpoch])
   @@index([householdId, keyEpoch])
   @@index([householdId])
+  @@index([deviceId])
+}
+
+model PersonalKeyEnvelope {
+  id        String   @id @default(cuid())
+  userId    String
+  deviceId  String
+  sealedKey String // Random per-user key sealed to this device (base64)
+  keyEpoch  Int      @default(1)
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, deviceId, keyEpoch])
+  @@index([userId, keyEpoch])
   @@index([deviceId])
 }
 

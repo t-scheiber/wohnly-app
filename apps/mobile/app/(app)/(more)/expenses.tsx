@@ -5,10 +5,12 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { formatCurrency, formatDate } from "@wohnly/shared";
 import type { Expense } from "@wohnly/shared";
+import { useResponsiveLayout } from "@/lib/hooks/useResponsiveLayout";
 
 export default function ExpensesScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { isSmallPhone, screenPadding, cardPadding } = useResponsiveLayout();
 
   const { data, refetch } = useExpenses();
   const [refreshing, setRefreshing] = useState(false);
@@ -27,17 +29,17 @@ export default function ExpensesScreen() {
       style={{
         backgroundColor: colors.card,
         borderRadius: 12,
-        padding: 16,
+        padding: cardPadding,
         marginBottom: 8,
         borderWidth: 1,
         borderColor: colors.border,
       }}
     >
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1 }}>
+        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: "600", color: colors.text, flex: 1, minWidth: 0 }}>
           {item.title}
         </Text>
-        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>
+        <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ marginLeft: 8, fontSize: 16, fontWeight: "bold", color: colors.text }}>
           {formatCurrency(item.amount, item.currency)}
         </Text>
       </View>
@@ -56,13 +58,13 @@ export default function ExpensesScreen() {
       <View
         style={{
           backgroundColor: colors.primary,
-          padding: 20,
-          margin: 16,
+          padding: isSmallPhone ? 16 : 20,
+          margin: screenPadding,
           borderRadius: 16,
         }}
       >
         <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>Total Expenses</Text>
-        <Text style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
+        <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ color: "#fff", fontSize: 28, fontWeight: "bold", marginTop: 4 }}>
           {formatCurrency(total)}
         </Text>
       </View>
@@ -71,7 +73,7 @@ export default function ExpensesScreen() {
         data={expenses}
         renderItem={renderItem}
         keyExtractor={(item: Expense) => item.id}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
+        contentContainerStyle={{ paddingHorizontal: screenPadding }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
         }

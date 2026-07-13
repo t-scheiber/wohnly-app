@@ -31,6 +31,10 @@ jobs:
         env:
           EXPO_PUBLIC_ADSENSE_BANNER_SLOT: ${{ vars.ADSENSE_BANNER_SLOT || secrets.ADSENSE_BANNER_SLOT }}
 
+      - name: Apply web metadata and mobile viewport
+        run: node scripts/inject-adsense.mjs
+        working-directory: apps/mobile
+
       - name: Upload web build to VPS
         uses: appleboy/scp-action@v1.0.0
         with:

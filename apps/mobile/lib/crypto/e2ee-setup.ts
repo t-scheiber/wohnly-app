@@ -49,7 +49,7 @@ export async function ensureDeviceKeyMaterial(): Promise<DeviceKeyMaterial> {
   const fingerprint = await getDeviceFingerprint();
   if (existing) {
     return {
-      deviceId: existing.deviceId,
+      deviceId: existing.deviceId || null,
       publicKey: existing.publicKey,
       privateKey: existing.privateKey,
       fingerprint,
@@ -148,11 +148,16 @@ export async function fetchAndCacheHouseholdKey(householdId: string): Promise<bo
 
   try {
     const state = await api<{ currentEpoch: number }>(`/api/households/${householdId}/key-state`);
-    const res = await api<{ envelopes: { sealedHK: string; keyEpoch: number }[] }>(
+    const res = await api<{
+      envelopes: { deviceId: string; sealedHK: string; keyEpoch: number }[];
+    }>(
       `/api/households/${householdId}/envelopes/${state.currentEpoch}`,
     );
-    if (res.envelopes.length === 0) return false;
-    const sealed = await base64ToSealed(res.envelopes[0].sealedHK);
+    const ownEnvelope = res.envelopes.find(
+      (envelope) => envelope.deviceId === device.deviceId,
+    );
+    if (!ownEnvelope) return false;
+    const sealed = await base64ToSealed(ownEnvelope.sealedHK);
     const hk = await openSealedHK(sealed, device.publicKey, device.privateKey);
     cacheHouseholdKey(householdId, state.currentEpoch, hk);
     return true;

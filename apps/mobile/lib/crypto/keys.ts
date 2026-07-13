@@ -27,3 +27,9 @@ export async function generateHouseholdKey(): Promise<Uint8Array> {
   const s = await getSodium();
   return s.crypto_aead_xchacha20poly1305_ietf_keygen();
 }
+
+/** Generate an independent random key for a user's personal encrypted data. */
+export async function generatePersonalKey(): Promise<Uint8Array> {
+  const s = await getSodium();
+  return s.crypto_aead_xchacha20poly1305_ietf_keygen();
+}
