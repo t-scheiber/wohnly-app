@@ -82,7 +82,12 @@ const workflows = [
   {
     name: "Build & Submit Mobile",
     file: "deploy-mobile.yml",
-    fields: [`platform=all`, `submit=${submit}`, "skip_build=false"],
+    fields: [
+      "platform=all",
+      `submit=${submit}`,
+      "skip_build=false",
+      "android_submit_profile=closed",
+    ],
   },
   {
     name: "Build & Deploy Desktop",
@@ -103,4 +108,4 @@ for (const workflow of workflows) {
 }
 
 console.log("\nAll workflows dispatched. Use `gh run list --limit 10` to monitor progress.");
-console.log("Note: Windows desktop currently builds an MSIX artifact; Microsoft Store upload is still handled manually in Partner Center.");
+console.log("Android targets the First Test closed track; Windows submission is handled by the desktop workflow.");

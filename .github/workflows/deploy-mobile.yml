@@ -21,10 +21,19 @@ on:
         required: false
         type: boolean
         default: false
+      android_submit_profile:
+        description: "Android destination"
+        required: true
+        type: choice
+        default: closed
+        options:
+          - closed
+          - production
 
 jobs:
-  manual-build:
-    name: Build ${{ inputs.platform }} (production)
+  ios:
+    name: Build & submit iOS
+    if: inputs.platform == 'ios' || inputs.platform == 'all'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -46,33 +55,56 @@ jobs:
         run: npm ci
 
       - name: Build iOS
-        if: ${{ !inputs.skip_build && (inputs.platform == 'ios' || inputs.platform == 'all') }}
+        if: ${{ !inputs.skip_build }}
         working-directory: apps/mobile
         run: eas build --profile production --platform ios --non-interactive
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
+      - name: Write App Store Connect API key
+        if: inputs.submit
+        run: echo "${{ secrets.ASC_API_KEY_P8 }}" | base64 -d > AuthKey_C5QRM2S8XQ.p8
+
+      - name: Submit iOS to App Store
+        if: inputs.submit
+        working-directory: apps/mobile
+        run: eas submit --profile production --platform ios --non-interactive --latest
+
+  android:
+    name: Build & submit Android (${{ inputs.android_submit_profile }})
+    if: inputs.platform == 'android' || inputs.platform == 'all'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v9
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build Android
-        if: ${{ !inputs.skip_build && (inputs.platform == 'android' || inputs.platform == 'all') }}
+        if: ${{ !inputs.skip_build }}
         working-directory: apps/mobile
         run: eas build --profile production --platform android --non-interactive
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
-      - name: Write App Store Connect API key
-        if: inputs.submit && (inputs.platform == 'ios' || inputs.platform == 'all')
-        run: echo "${{ secrets.ASC_API_KEY_P8 }}" | base64 -d > AuthKey_C5QRM2S8XQ.p8
-
-      - name: Submit iOS to App Store
-        if: inputs.submit && (inputs.platform == 'ios' || inputs.platform == 'all')
-        working-directory: apps/mobile
-        run: eas submit --platform ios --non-interactive --latest 2>&1 | tee /tmp/ios-submit.log
-
       - name: Write Google Service Account key
-        if: inputs.submit && (inputs.platform == 'android' || inputs.platform == 'all')
+        if: inputs.submit
         run: echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_B64 }}" | base64 -d > eas-submit_serviceaccount.json
 
       - name: Submit Android to Play Store
-        if: inputs.submit && (inputs.platform == 'android' || inputs.platform == 'all')
+        if: inputs.submit
         working-directory: apps/mobile
-        run: eas submit --platform android --non-interactive --latest
+        run: eas submit --profile "${{ inputs.android_submit_profile }}" --platform android --non-interactive --latest
