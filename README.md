@@ -170,41 +170,35 @@ Served by Caddy at `wohnly.app`.
 Built and submitted via [EAS Build](https://docs.expo.dev/build/introduction/).
 
 ```text
-Trigger: Push to main (auto preview build) or manual dispatch
+Trigger: Version change on main or manual dispatch
 Workflow: .github/workflows/deploy-mobile.yml
 ```
 
 - **iOS** — Submitted to the App Store via `eas submit --platform ios`
-- **Android** — Submitted to Google Play via `eas submit --platform android`
+- **Android** — Submitted to the Google Play `First Test` closed track by default
 
 ### Desktop (macOS & Windows)
 
 Built with Tauri. The web frontend is the same Expo web export used for the web app.
 
 ```text
-Trigger: Manual dispatch
+Trigger: Push to main or manual dispatch
 Workflow: .github/workflows/deploy-desktop.yml
 ```
 
-- **macOS** — Code-signed, notarized, and optionally submitted to the Mac App Store via the `submit` input
-- **Windows** — Built as .msi/.exe, distributed via GitHub Releases or Microsoft Store (see below)
+- **macOS** — Code-signed, notarized, and submitted to the Mac App Store when `apps/desktop/release-version.txt` changes
+- **Windows** — Built as an MSIX and submitted when the Tauri app version changes
 
 #### Submitting to the Microsoft Store
 
-The Windows build is not automatically submitted. After the CI build completes:
+The Windows MSIX is submitted automatically with the Microsoft Store Developer CLI. The Partner Center account must have a Microsoft Entra application with the Manager role, and these GitHub Actions secrets must be configured:
 
-1. Go to **Actions > Build & Deploy Desktop** and download the `windows-build` artifact (.msi + .exe)
-2. Go to [Partner Center](https://partner.microsoft.com/dashboard) > Apps and games > Wohnly
-3. Start a new submission, upload the `.msi` as the package
-4. Fill in the store listing (screenshots, description, etc.) and submit for review
+- `PARTNER_CENTER_TENANT_ID`
+- `PARTNER_CENTER_SELLER_ID`
+- `PARTNER_CENTER_CLIENT_ID`
+- `PARTNER_CENTER_CLIENT_SECRET`
 
-Alternatively, submit the PWA version:
-
-1. Go to [PWABuilder](https://pwabuilder.com) and enter `https://wohnly.app`
-2. Package for Microsoft Store — PWABuilder generates an `.msixbundle`
-3. Upload that bundle to Partner Center instead of the Tauri `.msi`
-
-The PWA route is simpler for updates since it picks up web deploys automatically, but the Tauri build provides a richer native experience (system tray, native menus, smaller runtime).
+The workflow only auto-submits when the version in `apps/desktop/tauri/tauri.conf.json` changes. A manual workflow dispatch with `submit=true` can retry an existing version.
 
 #### macOS Signing Setup (one-time)
 
