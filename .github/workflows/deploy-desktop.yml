@@ -307,6 +307,8 @@ jobs:
           </dict>
           </plist>
           PLIST
+          /usr/libexec/PlistBuddy -c "Add :com.apple.application-identifier string ${APPLE_TEAM_ID}.app.wohnly" entitlements.plist
+          /usr/libexec/PlistBuddy -c "Add :com.apple.developer.team-identifier string ${APPLE_TEAM_ID}" entitlements.plist
 
           # Match the app's existing export-compliance setting. Setting this to
           # false avoids App Store Connect expecting an encryption compliance code
