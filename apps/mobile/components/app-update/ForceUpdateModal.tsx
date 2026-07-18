@@ -5,7 +5,7 @@ import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/lib/hooks/useTheme";
 
 const STORE_URL: Record<string, string> = {
-  ios: "https://apps.apple.com/app/wohnly/id6740123456",
+  ios: "https://apps.apple.com/app/wohnly/id6761035211",
   android: "market://details?id=app.wohnly",
   web: "https://wohnly.app",
 };
