@@ -73,6 +73,8 @@ cat > "$WORKDIR/entitlements.plist" <<'PLIST'
 <key>com.apple.security.app-sandbox</key><true/>
 <key>com.apple.security.network.client</key><true/>
 <key>com.apple.security.files.user-selected.read-write</key><true/>
+<key>com.apple.developer.applesignin</key>
+<array><string>Default</string></array>
 </dict></plist>
 PLIST
 

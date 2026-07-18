@@ -33,6 +33,16 @@ export function isMacTauri(): boolean {
   );
 }
 
+interface AppleIDAuthorizationResponse {
+  userIdentifier: string | null;
+  givenName: string | null;
+  familyName: string | null;
+  email: string | null;
+  authorizationCode: string;
+  identityToken: string | null;
+  state: string | null;
+}
+
 /** Open a URL in the system browser via Tauri shell plugin */
 export async function openInBrowser(url: string): Promise<void> {
   if (!isTauri()) return;
@@ -77,20 +87,21 @@ export function onDeepLink(
 /**
  * Start the OAuth flow for Tauri.
  *
- * Flow:
- * 1. POST to the API to get the OAuth authorization URL
- * 2. On macOS, open the proxy in ASWebAuthenticationSession. On Windows,
- *    open it in the system browser.
- *    (this sets the state cookie in the browser context)
- * 3. User authenticates with the provider
- * 4. API callback redirects to wohnly://auth/callback?cookie=...
- *    (the expo server plugin appends the session cookie)
- * 5. Tauri deep-link plugin captures the URL
- * 6. handleTauriDeepLink() stores the cookie
+ * Apple on macOS uses the native AuthenticationServices sheet and exchanges
+ * its identity token directly for a Better Auth session. Other flows request
+ * an OAuth URL from the API, then open it in ASWebAuthenticationSession on
+ * macOS or the system browser on Windows. Those web flows return through the
+ * wohnly:// deep link and store the session cookie locally.
  */
 export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   const apiUrl =
     Constants.expoConfig?.extra?.apiUrl ?? "https://api.wohnly.app";
+
+  if (provider === "apple" && isMacTauri()) {
+    await tauriSignInWithApple(apiUrl);
+    return;
+  }
+
   const callbackURL = "wohnly://auth/callback";
   const url = `${apiUrl}/api/auth/sign-in/social`;
 
@@ -145,6 +156,82 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   }
 
   await openInBrowser(proxyUrl);
+}
+
+async function tauriSignInWithApple(apiUrl: string): Promise<void> {
+  const rawNonce = createNonce();
+  const hashedNonce = await sha256Hex(rawNonce);
+  const credential = await tauriInvoke<AppleIDAuthorizationResponse>(
+    "plugin:siwa|get_apple_id_credential",
+    {
+      payload: {
+        scope: ["fullName", "email"],
+        nonce: hashedNonce,
+      },
+    },
+  );
+
+  if (!credential.identityToken) {
+    throw new Error("Apple did not return an identity token. Please try again.");
+  }
+
+  const response = await fetch(`${apiUrl}/api/auth/sign-in/social`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      provider: "apple",
+      idToken: {
+        token: credential.identityToken,
+        nonce: rawNonce,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Sign in with Apple failed (${response.status}). Please try again.`);
+  }
+
+  const result: unknown = await response.json().catch(() => null);
+  const sessionToken =
+    result &&
+    typeof result === "object" &&
+    "token" in result &&
+    typeof result.token === "string"
+      ? result.token
+      : null;
+
+  if (!sessionToken) {
+    throw new Error("Sign in with Apple completed without a valid session.");
+  }
+
+  storeTauriSessionToken(sessionToken);
+  window.location.reload();
+}
+
+function createNonce(): string {
+  const bytes = new Uint8Array(32);
+  globalThis.crypto.getRandomValues(bytes);
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+async function sha256Hex(value: string): Promise<string> {
+  const data = new TextEncoder().encode(value);
+  const digest = await globalThis.crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+}
+
+function storeTauriSessionToken(sessionToken: string): void {
+  const existing = localStorage.getItem(COOKIE_STORAGE_KEY);
+  const cookies: Record<string, { value: string; expires: string | null }> =
+    existing ? safeJsonParse(existing) : {};
+
+  cookies["__Secure-better-auth.session_token"] = {
+    value: sessionToken,
+    expires: null,
+  };
+  localStorage.setItem(COOKIE_STORAGE_KEY, JSON.stringify(cookies));
 }
 
 /**
