@@ -1,6 +1,6 @@
 {
   "name": "wohnly",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -22,7 +22,8 @@
     "build-submit:all": "npm run release:all",
     "api:health": "node scripts/check-api-health.mjs",
     "submit:ios": "cd apps/mobile && eas submit --platform ios --latest",
-    "submit:android": "cd apps/mobile && eas submit --platform android --latest",
+    "submit:android": "cd apps/mobile && eas submit --profile closed --platform android --latest",
+    "submit:android:production": "cd apps/mobile && eas submit --profile production --platform android --latest",
     "submit:macos-mas": "bash scripts/submit-macos-mas.sh",
     "typecheck": "npx tsc --noEmit -p apps/mobile/tsconfig.json",
     "check:contrast": "node apps/mobile/scripts/check-contrast.mjs",
@@ -35,12 +36,11 @@
     "sharp": "^0.34.5"
   },
   "overrides": {
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "@prisma/dev": {
       "@hono/node-server": "2.0.8"
     },
-    "@xmldom/xmldom": "0.9.10",
     "postcss": "8.5.16",
     "uuid": "14.0.1",
     "shell-quote": "1.9.0",
@@ -49,7 +49,6 @@
   },
   "devDependencies": {
     "@emnapi/core": "1.10.0",
-    "eslint-plugin-react-native-a11y": "^3.5.1",
     "@emnapi/runtime": "1.10.0",
     "@napi-rs/wasm-runtime": "1.1.4",
     "@tauri-apps/api": "^2.11.0",
@@ -57,6 +56,9 @@
     "@tauri-apps/plugin-deep-link": "^2.4.8",
     "@tauri-apps/plugin-process": "^2.3.1",
     "@tauri-apps/plugin-shell": "^2.3.5",
-    "@tauri-apps/plugin-updater": "^2.10.1"
+    "@tauri-apps/plugin-updater": "^2.10.1",
+    "eslint": "9.39.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   }
 }
