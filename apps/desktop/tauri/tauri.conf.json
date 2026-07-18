@@ -52,7 +52,9 @@
       "icons/icon.ico"
     ],
     "macOS": {
-      "minimumSystemVersion": "13.0"
+      "minimumSystemVersion": "13.0",
+      "bundleVersion": "1.3.5",
+      "entitlements": "./Entitlements.plist"
     },
     "windows": {
       "nsis": {

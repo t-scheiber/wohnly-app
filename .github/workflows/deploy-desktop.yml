@@ -279,6 +279,10 @@ jobs:
             <true/>
             <key>com.apple.security.files.user-selected.read-write</key>
             <true/>
+            <key>com.apple.developer.applesignin</key>
+            <array>
+              <string>Default</string>
+            </array>
           </dict>
           </plist>
           PLIST
@@ -295,6 +299,11 @@ jobs:
           cp Wohnly_MAS.mobileprovision "$APP/Contents/embedded.provisionprofile"
           chmod 644 "$APP/Contents/embedded.provisionprofile"
           security cms -D -i "$APP/Contents/embedded.provisionprofile" > embedded-profile.plist
+          PROFILE_SIWA=$(/usr/libexec/PlistBuddy -c "Print :Entitlements:com.apple.developer.applesignin:0" embedded-profile.plist 2>/dev/null || true)
+          if [ "$PROFILE_SIWA" != "Default" ]; then
+            echo "Error: provisioning profile is missing Sign in with Apple"
+            exit 1
+          fi
 
           # Re-sign the .app with MAS certificate
           codesign --keychain mas.keychain --deep --force --options runtime \
