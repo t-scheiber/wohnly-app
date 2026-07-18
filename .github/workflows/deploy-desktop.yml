@@ -92,6 +92,8 @@ jobs:
   build-macos:
     name: Build & sign macOS
     needs: build-web
+    outputs:
+      should_submit: ${{ steps.macos-submit.outputs.should_submit }}
     if: >
       github.event_name == 'push' ||
       inputs.platform == 'all' ||
@@ -99,6 +101,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - uses: actions/download-artifact@v8
         with:
@@ -117,6 +121,26 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Check whether macOS should be submitted
+        id: macos-submit
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MANUAL_SUBMIT: ${{ inputs.submit }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          SHOULD_SUBMIT=false
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            SHOULD_SUBMIT="${MANUAL_SUBMIT:-false}"
+          elif [ "$EVENT_NAME" = "push" ]; then
+            CURRENT_RELEASE=$(cat apps/desktop/release-version.txt)
+            PREVIOUS_RELEASE=$(git show "${BEFORE_SHA}:apps/desktop/release-version.txt" 2>/dev/null || true)
+            if [ -n "$CURRENT_RELEASE" ] && [ "$CURRENT_RELEASE" != "$PREVIOUS_RELEASE" ]; then
+              SHOULD_SUBMIT=true
+            fi
+          fi
+          echo "should_submit=$SHOULD_SUBMIT" >> "$GITHUB_OUTPUT"
+          echo "Mac App Store submission: $SHOULD_SUBMIT"
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -169,10 +193,7 @@ jobs:
   submit-macos:
     name: Submit to Mac App Store
     needs: build-macos
-    if: >
-      github.event_name == 'workflow_dispatch' &&
-      inputs.submit &&
-      (inputs.platform == 'all' || inputs.platform == 'macos')
+    if: needs.build-macos.result == 'success' && needs.build-macos.outputs.should_submit == 'true'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
