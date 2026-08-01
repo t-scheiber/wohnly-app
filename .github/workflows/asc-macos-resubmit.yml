@@ -159,7 +159,12 @@ jobs:
                   },
               )
               for _ in range(30):
-                  cur = api(f"/v1/reviewSubmissions/{sid}")
+                  cur = api(f"/v1/reviewSubmissions/{sid}", soft=True)
+                  if cur.get("_e") == 404:
+                      print("  cancel poll: gone (404) — settled")
+                      break
+                  if cur.get("_e"):
+                      raise SystemExit(1)
                   cst = cur["data"]["attributes"].get("state")
                   print("  cancel poll:", cst)
                   if cst not in PENDING:
