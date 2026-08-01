@@ -33,7 +33,7 @@
     "db:push": "npm run db:push --workspace=apps/api"
   },
   "optionalDependencies": {
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.0"
   },
   "overrides": {
     "react": "19.2.3",
