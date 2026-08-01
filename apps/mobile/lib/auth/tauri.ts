@@ -24,13 +24,45 @@ export function tauriInvoke<T = unknown>(
   return (window as any).__TAURI_INTERNALS__.invoke(cmd, args);
 }
 
+let cachedHostOs: string | null = null;
+
+/**
+ * Host OS from Rust (`macos` | `windows` | `linux` …).
+ * Prefer this over userAgent — App Review failures happened when UA detection
+ * missed macOS and OAuth fell through to the system browser (Guideline 4).
+ */
+export async function getHostOs(): Promise<string> {
+  if (!isTauri()) return "";
+  if (cachedHostOs) return cachedHostOs;
+  try {
+    cachedHostOs = await tauriInvoke<string>("platform_os");
+  } catch {
+    const platform = typeof navigator !== "undefined" ? navigator.platform || "" : "";
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent || "" : "";
+    if (/^Mac/i.test(platform) || /Macintosh|Mac OS X|macOS/i.test(ua)) {
+      cachedHostOs = "macos";
+    } else if (/^Win/i.test(platform) || /Windows/i.test(ua)) {
+      cachedHostOs = "windows";
+    } else {
+      cachedHostOs = "unknown";
+    }
+  }
+  return cachedHostOs;
+}
+
 /** True when the Tauri webview is running on macOS. */
 export function isMacTauri(): boolean {
+  if (cachedHostOs) return cachedHostOs === "macos";
   return (
     isTauri() &&
     typeof navigator !== "undefined" &&
-    /Macintosh|Mac OS X/i.test(navigator.userAgent)
+    (/^Mac/i.test(navigator.platform || "") ||
+      /Macintosh|Mac OS X|macOS/i.test(navigator.userAgent || ""))
   );
+}
+
+export async function isMacTauriAsync(): Promise<boolean> {
+  return (await getHostOs()) === "macos";
 }
 
 interface AppleIDAuthorizationResponse {
@@ -88,18 +120,28 @@ export function onDeepLink(
  * Start the OAuth flow for Tauri.
  *
  * Apple on macOS uses the native AuthenticationServices sheet and exchanges
- * its identity token directly for a Better Auth session. Other flows request
- * an OAuth URL from the API, then open it in ASWebAuthenticationSession on
- * macOS or the system browser on Windows. Those web flows return through the
- * wohnly:// deep link and store the session cookie locally.
+ * its identity token directly for a Better Auth session. Google (and Apple on
+ * Windows) request an OAuth URL, then open ASWebAuthenticationSession on macOS
+ * or the system browser on Windows. macOS never falls back to the system
+ * browser — that is what triggered App Review Guideline 4.
  */
 export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
   const apiUrl =
     Constants.expoConfig?.extra?.apiUrl ?? "https://api.wohnly.app";
+  const onMac = await isMacTauriAsync();
 
-  if (provider === "apple" && isMacTauri()) {
-    await tauriSignInWithApple(apiUrl);
-    return;
+  if (provider === "apple") {
+    try {
+      await tauriSignInWithApple(apiUrl);
+      return;
+    } catch (err) {
+      // Sign in with Apple must never leave the Mac app (Guideline 4).
+      if (onMac) throw err;
+      console.warn(
+        "[tauriSignIn] native Apple SIWA unavailable, using browser OAuth",
+        err,
+      );
+    }
   }
 
   const callbackURL = "wohnly://auth/callback";
@@ -142,7 +184,9 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
 
   const proxyUrl = `${apiUrl}/api/auth/expo-authorization-proxy?authorizationURL=${encodeURIComponent(data.url)}`;
 
-  if (isMacTauri()) {
+  // Prefer ASWebAuthenticationSession whenever the plugin works. On macOS this
+  // is mandatory — never open Safari/system browser for OAuth.
+  try {
     const callbackUrl = await tauriInvoke<string>("plugin:auth-session|start", {
       authUrl: proxyUrl,
       callbackUrlScheme: "wohnly",
@@ -153,6 +197,13 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
     }
     window.location.reload();
     return;
+  } catch (err) {
+    if (onMac) {
+      const detail = err instanceof Error ? err.message : String(err);
+      throw new Error(
+        `In-app sign-in failed on macOS (ASWebAuthenticationSession). ${detail}`.trim(),
+      );
+    }
   }
 
   await openInBrowser(proxyUrl);

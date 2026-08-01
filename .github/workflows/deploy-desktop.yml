@@ -328,8 +328,9 @@ jobs:
             exit 1
           fi
 
-          # Re-sign the .app with MAS certificate
-          codesign --keychain mas.keychain --deep --force --options runtime \
+          # Re-sign the .app with MAS certificate (no hardened-runtime flag -
+          # Mac App Store uses sandbox entitlements instead).
+          codesign --keychain mas.keychain --deep --force \
             --sign "$MAS_APP_IDENTITY" \
             --entitlements entitlements.plist \
             "$APP"
