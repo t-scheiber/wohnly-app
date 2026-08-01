@@ -1,4 +1,5 @@
-# One-shot: attach processed MAS build to rejected macOS version and submit for review.
+# Attach a processed MAS build to the macOS App Store version and submit for review.
+# Handles stuck UNRESOLVED_ISSUES submissions by canceling them first (ASC requirement).
 name: ASC macOS resubmit
 
 on:
@@ -63,7 +64,7 @@ jobs:
                   headers={"kid": KEY_ID, "typ": "JWT"},
               )
 
-          def api(path, method="GET", body=None):
+          def api(path, method="GET", body=None, soft=False):
               data = None if body is None else json.dumps(body).encode()
               req = urllib.request.Request(
                   "https://api.appstoreconnect.apple.com" + path,
@@ -81,16 +82,19 @@ jobs:
               except urllib.error.HTTPError as e:
                   err = e.read().decode()
                   print(f"HTTP {e.code} {method} {path}\n{err[:3000]}")
+                  if soft:
+                      return {"_e": e.code, "_b": err}
                   raise SystemExit(1)
 
           # Wait for build processing
           build_id = None
+          state = None
           for i in range(40):
               builds = api(
                   f"/v1/builds?filter[app]={APP_ID}&sort=-uploadedDate&limit=15"
                   "&fields[builds]=version,uploadedDate,processingState,buildAudienceType"
               )
-              print(f"--- poll {i} ---")
+              print(f"--- poll builds {i} ---")
               for b in builds.get("data", []):
                   a = b["attributes"]
                   ver = str(a.get("version") or "")
@@ -120,53 +124,94 @@ jobs:
           )
           print("Build attached")
 
-          # Prefer an open / unresolved submission; else create one
+          # Cancel stuck submissions that own the version
+          # UNRESOLVED_ISSUES cannot accept new items; must cancel then create fresh.
+          ACTIVE = {"WAITING_FOR_REVIEW", "IN_REVIEW"}
+          CANCELABLE = {"READY_FOR_REVIEW", "UNRESOLVED_ISSUES"}
+          PENDING = CANCELABLE | ACTIVE | {"CANCELING"}
+
           subs = api(
-              f"/v1/apps/{APP_ID}/reviewSubmissions?filter[platform]=MAC_OS&limit=10"
+              f"/v1/apps/{APP_ID}/reviewSubmissions?filter[platform]=MAC_OS&limit=15"
           )
-          submission_id = None
           for s in subs.get("data", []):
               st = s["attributes"].get("state")
-              print("submission", s["id"], st)
-              if st in (
-                  "READY_FOR_REVIEW",
-                  "UNRESOLVED_ISSUES",
-                  "WAITING_FOR_REVIEW",
-                  "IN_REVIEW",
-              ):
-                  submission_id = s["id"]
-                  break
+              print("existing submission", s["id"], st)
+              if st in ACTIVE:
+                  raise SystemExit(
+                      f"Active review in progress ({st}): {s['id']}. Cancel in ASC UI first."
+                  )
 
-          if not submission_id:
-              created = api(
-                  "/v1/reviewSubmissions",
-                  "POST",
+          for s in subs.get("data", []):
+              st = s["attributes"].get("state")
+              if st not in CANCELABLE:
+                  continue
+              sid = s["id"]
+              print("Canceling submission", sid, st)
+              api(
+                  f"/v1/reviewSubmissions/{sid}",
+                  "PATCH",
                   {
                       "data": {
                           "type": "reviewSubmissions",
-                          "attributes": {"platform": "MAC_OS"},
-                          "relationships": {
-                              "app": {"data": {"type": "apps", "id": APP_ID}}
-                          },
+                          "id": sid,
+                          "attributes": {"canceled": True},
                       }
                   },
               )
-              submission_id = created["data"]["id"]
-              print("Created submission", submission_id)
-          else:
-              print("Using existing submission", submission_id)
+              for _ in range(30):
+                  cur = api(f"/v1/reviewSubmissions/{sid}")
+                  cst = cur["data"]["attributes"].get("state")
+                  print("  cancel poll:", cst)
+                  if cst not in PENDING:
+                      break
+                  time.sleep(2)
 
-          # Ensure version is an item on the submission
-          items = api(f"/v1/reviewSubmissions/{submission_id}/items")
-          has_version = False
-          for item in items.get("data", []):
-              rel = item.get("relationships", {}).get("appStoreVersion", {}).get("data")
-              print("item", item["id"], item.get("attributes"), rel)
-              if rel and rel.get("id") == MAC_VER:
-                  has_version = True
+          # Create fresh submission
+          created = api(
+              "/v1/reviewSubmissions",
+              "POST",
+              {
+                  "data": {
+                      "type": "reviewSubmissions",
+                      "attributes": {"platform": "MAC_OS"},
+                      "relationships": {
+                          "app": {"data": {"type": "apps", "id": APP_ID}}
+                      },
+                  }
+              },
+          )
+          submission_id = created["data"]["id"]
+          print("Created submission", submission_id)
 
-          if not has_version:
-              api(
+          # Attach version item (relationship key is appStoreVersion singular in v1)
+          add = api(
+              "/v1/reviewSubmissionItems",
+              "POST",
+              {
+                  "data": {
+                      "type": "reviewSubmissionItems",
+                      "relationships": {
+                          "reviewSubmission": {
+                              "data": {
+                                  "type": "reviewSubmissions",
+                                  "id": submission_id,
+                              }
+                          },
+                          "appStoreVersion": {
+                              "data": {
+                                  "type": "appStoreVersions",
+                                  "id": MAC_VER,
+                              }
+                          },
+                      },
+                  }
+              },
+              soft=True,
+          )
+          if add.get("_e"):
+              # Some ASC tenants expect plural relationship key
+              print("Retrying with appStoreVersions relationship key")
+              add = api(
                   "/v1/reviewSubmissionItems",
                   "POST",
                   {
@@ -179,7 +224,7 @@ jobs:
                                       "id": submission_id,
                                   }
                               },
-                              "appStoreVersion": {
+                              "appStoreVersions": {
                                   "data": {
                                       "type": "appStoreVersions",
                                       "id": MAC_VER,
@@ -189,18 +234,23 @@ jobs:
                       }
                   },
               )
-              print("Added appStoreVersion item")
+          print("Added appStoreVersion item")
 
-          # Submit for review
+          # Finalize: PATCH submitted=true (preferred over /submit)
           submitted = api(
-              f"/v1/reviewSubmissions/{submission_id}/submit",
-              "POST",
-              {"data": {"type": "reviewSubmissions", "id": submission_id}},
+              f"/v1/reviewSubmissions/{submission_id}",
+              "PATCH",
+              {
+                  "data": {
+                      "type": "reviewSubmissions",
+                      "id": submission_id,
+                      "attributes": {"submitted": True},
+                  }
+              },
           )
           print("SUBMITTED")
           print(json.dumps(submitted, indent=2)[:4000])
 
-          # Final status
           ver = api(f"/v1/appStoreVersions/{MAC_VER}")
           print(
               "version state:",
