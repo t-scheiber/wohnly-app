@@ -1,0 +1,213 @@
+# One-shot: attach processed MAS build to rejected macOS version and submit for review.
+name: ASC macOS resubmit
+
+on:
+  workflow_dispatch:
+    inputs:
+      marketing_version:
+        description: App Store version string (must already exist)
+        required: true
+        default: "1.3.5"
+      build_version:
+        description: CFBundleVersion / ASC build version to attach
+        required: true
+        default: "1.3.7"
+      mac_version_id:
+        description: appStoreVersions ID for macOS
+        required: true
+        default: "3c362380-dde1-4b3d-819c-01ce5bff1413"
+      app_id:
+        description: ASC app ID
+        required: true
+        default: "6761035211"
+
+jobs:
+  resubmit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Write ASC API key
+        run: |
+          mkdir -p ~/.private_keys
+          echo "${{ secrets.ASC_API_KEY_P8 }}" | base64 -d > ~/.private_keys/AuthKey_${{ secrets.ASC_API_KEY_ID }}.p8
+
+      - name: Attach build and submit for review
+        env:
+          ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
+          ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
+          MARKETING_VERSION: ${{ inputs.marketing_version }}
+          BUILD_VERSION: ${{ inputs.build_version }}
+          MAC_VERSION_ID: ${{ inputs.mac_version_id }}
+          APP_ID: ${{ inputs.app_id }}
+        run: |
+          pip3 install --quiet PyJWT cryptography
+          python3 <<'PY'
+          import json, time, urllib.error, urllib.request
+          from pathlib import Path
+          import jwt
+          import os
+
+          KEY_ID = os.environ["ASC_API_KEY_ID"]
+          ISSUER = os.environ["ASC_API_ISSUER_ID"]
+          KEY = Path(f"~/.private_keys/AuthKey_{KEY_ID}.p8").expanduser().read_text()
+          APP_ID = os.environ["APP_ID"]
+          MAC_VER = os.environ["MAC_VERSION_ID"]
+          BUILD_VERSION = os.environ["BUILD_VERSION"]
+
+          def tok():
+              n = int(time.time())
+              return jwt.encode(
+                  {"iss": ISSUER, "iat": n, "exp": n + 1200, "aud": "appstoreconnect-v1"},
+                  KEY,
+                  algorithm="ES256",
+                  headers={"kid": KEY_ID, "typ": "JWT"},
+              )
+
+          def api(path, method="GET", body=None):
+              data = None if body is None else json.dumps(body).encode()
+              req = urllib.request.Request(
+                  "https://api.appstoreconnect.apple.com" + path,
+                  data=data,
+                  method=method,
+                  headers={
+                      "Authorization": f"Bearer {tok()}",
+                      "Content-Type": "application/json",
+                  },
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=90) as r:
+                      raw = r.read()
+                      return json.loads(raw) if raw else {"_ok": True, "status": r.status}
+              except urllib.error.HTTPError as e:
+                  err = e.read().decode()
+                  print(f"HTTP {e.code} {method} {path}\n{err[:3000]}")
+                  raise SystemExit(1)
+
+          # Wait for build processing
+          build_id = None
+          for i in range(40):
+              builds = api(
+                  f"/v1/builds?filter[app]={APP_ID}&sort=-uploadedDate&limit=15"
+                  "&fields[builds]=version,uploadedDate,processingState,buildAudienceType"
+              )
+              print(f"--- poll {i} ---")
+              for b in builds.get("data", []):
+                  a = b["attributes"]
+                  ver = str(a.get("version") or "")
+                  state = a.get("processingState")
+                  print(b["id"], ver, state, a.get("uploadedDate"))
+                  if ver == BUILD_VERSION:
+                      build_id = b["id"]
+                      if state == "VALID":
+                          break
+                      if state in ("FAILED", "INVALID"):
+                          raise SystemExit(f"Build {BUILD_VERSION} processing failed: {state}")
+              else:
+                  time.sleep(30)
+                  continue
+              if build_id and state == "VALID":
+                  break
+              time.sleep(30)
+
+          if not build_id:
+              raise SystemExit(f"Build {BUILD_VERSION} not found after polling")
+
+          print("Attaching build", build_id, "to version", MAC_VER)
+          api(
+              f"/v1/appStoreVersions/{MAC_VER}/relationships/build",
+              "PATCH",
+              {"data": {"type": "builds", "id": build_id}},
+          )
+          print("Build attached")
+
+          # Prefer an open / unresolved submission; else create one
+          subs = api(
+              f"/v1/apps/{APP_ID}/reviewSubmissions?filter[platform]=MAC_OS&limit=10"
+          )
+          submission_id = None
+          for s in subs.get("data", []):
+              st = s["attributes"].get("state")
+              print("submission", s["id"], st)
+              if st in (
+                  "READY_FOR_REVIEW",
+                  "UNRESOLVED_ISSUES",
+                  "WAITING_FOR_REVIEW",
+                  "IN_REVIEW",
+              ):
+                  submission_id = s["id"]
+                  break
+
+          if not submission_id:
+              created = api(
+                  "/v1/reviewSubmissions",
+                  "POST",
+                  {
+                      "data": {
+                          "type": "reviewSubmissions",
+                          "attributes": {"platform": "MAC_OS"},
+                          "relationships": {
+                              "app": {"data": {"type": "apps", "id": APP_ID}}
+                          },
+                      }
+                  },
+              )
+              submission_id = created["data"]["id"]
+              print("Created submission", submission_id)
+          else:
+              print("Using existing submission", submission_id)
+
+          # Ensure version is an item on the submission
+          items = api(f"/v1/reviewSubmissions/{submission_id}/items")
+          has_version = False
+          for item in items.get("data", []):
+              rel = item.get("relationships", {}).get("appStoreVersion", {}).get("data")
+              print("item", item["id"], item.get("attributes"), rel)
+              if rel and rel.get("id") == MAC_VER:
+                  has_version = True
+
+          if not has_version:
+              api(
+                  "/v1/reviewSubmissionItems",
+                  "POST",
+                  {
+                      "data": {
+                          "type": "reviewSubmissionItems",
+                          "relationships": {
+                              "reviewSubmission": {
+                                  "data": {
+                                      "type": "reviewSubmissions",
+                                      "id": submission_id,
+                                  }
+                              },
+                              "appStoreVersion": {
+                                  "data": {
+                                      "type": "appStoreVersions",
+                                      "id": MAC_VER,
+                                  }
+                              },
+                          },
+                      }
+                  },
+              )
+              print("Added appStoreVersion item")
+
+          # Submit for review
+          submitted = api(
+              f"/v1/reviewSubmissions/{submission_id}/submit",
+              "POST",
+              {"data": {"type": "reviewSubmissions", "id": submission_id}},
+          )
+          print("SUBMITTED")
+          print(json.dumps(submitted, indent=2)[:4000])
+
+          # Final status
+          ver = api(f"/v1/appStoreVersions/{MAC_VER}")
+          print(
+              "version state:",
+              ver["data"]["attributes"].get("appStoreState"),
+              "version:",
+              ver["data"]["attributes"].get("versionString"),
+          )
+          sub = api(f"/v1/reviewSubmissions/{submission_id}")
+          print("submission state:", sub["data"]["attributes"].get("state"))
+          PY
