@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-platform-os"
+description = "Allows the frontend to read the host operating system for auth routing"
+commands.allow = ["platform_os"]

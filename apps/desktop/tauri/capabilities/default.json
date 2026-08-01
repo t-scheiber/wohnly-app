@@ -9,6 +9,7 @@
     "deep-link:default",
     "auth-session:default",
     "siwa:allow-get-apple-id-credential",
+    "allow-platform-os",
     "iap:default",
     "updater:default",
     "process:allow-restart"

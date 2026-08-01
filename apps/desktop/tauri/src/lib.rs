@@ -1,5 +1,11 @@
 use tauri::Manager;
 
+/// Reliable OS detection for the frontend (userAgent is not trustworthy for MAS auth).
+#[tauri::command]
+fn platform_os() -> &'static str {
+    std::env::consts::OS
+}
+
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
@@ -18,6 +24,7 @@ pub fn run() {
         .plugin(tauri_plugin_iap::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
+        .invoke_handler(tauri::generate_handler![platform_os])
         .run(tauri::generate_context!())
         .expect("error while running Wohnly");
 }

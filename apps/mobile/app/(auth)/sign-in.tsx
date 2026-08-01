@@ -18,6 +18,7 @@ import {
   onDeepLink,
   tauriSignIn,
   handleTauriDeepLink,
+  getHostOs,
 } from "@/lib/auth/tauri";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -78,6 +79,13 @@ export default function SignInScreen() {
   const { t } = useTranslation();
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
+
+  // Warm host OS detection early so macOS auth never mis-routes to Safari.
+  useEffect(() => {
+    if (isTauri()) {
+      void getHostOs();
+    }
+  }, []);
 
   // Handle deep link callback from system browser (Tauri only)
   useEffect(() => {
