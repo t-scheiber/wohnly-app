@@ -79,6 +79,7 @@ export default function SignInScreen() {
   const { t } = useTranslation();
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   // Warm host OS detection early so macOS auth never mis-routes to Safari.
   useEffect(() => {
@@ -127,6 +128,7 @@ export default function SignInScreen() {
 
   const handleSocialSignIn = async (provider: "google" | "apple") => {
     const setLoading = provider === "google" ? setLoadingGoogle : setLoadingApple;
+    setAuthError(null);
     setLoading(true);
     try {
       if (isTauri()) {
@@ -140,6 +142,7 @@ export default function SignInScreen() {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Sign-in failed. Please try again.";
+      setAuthError(message);
 
       // Tauri runs on the web platform, so use the browser alert there.
       if (Platform.OS === "web" && typeof window !== "undefined") {
@@ -206,6 +209,17 @@ export default function SignInScreen() {
             )}
           </View>
         </Pressable>
+
+        {authError && (
+          <View
+            accessibilityRole="alert"
+            style={[styles.authError, { borderColor: colors.destructive }]}
+          >
+            <Text style={[styles.authErrorText, { color: colors.destructive }]}>
+              {authError}
+            </Text>
+          </View>
+        )}
 
         <View style={styles.legalLinks}>
           <Link href="/privacy-policy" style={styles.legalLink}>
@@ -353,6 +367,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginLeft: 10,
+  },
+  authError: {
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginTop: -16,
+    marginBottom: 24,
+  },
+  authErrorText: {
+    fontSize: 13,
+    lineHeight: 18,
+    textAlign: "center",
   },
   legalLinks: {
     alignSelf: "center",

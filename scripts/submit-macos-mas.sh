@@ -1,29 +1,41 @@
 #!/usr/bin/env bash
-# Re-sign a Tauri DMG for Mac App Store and upload to App Store Connect.
+# Package the dedicated Tauri Mac App Store flavor and upload it.
 # Requires: 1Password CLI (op), curl, codesign, productbuild, and either:
 #   - Transporter (iTMSTransporter), or full Xcode (xcrun altool).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VERSION="$(jq -r '.version' "$ROOT/apps/desktop/tauri/tauri.conf.json")"
-DMG="${1:-}"
+APP_INPUT="${1:-}"
 OUT_DIR="${OUT_DIR:-$ROOT/apps/desktop/release}"
-ASC_KEY="${ASC_KEY:-$ROOT/AuthKey_C5QRM2S8XQ.p8}"
+ASC_KEY="${ASC_KEY:-$HOME/.private_keys/AuthKey_C5QRM2S8XQ.p8}"
 ASC_KEY_ID="${ASC_KEY_ID:-C5QRM2S8XQ}"
 ASC_ISSUER="${ASC_ISSUER:-5f00ed40-b6d3-4426-8584-9fcd845087cd}"
 OP_VAULT="${OP_VAULT:-Wohnly}"
 
-if [[ -z "$DMG" ]]; then
-  DMG="$(find "$ROOT/apps/desktop/tauri/target" "$ROOT" -name "Wohnly_${VERSION}_*.dmg" 2>/dev/null | head -1 || true)"
+if [[ "$APP_INPUT" == *.dmg ]]; then
+  echo "Refusing to re-sign a direct-download DMG for the Mac App Store." >&2
+  echo "Run without an argument to build the updater-free MAS flavor." >&2
+  exit 1
 fi
-if [[ -z "$DMG" || ! -f "$DMG" ]]; then
-  echo "Usage: $0 [path/to/Wohnly_${VERSION}_aarch64.dmg]" >&2
-  echo "Build first: npm run build:web && npm run build:macos" >&2
+
+if [[ -z "$APP_INPUT" ]]; then
+  (cd "$ROOT" && npm run build:web)
+  (
+    cd "$ROOT/apps/desktop"
+    npx tauri build --features mas --bundles app --no-sign \
+      --config tauri/tauri.appstore.conf.json
+  )
+  APP_INPUT="$ROOT/apps/desktop/tauri/target/release/bundle/macos/Wohnly.app"
+fi
+if [[ ! -d "$APP_INPUT" ]]; then
+  echo "Usage: $0 [path/to/dedicated/Wohnly.app]" >&2
   exit 1
 fi
 
 command -v op >/dev/null || { echo "1Password CLI (op) required" >&2; exit 1; }
 command -v jq >/dev/null || { echo "jq required" >&2; exit 1; }
+command -v fastlane >/dev/null || { echo "fastlane required" >&2; exit 1; }
 [[ -f "$ASC_KEY" ]] || { echo "Missing ASC API key: $ASC_KEY" >&2; exit 1; }
 
 export OP_ACCOUNT="${OP_ACCOUNT:-my.1password.com}"
@@ -58,10 +70,30 @@ security import "$WORKDIR/mas_app.p12" -k mas.keychain -P "$MAS_PW" -T /usr/bin/
 security import "$WORKDIR/mas_installer.p12" -k mas.keychain -P "$MAS_PW" -T /usr/bin/codesign -T /usr/bin/productbuild
 security set-key-partition-list -S apple-tool:,apple:,codesign:,productbuild: -s -k "$KEYCHAIN_PW" mas.keychain
 
-MOUNT="/tmp/wohnly-dmg-$$"
-hdiutil attach "$DMG" -nobrowse -mountpoint "$MOUNT"
-cp -R "$MOUNT"/Wohnly.app "$WORKDIR/Wohnly.app"
-hdiutil detach "$MOUNT"
+ditto "$APP_INPUT" "$WORKDIR/Wohnly.app"
+
+if grep -R -a -q "desktop-latest/latest.json" "$WORKDIR/Wohnly.app"; then
+  echo "Refusing to submit an app containing the external updater endpoint." >&2
+  exit 1
+fi
+
+jq -n \
+  --arg key_id "$ASC_KEY_ID" \
+  --arg issuer_id "$ASC_ISSUER" \
+  --rawfile key "$ASC_KEY" \
+  '{key_id: $key_id, issuer_id: $issuer_id, key: $key, in_house: false}' \
+  > "$WORKDIR/asc-api-key.json"
+(
+  cd "$WORKDIR"
+  fastlane sigh \
+    --app_identifier app.wohnly \
+    --platform macos \
+    --api_key_path asc-api-key.json \
+    --filename Wohnly_MAS.mobileprovision
+)
+cp "$WORKDIR/Wohnly_MAS.mobileprovision" \
+  "$WORKDIR/Wohnly.app/Contents/embedded.provisionprofile"
+chmod 644 "$WORKDIR/Wohnly.app/Contents/embedded.provisionprofile"
 
 MAS_APP_IDENTITY="$(security find-identity -v -p codesigning mas.keychain | grep '3rd Party Mac Developer Application' | head -1 | sed 's/.*"\(.*\)".*/\1/')"
 MAS_INSTALLER_IDENTITY="$(security find-identity -v mas.keychain | grep '3rd Party Mac Developer Installer' | head -1 | sed 's/.*"\(.*\)".*/\1/')"
@@ -86,7 +118,7 @@ PLIST
   || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" "$WORKDIR/Wohnly.app/Contents/Info.plist"
 /usr/libexec/PlistBuddy -c "Delete :ITSEncryptionExportComplianceCode" "$WORKDIR/Wohnly.app/Contents/Info.plist" 2>/dev/null || true
 
-codesign --keychain mas.keychain --deep --force --options runtime \
+codesign --keychain mas.keychain --deep --force \
   --sign "$MAS_APP_IDENTITY" --entitlements "$WORKDIR/entitlements.plist" "$WORKDIR/Wohnly.app"
 
 mkdir -p "$OUT_DIR"

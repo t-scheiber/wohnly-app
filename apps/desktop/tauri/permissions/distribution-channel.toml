@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-distribution-channel"
+description = "Allows the frontend to detect the signed distribution flavor"
+commands.allow = ["distribution_channel"]
