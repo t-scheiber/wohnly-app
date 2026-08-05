@@ -190,6 +190,36 @@ jobs:
             apps/desktop/tauri/target/release/bundle/macos/*.app.tar.gz.sig
           retention-days: 30
 
+      - name: Build Mac App Store flavor (no external updater)
+        working-directory: apps/desktop
+        run: >-
+          npx tauri build
+          --features mas
+          --bundles app
+          --no-sign
+          --config tauri/tauri.appstore.conf.json
+
+      - name: Verify Mac App Store flavor
+        run: |
+          APP="apps/desktop/tauri/target/release/bundle/macos/Wohnly.app"
+          test -d "$APP"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :LSRequiresCarbon' "$APP/Contents/Info.plist")" = "false"
+          if grep -R -a -q "desktop-latest/latest.json" "$APP"; then
+            echo "Error: Mac App Store flavor still contains the external updater endpoint"
+            exit 1
+          fi
+          ditto -c -k --sequesterRsrc --keepParent \
+            "$APP" \
+            apps/desktop/tauri/target/release/bundle/macos/Wohnly-mas.zip
+
+      - name: Upload Mac App Store app
+        uses: actions/upload-artifact@v7
+        with:
+          name: macos-mas-app
+          # Preserve app-bundle symlinks, modes, and resource forks across jobs.
+          path: apps/desktop/tauri/target/release/bundle/macos/Wohnly-mas.zip
+          retention-days: 30
+
   submit-macos:
     name: Submit to Mac App Store
     needs: build-macos
@@ -200,8 +230,8 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          name: macos-build
-          path: artifacts/macos
+          name: macos-mas-app
+          path: artifacts/macos-mas
 
       - name: Get version
         id: version
@@ -262,25 +292,28 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
 
-          # Extract .app from DMG
-          DMG=$(find artifacts/macos -name '*.dmg' | head -1)
-          if [ -z "$DMG" ]; then
-            echo "Error: No .dmg found in artifacts"
+          # Use the dedicated MAS build. Re-signing a direct-download DMG here
+          # previously left direct-only behavior inside the submitted binary.
+          MAS_ZIP="artifacts/macos-mas/Wohnly-mas.zip"
+          if [ ! -f "$MAS_ZIP" ]; then
+            echo "Error: No dedicated Mac App Store archive found"
             exit 1
           fi
-          echo "Mounting DMG: $DMG"
-          hdiutil attach "$DMG" -nobrowse -mountpoint /tmp/wohnly-dmg
-          APP=$(find /tmp/wohnly-dmg -name '*.app' -type d -maxdepth 1 | head -1)
-          if [ -z "$APP" ]; then
-            echo "Error: No .app found in DMG"
-            hdiutil detach /tmp/wohnly-dmg
+          mkdir mas-unpacked
+          ditto -x -k "$MAS_ZIP" mas-unpacked
+          APP="mas-unpacked/Wohnly.app"
+          if [ ! -d "$APP" ]; then
+            echo "Error: Mac App Store archive did not contain Wohnly.app"
             exit 1
           fi
-          # Copy to writable location
-          cp -R "$APP" ./Wohnly.app
-          hdiutil detach /tmp/wohnly-dmg
           APP="./Wohnly.app"
-          echo "Found app: $APP"
+          ditto mas-unpacked/Wohnly.app "$APP"
+          echo "Found dedicated app: $APP"
+
+          if grep -R -a -q "desktop-latest/latest.json" "$APP"; then
+            echo "Error: refusing to submit an app with an external updater"
+            exit 1
+          fi
 
           # Find the MAS signing identities
           MAS_APP_IDENTITY=$(security find-identity -v -p codesigning mas.keychain | grep "3rd Party Mac Developer Application" | head -1 | sed 's/.*"\(.*\)".*/\1/')

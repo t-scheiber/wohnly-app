@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Platform } from "react-native";
+import { getDistributionChannel } from "@/lib/auth/tauri";
 
 /**
  * Hook that checks for app updates on Tauri desktop.
@@ -16,13 +17,18 @@ export function useTauriUpdater() {
     checked.current = true;
 
     // Delay the check so the app finishes loading first
-    const timer = setTimeout(() => checkForUpdate(), 3000);
+    const timer = setTimeout(() => {
+      void checkForUpdate();
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
 }
 
 async function checkForUpdate() {
   try {
+    // Mac App Store builds are updated exclusively by the App Store.
+    if ((await getDistributionChannel()) === "mac_app_store") return;
+
     const { check } = await (Function(
       'return import("@tauri-apps/plugin-updater")'
     )() as Promise<typeof import("@tauri-apps/plugin-updater")>);

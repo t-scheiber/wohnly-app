@@ -10,6 +10,8 @@
     "auth-session:default",
     "siwa:allow-get-apple-id-credential",
     "allow-platform-os",
+    "allow-distribution-channel",
+    "allow-exchange-apple-identity-token",
     "iap:default",
     "updater:default",
     "process:allow-restart"

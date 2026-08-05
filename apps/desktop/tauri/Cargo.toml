@@ -5,6 +5,11 @@ description = "Wohnly - Household Manager"
 authors = ["Thomas Scheiber"]
 edition = "2021"
 
+[features]
+default = []
+# Mac App Store builds must not register an external update mechanism.
+mas = []
+
 [lib]
 name = "wohnly_desktop_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
@@ -20,6 +25,7 @@ tauri-plugin-updater = "2.10.1"
 tauri-plugin-process = "2.3.1"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
+reqwest = { version = "0.13.2", default-features = false, features = ["json", "native-tls"] }
 tauri-plugin-single-instance = { version = "2.4.2", features = ["deep-link"] }
 tauri-plugin-auth-session = "0.2.2"
 tauri-plugin-iap = "0.10.0-rc.8"

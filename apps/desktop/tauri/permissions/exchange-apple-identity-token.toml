@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-exchange-apple-identity-token"
+description = "Allows native Sign in with Apple credentials to be exchanged for a Wohnly session"
+commands.allow = ["exchange_apple_identity_token"]

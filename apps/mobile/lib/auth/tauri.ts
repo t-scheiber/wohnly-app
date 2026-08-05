@@ -25,6 +25,7 @@ export function tauriInvoke<T = unknown>(
 }
 
 let cachedHostOs: string | null = null;
+let cachedDistributionChannel: string | null = null;
 
 /**
  * Host OS from Rust (`macos` | `windows` | `linux` …).
@@ -63,6 +64,27 @@ export function isMacTauri(): boolean {
 
 export async function isMacTauriAsync(): Promise<boolean> {
   return (await getHostOs()) === "macos";
+}
+
+export type DistributionChannel = "mac_app_store" | "direct" | "web";
+
+/** Signed build flavor reported by Rust. Store policy must not rely on UA. */
+export async function getDistributionChannel(): Promise<DistributionChannel> {
+  if (!isTauri()) return "web";
+  if (cachedDistributionChannel) {
+    return cachedDistributionChannel as DistributionChannel;
+  }
+  try {
+    cachedDistributionChannel = await tauriInvoke<string>(
+      "distribution_channel",
+    );
+  } catch {
+    // Fail closed on macOS: a broken IPC permission must never re-enable an
+    // external updater or browser OAuth in a Store build.
+    cachedDistributionChannel =
+      (await getHostOs()) === "macos" ? "mac_app_store" : "direct";
+  }
+  return cachedDistributionChannel as DistributionChannel;
 }
 
 interface AppleIDAuthorizationResponse {
@@ -226,37 +248,32 @@ async function tauriSignInWithApple(apiUrl: string): Promise<void> {
     throw new Error("Apple did not return an identity token. Please try again.");
   }
 
-  const response = await fetch(`${apiUrl}/api/auth/sign-in/social`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      provider: "apple",
-      idToken: {
-        token: credential.identityToken,
-        nonce: rawNonce,
-      },
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Sign in with Apple failed (${response.status}). Please try again.`);
-  }
-
-  const result: unknown = await response.json().catch(() => null);
-  const sessionToken =
-    result &&
-    typeof result === "object" &&
-    "token" in result &&
-    typeof result.token === "string"
-      ? result.token
-      : null;
-
-  if (!sessionToken) {
-    throw new Error("Sign in with Apple completed without a valid session.");
-  }
+  const sessionToken = await tauriInvoke<string>(
+    "exchange_apple_identity_token",
+    {
+      apiUrl,
+      identityToken: credential.identityToken,
+      nonce: rawNonce,
+      givenName: credential.givenName,
+      familyName: credential.familyName,
+      email: credential.email,
+    },
+  );
 
   storeTauriSessionToken(sessionToken);
-  window.location.reload();
+
+  // Confirm the stored token is visible to the same auth endpoint the app
+  // uses after launch. Never silently reload back to the login screen.
+  const verification = await fetch(`${apiUrl}/api/auth/get-session`, {
+    headers: { "x-session-token": sessionToken },
+  });
+  const verifiedSession = await verification.json().catch(() => null);
+  if (!verification.ok || !verifiedSession?.user?.id) {
+    clearTauriCookie();
+    throw new Error("Apple sign-in completed, but the session could not be verified.");
+  }
+
+  window.location.replace("/");
 }
 
 function createNonce(): string {
