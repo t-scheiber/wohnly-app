@@ -24,7 +24,7 @@ on:
           - macos
           - windows
       submit:
-        description: "Submit to stores after build"
+        description: "Submit the macOS build to App Store Connect"
         required: false
         type: boolean
         default: false
@@ -398,13 +398,11 @@ jobs:
             --apiIssuer "$ASC_API_ISSUER_ID" \
             --verbose
 
-  # -- Windows: build MSIX for Microsoft Store (Store signs it for free) --
+  # -- Windows: build an MSIX artifact for manual Microsoft Store submission --
 
   build-windows:
     name: Build Windows MSIX
     needs: build-web
-    outputs:
-      should_submit: ${{ steps.windows-submit.outputs.should_submit }}
     if: >
       github.event_name == 'push' ||
       inputs.platform == 'all' ||
@@ -461,27 +459,6 @@ jobs:
         shell: bash
         run: echo "version=$(jq -r '.version' apps/desktop/tauri/tauri.conf.json)" >> "$GITHUB_OUTPUT"
 
-      - name: Check whether Windows should be submitted
-        id: windows-submit
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          MANUAL_SUBMIT: ${{ inputs.submit }}
-          BEFORE_SHA: ${{ github.event.before }}
-        run: |
-          SHOULD_SUBMIT=false
-          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            SHOULD_SUBMIT="${MANUAL_SUBMIT:-false}"
-          elif [ "$EVENT_NAME" = "push" ]; then
-            CURRENT_VERSION="${{ steps.version.outputs.version }}"
-            PREVIOUS_VERSION=$(git show "${BEFORE_SHA}:apps/desktop/tauri/tauri.conf.json" 2>/dev/null | jq -r '.version' || true)
-            if [ -n "$PREVIOUS_VERSION" ] && [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
-              SHOULD_SUBMIT=true
-            fi
-          fi
-          echo "should_submit=$SHOULD_SUBMIT" >> "$GITHUB_OUTPUT"
-          echo "Windows Store submission: $SHOULD_SUBMIT"
-
       - name: Package as MSIX
         shell: powershell
         run: |
@@ -493,34 +470,6 @@ jobs:
           name: windows-msix
           path: apps/desktop/msix-output/Wohnly.msix
           retention-days: 30
-
-  submit-windows:
-    name: Submit to Microsoft Store
-    needs: build-windows
-    if: needs.build-windows.result == 'success' && needs.build-windows.outputs.should_submit == 'true'
-    runs-on: windows-latest
-    steps:
-      - uses: actions/download-artifact@v8
-        with:
-          name: windows-msix
-          path: artifacts/windows
-
-      - name: Setup Microsoft Store Developer CLI
-        uses: microsoft/microsoft-store-apppublisher@v1.1
-
-      - name: Configure Partner Center credentials
-        shell: pwsh
-        run: |
-          msstore reconfigure `
-            --tenantId "${{ secrets.PARTNER_CENTER_TENANT_ID }}" `
-            --sellerId "${{ secrets.PARTNER_CENTER_SELLER_ID }}" `
-            --clientId "${{ secrets.PARTNER_CENTER_CLIENT_ID }}" `
-            --clientSecret "${{ secrets.PARTNER_CENTER_CLIENT_SECRET }}"
-
-      - name: Publish MSIX to Microsoft Store
-        shell: pwsh
-        run: |
-          msstore publish "${{ github.workspace }}\artifacts\windows\Wohnly.msix" -id 9P5JTRSRMJPB
 
   # -- GitHub Release: macOS download + Microsoft Store link for Windows --
 
