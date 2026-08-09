@@ -40,7 +40,7 @@ function safeJsonParse(
  * The expo client plugin is inactive on web (Platform.OS === "web"),
  * so Tauri needs its own cookie management. This plugin:
  * - Checks isTauri() at request time (not module init)
- * - Injects the stored session cookie into every request
+ * - Sends the stored session token through Better Auth's official bearer bridge
  * - Captures set-cookie headers from responses and stores them
  */
 const tauriFetchPlugin = {
@@ -55,9 +55,9 @@ const tauriFetchPlugin = {
     options.credentials = "omit";
     options.headers = {
       ...options.headers,
-      // Browser forbids setting Cookie header in fetch(),
-      // so send via custom header that the API converts to Cookie
-      ...(sessionToken ? { "x-session-token": sessionToken } : {}),
+      // Browser webviews cannot set Cookie directly. Better Auth's bearer
+      // plugin verifies this token and exposes it to the session endpoint.
+      ...(sessionToken ? { Authorization: `Bearer ${sessionToken}` } : {}),
     };
     return { url, options };
   },

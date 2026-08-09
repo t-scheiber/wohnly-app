@@ -122,6 +122,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify unified macOS version
+        run: |
+          APP_VERSION=$(jq -r '.version' apps/desktop/tauri/tauri.conf.json)
+          BUNDLE_VERSION=$(jq -r '.bundle.macOS.bundleVersion // empty' apps/desktop/tauri/tauri.conf.json)
+          if [ -n "$BUNDLE_VERSION" ] && [ "$BUNDLE_VERSION" != "$APP_VERSION" ]; then
+            echo "Error: macOS version ($APP_VERSION) and build ($BUNDLE_VERSION) must match"
+            exit 1
+          fi
+          echo "macOS version and build: $APP_VERSION"
+
       - name: Check whether macOS should be submitted
         id: macos-submit
         env:
@@ -133,8 +143,8 @@ jobs:
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             SHOULD_SUBMIT="${MANUAL_SUBMIT:-false}"
           elif [ "$EVENT_NAME" = "push" ]; then
-            CURRENT_RELEASE=$(cat apps/desktop/release-version.txt)
-            PREVIOUS_RELEASE=$(git show "${BEFORE_SHA}:apps/desktop/release-version.txt" 2>/dev/null || true)
+            CURRENT_RELEASE=$(jq -r '.version' apps/desktop/tauri/tauri.conf.json)
+            PREVIOUS_RELEASE=$(git show "${BEFORE_SHA}:apps/desktop/tauri/tauri.conf.json" 2>/dev/null | jq -r '.version' 2>/dev/null || true)
             if [ -n "$CURRENT_RELEASE" ] && [ "$CURRENT_RELEASE" != "$PREVIOUS_RELEASE" ]; then
               SHOULD_SUBMIT=true
             fi

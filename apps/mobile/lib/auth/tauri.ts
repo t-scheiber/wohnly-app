@@ -265,7 +265,7 @@ async function tauriSignInWithApple(apiUrl: string): Promise<void> {
   // Confirm the stored token is visible to the same auth endpoint the app
   // uses after launch. Never silently reload back to the login screen.
   const verification = await fetch(`${apiUrl}/api/auth/get-session`, {
-    headers: { "x-session-token": sessionToken },
+    headers: { Authorization: `Bearer ${sessionToken}` },
   });
   const verifiedSession = await verification.json().catch(() => null);
   if (!verification.ok || !verifiedSession?.user?.id) {
