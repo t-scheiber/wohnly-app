@@ -186,19 +186,16 @@ Trigger: Push to main or manual dispatch
 Workflow: .github/workflows/deploy-desktop.yml
 ```
 
-- **macOS** — Code-signed, notarized, and submitted to the Mac App Store when `apps/desktop/release-version.txt` changes
-- **Windows** — Built as an MSIX and submitted when the Tauri app version changes
+- **macOS** — Code-signed, notarized, and submitted to the Mac App Store when the Tauri app version changes
+- **Windows** — Built as an MSIX artifact for manual Microsoft Store submission
 
 #### Submitting to the Microsoft Store
 
-The Windows MSIX is submitted automatically with the Microsoft Store Developer CLI. The Partner Center account must have a Microsoft Entra application with the Manager role, and these GitHub Actions secrets must be configured:
-
-- `PARTNER_CENTER_TENANT_ID`
-- `PARTNER_CENTER_SELLER_ID`
-- `PARTNER_CENTER_CLIENT_ID`
-- `PARTNER_CENTER_CLIENT_SECRET`
-
-The workflow only auto-submits when the version in `apps/desktop/tauri/tauri.conf.json` changes. A manual workflow dispatch with `submit=true` can retry an existing version.
+GitHub Actions builds `windows-msix` and retains the artifact for 30 days. Download
+`Wohnly.msix` from the workflow run and upload it manually through the Microsoft
+Partner Center dashboard. Automated Partner Center publication is intentionally
+disabled because the Store account is an individual developer account without a
+Microsoft Entra tenant/application.
 
 #### macOS Signing Setup (one-time)
 
