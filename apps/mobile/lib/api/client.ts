@@ -22,7 +22,7 @@ class ApiError extends Error {
 /**
  * Authenticated API client for all Wohnly API calls.
  * - Regular web: uses browser cookies via credentials: "include"
- * - Tauri desktop: sends session token via x-session-token header
+ * - Tauri desktop: sends the session token through Better Auth's bearer bridge
  * - Native (iOS/Android): sends cookies from expo client plugin
  */
 export async function api<T>(
@@ -39,9 +39,9 @@ export async function api<T>(
     // Regular web: let the browser handle cookies natively
     credentials = "include";
   } else if (isTauri()) {
-    // Tauri: browser forbids Cookie header, use custom header
+    // Tauri: browser forbids Cookie, so use Better Auth's bearer plugin.
     const token = getTauriSessionToken();
-    if (token) headers["x-session-token"] = token;
+    if (token) headers.Authorization = `Bearer ${token}`;
     credentials = "omit";
   } else {
     // Native: expo client plugin manages cookies manually

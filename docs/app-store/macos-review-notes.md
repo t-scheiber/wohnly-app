@@ -1,19 +1,21 @@
 # macOS App Review notes
 
-Use the text below for the next macOS submission after uploading build 1.3.8
-or later. Do not reuse build 1.3.7.
+Use the text below for the current version/build 1.3.9 submission. For later releases,
+the macOS marketing version and build number are generated from the same Tauri
+`version` value and must remain identical.
 
 ## Notes for App Review
 
-This build resolves the Guideline 2.1(a) issue reported on July 30 and August 4,
-where Sign in with Apple did not progress beyond the login screen.
+This build resolves the Guideline 2.1(a) issue reported on August 6, where Apple
+authentication completed but the app displayed "session could not be verified."
 
 1. Sign in with Apple is presented through the native macOS
    AuthenticationServices authorization sheet and never opens Safari. After
    Apple returns the credential, the app's native Rust layer exchanges the
-   identity token with our authentication server. The app then verifies the
-   resulting session before navigating away from the login screen. A failed
-   exchange now displays a visible error instead of appearing not to progress.
+   identity token with our authentication server. It verifies the resulting
+   session through Better Auth's official bearer-token plugin before returning
+   it to the webview. The webview uses the same supported bearer bridge for all
+   subsequent authenticated requests.
 2. Google sign-in uses ASWebAuthenticationSession and remains inside the
    system-managed in-app authentication session, as confirmed acceptable in
    App Review's June 28 message.
@@ -39,10 +41,12 @@ Settings.
 | June 28 | 1.3.4 | Apple clarification | Google may use ASWebAuthenticationSession; Apple must complete without leaving the app. |
 | July 30 | 1.3.5 (1.3.6) | Guideline 2.1(a): Apple sign-in did not proceed | The native Apple sheet was added, but the webview session exchange was not proven to succeed. |
 | August 4 | 1.3.5 (1.3.7) | Same Guideline 2.1(a) rejection | Build 1.3.7 hardened OS detection but did not replace the failing credential-to-session handoff. |
+| August 6 | 1.3.5 (1.3.8) | Guideline 2.1(a): "session could not be verified" | The native exchange succeeded, but verification still depended on a custom request-header-to-cookie rewrite. Version/build 1.3.9 replaces it with Better Auth's official bearer bridge and verifies the token natively before returning it to the webview. |
 
 ## Pre-submission checklist
 
-- Confirm `bundleVersion` is 1.3.8 or later; do not reuse build 1.3.7.
+- Confirm the Tauri `version` is newer than the last submitted version. Tauri
+  uses it for both `CFBundleShortVersionString` and `CFBundleVersion`.
 - Run the desktop deployment workflow and confirm the `macos-mas-app` artifact
   was used by the submission job.
 - Confirm the MAS verification step found no external updater URL.

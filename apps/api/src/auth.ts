@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { bearer } from "better-auth/plugins/bearer";
 import { expo } from "@better-auth/expo";
 import { prisma } from "./lib/prisma.js";
 
@@ -29,6 +30,10 @@ export const auth = betterAuth({
 
   plugins: [
     expo(), // Enables Expo/RN support (deep link redirects, token handling)
+    // Desktop webviews cannot set the Cookie header themselves. Accept the
+    // Better Auth session token through the official Authorization: Bearer
+    // bridge instead of rewriting Hono's raw request object.
+    bearer(),
   ],
 
   trustedOrigins: [

@@ -7,6 +7,16 @@ struct NativeAppleSignInResponse {
     code: Option<String>,
 }
 
+#[derive(serde::Deserialize)]
+struct NativeAppleSessionResponse {
+    user: NativeAppleSessionUser,
+}
+
+#[derive(serde::Deserialize)]
+struct NativeAppleSessionUser {
+    id: String,
+}
+
 /// Reliable OS detection for the frontend (userAgent is not trustworthy for MAS auth).
 #[tauri::command]
 fn platform_os() -> &'static str {
@@ -64,10 +74,12 @@ async fn exchange_apple_identity_token(
         id_token["user"] = user.into();
     }
 
-    let response = reqwest::Client::builder()
+    let client = reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(20))
         .build()
-        .map_err(|_| "Could not initialize secure sign-in".to_string())?
+        .map_err(|_| "Could not initialize secure sign-in".to_string())?;
+
+    let response = client
         .post(format!("{api_url}/api/auth/sign-in/social"))
         .json(&serde_json::json!({
             "provider": "apple",
@@ -90,10 +102,37 @@ async fn exchange_apple_identity_token(
             .unwrap_or_else(|| format!("Sign in with Apple failed ({status})")));
     }
 
-    payload
+    let token = payload
         .token
         .filter(|token| !token.is_empty())
-        .ok_or_else(|| "Authentication completed without a session".to_string())
+        .ok_or_else(|| "Authentication completed without a session".to_string())?;
+
+    // Verify the exact session token before returning it to the webview. The
+    // Better Auth bearer plugin is the supported bridge for non-cookie clients
+    // and avoids depending on a mutable Hono request wrapper.
+    let verification = client
+        .get(format!("{api_url}/api/auth/get-session"))
+        .bearer_auth(&token)
+        .send()
+        .await
+        .map_err(|_| {
+            "Apple sign-in completed, but the session could not be verified".to_string()
+        })?;
+
+    if !verification.status().is_success() {
+        return Err("Apple sign-in completed, but the session could not be verified".to_string());
+    }
+
+    verification
+        .json::<Option<NativeAppleSessionResponse>>()
+        .await
+        .map_err(|_| "Apple sign-in completed, but the session could not be verified".to_string())?
+        .filter(|session| !session.user.id.is_empty())
+        .ok_or_else(|| {
+            "Apple sign-in completed, but the session could not be verified".to_string()
+        })?;
+
+    Ok(token)
 }
 
 pub fn run() {
