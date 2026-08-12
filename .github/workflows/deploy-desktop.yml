@@ -239,10 +239,10 @@ jobs:
           path: apps/desktop/tauri/target/release/bundle/macos/Wohnly-mas.zip
           retention-days: 30
 
-  submit-macos:
-    name: Submit to Mac App Store
+  package-macos-store:
+    name: Package Mac App Store candidate
     needs: build-macos
-    if: needs.build-macos.result == 'success' && needs.build-macos.outputs.should_submit == 'true'
+    if: needs.build-macos.result == 'success'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
@@ -252,9 +252,11 @@ jobs:
           name: macos-mas-app
           path: artifacts/macos-mas
 
-      - name: Get version
+      - name: Get App Store version and build
         id: version
-        run: echo "version=$(jq -r '.version' apps/desktop/tauri/tauri.conf.json)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version=$(jq -r '.version' apps/desktop/tauri/tauri.appstore.conf.json)" >> "$GITHUB_OUTPUT"
+          echo "build=$(jq -r '.bundle.macOS.bundleVersion' apps/desktop/tauri/tauri.appstore.conf.json)" >> "$GITHUB_OUTPUT"
 
       - name: Import Mac App Store certificates
         env:
@@ -303,13 +305,12 @@ jobs:
             --api_key_path asc-api-key.json \
             --filename Wohnly_MAS.mobileprovision
 
-      - name: Re-sign, package, and upload to Mac App Store
+      - name: Re-sign and package Mac App Store candidate
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
-          ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
         run: |
           VERSION="${{ steps.version.outputs.version }}"
+          BUILD="${{ steps.version.outputs.build }}"
 
           # Use the dedicated MAS build. Re-signing a direct-download DMG here
           # previously left direct-only behavior inside the submitted binary.
@@ -390,7 +391,7 @@ jobs:
           echo "Re-signed .app for Mac App Store"
 
           # Package as .pkg with installer certificate
-          PKG="Wohnly-${VERSION}.pkg"
+          PKG="Wohnly-${VERSION}-${BUILD}.pkg"
           productbuild \
             --component "$APP" /Applications \
             --sign "$MAS_INSTALLER_IDENTITY" \
@@ -403,15 +404,7 @@ jobs:
           cp "$PKG" mas-release-artifact/
           shasum -a 256 "$PKG" | tee mas-release-artifact/SHA256SUMS.txt
 
-          # Upload to App Store Connect
-          xcrun altool --upload-app \
-            --type macos \
-            --file "$PKG" \
-            --apiKey "$ASC_API_KEY_ID" \
-            --apiIssuer "$ASC_API_ISSUER_ID" \
-            --verbose
-
-      - name: Upload exact Mac App Store package
+      - name: Retain exact Mac App Store package for live MacBook validation
         uses: actions/upload-artifact@v7
         with:
           name: macos-mas-pkg
