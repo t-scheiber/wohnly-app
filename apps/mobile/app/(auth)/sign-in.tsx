@@ -19,6 +19,7 @@ import {
   tauriSignIn,
   handleTauriDeepLink,
   getHostOs,
+  getAuthErrorMessage,
 } from "@/lib/auth/tauri";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -140,8 +141,7 @@ export default function SignInScreen() {
         });
       }
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Sign-in failed. Please try again.";
+      const message = getAuthErrorMessage(err);
       setAuthError(message);
 
       // Tauri runs on the web platform, so use the browser alert there.

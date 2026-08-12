@@ -7,6 +7,7 @@
 import { useEffect, useRef } from "react";
 import { View, Platform } from "react-native";
 import { usePro } from "@/lib/hooks/usePro";
+import { isTauri } from "@/lib/auth/tauri";
 
 const AD_UNIT_IDS = {
   ios: process.env.EXPO_PUBLIC_ADMOB_BANNER_IOS ?? "ca-app-pub-9336334259937355/6145690883",
@@ -78,6 +79,12 @@ interface AdBannerProps {
 
 export function AdBanner({ style }: AdBannerProps) {
   const { isPro, isLoading } = usePro();
+
+  // Desktop store builds share the web rendering target, but must not load
+  // web advertising or tracking scripts inside the packaged app.
+  if (Platform.OS === "web" && isTauri()) {
+    return null;
+  }
 
   // Only hide ads for confirmed Pro users.
   // Show ads while loading (default to showing ads).
