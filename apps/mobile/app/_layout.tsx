@@ -4,6 +4,7 @@ import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
 import { apiPatch } from "@/lib/api/client";
 import { authClient } from "@/lib/auth/client";
+import { isTauri } from "@/lib/auth/tauri";
 import { ensureDeviceRegistered } from "@/lib/crypto/e2ee-setup";
 import { useTauriUpdater } from "@/lib/hooks/use-tauri-updater";
 import { useConsent } from "@/lib/hooks/useConsent";
@@ -178,7 +179,7 @@ function AdSenseLoader({ enabled }: { enabled: boolean }) {
   const { isPro } = usePro();
 
   useEffect(() => {
-    if (Platform.OS !== "web") return;
+    if (Platform.OS !== "web" || isTauri()) return;
 
     const scriptId = "adsense-script";
     const existingScript = document.getElementById(scriptId);
