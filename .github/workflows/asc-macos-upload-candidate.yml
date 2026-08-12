@@ -1,0 +1,63 @@
+name: Upload validated macOS candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_run_id:
+        description: "Workflow run containing the macos-mas-pkg artifact"
+        required: true
+        type: string
+      expected_sha256:
+        description: "Expected SHA-256 of the signed pkg"
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  upload:
+    name: Upload exact candidate to App Store Connect
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: macos-mas-pkg
+          path: candidate
+          run-id: ${{ inputs.artifact_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify exact package and upload
+        env:
+          EXPECTED_SHA256: ${{ inputs.expected_sha256 }}
+          ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
+          ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+        run: |
+          set -euo pipefail
+          PKG=$(find candidate -maxdepth 1 -type f -name '*.pkg' -print -quit)
+          if [ -z "$PKG" ]; then
+            echo "Error: macos-mas-pkg contains no pkg"
+            exit 1
+          fi
+
+          ACTUAL_SHA256=$(shasum -a 256 "$PKG" | awk '{print $1}')
+          if [ "$ACTUAL_SHA256" != "$EXPECTED_SHA256" ]; then
+            echo "Error: candidate checksum mismatch"
+            echo "Expected: $EXPECTED_SHA256"
+            echo "Actual:   $ACTUAL_SHA256"
+            exit 1
+          fi
+          echo "Verified exact candidate: $PKG ($ACTUAL_SHA256)"
+
+          mkdir -p ~/.private_keys
+          echo "$ASC_API_KEY_P8" | base64 --decode > ~/.private_keys/AuthKey_${ASC_API_KEY_ID}.p8
+          chmod 600 ~/.private_keys/AuthKey_${ASC_API_KEY_ID}.p8
+
+          xcrun altool --upload-app \
+            --type macos \
+            --file "$PKG" \
+            --apiKey "$ASC_API_KEY_ID" \
+            --apiIssuer "$ASC_API_ISSUER_ID" \
+            --verbose
