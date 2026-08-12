@@ -6,9 +6,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: App Store version and CFBundleVersion (must match)
+        description: Existing App Store marketing version
         required: true
-        default: "1.3.10"
+        default: "1.3.9"
+      build:
+        description: Processed CFBundleVersion to attach
+        required: true
+        default: "1.3.10.1"
       app_id:
         description: ASC app ID
         required: true
@@ -29,6 +33,7 @@ jobs:
           ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
           ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
           VERSION: ${{ inputs.version }}
+          BUILD_VERSION: ${{ inputs.build }}
           APP_ID: ${{ inputs.app_id }}
         run: |
           pip3 install --quiet PyJWT cryptography
@@ -43,6 +48,7 @@ jobs:
           KEY = Path(f"~/.private_keys/AuthKey_{KEY_ID}.p8").expanduser().read_text()
           APP_ID = os.environ["APP_ID"]
           VERSION = os.environ["VERSION"]
+          BUILD_VERSION = os.environ["BUILD_VERSION"]
 
           def tok():
               n = int(time.time())
@@ -75,38 +81,20 @@ jobs:
                       return {"_e": e.code, "_b": err}
                   raise SystemExit(1)
 
-          # Resolve the App Store version from the same value used by the build.
+          # Updates must attach to the existing marketing-version record. A
+          # rejected version cannot be replaced by creating a new version while
+          # its review submission is still unresolved.
           versions = api(
               f"/v1/apps/{APP_ID}/appStoreVersions"
               f"?filter[platform]=MAC_OS&filter[versionString]={VERSION}&limit=10"
           )
           matches = versions.get("data", [])
-          if not matches:
-              print("Creating macOS App Store version", VERSION)
-              created_version = api(
-                  "/v1/appStoreVersions",
-                  "POST",
-                  {
-                      "data": {
-                          "type": "appStoreVersions",
-                          "attributes": {
-                              "platform": "MAC_OS",
-                              "versionString": VERSION,
-                          },
-                          "relationships": {
-                              "app": {"data": {"type": "apps", "id": APP_ID}}
-                          },
-                      }
-                  },
-              )
-              matches = [created_version["data"]]
           if len(matches) != 1:
               raise SystemExit(
                   f"Expected one macOS App Store version {VERSION}, found {len(matches)}"
               )
           MAC_VER = matches[0]["id"]
-          BUILD_VERSION = VERSION
-          print("Resolved App Store version", VERSION, MAC_VER)
+          print("Resolved App Store version", VERSION, MAC_VER, "build", BUILD_VERSION)
 
           # Wait for build processing
           build_id = None
