@@ -81,6 +81,25 @@ jobs:
               f"?filter[platform]=MAC_OS&filter[versionString]={VERSION}&limit=10"
           )
           matches = versions.get("data", [])
+          if not matches:
+              print("Creating macOS App Store version", VERSION)
+              created_version = api(
+                  "/v1/appStoreVersions",
+                  "POST",
+                  {
+                      "data": {
+                          "type": "appStoreVersions",
+                          "attributes": {
+                              "platform": "MAC_OS",
+                              "versionString": VERSION,
+                          },
+                          "relationships": {
+                              "app": {"data": {"type": "apps", "id": APP_ID}}
+                          },
+                      }
+                  },
+              )
+              matches = [created_version["data"]]
           if len(matches) != 1:
               raise SystemExit(
                   f"Expected one macOS App Store version {VERSION}, found {len(matches)}"
