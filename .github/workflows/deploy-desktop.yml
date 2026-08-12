@@ -214,6 +214,15 @@ jobs:
           APP="apps/desktop/tauri/target/release/bundle/macos/Wohnly.app"
           test -d "$APP"
           test "$(/usr/libexec/PlistBuddy -c 'Print :LSRequiresCarbon' "$APP/Contents/Info.plist")" = "false"
+          EXPECTED_VERSION=$(jq -r '.version' apps/desktop/tauri/tauri.appstore.conf.json)
+          EXPECTED_BUILD=$(jq -r '.bundle.macOS.bundleVersion' apps/desktop/tauri/tauri.appstore.conf.json)
+          ACTUAL_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist")
+          ACTUAL_BUILD=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$APP/Contents/Info.plist")
+          if [ "$ACTUAL_VERSION" != "$EXPECTED_VERSION" ] || [ "$ACTUAL_BUILD" != "$EXPECTED_BUILD" ]; then
+            echo "Error: MAS bundle is $ACTUAL_VERSION ($ACTUAL_BUILD), expected $EXPECTED_VERSION ($EXPECTED_BUILD)"
+            exit 1
+          fi
+          echo "Verified MAS bundle: $ACTUAL_VERSION ($ACTUAL_BUILD)"
           if grep -R -a -q "desktop-latest/latest.json" "$APP"; then
             echo "Error: Mac App Store flavor still contains the external updater endpoint"
             exit 1
@@ -390,6 +399,10 @@ jobs:
 
           echo "Created signed pkg: $PKG"
 
+          mkdir -p mas-release-artifact
+          cp "$PKG" mas-release-artifact/
+          shasum -a 256 "$PKG" | tee mas-release-artifact/SHA256SUMS.txt
+
           # Upload to App Store Connect
           xcrun altool --upload-app \
             --type macos \
@@ -398,6 +411,12 @@ jobs:
             --apiIssuer "$ASC_API_ISSUER_ID" \
             --verbose
 
+      - name: Upload exact Mac App Store package
+        uses: actions/upload-artifact@v7
+        with:
+          name: macos-mas-pkg
+          path: mas-release-artifact
+          retention-days: 30
   # -- Windows: build an MSIX artifact for manual Microsoft Store submission --
 
   build-windows:
