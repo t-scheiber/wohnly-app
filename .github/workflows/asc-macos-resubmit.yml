@@ -8,7 +8,7 @@ on:
       version:
         description: App Store version and CFBundleVersion (must match)
         required: true
-        default: "1.3.9"
+        default: "1.3.10"
       app_id:
         description: ASC app ID
         required: true

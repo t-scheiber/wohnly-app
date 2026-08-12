@@ -24,6 +24,21 @@ export function tauriInvoke<T = unknown>(
   return (window as any).__TAURI_INTERNALS__.invoke(cmd, args);
 }
 
+/** Preserve useful native/Tauri error text instead of replacing string
+ * rejections with the generic App Review-visible "Sign-in failed" message. */
+export function getAuthErrorMessage(
+  error: unknown,
+  fallback = "Sign-in failed. Please try again.",
+): string {
+  if (error instanceof Error && error.message.trim()) return error.message;
+  if (typeof error === "string" && error.trim()) return error.trim();
+  if (error && typeof error === "object" && "message" in error) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === "string" && message.trim()) return message.trim();
+  }
+  return fallback;
+}
+
 let cachedHostOs: string | null = null;
 let cachedDistributionChannel: string | null = null;
 
@@ -157,11 +172,20 @@ export async function tauriSignIn(provider: "google" | "apple"): Promise<void> {
       await tauriSignInWithApple(apiUrl);
       return;
     } catch (err) {
-      // Sign in with Apple must never leave the Mac app (Guideline 4).
-      if (onMac) throw err;
+      const detail = getAuthErrorMessage(err);
+      // Do not retry user cancellation, but recover from presentation/plugin or
+      // native token-exchange failures through the in-app OAuth session.
+      if (onMac && /cancel|canceled|cancelled|1001/i.test(detail)) {
+        throw new Error(detail);
+      }
+      // AuthenticationServices can fail before returning a credential (for
+      // example if the native sheet cannot acquire a presentation anchor).
+      // Fall back to ASWebAuthenticationSession, which remains inside the Mac
+      // app and satisfies the App Review requirement that auth not open Safari.
       console.warn(
-        "[tauriSignIn] native Apple SIWA unavailable, using browser OAuth",
-        err,
+        `[tauriSignIn] native Apple SIWA unavailable, using ${
+          onMac ? "ASWebAuthenticationSession" : "browser OAuth"
+        }: ${detail}`,
       );
     }
   }
