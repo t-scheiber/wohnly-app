@@ -30,6 +30,7 @@ jobs:
             npm ci
             cd apps/api
             npx prisma generate
+            node -e 'require("../../node_modules/.prisma/client/query_compiler_fast_bg.wasm-base64.js")'
             npx prisma db push --accept-data-loss
             cd ../..
             pm2 delete wohnly-api 2>/dev/null || true

@@ -1,8 +1,9 @@
 # macOS App Review notes
 
-Use the text below for the current version/build 1.3.10 submission. For later releases,
-the macOS marketing version and build number are generated from the same Tauri
-`version` value and must remain identical.
+Use the text below for the current 1.3.9 marketing-version submission with
+replacement build 1.3.10.1. The normal desktop release remains 1.3.10 in
+`tauri.conf.json`; `tauri.appstore.conf.json` overrides the Mac App Store
+marketing version and monotonically increasing build number.
 
 ## Notes for App Review
 
@@ -44,12 +45,12 @@ Settings.
 | July 30 | 1.3.5 (1.3.6) | Guideline 2.1(a): Apple sign-in did not proceed | The native Apple sheet was added, but the webview session exchange was not proven to succeed. |
 | August 4 | 1.3.5 (1.3.7) | Same Guideline 2.1(a) rejection | Build 1.3.7 hardened OS detection but did not replace the failing credential-to-session handoff. |
 | August 6 | 1.3.5 (1.3.8) | Guideline 2.1(a): "session could not be verified" | The native exchange succeeded, but verification still depended on a custom request-header-to-cookie rewrite. Version/build 1.3.9 replaces it with Better Auth's official bearer bridge and verifies the token natively before returning it to the webview. |
-| August 10 | 1.3.9 (1.3.9) | Guideline 2.1(a): "Sign-in failed. Please try again." | The native AuthenticationServices invocation could reject with a string before returning a credential. The UI discarded string error details and the macOS path had no in-app fallback. Version/build 1.3.10 preserves the native diagnostic and falls back to ASWebAuthenticationSession without opening Safari. |
+| August 10 | 1.3.9 (1.3.9) | Guideline 2.1(a): "Sign-in failed. Please try again." | The native AuthenticationServices invocation could reject with a string before returning a credential. The UI discarded string error details and the macOS path had no in-app fallback. Replacement build 1.3.10.1 preserves the native diagnostic and falls back to a Safari-managed ASWebAuthenticationSession rather than launching the ordinary Safari browser. |
 
 ## Pre-submission checklist
 
-- Confirm the Tauri `version` is newer than the last submitted version. Tauri
-  uses it for both `CFBundleShortVersionString` and `CFBundleVersion`.
+- Keep the rejected App Store marketing version selected and confirm the
+  `tauri.appstore.conf.json` build number is newer than every prior upload.
 - Run the desktop deployment workflow and confirm the `macos-mas-app` artifact
   was used by the submission job.
 - Confirm the MAS verification step found no external updater URL.

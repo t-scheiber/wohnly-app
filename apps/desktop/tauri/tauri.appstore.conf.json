@@ -1,8 +1,12 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
+  "version": "1.3.9",
   "bundle": {
     "targets": ["app"],
-    "createUpdaterArtifacts": false
+    "createUpdaterArtifacts": false,
+    "macOS": {
+      "bundleVersion": "1.3.10.1"
+    }
   },
   "plugins": {
     "updater": {
