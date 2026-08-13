@@ -321,6 +321,8 @@ export default function SettingsScreen() {
   const [weekStartPickerOpen, setWeekStartPickerOpen] = useState(false);
   const [timeFormatPickerOpen, setTimeFormatPickerOpen] = useState(false);
   const [paywallModalOpen, setPaywallModalOpen] = useState(false);
+  const [signOutModalOpen, setSignOutModalOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   const handleSaveNickname = () => {
     setNickname.mutate(
@@ -545,29 +547,29 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleSignOut = () => {
-    if (Platform.OS === "web") {
-      if (confirm(t("settings.signOutConfirm"))) {
-        clearHouseholdKeys();
-        clearPersonalKeys();
-        if (isTauri()) clearTauriCookie();
-        authClient.signOut().then(() => router.replace("/(auth)/sign-in"));
-      }
-      return;
+  const handleSignOut = () => setSignOutModalOpen(true);
+
+  const confirmSignOut = async () => {
+    if (signingOut) return;
+    setSigningOut(true);
+    try {
+      // Give Better Auth a bounded chance to invalidate the server session
+      // before removing the local Tauri bearer token. Local cleanup still runs
+      // if the request fails or hangs, so this device cannot remain logged in.
+      await Promise.race([
+        authClient.signOut(),
+        new Promise<void>((resolve) => setTimeout(resolve, 5000)),
+      ]);
+    } catch {
+      // A failed remote invalidation must not block local sign-out.
+    } finally {
+      clearHouseholdKeys();
+      clearPersonalKeys();
+      if (isTauri()) clearTauriCookie();
+      setSignOutModalOpen(false);
+      setSigningOut(false);
+      router.replace("/(auth)/sign-in");
     }
-    Alert.alert(t("settings.signOut"), t("settings.signOutConfirm"), [
-      { text: t("common.cancel"), style: "cancel" },
-      {
-        text: t("settings.signOut"),
-        style: "destructive",
-        onPress: async () => {
-          clearHouseholdKeys();
-          clearPersonalKeys();
-          await authClient.signOut();
-          router.replace("/(auth)/sign-in");
-        },
-      },
-    ]);
   };
 
   return (
@@ -929,6 +931,112 @@ export default function SettingsScreen() {
         }}
         colors={colors}
       />
+
+      {/* In-app confirmation works in Tauri, web, iOS, and Android. Browser
+          confirm() is not reliably presented by the packaged macOS WKWebView. */}
+      <AppModal
+        visible={signOutModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => {
+          if (!signingOut) setSignOutModalOpen(false);
+        }}
+      >
+        <Pressable
+          onPress={() => {
+            if (!signingOut) setSignOutModalOpen(false);
+          }}
+          accessible={false}
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.4)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Pressable
+            onPress={() => {}}
+            accessible={false}
+            style={{
+              backgroundColor: colors.card,
+              borderRadius: 16,
+              width: "85%",
+              maxWidth: 360,
+              padding: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "700",
+                color: colors.text,
+                marginBottom: 8,
+              }}
+            >
+              {t("settings.signOut")}
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                lineHeight: 21,
+                color: colors.textSecondary,
+                marginBottom: 20,
+              }}
+            >
+              {t("settings.signOutConfirm")}
+            </Text>
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              <Pressable
+                onPress={() => setSignOutModalOpen(false)}
+                disabled={signingOut}
+                accessibilityRole="button"
+                style={({ pressed }) => ({
+                  flex: 1,
+                  padding: 14,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  alignItems: "center" as const,
+                  opacity: signingOut ? 0.5 : pressed ? 0.7 : 1,
+                })}
+              >
+                <Text
+                  style={{
+                    color: colors.textSecondary,
+                    fontSize: 16,
+                    fontWeight: "600",
+                  }}
+                >
+                  {t("common.cancel")}
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={confirmSignOut}
+                disabled={signingOut}
+                accessibilityRole="button"
+                style={({ pressed }) => ({
+                  flex: 1,
+                  padding: 14,
+                  borderRadius: 10,
+                  backgroundColor: colors.destructive,
+                  alignItems: "center" as const,
+                  opacity: signingOut ? 0.6 : pressed ? 0.8 : 1,
+                })}
+              >
+                <Text
+                  style={{
+                    color: colors.primaryForeground,
+                    fontSize: 16,
+                    fontWeight: "600",
+                  }}
+                >
+                  {t("settings.signOut")}
+                </Text>
+              </Pressable>
+            </View>
+          </Pressable>
+        </Pressable>
+      </AppModal>
 
       {/* Edit Name Modal */}
       <AppModal
