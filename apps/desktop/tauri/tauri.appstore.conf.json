@@ -5,7 +5,7 @@
     "targets": ["app"],
     "createUpdaterArtifacts": false,
     "macOS": {
-      "bundleVersion": "1.3.11"
+      "bundleVersion": "1.3.12"
     }
   },
   "plugins": {

@@ -1,7 +1,7 @@
 # macOS App Review notes
 
 Use the text below for the current 1.3.9 marketing-version submission with
-replacement build 1.3.11. The normal desktop release remains 1.3.10 in
+replacement build 1.3.12. The normal desktop release remains 1.3.10 in
 `tauri.conf.json`; `tauri.appstore.conf.json` overrides the Mac App Store
 marketing version and monotonically increasing build number.
 
@@ -45,7 +45,7 @@ Settings.
 | July 30 | 1.3.5 (1.3.6) | Guideline 2.1(a): Apple sign-in did not proceed | The native Apple sheet was added, but the webview session exchange was not proven to succeed. |
 | August 4 | 1.3.5 (1.3.7) | Same Guideline 2.1(a) rejection | Build 1.3.7 hardened OS detection but did not replace the failing credential-to-session handoff. |
 | August 6 | 1.3.5 (1.3.8) | Guideline 2.1(a): "session could not be verified" | The native exchange succeeded, but verification still depended on a custom request-header-to-cookie rewrite. Version/build 1.3.9 replaces it with Better Auth's official bearer bridge and verifies the token natively before returning it to the webview. |
-| August 10 | 1.3.9 (1.3.9) | Guideline 2.1(a): "Sign-in failed. Please try again." | The native AuthenticationServices invocation could reject with a string before returning a credential. The UI discarded string error details and the macOS path had no in-app fallback. Replacement build 1.3.11 preserves the native diagnostic and falls back to a Safari-managed ASWebAuthenticationSession rather than launching the ordinary Safari browser. |
+| August 10 | 1.3.9 (1.3.9) | Guideline 2.1(a): "Sign-in failed. Please try again." | The native AuthenticationServices invocation could reject with a string before returning a credential. The UI discarded string error details and the macOS path had no in-app fallback. Build 1.3.11 successfully completed Apple authentication during live MacBook testing, but its Settings screen relied on a browser `confirm()` dialog that WKWebView did not present, leaving Sign Out nonfunctional. Replacement build 1.3.12 uses an accessible in-app confirmation and guarantees local session cleanup. |
 
 ## Pre-submission checklist
 
