@@ -72,10 +72,6 @@ jobs:
 
           build = get(f"/v1/builds/{build_id}")["data"]
           beta_detail = get(f"/v1/buildBetaDetails/{build_id}")["data"]
-          build_group_ids = {
-              item["id"]
-              for item in get(f"/v1/builds/{build_id}/relationships/betaGroups").get("data", [])
-          }
           groups_payload = get("/v1/betaGroups", {"filter[app]": app_id, "limit": "200"})
 
           groups = []
@@ -89,13 +85,20 @@ jobs:
                       {"limit": "200"},
                   ).get("data", [])
               )
+              group_build_ids = {
+                  item["id"]
+                  for item in get(
+                      f"/v1/betaGroups/{group['id']}/builds",
+                      {"limit": "200"},
+                  ).get("data", [])
+              }
               groups.append(
                   {
                       "id": group["id"],
                       "name": attrs.get("name"),
                       "isInternal": True,
                       "testerCount": tester_count,
-                      "containsBuild": group["id"] in build_group_ids,
+                      "containsBuild": build_id in group_build_ids,
                   }
               )
 
