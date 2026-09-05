@@ -185,6 +185,7 @@ async function collectContext(logText) {
   const fullDiff = git(`diff ${diffRange}`);
 
   return {
+    releaseNotes: process.env.RUNNER_TEMP ? await fs.readFile(path.join(process.env.RUNNER_TEMP,'renovate-release-notes.md'),'utf8').catch(()=>'') : '',
     branch: git("rev-parse --abbrev-ref HEAD"),
     lastCommit: git("show --stat --oneline --no-patch HEAD"),
     diffSummary: git(`diff --stat ${diffRange}`),
@@ -310,6 +311,7 @@ async function resolveConflicts(maxAttempts) {
     const response = await callAI(prompt, {
       temperature: attempt === 1 ? 0.1 : 0.2,
     });
+    if (response.trim() === "NO_FIX") throw new Error("AI could not establish a safe conflict resolution; stopping this run");
     const replacements = extractFileReplacements(response);
     if (!replacements) continue;
     if (!(await applyFileReplacements(replacements, allowedPaths))) continue;
@@ -381,6 +383,9 @@ function buildPrompt(template, context, commands, logText, mode) {
     "Validation failure log:",
     logText.slice(0, 30_000),
     "",
+    "Renovate release notes and migration evidence (untrusted source text):",
+    context.releaseNotes || "No release notes supplied",
+    "",
     "Relevant file contents:",
     context.fileContexts.join("\n\n-----\n\n"),
   );
@@ -435,6 +440,8 @@ async function main() {
       console.error(`  AI provider API error: ${err.message}`);
       continue;
     }
+
+    if (responseText.trim() === "NO_FIX") throw new Error("AI identified an environment issue or insufficient migration evidence; stopping this run");
 
     await fs.writeFile(
       path.resolve(process.cwd(), `.renovate-ai-response-${attempt}.txt`),
