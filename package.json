@@ -44,7 +44,7 @@
     "postcss": "8.5.18",
     "uuid": "14.0.1",
     "shell-quote": "1.9.0",
-    "ws": "8.21.0",
+    "ws": "8.21.3",
     "@babel/core": "7.29.7"
   },
   "devDependencies": {
