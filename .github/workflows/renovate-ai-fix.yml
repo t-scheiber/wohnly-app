@@ -1,7 +1,9 @@
 name: Renovate AI Fix
-run-name: Renovate validation for PR ${{ inputs.pr_number }}
+run-name: Renovate ${{ inputs.mode || github.event.client_payload.mode || 'validate' }} for PR ${{ inputs.pr_number || github.event.client_payload.pr_number }}
 
 on:
+  repository_dispatch:
+    types: [renovate-validate]
   workflow_dispatch:
     inputs:
       pr_number:
@@ -9,21 +11,30 @@ on:
         required: true
         type: string
 
+      mode:
+        description: Validate and merge, or retry merge only
+        default: validate
+        type: choice
+        options: [validate, merge]
+
 permissions:
-  contents: write
-  pull-requests: read
-  statuses: write
+  contents: read
 
 concurrency:
-  group: renovate-validation-${{ inputs.pr_number }}
+  group: renovate-validation-${{ inputs.pr_number || github.event.client_payload.pr_number }}
   cancel-in-progress: false
 
 jobs:
   renovate-ai-fix:
+    if: (inputs.mode || github.event.client_payload.mode || 'validate') != 'merge'
+    permissions:
+      contents: write
+      pull-requests: read
+      statuses: write
     runs-on: ubuntu-latest
     timeout-minutes: 35
     env:
-      PR_NUMBER: ${{ inputs.pr_number }}
+      PR_NUMBER: ${{ inputs.pr_number || github.event.client_payload.pr_number }}
       POLICY_REVISION: '2'
       CI: 'true'
       AI_PROVIDER: openrouter
@@ -179,3 +190,26 @@ jobs:
           BASE_SHA: ${{ steps.pr.outputs.base }}
           VALIDATION_RESULT: ${{ steps.final.outcome }}
         run: node "$RUNNER_TEMP/renovate-helpers/scripts/pr-lifecycle.mjs" finish
+
+  merge:
+    needs: renovate-ai-fix
+    if: always() && (needs.renovate-ai-fix.result == 'success' || (needs.renovate-ai-fix.result == 'skipped' && (inputs.mode || github.event.client_payload.mode) == 'merge'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: read
+      checks: read
+      actions: read
+    steps:
+      - name: Checkout trusted merge controller
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/renovate
+      - name: Merge only the validated current revision
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number || github.event.client_payload.pr_number }}
+        run: node .github/renovate/scripts/merge-pr.mjs
