@@ -10,6 +10,7 @@ if (!trustedPR(pr, repo)) throw new Error('PR is not an open trusted Renovate up
 const mode = process.argv[2];
 const url = `https://github.com/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
 if (mode === 'prepare') {
+  if (process.env.RUNNER_TEMP) fs.writeFileSync(`${process.env.RUNNER_TEMP}/renovate-release-notes.md`, (pr.body || '').slice(0,40000));
   const base = await github(`${route}/git/ref/heads/${encodeURIComponent(pr.base.ref)}`);
   for (const [key,value] of Object.entries({ head:pr.head.sha, branch:pr.head.ref, base:base.object.sha, base_ref:pr.base.ref })) fs.appendFileSync(process.env.GITHUB_OUTPUT, `${key}=${value}\n`);
   await github(`${route}/statuses/${pr.head.sha}`, { method:'POST', body:{ state:'pending', context:VALIDATION_CONTEXT, target_url:url, description:validationDescription(base.object.sha, process.env.POLICY_REVISION) } });
@@ -20,7 +21,11 @@ if (mode === 'prepare') {
   if (pr.head.sha !== sha) throw new Error('PR changed during validation; a fresh run is required');
   if (passed) {
     const repaired = execFileSync('git', ['rev-parse','HEAD'], { encoding:'utf8' }).trim();
-    if (repaired !== sha) {
+    const baseline = process.env.VALIDATION_BASELINE_SHA;
+    if (!/^[a-f0-9]{40}$/.test(baseline || '')) throw new Error('Missing validation baseline');
+    const changes = execFileSync('git', ['diff','--name-only',baseline,repaired], { encoding:'utf8' }).trim();
+    // A synthetic base merge is validation evidence, not an application repair.
+    if (changes) {
       execFileSync('gh',['auth','setup-git'],{stdio:'inherit'});
       execFileSync('git',['push','origin',`HEAD:refs/heads/${pr.head.ref}`],{stdio:'inherit'});
       sha = repaired;
