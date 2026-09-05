@@ -1,8 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
 export function providerConfig(env = process.env) {
   const provider = env.AI_PROVIDER || (env.OPENROUTER_API_KEY ? 'openrouter' : 'openai');
   if (!['openai', 'openrouter'].includes(provider)) throw new Error('Unsupported AI_PROVIDER');
   return {
     provider,
+    budgetFile: env.RUNNER_TEMP ? path.join(env.RUNNER_TEMP,'renovate-ai-budget.json') : null,
     key: provider === 'openrouter' ? env.OPENROUTER_API_KEY : env.OPENAI_API_KEY,
     model: env.AI_MODEL || (provider === 'openrouter' ? 'z-ai/glm-5.3-flash' : 'gpt-5.6-luna'),
     url: provider === 'openrouter' ? 'https://openrouter.ai/api/v1/chat/completions' : 'https://api.openai.com/v1/responses',
@@ -11,6 +14,11 @@ export function providerConfig(env = process.env) {
 
 export async function requestRepair(prompt, config, fetchImpl = fetch) {
   if (!config.key) throw new Error(`Missing ${config.provider} API key`);
+  if (config.budgetFile) {
+    const used = fs.existsSync(config.budgetFile) ? JSON.parse(fs.readFileSync(config.budgetFile,'utf8')).requests : 0;
+    if (!Number.isInteger(used) || used >= 3) throw new Error('AI request budget exhausted for this workflow run');
+    fs.writeFileSync(config.budgetFile, JSON.stringify({requests:used+1}));
+  }
   const body = config.provider === 'openrouter'
     ? { model: config.model, messages: [{ role: 'user', content: prompt }], max_tokens: 12000, temperature: 0.2 }
     : { model: config.model, input: prompt, max_output_tokens: 12000, reasoning: { effort: 'medium' }, store: false };
