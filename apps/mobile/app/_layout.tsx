@@ -1,3 +1,6 @@
+import { clearHouseholdKeyMemory } from "@/lib/crypto/household-key-cache";
+import { clearPersonalKeyMemory } from "@/lib/crypto/personal-key-cache";
+import { setActiveHouseholdId } from "@/lib/crypto/active-household";
 import { ForceUpdateModal } from "@/components/app-update/ForceUpdateModal";
 import { AppModal } from "@/components/ui/AppModal";
 import { Colors } from "@/constants/Colors";
@@ -19,7 +22,7 @@ import {
     registerForPushNotifications,
 } from "@/lib/notifications/setup";
 import { initRevenueCat } from "@/lib/payments/setup";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
@@ -36,14 +39,24 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const GestureHandlerRootView = _GestureHandlerRootView as any;
 
-const queryClient = new QueryClient({
+function SessionQueryProvider({ children }: { children: React.ReactNode }) {
+  const { data: session } = authClient.useSession();
+  const userId = session?.user?.id ?? "anonymous";
+  return <IdentityQueryProvider key={userId}>{children}</IdentityQueryProvider>;
+}
+
+function IdentityQueryProvider({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60,
       retry: 2,
     },
   },
-});
+}));
+  useEffect(() => () => { setActiveHouseholdId(null); clearHouseholdKeyMemory(); clearPersonalKeyMemory(); void queryClient.cancelQueries(); queryClient.clear(); }, [queryClient]);
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+}
 
 function NamePromptModal({
   colorScheme,
@@ -52,6 +65,7 @@ function NamePromptModal({
   colorScheme: "light" | "dark";
   onComplete: () => void;
 }) {
+  const queryClient = useQueryClient();
   const colors = Colors[colorScheme];
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
@@ -204,6 +218,7 @@ function AdSenseLoader({ enabled }: { enabled: boolean }) {
 }
 
 function AuthGate({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
   const { data: session, isPending } = authClient.useSession();
   const segments = useSegments();
   const router = useRouter();
@@ -235,7 +250,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     } else if (purchase === "cancelled") {
       window.history.replaceState({}, "", window.location.pathname);
     }
-  }, []);
+  }, [queryClient]);
 
   // Stream server events — access/key/rotation notifications invalidate the
   // relevant React Query caches so surfaces A–D react in real time.
@@ -269,9 +284,9 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     }
 
     if (session?.user?.id) {
-      initRevenueCat(session.user.id);
+      void initRevenueCat(session.user.id).catch(() => {});
     }
-  }, [session, isPending, segments]);
+  }, [session, isPending, segments, router]);
 
   // Register device for E2EE and push notifications on all platforms
   useEffect(() => {
@@ -305,7 +320,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
         router.push(data.url as any);
       }
     });
-  }, [session?.user?.id]);
+  }, [session?.user?.id, router]);
 
   if (isPending) return null;
 
@@ -373,7 +388,7 @@ export default function RootLayout() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider>
           {Platform.OS === "web" ? (
-            <QueryClientProvider client={queryClient}>
+            <SessionQueryProvider>
               <AuthGate>
                 <View
                   style={{
@@ -389,16 +404,16 @@ export default function RootLayout() {
                   </View>
                 </View>
               </AuthGate>
-            </QueryClientProvider>
+            </SessionQueryProvider>
           ) : (
-            <QueryClientProvider client={queryClient}>
+            <SessionQueryProvider>
               <AuthGate>
                 <StatusBar
                   style={theme.colorScheme === "dark" ? "light" : "dark"}
                 />
                 <Slot />
               </AuthGate>
-            </QueryClientProvider>
+            </SessionQueryProvider>
           )}
         </SafeAreaProvider>
       </GestureHandlerRootView>

@@ -1,3 +1,4 @@
+import { visibleEventsWhere } from "../lib/event-visibility.js";
 import { Hono } from "hono";
 import { randomUUID } from "node:crypto";
 import { requireAuth } from "../middleware/auth.js";
@@ -335,12 +336,12 @@ app.get("/export", async (c) => {
   // Fetch all household data in parallel
   const [members, todos, chores, expenses, subscriptions, events, shoppingItems, mealPlans] = await Promise.all([
     prisma.householdMember.findMany({ where: { householdId }, select: { id: true, displayName: true, email: true, role: true, points: true, joinedAt: true } }),
-    prisma.todo.findMany({ where: { householdId }, include: { assignments: true } }),
+    prisma.todo.findMany({ where: { householdId, OR: [{ isPersonal: false }, { creatorId: userId }] }, include: { assignments: true } }),
     prisma.chore.findMany({ where: { householdId }, include: { assignments: true } }),
     prisma.expense.findMany({ where: { householdId }, include: { splits: true, attachments: { select: { id: true, type: true, fileName: true, createdAt: true } } } }),
     prisma.subscription.findMany({ where: { householdId }, include: { splits: true } }),
-    prisma.event.findMany({ where: { householdId }, include: { attendees: true, reminders: true } }),
-    prisma.shoppingItem.findMany({ where: { householdId } }),
+    prisma.event.findMany({ where: { householdId, ...visibleEventsWhere(userId) }, include: { attendees: true, reminders: true } }),
+    prisma.shoppingItem.findMany({ where: { householdId, OR: [{ isPersonal: false }, { addedBy: userId }] } }),
     prisma.mealPlan.findMany({ where: { householdId } }),
   ]);
 

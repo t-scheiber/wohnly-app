@@ -53,16 +53,16 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
   const [category, setCategory] = useState(editItem?.category ?? "");
   const [description, setDescription] = useState(editItem?.description ?? "");
   const [date, setDate] = useState<Date>(editItem?.date ? new Date(editItem.date) : new Date());
-  const [paidByMemberId, setPaidByMemberId] = useState<string | null>(editItem?.paidById ?? null);
+  const [paidByMemberId, setPaidByMemberId] = useState<string | null>(null);
   const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false);
   const [currencySearch, setCurrencySearch] = useState("");
   const [splitMode, setSplitMode] = useState<SplitMode>(
-    editItem?.splitType === "shares" ? "shares" : editItem?.splitType && editItem.splitType !== "equal" ? "custom" : "equal"
+    editItem?.splitType === "itemized" ? "itemized" : editItem?.splitType && editItem.splitType !== "equal" ? "custom" : "equal"
   );
-  const [memberSplits, setMemberSplits] = useState<MemberSplit[]>([]);
+  const [memberSplits, setMemberSplits] = useState<MemberSplit[]>(() => (editItem?.splits ?? []).map(split => ({ memberId: split.memberId, name: "Member", amount: String(split.amount) })));
   const [memberShares, setMemberShares] = useState<MemberShares[]>([]);
   const [showItemizedForm, setShowItemizedForm] = useState(false);
-  const [itemizedLineItems, setItemizedLineItems] = useState<LineItem[]>([]);
+  const [itemizedLineItems, setItemizedLineItems] = useState<LineItem[]>(() => (editItem?.lineItems ?? []).map(item => ({ id: item.id, name: item.name, amount: String(item.amount), assigneeIds: (item.assignments ?? []).map(a => a.memberId) })));
   const [scannedLineItems, setScannedLineItems] = useState<{ name: string; amount: number }[]>([]);
 
   const [fieldErrors, setFieldErrors] = useState<{ title?: string; amount?: string }>({});
@@ -96,7 +96,7 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
   };
 
   const currentMember = membersData?.members?.find((m) => m.isCurrentUser);
-  const selectedPaidBy = paidByMemberId ?? currentMember?.id;
+  const selectedPaidBy = paidByMemberId ?? membersData?.members.find(m => m.userId === editItem?.paidById)?.id ?? currentMember?.id;
   const selectedCurrency = CURRENCIES.find((c) => c.code === currency) ?? CURRENCIES[0];
 
   const filteredCurrencies = currencySearch
@@ -110,12 +110,13 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
   const initCustomSplits = () => {
     if (membersData?.members) {
       const total = parseFloat(amount.replace(",", ".")) || 0;
-      const perPerson = total > 0 ? (total / membersData.members.length).toFixed(2) : "";
+      const cents = Math.round(total * 100);
+      const count = membersData.members.length;
       setMemberSplits(
-        membersData.members.map((m) => ({
+        membersData.members.map((m, index) => ({
           memberId: m.id,
           name: m.nickname || m.displayName || (m as any).email || "Member",
-          amount: perPerson,
+          amount: total > 0 ? ((Math.floor(cents / count) + (index < cents % count ? 1 : 0)) / 100).toFixed(2) : "",
         }))
       );
     }
@@ -185,7 +186,7 @@ export function AddExpenseForm({ onSuccess, onCancel, editItem }: AddExpenseForm
       return;
     }
 
-    if (splitMode === "custom" && Math.abs(remaining) > 0.01) {
+    if (splitMode === "custom" && Math.abs(remaining) >= 0.01) {
       Alert.alert("Error", `Split amounts don't add up. ${remaining > 0 ? `${remaining.toFixed(2)} remaining` : `${Math.abs(remaining).toFixed(2)} over budget`}`);
       return;
     }

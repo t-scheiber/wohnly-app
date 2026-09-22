@@ -1,3 +1,5 @@
+import { allocateMoney, expenseSplits } from "../lib/money-splits.js";
+import { readBody, schemas, requireHouseholdMembers, pagination, badRequest } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -17,7 +19,7 @@ app.get("/", async (c) => {
 
   const expenses = await prisma.expense.findMany({
     where: { householdId: member.householdId },
-    include: { splits: true, attachments: { select: { id: true, type: true, mimeType: true, fileName: true, encrypted: true, createdAt: true } } },
+    include: { splits: true, lineItems: { include: { assignments: true } }, attachments: { select: { id: true, type: true, mimeType: true, fileName: true, encrypted: true, createdAt: true } } },
     orderBy: [{ date: "desc" }, { createdAt: "desc" }],
   });
 
@@ -27,9 +29,9 @@ app.get("/", async (c) => {
 // POST /api/expenses
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.expense);
 
-  const { title, description, amount, category, currency, paidById, paidFromAccount, splitType, splits: customSplits, lineItems, date, encrypted, nonce } = body;
+  const { title, description, amount, category, currency, paidById, paidFromAccount, splitType, splits: customSplits, lineItems, date, encrypted, nonce, encryptionEpoch } = body;
 
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!amount || amount <= 0) return c.json({ error: "Amount must be positive" }, 400);
@@ -42,47 +44,8 @@ app.post("/", async (c) => {
   });
 
   const totalAmount = new Decimal(amount);
-  let splitEntries: { memberId: string; amount: typeof totalAmount }[];
-
-  if (splitType === "itemized" && lineItems?.length) {
-    // Calculate per-member totals from line item assignments
-    const memberTotals = new Map<string, Decimal>();
-    for (const item of lineItems as { name: string; amount: number; assigneeIds: string[] }[]) {
-      const itemAmount = new Decimal(item.amount);
-      const perPerson = itemAmount.div(item.assigneeIds.length);
-      for (const memberId of item.assigneeIds) {
-        memberTotals.set(memberId, (memberTotals.get(memberId) ?? new Decimal(0)).add(perPerson));
-      }
-    }
-    splitEntries = [...memberTotals.entries()].map(([memberId, amt]) => ({
-      memberId,
-      amount: amt,
-    }));
-  } else if (splitType === "shares" && customSplits?.length) {
-    const totalShares = customSplits.reduce((sum: number, s: { shares?: number }) => sum + (s.shares ?? 1), 0);
-    splitEntries = customSplits.map((s: { memberId: string; shares?: number }) => ({
-      memberId: s.memberId,
-      amount: totalAmount.mul(s.shares ?? 1).div(totalShares),
-    }));
-  } else if (splitType === "custom" && customSplits?.length) {
-    splitEntries = customSplits.map((s: { memberId: string; amount?: number; percentage?: number }) => ({
-      memberId: s.memberId,
-      amount: s.amount != null
-        ? new Decimal(s.amount)
-        : totalAmount.mul(s.percentage ?? 0).div(100),
-    }));
-  } else if (splitType === "percentage" && customSplits?.length) {
-    splitEntries = customSplits.map((s: { memberId: string; percentage: number }) => ({
-      memberId: s.memberId,
-      amount: totalAmount.mul(s.percentage).div(100),
-    }));
-  } else {
-    const splitAmount = totalAmount.div(members.length);
-    splitEntries = members.map((m) => ({
-      memberId: m.id,
-      amount: splitAmount,
-    }));
-  }
+  if (paidById && !members.some(m => m.userId === paidById)) badRequest("Payer must belong to this household");
+  const splitEntries = expenseSplits(totalAmount, members.map(m => m.id), splitType, customSplits, lineItems);
 
   const expense = await prisma.expense.create({
     data: {
@@ -91,6 +54,7 @@ app.post("/", async (c) => {
       description: encrypted ? (description || null) : (description?.trim() || null),
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch: encryptionEpoch ?? 1,
       amount: totalAmount,
       currency: currency || "EUR",
       category: category?.trim() || null,
@@ -106,11 +70,12 @@ app.post("/", async (c) => {
       },
       ...(splitType === "itemized" && lineItems?.length && {
         lineItems: {
-          create: (lineItems as { name: string; amount: number; assigneeIds: string[] }[]).map((item) => ({
-            name: encrypted ? item.name : item.name.trim(),
+          create: lineItems.map((item) => ({
+            name: item.encrypted ? item.name : item.name.trim(),
             amount: new Decimal(item.amount),
-            encrypted: !!encrypted,
-            nonce: nonce || null,
+            encrypted: !!item.encrypted,
+            nonce: item.nonce ?? null,
+            encryptionEpoch: item.encryptionEpoch ?? 1,
             assignments: {
               create: item.assigneeIds.map((memberId: string) => ({ memberId })),
             },
@@ -141,10 +106,9 @@ app.get("/settle-up", async (c) => {
     where: { householdId },
     include: { splits: true },
   });
-  const subscriptions = await prisma.subscription.findMany({
-    where: { householdId, active: true },
-    include: { splits: true },
-  });
+  const currency = member.household.baseCurrency ?? "EUR";
+  const rates = expenses.some(e => e.currency !== currency) ? await getExchangeRates(currency) : null;
+  const convert = (amount: number, from: string) => from === currency ? amount : convertAmount(amount, from, currency, rates!.rates, currency);
 
   // Calculate net balance per member (paid - owed)
   const balances = members.map((m) => {
@@ -152,17 +116,12 @@ app.get("/settle-up", async (c) => {
     let owed = 0;
 
     for (const exp of expenses) {
-      if (exp.paidById === m.userId) paid += Number(exp.amount);
+      if (exp.paidById === m.userId) paid += convert(Number(exp.amount), exp.currency);
       for (const split of exp.splits) {
-        if (split.memberId === m.id) owed += Number(split.amount);
+        if (split.memberId === m.id) owed += convert(Number(split.amount), exp.currency);
       }
     }
 
-    for (const sub of subscriptions) {
-      for (const split of sub.splits) {
-        if (split.memberId === m.id) owed += Number(split.amount);
-      }
-    }
 
     return {
       memberId: m.id,
@@ -173,7 +132,7 @@ app.get("/settle-up", async (c) => {
 
   // Use greedy algorithm to minimize transactions
   const nets = balances
-    .filter((b) => Math.abs(b.balance) > 0.01)
+    .filter((b) => Math.abs(b.balance) >= 0.01)
     .map((b) => ({ memberId: b.memberId, balance: b.balance }));
 
   const settlements: { from: string; to: string; amount: number }[] = [];
@@ -183,7 +142,7 @@ app.get("/settle-up", async (c) => {
     const debtor = nets[0];
     const creditor = nets[nets.length - 1];
 
-    if (!debtor || !creditor || debtor.balance >= -0.01 || creditor.balance <= 0.01) break;
+    if (!debtor || !creditor || debtor.balance > -0.01 || creditor.balance < 0.01) break;
 
     const amount = Math.min(-debtor.balance, creditor.balance);
     const rounded = Math.round(amount * 100) / 100;
@@ -209,7 +168,7 @@ app.get("/settle-up", async (c) => {
       fromName: memberMap.get(s.from),
       toName: memberMap.get(s.to),
     })),
-    currency: expenses[0]?.currency || "EUR",
+    currency,
   });
 });
 
@@ -403,32 +362,62 @@ app.get("/export", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const expenseId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.expensePatch);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
 
   const existing = await prisma.expense.findFirst({
     where: { id: expenseId, householdId: member.householdId },
+    include: { splits: true },
   });
   if (!existing) return c.json({ error: "Expense not found" }, 404);
 
-  const { title, description, amount, category, paidById, paidFromAccount, date, encrypted, nonce } = body;
+  const { title, description, amount, currency, category, paidById, paidFromAccount, splitType, splits, lineItems, date, encrypted, nonce, encryptionEpoch } = body;
 
-  const expense = await prisma.expense.update({
+  if (paidById && !await prisma.householdMember.findFirst({ where: { householdId: member.householdId, userId: paidById } })) badRequest("Payer must belong to this household");
+  const replacingSplits = splitType !== undefined || splits !== undefined || lineItems !== undefined;
+  const nextType = splitType ?? existing.splitType;
+  if (amount !== undefined && nextType === "itemized" && !lineItems && !new Decimal(amount).eq(existing.amount)) badRequest("Line items are required to update the total");
+  const householdMembers = replacingSplits ? await prisma.householdMember.findMany({ where: { householdId: member.householdId } }) : [];
+  const newSplits = replacingSplits ? expenseSplits(new Decimal(amount ?? existing.amount), householdMembers.map(m => m.id), nextType, splits, lineItems) : null;
+  const expense = await prisma.$transaction(async tx => {
+    if (newSplits) {
+      await tx.expenseSplit.deleteMany({ where: { expenseId } });
+      await tx.expenseSplit.createMany({ data: newSplits.map(split => ({ expenseId, ...split })) });
+    } else if (amount !== undefined) {
+      const updatedSplits = allocateMoney(new Decimal(amount), existing.splits.map(s => ({ memberId: s.memberId, weight: s.amount })));
+      for (const split of updatedSplits) await tx.expenseSplit.updateMany({ where: { expenseId, memberId: split.memberId }, data: { amount: split.amount } });
+    }
+    if (lineItems !== undefined || (splitType !== undefined && splitType !== "itemized")) {
+      await tx.expenseLineItem.deleteMany({ where: { expenseId } });
+      if (nextType === "itemized" && lineItems) {
+        for (const item of lineItems) await tx.expenseLineItem.create({ data: {
+          expenseId, name: item.name, amount: new Decimal(item.amount), encrypted: !!item.encrypted,
+          nonce: item.nonce ?? null, encryptionEpoch: item.encryptionEpoch ?? 1,
+          assignments: { create: item.assigneeIds.map(memberId => ({ memberId })) },
+        } });
+      }
+    }
+    return tx.expense.update({
     where: { id: expenseId },
     data: {
       ...(title !== undefined && { title: encrypted ? title : title.trim() }),
       ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
       ...(encrypted !== undefined && { encrypted }),
       ...(nonce !== undefined && { nonce: nonce || null }),
+      ...(encryptionEpoch !== undefined && { encryptionEpoch }),
       ...(amount !== undefined && { amount: new Decimal(amount) }),
-      ...(category !== undefined && { category: category.trim() }),
+      ...(currency !== undefined && { currency }),
+      ...(splitType !== undefined && { splitType }),
+      ...(category !== undefined && { category: category?.trim() || null }),
       ...(paidById !== undefined && { paidById }),
       ...(paidFromAccount !== undefined && { paidFromAccount: paidFromAccount?.trim() || null }),
       ...(date !== undefined && { date: new Date(date) }),
     },
     include: { splits: true },
+  });
+
   });
 
   return c.json({ success: true, expense });
@@ -478,9 +467,9 @@ app.get("/:id/attachments", async (c) => {
 app.post("/:id/attachments", async (c) => {
   const userId = c.get("userId") as string;
   const expenseId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.attachment);
 
-  const { type, content, mimeType, fileName, encrypted, nonce } = body;
+  const { type, content, mimeType, fileName, encrypted, nonce, encryptionEpoch } = body;
 
   if (!type || !content) {
     return c.json({ error: "type and content are required" }, 400);
@@ -511,6 +500,7 @@ app.post("/:id/attachments", async (c) => {
       fileName: fileName || null,
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch: encryptionEpoch ?? 1,
     },
   });
 

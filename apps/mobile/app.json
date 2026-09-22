@@ -2,7 +2,7 @@
   "expo": {
     "name": "Wohnly",
     "slug": "wohnly",
-    "version": "1.3.5",
+    "version": "1.4.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "wohnly",
@@ -121,7 +121,15 @@
       "expo-font",
       "expo-image",
       "expo-sharing",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "enableSceneSupport": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
