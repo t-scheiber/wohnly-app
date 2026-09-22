@@ -191,6 +191,11 @@ jobs:
           tauriScript: npx tauri
           args: --verbose
 
+      - name: Require signed macOS updater archive
+        run: |
+          test -s apps/desktop/tauri/target/release/bundle/macos/Wohnly.app.tar.gz
+          test -s apps/desktop/tauri/target/release/bundle/macos/Wohnly.app.tar.gz.sig
+
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -555,19 +560,16 @@ jobs:
           PUB_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           BASE="https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest"
 
-          MAC_SIG=""
-          if [ -f "artifacts/release/Wohnly-macOS.app.tar.gz.sig" ]; then
-            MAC_SIG=$(cat "artifacts/release/Wohnly-macOS.app.tar.gz.sig")
-          fi
+          test -s artifacts/release/Wohnly-macOS.app.tar.gz
+          test -s artifacts/release/Wohnly-macOS.app.tar.gz.sig
+          MAC_SIG=$(cat artifacts/release/Wohnly-macOS.app.tar.gz.sig)
+          test -n "$MAC_SIG"
+          test -n "$MAC_UPDATER_TARGET"
 
           # macOS-only updater (Windows updates via Microsoft Store)
-          PLATFORMS="{}"
-          if [ -n "$MAC_SIG" ]; then
-            test -n "$MAC_UPDATER_TARGET"
-            PLATFORMS=$(jq -n --arg target "$MAC_UPDATER_TARGET" \
-              --arg signature "$MAC_SIG" --arg url "${BASE}/Wohnly-macOS.app.tar.gz" \
-              '{($target): {signature: $signature, url: $url}}')
-          fi
+          PLATFORMS=$(jq -n --arg target "$MAC_UPDATER_TARGET" \
+            --arg signature "$MAC_SIG" --arg url "${BASE}/Wohnly-macOS.app.tar.gz" \
+            '{($target): {signature: $signature, url: $url}}')
 
           jq -n \
             --arg version "$VERSION" \
