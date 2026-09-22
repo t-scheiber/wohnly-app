@@ -168,6 +168,7 @@ jobs:
         run: |
           echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
           security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
@@ -175,6 +176,7 @@ jobs:
           rm certificate.p12
 
       - name: Build Tauri app (signed)
+        timeout-minutes: 30
         uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -239,6 +241,10 @@ jobs:
           path: apps/desktop/tauri/target/release/bundle/macos/Wohnly-mas.zip
           retention-days: 30
 
+      - name: Remove temporary signing keychain
+        if: always()
+        run: security delete-keychain build.keychain || true
+
   package-macos-store:
     name: Package Mac App Store candidate
     needs: build-macos
@@ -267,6 +273,7 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           security create-keychain -p "$KEYCHAIN_PASSWORD" mas.keychain
+          security set-keychain-settings -lut 21600 mas.keychain
           security default-keychain -s mas.keychain
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" mas.keychain
 
@@ -410,6 +417,13 @@ jobs:
           name: macos-mas-pkg
           path: mas-release-artifact
           retention-days: 30
+
+      - name: Remove temporary Mac App Store signing material
+        if: always()
+        run: |
+          security delete-keychain mas.keychain || true
+          rm -f asc-api-key.json ~/.private_keys/AuthKey_${{ secrets.ASC_API_KEY_ID }}.p8
+
   # -- Windows: build an MSIX artifact for manual Microsoft Store submission --
 
   build-windows:
