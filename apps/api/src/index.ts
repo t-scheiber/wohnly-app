@@ -1,6 +1,7 @@
+import { HTTPException } from "hono/http-exception";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { logger } from "hono/logger";
+import { bodyLimit } from "hono/body-limit";
 import { serve } from "@hono/node-server";
 import { auth } from "./auth.js";
 import type { AppEnv } from "./types.js";
@@ -67,11 +68,18 @@ app.use("*", async (c, next) => {
 });
 
 // Middleware
-app.use("*", logger());
+app.use("*", bodyLimit({ maxSize: 12 * 1024 * 1024 }));
+app.use("*", async (c, next) => {
+  const start = Date.now();
+  await next();
+  console.log(c.req.method, c.req.path, c.res.status, Date.now() - start);
+});
 
 // Security Headers
 app.use("*", async (c, next) => {
   c.header("X-Content-Type-Options", "nosniff");
+  c.header("Referrer-Policy", "no-referrer");
+  if (c.req.path.startsWith("/api/")) c.header("Cache-Control", "no-store");
   c.header("X-Frame-Options", "DENY");
   c.header("X-XSS-Protection", "1; mode=block");
   await next();
@@ -138,7 +146,7 @@ async function handleAuth(c: any) {
 .box{max-width:360px}h2{margin-bottom:8px}p{color:#aaa;font-size:14px}</style></head>
 <body><div class="box"><h2>Login successful</h2><p>Returning to Wohnly...</p>
 <p style="margin-top:24px;font-size:12px;color:#666">You can close this tab.</p></div>
-<script>window.location.href=${JSON.stringify(location)};setTimeout(()=>window.close(),1500)</script>
+<script>window.location.href=${JSON.stringify(location).replaceAll("<", "\\u003c")};setTimeout(()=>window.close(),1500)</script>
 </body></html>`);
   }
   return res;
@@ -204,6 +212,7 @@ app.notFound((c) => {
 });
 
 app.onError((err, c) => {
+  if (err instanceof HTTPException) return err.getResponse();
   console.error(`[API ERROR] ${c.req.method} ${c.req.path}:`, err);
 
   // Prisma unique constraint error (e.g., P2002)
@@ -215,7 +224,7 @@ app.onError((err, c) => {
   const status = (err as any).status || 500;
   return c.json(
     {
-      error: err.message || "Internal Server Error",
+      error: process.env.NODE_ENV === "production" && status >= 500 ? "Internal Server Error" : err.message || "Internal Server Error",
       ...(process.env.NODE_ENV !== "production" ? { stack: err.stack } : {}),
     },
     status
@@ -227,7 +236,7 @@ console.log(`Wohnly API starting on port ${port}`);
 
 eventListener.start().catch((err) => {
   console.error("[events] failed to start listener", err);
-  process.exit(1);
+  // The listener schedules retries; the HTTP API remains available.
 });
 
 startExpireAccessRequestsCron();

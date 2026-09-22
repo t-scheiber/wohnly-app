@@ -3,7 +3,9 @@ import {
   addWeeks,
   addMonths,
   startOfDay,
-  isWithinInterval,
+  startOfMonth,
+  getDaysInMonth,
+  setDate,
   isBefore,
   isAfter,
   getDay,
@@ -12,6 +14,7 @@ import {
 
 interface ChoreForSchedule {
   frequency: string; // "daily" | "weekly" | "biweekly" | "monthly"
+  dayOfMonth?: number | null;
   dayOfWeek?: number | null; // 0-6 for weekly chores
   lastCompleted?: Date | string | null;
   createdAt: Date | string;
@@ -52,7 +55,8 @@ export function getChoreOccurrences(
       break;
     }
     case "biweekly": {
-      let d = startOfDay(anchor);
+      let d = setDay(anchor, chore.dayOfWeek ?? getDay(anchor), { weekStartsOn: 1 });
+      if (isBefore(d, anchor)) d = addWeeks(d, 1);
       // Advance to within range
       while (isBefore(d, rangeStart)) d = addWeeks(d, 2);
       while (!isAfter(d, rangeEnd)) {
@@ -62,11 +66,12 @@ export function getChoreOccurrences(
       break;
     }
     case "monthly": {
-      let d = startOfDay(anchor);
-      while (isBefore(d, rangeStart)) d = addMonths(d, 1);
-      while (!isAfter(d, rangeEnd)) {
-        if (!isBefore(d, rangeStart)) dates.push(d);
-        d = addMonths(d, 1);
+      const target = chore.dayOfMonth ?? anchor.getDate();
+      let month = startOfMonth(isBefore(anchor, rangeStart) ? rangeStart : anchor);
+      while (!isAfter(month, rangeEnd)) {
+        const day = setDate(month, Math.min(target, getDaysInMonth(month)));
+        if (!isBefore(day, rangeStart) && !isBefore(day, anchor) && !isAfter(day, rangeEnd)) dates.push(day);
+        month = addMonths(month, 1);
       }
       break;
     }

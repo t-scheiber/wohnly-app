@@ -75,6 +75,7 @@ export interface Chore {
   description?: string | null;
   frequency: ChoreFrequency;
   dayOfWeek?: number | null;
+  dayOfMonth?: number | null;
   effortWeight: number; // 1-5
   lastDone?: Date | null;
   lastDoneBy?: string | null;

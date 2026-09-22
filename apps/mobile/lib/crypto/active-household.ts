@@ -17,7 +17,7 @@ let _currentEpoch: number = 1;
 let _currentEpochReady = false;
 
 export function setActiveHouseholdId(id: string | null) {
-  if (id !== _householdId) _currentEpochReady = false;
+  if (id !== _householdId) { _currentEpochReady = false; _currentEpoch = 1; }
   _householdId = id;
 }
 

@@ -1,5 +1,5 @@
 import {
-    getEncryptionKey,
+    resolveEncryptionKey,
     resolveActiveEncryptionKey,
 } from "@/lib/crypto/active-household";
 import { resolvePersonalEncryptionKey } from "@/lib/crypto/personal-key";
@@ -36,6 +36,15 @@ import type {
     UserPreferences
 } from "@wohnly/shared";
 import { api, apiDelete, apiPatch, apiPost } from "./client";
+
+async function encryptLineItems(data: Record<string, unknown>, key: Uint8Array, epoch: number) {
+  if (!Array.isArray(data.lineItems)) return {};
+  const lineItems = await Promise.all(data.lineItems.map(async item => {
+    const encrypted = await encryptTodo({ title: item.name }, key, epoch);
+    return { ...item, name: encrypted.title, encrypted: true, nonce: encrypted.nonce, encryptionEpoch: epoch };
+  }));
+  return { lineItems };
+}
 
 // ── Household & Members ──
 
@@ -87,12 +96,16 @@ export function useTodos() {
   return useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
-      const res = await api<{ todos: Todo[]; pagination: unknown }>(
-        "/api/todos",
-      );
+      type TodoPage = { todos: Todo[]; pagination: { pages: number } };
+      const res = await api<TodoPage>("/api/todos?limit=50");
+      for (let page = 2; page <= res.pagination.pages; page++) {
+        const next = await api<TodoPage>(`/api/todos?limit=50&page=${page}`);
+        res.todos.push(...next.todos);
+      }
+      res.todos = [...new Map(res.todos.map(todo => [todo.id, todo])).values()];
       const todos = await Promise.all(
-        res.todos.map((t) => {
-          const hk = getEncryptionKey(t.encryptionEpoch ?? 1);
+        res.todos.map(async (t) => {
+          const hk = (t.encrypted ? await resolveEncryptionKey(t.encryptionEpoch ?? 1) : null);
           return hk ? decryptTodo(t, hk) : t;
         }),
       );
@@ -277,8 +290,8 @@ export function useShoppingList() {
     queryFn: async () => {
       const res = await api<{ items: ShoppingItem[] }>("/api/shopping");
       const items = await Promise.all(
-        res.items.map((i) => {
-          const hk = getEncryptionKey(i.encryptionEpoch ?? 1);
+        res.items.map(async (i) => {
+          const hk = (i.encrypted ? await resolveEncryptionKey(i.encryptionEpoch ?? 1) : null);
           return hk ? decryptShoppingItem(i, hk) : i;
         }),
       );
@@ -456,8 +469,8 @@ export function useChores() {
     queryFn: async () => {
       const res = await api<{ chores: Chore[] }>("/api/chores");
       const chores = await Promise.all(
-        res.chores.map((c) => {
-          const hk = getEncryptionKey(c.encryptionEpoch ?? 1);
+        res.chores.map(async (c) => {
+          const hk = (c.encrypted ? await resolveEncryptionKey(c.encryptionEpoch ?? 1) : null);
           return hk ? decryptChore(c, hk) : c;
         }),
       );
@@ -716,7 +729,7 @@ export function useEvents(startDate?: string, endDate?: string) {
             // Personal events created before the per-user key used either the
             // household key or plaintext. Decrypt locally, then migrate them.
             const legacyKey = e.encrypted
-              ? getEncryptionKey(e.encryptionEpoch ?? 1)
+              ? (e.encrypted ? await resolveEncryptionKey(e.encryptionEpoch ?? 1) : null)
               : null;
             if (e.encrypted && !legacyKey) return e;
             const decrypted = legacyKey
@@ -735,7 +748,7 @@ export function useEvents(startDate?: string, endDate?: string) {
             } catch {}
             return decrypted;
           }
-          const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
+          const hk = (e.encrypted ? await resolveEncryptionKey(e.encryptionEpoch ?? 1) : null);
           return hk ? decryptEvent(e, hk) : e;
         }),
       );
@@ -822,9 +835,17 @@ export function useExpenses() {
     queryFn: async () => {
       const res = await api<{ expenses: Expense[] }>("/api/expenses");
       const expenses = await Promise.all(
-        res.expenses.map((e) => {
-          const hk = getEncryptionKey(e.encryptionEpoch ?? 1);
-          return hk ? decryptExpense(e, hk) : e;
+        res.expenses.map(async (e) => {
+          const hk = (e.encrypted ? await resolveEncryptionKey(e.encryptionEpoch ?? 1) : null);
+          const expense = hk ? await decryptExpense(e, hk) : e;
+          const lineItems = await Promise.all((e.lineItems ?? []).map(async item => {
+            // Old clients marked plaintext names with the parent nonce.
+            if (!item.encrypted || item.nonce === e.nonce) return item;
+            const key = await resolveEncryptionKey(item.encryptionEpoch ?? 1);
+            const decrypted = await decryptTodo({ ...item, title: item.name }, key);
+            return { ...item, name: decrypted.title };
+          }));
+          return { ...expense, lineItems };
         }),
       );
       return { ...res, expenses };
@@ -845,10 +866,12 @@ export function useCreateExpense() {
         hk,
         epoch,
       );
-      return apiPost("/api/expenses", { ...data, ...enc });
+      return apiPost("/api/expenses", { ...data, ...enc, ...await encryptLineItems(data, hk, epoch) });
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["expenses"] });
+      qc.invalidateQueries({ queryKey: ["settle-up"] });
+      qc.invalidateQueries({ queryKey: ["expense-analytics"] });
       qc.invalidateQueries({ queryKey: ["balances"] });
     },
   });
@@ -880,8 +903,8 @@ export function useExpenseAttachments(expenseId: string | null) {
         `/api/expenses/${expenseId}/attachments`,
       );
       const attachments = await Promise.all(
-        res.attachments.map((a) => {
-          const hk = getEncryptionKey(a.encryptionEpoch ?? 1);
+        res.attachments.map(async (a) => {
+          const hk = (a.encrypted ? await resolveEncryptionKey(a.encryptionEpoch ?? 1) : null);
           return hk ? decryptAttachment(a, hk) : a;
         }),
       );
@@ -1028,7 +1051,7 @@ export function useUpdateExpense() {
           hk,
           epoch,
         );
-        return apiPatch(`/api/expenses/${id}`, { ...data, ...enc });
+        return apiPatch(`/api/expenses/${id}`, { ...data, ...enc, ...await encryptLineItems(data, hk, epoch) });
       }
       return apiPatch(`/api/expenses/${id}`, data);
     },
@@ -1049,8 +1072,8 @@ export function useSubscriptions() {
         "/api/subscriptions",
       );
       const subscriptions = await Promise.all(
-        res.subscriptions.map((s) => {
-          const hk = getEncryptionKey(s.encryptionEpoch ?? 1);
+        res.subscriptions.map(async (s) => {
+          const hk = (s.encrypted ? await resolveEncryptionKey(s.encryptionEpoch ?? 1) : null);
           return hk ? decryptSubscription(s, hk) : s;
         }),
       );

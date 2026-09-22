@@ -1,3 +1,5 @@
+import { allocateMoney } from "../lib/money-splits.js";
+import { readBody, schemas, requireHouseholdMembers, pagination, badRequest } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -26,9 +28,9 @@ app.get("/", async (c) => {
 // POST /api/subscriptions
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.subscription);
 
-  const { name, description, amount, frequency, category, billingDate, splitType, encrypted, nonce } = body;
+  const { name, description, amount, currency, frequency, category, billingDate, splitType, encrypted, nonce, encryptionEpoch } = body;
 
   if (!name?.trim()) return c.json({ error: "Name is required" }, 400);
   if (!amount || amount <= 0) return c.json({ error: "Amount must be positive" }, 400);
@@ -42,7 +44,7 @@ app.post("/", async (c) => {
     where: { householdId: member.householdId },
   });
 
-  const splitAmount = new Decimal(amount).div(members.length);
+  const splitEntries = allocateMoney(new Decimal(amount), members.map(m => ({ memberId: m.id, weight: new Decimal(1) })));
 
   const subscription = await prisma.subscription.create({
     data: {
@@ -51,17 +53,16 @@ app.post("/", async (c) => {
       description: encrypted ? (description || null) : (description?.trim() || null),
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch: encryptionEpoch ?? 1,
       amount: new Decimal(amount),
+      currency: currency ?? "EUR",
       frequency,
       category: category.trim(),
       billingDate: billingDate ? new Date(billingDate) : null,
       createdBy: userId,
       splitType: splitType || "equal",
       splits: {
-        create: members.map((m) => ({
-          memberId: m.id,
-          amount: splitAmount,
-        })),
+        create: splitEntries,
       },
     },
     include: { splits: true },
@@ -74,32 +75,42 @@ app.post("/", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const subscriptionId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.subscriptionPatch);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
 
   const existing = await prisma.subscription.findFirst({
     where: { id: subscriptionId, householdId: member.householdId },
+    include: { splits: true },
   });
   if (!existing) return c.json({ error: "Subscription not found" }, 404);
 
-  const { name, description, amount, frequency, category, billingDate, active, encrypted, nonce } = body;
+  const { name, description, amount, currency, frequency, category, billingDate, active, encrypted, nonce, encryptionEpoch } = body;
 
-  const subscription = await prisma.subscription.update({
+  const subscription = await prisma.$transaction(async tx => {
+    if (amount !== undefined) {
+      const updated = allocateMoney(new Decimal(amount), existing.splits.map(s => ({ memberId: s.memberId, weight: s.amount })));
+      for (const split of updated) await tx.subscriptionSplit.updateMany({ where: { subscriptionId, memberId: split.memberId }, data: { amount: split.amount } });
+    }
+    return tx.subscription.update({
     where: { id: subscriptionId },
     data: {
       ...(name !== undefined && { name: encrypted ? name : name.trim() }),
       ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
       ...(encrypted !== undefined && { encrypted }),
       ...(nonce !== undefined && { nonce: nonce || null }),
+      ...(encryptionEpoch !== undefined && { encryptionEpoch }),
       ...(amount !== undefined && { amount: new Decimal(amount) }),
+      ...(currency !== undefined && { currency }),
       ...(frequency !== undefined && { frequency }),
       ...(category !== undefined && { category: category.trim() }),
       ...(billingDate !== undefined && { billingDate: billingDate ? new Date(billingDate) : null }),
       ...(active !== undefined && { active }),
     },
     include: { splits: true },
+  });
+
   });
 
   return c.json({ success: true, subscription });
