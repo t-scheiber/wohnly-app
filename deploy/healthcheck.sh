@@ -1,11 +1,11 @@
 #!/bin/bash
 # API Health Check — runs via cron on the VPS.
 # Checks the /api/health endpoint. If down:
-#   1. Pull latest code from git
-#   2. Install deps + prisma generate
-#   3. Restart API via PM2
+#   1. Restart the deployed API
+#   2. Check recovery
+#   3. Preserve deployed code and database schema
 #   4. Email t@wohnly.app with status
-# Also deploys the web frontend if git had changes.
+# Release deployment is handled by CI, never by the health monitor.
 
 HEALTH_URL="http://localhost:3001/api/health"
 EXTERNAL_URL="https://api.wohnly.app/api/health"
@@ -58,47 +58,17 @@ fi
 # Record alert timestamp
 date +%s > "$STATE_FILE"
 
-# Full recovery: pull latest code, rebuild, restart
+# Restart the deployed release. Deployments and schema changes belong in CI.
 cd "$REPO_DIR" || exit 1
-export GIT_SSH_COMMAND="ssh -i /root/.ssh/wohnly_deploy -o StrictHostKeyChecking=no"
-
-# Pull latest
-git stash 2>/dev/null || true
-git fetch origin main 2>/dev/null
-BEFORE=$(git rev-parse HEAD)
-git reset --hard origin/main 2>/dev/null
-AFTER=$(git rev-parse HEAD)
-
-# Install deps
-npm ci --silent 2>/dev/null
-
-# Prisma
-cd apps/api
-npx prisma generate 2>/dev/null
-npx prisma db push --accept-data-loss 2>/dev/null
-cd "$REPO_DIR"
-
-# Restart API
-pm2 delete "$PM2_APP" 2>/dev/null || true
-pm2 start deploy/pm2.api.config.cjs --only "$PM2_APP" --update-env 2>/dev/null
+pm2 restart "$PM2_APP" --update-env 2>/dev/null || pm2 start deploy/pm2.api.config.cjs --only "$PM2_APP" --update-env
 pm2 save 2>/dev/null
-
-# If code changed, also rebuild and deploy web
-if [ "$BEFORE" != "$AFTER" ]; then
-  cd apps/mobile
-  npx expo export --platform web 2>/dev/null
-  node scripts/inject-adsense.mjs 2>/dev/null
-  cp -r dist/* "$WEB_DIR/" 2>/dev/null
-  cd "$REPO_DIR"
-fi
 
 # Wait and re-check
 sleep 5
 HTTP_RECHECK=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$HEALTH_URL" 2>/dev/null)
 
 if [ "$HTTP_RECHECK" = "200" ]; then
-  BODY="The Wohnly API was down but has been auto-recovered.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nOriginal status: $HTTP_CODE\nAfter recovery: $HTTP_RECHECK\n\nRecovery steps taken:\n- git pull ($(git log --oneline -1))\n- npm ci + prisma generate\n- pm2 restart"
-  [ "$BEFORE" != "$AFTER" ] && BODY="$BODY\n- Web frontend redeployed (code changed)"
+  BODY="The Wohnly API was down but has been auto-recovered.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nOriginal status: $HTTP_CODE\nAfter recovery: $HTTP_RECHECK\n\nRecovery steps taken:\n- Restart deployed API via PM2"
   rm -f "$STATE_FILE"
 else
   BODY="The Wohnly API is DOWN and auto-recovery FAILED.\n\nTimestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")\nHealth check: $HEALTH_URL -> $HTTP_CODE\nAfter recovery attempt: $HTTP_RECHECK\n\nManual intervention required:\n  ssh vps 'pm2 logs wohnly-api --lines 50 --nostream'"

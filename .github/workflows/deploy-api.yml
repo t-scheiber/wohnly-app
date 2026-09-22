@@ -10,6 +10,10 @@ on:
       - 'deploy/**'
       - '.github/workflows/deploy-api.yml'
 
+concurrency:
+  group: deploy-api
+  cancel-in-progress: false
+
 jobs:
   deploy:
     if: vars.DEPLOY_ENABLED != 'false'
@@ -22,22 +26,26 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -euo pipefail
             export GIT_SSH_COMMAND="ssh -i /root/.ssh/wohnly_deploy -o StrictHostKeyChecking=no"
             cd /var/www/wohnly
             git stash 2>/dev/null || true
             git fetch origin main
-            git reset --hard origin/main
+            git reset --hard ${{ github.sha }}
+            node --env-file=apps/api/.env deploy/backup-db.mjs
             npm ci
             cd apps/api
             npx prisma generate
             node -e 'require("../../node_modules/.prisma/client/query_compiler_fast_bg.wasm-base64.js")'
-            npx prisma db push --accept-data-loss
+            npx prisma db push
             cd ../..
+            npm run build:api
             pm2 delete wohnly-api 2>/dev/null || true
             pm2 start deploy/pm2.api.config.cjs --only wohnly-api --update-env
             pm2 save
+            curl --fail --retry 10 --retry-delay 3 --retry-connrefused http://localhost:3001/api/health
 
             # Install health check cron (every 2 minutes)
             chmod +x deploy/healthcheck.sh
             CRON_CMD="*/2 * * * * /var/www/wohnly/deploy/healthcheck.sh >> /var/log/wohnly-health.log 2>&1"
-            ( crontab -l 2>/dev/null | grep -v "healthcheck.sh" ; echo "$CRON_CMD" ) | crontab -
+            ( crontab -l 2>/dev/null | grep -v "healthcheck.sh" || true; echo "$CRON_CMD" ) | crontab -

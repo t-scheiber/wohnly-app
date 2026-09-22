@@ -1,58 +1,65 @@
 import { Client } from "pg";
 import { EventEmitter } from "node:events";
-import type { EventPayload } from "./types.js";
-import { EVENT_CHANNEL } from "./types.js";
+import { EVENT_CHANNEL, type EventPayload } from "./types.js";
 
-class EventListener extends EventEmitter {
+export class EventListener extends EventEmitter {
   private client: Client | null = null;
   private reconnectAttempts = 0;
   private connectPromise: Promise<void> | null = null;
+  private timer: ReturnType<typeof setTimeout> | null = null;
+  private stopped = false;
 
-  async start(): Promise<void> {
+  constructor(private createClient = () => new Client({ connectionString: process.env.DATABASE_URL })) { super(); }
+
+  start(): Promise<void> {
     if (this.connectPromise) return this.connectPromise;
-    this.connectPromise = this._connect();
+    this.stopped = false;
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    this.connectPromise = this.connect().catch(error => {
+      this.scheduleReconnect();
+      throw error;
+    });
     return this.connectPromise;
   }
 
-  private async _connect(): Promise<void> {
-    this.client = new Client({ connectionString: process.env.DATABASE_URL });
-    this.client.on("notification", (msg) => {
+  private async connect() {
+    const client = this.createClient();
+    this.client = client;
+    client.on("notification", msg => {
       if (msg.channel !== EVENT_CHANNEL || !msg.payload) return;
-      try {
-        const payload = JSON.parse(msg.payload) as EventPayload;
-        this.emit("event", payload);
-      } catch (err) {
-        console.error("[events] failed to parse notification", err);
-      }
+      try { this.emit("event", JSON.parse(msg.payload) as EventPayload); }
+      catch { console.error("[events] invalid notification"); }
     });
-    this.client.on("error", (err) => {
-      console.error("[events] pg client error; will reconnect", err);
-      this._scheduleReconnect();
-    });
-    this.client.on("end", () => {
-      console.warn("[events] pg client ended; reconnecting");
-      this._scheduleReconnect();
-    });
-    await this.client.connect();
-    await this.client.query(`LISTEN ${EVENT_CHANNEL}`);
+    client.on("error", () => { if (this.client === client) this.scheduleReconnect(); });
+    client.on("end", () => { if (this.client === client) this.scheduleReconnect(); });
+    await client.connect();
+    await client.query(`LISTEN ${EVENT_CHANNEL}`);
     this.reconnectAttempts = 0;
-    console.log("[events] listener connected");
   }
 
-  private _scheduleReconnect() {
-    if (this.client) {
-      this.client.removeAllListeners();
-      this.client = null;
-    }
-    const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 30_000);
-    this.reconnectAttempts += 1;
-    setTimeout(() => {
+  private scheduleReconnect() {
+    if (this.stopped || this.timer) return;
+    const client = this.client;
+    this.client = null;
+    // Keep the error listener installed until the socket is fully closed.
+    if (client) void client.end().catch(() => {});
+    const delay = Math.min(1000 * 2 ** this.reconnectAttempts++, 30_000);
+    this.timer = setTimeout(() => {
+      this.timer = null;
       this.connectPromise = null;
-      this.start().catch((err) =>
-        console.error("[events] reconnect failed", err),
-      );
+      void this.start().catch(() => console.error("[events] reconnect failed; retry scheduled"));
     }, delay);
+    this.timer.unref();
+  }
+
+  async stop() {
+    this.stopped = true;
+    if (this.timer) clearTimeout(this.timer);
+    this.timer = null;
+    const client = this.client;
+    this.client = null;
+    this.connectPromise = null;
+    if (client) await client.end().catch(() => {});
   }
 }
-
 export const eventListener = new EventListener();

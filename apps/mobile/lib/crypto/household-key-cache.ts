@@ -204,3 +204,6 @@ export function clearHouseholdKeys(): void {
   }
   touchedHouseholds.clear();
 }
+
+/** Clears decrypted in-memory key material; persisted device keys survive sign-out. */
+export function clearHouseholdKeyMemory(): void { cache.clear(); }

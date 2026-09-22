@@ -77,6 +77,8 @@ class SseRegistry {
         members.forEach((m) => recipients.add(m.userId));
         break;
     }
+    if (payload.type === "household.member.removed") recipients.add(payload.removedUserId);
+    if (payload.type === "household.device.removed") recipients.add(payload.deviceUserId);
     return recipients;
   }
 }
