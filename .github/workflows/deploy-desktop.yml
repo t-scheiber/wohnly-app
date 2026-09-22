@@ -527,6 +527,12 @@ jobs:
           # macOS DMG
           DMG=$(find artifacts/macos -name '*.dmg' 2>/dev/null | head -1)
           if [ -n "$DMG" ]; then
+            case "$DMG" in
+              *_aarch64.dmg) MAC_UPDATER_TARGET=darwin-aarch64 ;;
+              *_x64.dmg) MAC_UPDATER_TARGET=darwin-x86_64 ;;
+              *) echo "Unknown macOS package architecture: $DMG"; exit 1 ;;
+            esac
+            echo "MAC_UPDATER_TARGET=$MAC_UPDATER_TARGET" >> "$GITHUB_ENV"
             cp "$DMG" "artifacts/release/Wohnly-macOS.dmg"
             cp "$DMG" "artifacts/release/Wohnly-${VERSION}-macOS.dmg"
           fi
@@ -557,8 +563,10 @@ jobs:
           # macOS-only updater (Windows updates via Microsoft Store)
           PLATFORMS="{}"
           if [ -n "$MAC_SIG" ]; then
-            MAC_ENTRY="\"signature\":$(echo "$MAC_SIG" | jq -Rs .),\"url\":\"${BASE}/Wohnly-macOS.app.tar.gz\""
-            PLATFORMS="{\"darwin-x86_64\":{${MAC_ENTRY}},\"darwin-aarch64\":{${MAC_ENTRY}}}"
+            test -n "$MAC_UPDATER_TARGET"
+            PLATFORMS=$(jq -n --arg target "$MAC_UPDATER_TARGET" \
+              --arg signature "$MAC_SIG" --arg url "${BASE}/Wohnly-macOS.app.tar.gz" \
+              '{($target): {signature: $signature, url: $url}}')
           fi
 
           jq -n \
