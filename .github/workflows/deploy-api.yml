@@ -48,4 +48,4 @@ jobs:
             # Install health check cron (every 2 minutes)
             chmod +x deploy/healthcheck.sh
             CRON_CMD="*/2 * * * * /var/www/wohnly/deploy/healthcheck.sh >> /var/log/wohnly-health.log 2>&1"
-            ( crontab -l 2>/dev/null | grep -v "healthcheck.sh" ; echo "$CRON_CMD" ) | crontab -
+            ( crontab -l 2>/dev/null | grep -v "healthcheck.sh" || true; echo "$CRON_CMD" ) | crontab -
