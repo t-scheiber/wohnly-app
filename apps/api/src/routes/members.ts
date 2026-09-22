@@ -1,3 +1,4 @@
+import { cleanMemberDeparture } from "../lib/member-departure.js";
 import { Hono } from "hono";
 import { sendLeaveConfirmationEmail } from "../lib/email.js";
 import { publishEvent } from "../lib/events/publisher.js";
@@ -138,7 +139,7 @@ app.get("/list", async (c) => {
       },
     },
   });
-  if (!member) return c.json({ error: "No household" }, 400);
+  if (!member) return c.json({ members: [], currentUserId: userId, household: null });
 
   const members = await prisma.householdMember.findMany({
     where: { householdId: member.householdId },
@@ -398,6 +399,7 @@ async function executeLeaveTransaction(
       where: { userId: confirmation.member.userId },
     });
 
+    await cleanMemberDeparture(tx, householdId, confirmation.member.userId);
     await tx.householdMember.delete({
       where: { id: confirmation.memberId },
     });

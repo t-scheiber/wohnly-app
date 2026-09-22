@@ -6,7 +6,7 @@ import { isTauri, getTauriSessionToken } from "../auth/tauri";
 const API_BASE = Constants.expoConfig?.extra?.apiUrl ?? "https://api.wohnly.app";
 
 /** Regular web (not Tauri, not native) uses browser cookies */
-const isRegularWeb = Platform.OS === "web" && !isTauri();
+const isRegularWeb = () => Platform.OS === "web" && !isTauri();
 
 class ApiError extends Error {
   constructor(
@@ -35,7 +35,7 @@ export async function api<T>(
   };
   let credentials: RequestCredentials;
 
-  if (isRegularWeb) {
+  if (isRegularWeb()) {
     // Regular web: let the browser handle cookies natively
     credentials = "include";
   } else if (isTauri()) {
@@ -45,7 +45,7 @@ export async function api<T>(
     credentials = "omit";
   } else {
     // Native: expo client plugin manages cookies manually
-    const cookies = authClient.getCookie();
+    const cookies = await authClient.getCookie();
     if (cookies) headers["Cookie"] = cookies;
     credentials = "omit";
   }

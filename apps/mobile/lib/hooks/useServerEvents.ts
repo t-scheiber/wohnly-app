@@ -8,9 +8,9 @@
  */
 import { useEffect } from "react";
 import Constants from "expo-constants";
-import { Platform } from "react-native";
-import { useQueryClient } from "@tanstack/react-query";
-import { isTauri, getTauriSessionToken } from "@/lib/auth/tauri";
+import { AppState, Platform } from "react-native";
+import { useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { isTauri } from "@/lib/auth/tauri";
 
 const API_BASE = Constants.expoConfig?.extra?.apiUrl ?? "https://api.wohnly.app";
 
@@ -38,22 +38,25 @@ export function useServerEvents(enabled: boolean): void {
 
   useEffect(() => {
     if (!enabled) return;
+    return subscribeServerEvents(qc);
+  }, [enabled, qc]);
+}
+
+function subscribeServerEvents(qc: QueryClient): () => void {
     const Ctor = getEventSourceCtor();
-    if (!Ctor) {
-      // React Native native path — polling fallback is handled by query refetchInterval.
-      return;
-    }
-
-    // Regular web uses cookie-auth; Tauri appends the session token as a query param
-    // because browsers forbid Cookie/x-session-token on EventSource.
-    let url = `${API_BASE}/api/stream`;
-    const withCreds = Platform.OS === "web" && !isTauri();
-    if (isTauri()) {
-      const token = getTauriSessionToken();
-      if (token) url += `?token=${encodeURIComponent(token)}`;
-    }
-
-    const es = new Ctor(url, withCreds ? { withCredentials: true } : undefined);
+    let dispose: () => void;
+    if (!Ctor || isTauri() || Platform.OS !== "web") {
+      const refresh = () => {
+        if (AppState.currentState !== "active") return;
+        for (const key of ["access-requests", "key-state", "household", "members", "devices"]) {
+          void qc.invalidateQueries({ queryKey: [key] });
+        }
+      };
+      const timer = setInterval(refresh, 30_000);
+      const subscription = AppState.addEventListener("change", state => { if (state === "active") refresh(); });
+      dispose = () => { clearInterval(timer); subscription.remove(); };
+    } else {
+    const es = new Ctor(`${API_BASE}/api/stream`, { withCredentials: true });
 
     const handlers: { type: string; listener: (e: MessageEvent) => void }[] = [];
     for (const type of EVENT_TYPES) {
@@ -73,6 +76,7 @@ export function useServerEvents(enabled: boolean): void {
             break;
           case "household.member.removed":
           case "household.device.removed":
+            qc.invalidateQueries({ queryKey: ["household"] });
             qc.invalidateQueries({ queryKey: ["members"] });
             qc.invalidateQueries({ queryKey: ["devices"] });
             qc.invalidateQueries({ queryKey: ["key-state"] });
@@ -87,11 +91,12 @@ export function useServerEvents(enabled: boolean): void {
       // Browser auto-reconnects; log at debug level only.
     };
 
-    return () => {
+    dispose = () => {
       for (const { type, listener } of handlers) {
         es.removeEventListener(type, listener as EventListener);
       }
       es.close();
     };
-  }, [enabled, qc]);
+    }
+    return () => dispose();
 }

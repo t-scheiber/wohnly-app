@@ -1,3 +1,4 @@
+import { readBody, schemas } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -29,7 +30,7 @@ app.get("/", async (c) => {
 // POST /api/shopping
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const { name, quantity, isPersonal, encrypted, nonce, encryptionEpoch } = await c.req.json();
+  const { name, quantity, isPersonal, encrypted, nonce, encryptionEpoch } = await readBody(c, schemas.shopping);
 
   if (!name?.trim()) return c.json({ error: "Item name is required" }, 400);
 
@@ -46,9 +47,7 @@ app.post("/", async (c) => {
       encrypted: !!encrypted,
       nonce: nonce || null,
       encryptionEpoch:
-        encrypted && Number.isInteger(encryptionEpoch) && encryptionEpoch >= 1
-          ? encryptionEpoch
-          : 1,
+        encryptionEpoch ?? 1,
     },
   });
 
@@ -59,7 +58,7 @@ app.post("/", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const itemId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.shoppingPatch);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);

@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+import { readBody, schemas, requireHouseholdMembers, pagination, badRequest } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -33,9 +35,9 @@ app.get("/", async (c) => {
 // POST /api/meals
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.meal);
 
-  const { title, date, mealType, recipe, ingredients, encrypted, nonce } = body;
+  const { title, date, mealType, recipe, ingredients, encrypted, nonce, encryptionEpoch } = body;
 
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!date) return c.json({ error: "Date is required" }, 400);
@@ -51,9 +53,10 @@ app.post("/", async (c) => {
       date: new Date(date),
       mealType,
       recipe: encrypted ? (recipe || null) : (recipe?.trim() || null),
-      ingredients: ingredients || null,
+      ingredients: ingredients ?? Prisma.JsonNull,
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch: encryptionEpoch ?? 1,
     },
   });
 
@@ -64,7 +67,7 @@ app.post("/", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const mealId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.mealPatch);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
@@ -74,7 +77,7 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Meal not found" }, 404);
 
-  const { title, date, mealType, recipe, ingredients, encrypted, nonce } = body;
+  const { title, date, mealType, recipe, ingredients, encrypted, nonce, encryptionEpoch } = body;
 
   const meal = await prisma.mealPlan.update({
     where: { id: mealId },
@@ -83,9 +86,10 @@ app.patch("/:id", async (c) => {
       ...(date !== undefined && { date: new Date(date) }),
       ...(mealType !== undefined && { mealType }),
       ...(recipe !== undefined && { recipe: encrypted ? (recipe || null) : (recipe?.trim() || null) }),
-      ...(ingredients !== undefined && { ingredients }),
+      ...(ingredients !== undefined && { ingredients: ingredients ?? Prisma.JsonNull }),
       ...(encrypted !== undefined && { encrypted }),
       ...(nonce !== undefined && { nonce: nonce || null }),
+      ...(encryptionEpoch !== undefined && { encryptionEpoch }),
     },
   });
 

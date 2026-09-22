@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { startOfMonth, endOfMonth, format, isSameDay } from "date-fns";
+import { startOfMonth, endOfMonth, format, isSameDay, eachDayOfInterval, max, min, startOfDay } from "date-fns";
 import { useEvents, useChores, useSubscriptions } from "@/lib/api/queries";
 import { getChoreOccurrences, getSubscriptionBillingDates, formatCurrency } from "@wohnly/shared";
 import type { DayMarkers } from "@/components/calendar/CalendarMonthView";
@@ -44,7 +44,11 @@ export function useCalendarData(month: Date, filters: Filters, deviceEvents?: De
     // Events
     if (filters.events && eventsData?.events) {
       for (const event of eventsData.events) {
-        const dateStr = format(new Date(event.startDate), "yyyy-MM-dd");
+        const start = max([startOfDay(new Date(event.startDate)), monthStart]);
+        const end = min([startOfDay(new Date(event.endDate ?? event.startDate)), monthEnd]);
+        if (end < start) continue;
+        for (const day of eachDayOfInterval({ start, end })) {
+        const dateStr = format(day, "yyyy-MM-dd");
         ensureDay(dateStr);
         marks[dateStr].events = true;
         items.push({
@@ -62,6 +66,8 @@ export function useCalendarData(month: Date, filters: Filters, deviceEvents?: De
       }
     }
 
+    }
+
     // Chores
     if (filters.chores && choresData?.chores) {
       for (const chore of choresData.chores) {
@@ -69,6 +75,7 @@ export function useCalendarData(month: Date, filters: Filters, deviceEvents?: De
           {
             frequency: chore.frequency,
             dayOfWeek: chore.dayOfWeek,
+            dayOfMonth: chore.dayOfMonth,
             lastCompleted: chore.lastDone,
             createdAt: chore.createdAt,
           },

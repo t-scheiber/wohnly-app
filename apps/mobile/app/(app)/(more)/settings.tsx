@@ -1,3 +1,4 @@
+import { setActiveHouseholdId } from "@/lib/crypto/active-household";
 import { Colors } from "@/constants/Colors";
 import {
     LANGUAGES as ALL_LANGUAGES,
@@ -12,8 +13,8 @@ import {
 } from "@/lib/api/queries";
 import { authClient } from "@/lib/auth/client";
 import { clearTauriCookie, isTauri } from "@/lib/auth/tauri";
-import { clearHouseholdKeys } from "@/lib/crypto/household-key-cache";
-import { clearPersonalKeys } from "@/lib/crypto/personal-key-cache";
+import { clearHouseholdKeyMemory } from "@/lib/crypto/household-key-cache";
+import { clearPersonalKeyMemory } from "@/lib/crypto/personal-key-cache";
 import { useHousehold } from "@/lib/hooks/useHousehold";
 import { useNotificationSettings } from "@/lib/hooks/useNotificationSettings";
 import { openAdInspector } from "@/lib/hooks/useConsent";
@@ -563,8 +564,10 @@ export default function SettingsScreen() {
     } catch {
       // A failed remote invalidation must not block local sign-out.
     } finally {
-      clearHouseholdKeys();
-      clearPersonalKeys();
+      setActiveHouseholdId(null);
+      queryClient.clear();
+      clearHouseholdKeyMemory();
+      clearPersonalKeyMemory();
       if (isTauri()) clearTauriCookie();
       setSignOutModalOpen(false);
       setSigningOut(false);

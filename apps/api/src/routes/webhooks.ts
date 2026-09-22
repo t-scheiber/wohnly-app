@@ -95,20 +95,13 @@ app.post("/stripe", async (c) => {
   const sig = c.req.header("stripe-signature");
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
+  if (!webhookSecret || !stripe) return c.json({ error: "Stripe webhook not configured" }, 503);
+  if (!sig) return c.json({ error: "Missing signature" }, 400);
   let event: Stripe.Event;
-
-  if (webhookSecret && sig) {
-    const body = await c.req.text();
-    try {
-      if (!stripe) return c.json({ error: "Stripe not configured" }, 503);
-      event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-    } catch (err) {
-      console.error("Stripe webhook signature verification failed:", err);
-      return c.json({ error: "Invalid signature" }, 400);
-    }
-  } else {
-    // No webhook secret configured — parse directly (development)
-    event = await c.req.json();
+  try {
+    event = stripe.webhooks.constructEvent(await c.req.text(), sig, webhookSecret);
+  } catch {
+    return c.json({ error: "Invalid signature" }, 400);
   }
 
   switch (event.type) {

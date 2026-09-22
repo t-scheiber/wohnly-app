@@ -1,3 +1,5 @@
+import { visibleEventsWhere } from "../lib/event-visibility.js";
+import { readBody, schemas, requireHouseholdMembers, pagination, badRequest } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -15,12 +17,12 @@ app.get("/", async (c) => {
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
 
-  const where: Record<string, unknown> = { householdId: member.householdId };
-  if (startDate || endDate) {
-    where.startDate = {};
-    if (startDate) (where.startDate as Record<string, unknown>).gte = new Date(startDate);
-    if (endDate) (where.startDate as Record<string, unknown>).lte = new Date(endDate);
-  }
+  const where: Record<string, unknown> = { householdId: member.householdId, ...visibleEventsWhere(userId) };
+  if ((startDate && !Number.isFinite(Date.parse(startDate))) || (endDate && !Number.isFinite(Date.parse(endDate)))) badRequest("Invalid date range");
+  where.AND = [
+    ...(endDate ? [{ startDate: { lte: new Date(endDate) } }] : []),
+    ...(startDate ? [{ OR: [{ endDate: { gte: new Date(startDate) } }, { endDate: null, startDate: { gte: new Date(startDate) } }] }] : []),
+  ];
 
   const events = await prisma.event.findMany({
     where,
@@ -37,7 +39,7 @@ app.get("/", async (c) => {
       return event.creatorId === userId;
     }
     if (event.visibility === "custom") {
-      return event.attendees.some((a) => a.member.userId === userId);
+      return event.creatorId === userId || event.attendees.some((a) => a.member.userId === userId);
     }
     // "household" — visible to all
     return true;
@@ -55,7 +57,7 @@ app.get("/:id", async (c) => {
   if (!member) return c.json({ error: "No household" }, 400);
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, householdId: member.householdId },
+    where: { id: eventId, householdId: member.householdId, ...visibleEventsWhere(userId) },
     include: {
       attendees: { include: { member: true } },
       reminders: true,
@@ -68,7 +70,7 @@ app.get("/:id", async (c) => {
   if (event.visibility === "personal" && event.creatorId !== userId) {
     return c.json({ error: "Event not found" }, 404);
   }
-  if (event.visibility === "custom" && !event.attendees.some((a) => a.member.userId === userId)) {
+  if (event.visibility === "custom" && event.creatorId !== userId && !event.attendees.some((a) => a.member.userId === userId)) {
     return c.json({ error: "Event not found" }, 404);
   }
 
@@ -78,7 +80,7 @@ app.get("/:id", async (c) => {
 // POST /api/events
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.event);
 
   const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce, encryptionEpoch, encryptionScope } = body;
   if (!title?.trim() || !startDate) {
@@ -88,6 +90,8 @@ app.post("/", async (c) => {
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
 
+  await requireHouseholdMembers(member.householdId, attendeeIds);
+  if (endDate && new Date(endDate) < new Date(startDate)) badRequest("End date must not precede start date");
   const eventVisibility = visibility ?? "household";
 
   // Build attendees based on visibility
@@ -115,9 +119,7 @@ app.post("/", async (c) => {
       encrypted: !!encrypted,
       nonce: nonce || null,
       encryptionEpoch:
-        encrypted && Number.isInteger(encryptionEpoch) && encryptionEpoch >= 1
-          ? encryptionEpoch
-          : 1,
+        encryptionEpoch ?? 1,
       encryptionScope:
         encrypted &&
         eventVisibility === "personal" &&
@@ -150,13 +152,13 @@ app.post("/", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const eventId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.eventPatch);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
 
   const existing = await prisma.event.findFirst({
-    where: { id: eventId, householdId: member.householdId },
+    where: { id: eventId, householdId: member.householdId, ...visibleEventsWhere(userId) },
   });
   if (!existing) return c.json({ error: "Event not found" }, 404);
   if (existing.visibility === "personal" && existing.creatorId !== userId) {
@@ -164,17 +166,23 @@ app.patch("/:id", async (c) => {
   }
 
   const { title, description, location, startDate, endDate, allDay, color, visibility, attendeeIds, reminderMinutes, isRecurring, recurrenceRule, encrypted, nonce, encryptionEpoch, encryptionScope } = body;
+  await requireHouseholdMembers(member.householdId, attendeeIds);
+  const nextEnd = endDate === undefined ? existing.endDate : endDate;
+  if (nextEnd && new Date(nextEnd) < new Date(startDate ?? existing.startDate)) badRequest("End date must not precede start date");
   const nextVisibility = visibility ?? existing.visibility;
   if (nextVisibility === "personal" && existing.creatorId !== userId) {
     return c.json({ error: "Only the creator can make an event personal" }, 403);
   }
 
   const event = await prisma.$transaction(async (tx) => {
-    if (attendeeIds !== undefined) {
+    if (attendeeIds !== undefined || visibility !== undefined) {
+      const creator = await tx.householdMember.findFirst({ where: { householdId: member.householdId, userId: existing.creatorId } });
+      const previous = await tx.eventAttendee.findMany({ where: { eventId }, select: { memberId: true } });
+      const nextAttendees = nextVisibility === "personal" ? [member.id] : [...new Set([...(creator ? [creator.id] : []), ...(attendeeIds ?? previous.map(a => a.memberId))])];
       await tx.eventAttendee.deleteMany({ where: { eventId } });
-      if (attendeeIds.length > 0) {
+      if (nextAttendees.length > 0) {
         await tx.eventAttendee.createMany({
-          data: attendeeIds.map((id: string) => ({
+          data: nextAttendees.map((id: string) => ({
             eventId,
             memberId: id,
             status: id === member.id ? "accepted" : "pending",
@@ -207,7 +215,7 @@ app.patch("/:id", async (c) => {
           encryptionScope:
             encrypted !== false &&
             nextVisibility === "personal" &&
-            encryptionScope === "personal"
+            (encryptionScope ?? existing.encryptionScope) === "personal"
               ? "personal"
               : "household",
         }),
@@ -238,7 +246,7 @@ app.delete("/:id", async (c) => {
   if (!member) return c.json({ error: "No household" }, 400);
 
   const existing = await prisma.event.findFirst({
-    where: { id: eventId, householdId: member.householdId },
+    where: { id: eventId, householdId: member.householdId, ...visibleEventsWhere(userId) },
   });
   if (!existing) return c.json({ error: "Event not found" }, 404);
   if (existing.visibility === "personal" && existing.creatorId !== userId) {
@@ -281,7 +289,7 @@ app.post("/:id/push-google", async (c) => {
   if (!member) return c.json({ error: "No household" }, 400);
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, householdId: member.householdId },
+    where: { id: eventId, householdId: member.householdId, ...visibleEventsWhere(userId) },
   });
   if (!event) return c.json({ error: "Event not found" }, 404);
 

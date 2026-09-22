@@ -1,3 +1,4 @@
+import { readBody, schemas, requireHouseholdMembers } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -37,14 +38,16 @@ app.get("/", async (c) => {
 // POST /api/chores
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.chore);
 
-  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, effortWeight, assigneeIds, encrypted, nonce } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, effortWeight, assigneeIds, encrypted, nonce, encryptionEpoch } = body;
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
   if (!frequency) return c.json({ error: "Frequency is required" }, 400);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
+
+  await requireHouseholdMembers(member.householdId, assigneeIds);
 
   const chore = await prisma.chore.create({
     data: {
@@ -53,6 +56,7 @@ app.post("/", async (c) => {
       description: encrypted ? (description || null) : (description?.trim() || null),
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch: encryptionEpoch ?? 1,
       frequency,
       dayOfWeek: dayOfWeek ?? null,
       dayOfMonth: dayOfMonth ?? null,
@@ -72,7 +76,7 @@ app.post("/", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const choreId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.chorePatch);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
@@ -83,7 +87,9 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Chore not found" }, 404);
 
-  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, effortWeight, completed, assigneeIds, encrypted, nonce } = body;
+  const { title, description, frequency, dayOfWeek, dayOfMonth, rotate, effortWeight, completed, assigneeIds, encrypted, nonce, encryptionEpoch } = body;
+
+  await requireHouseholdMembers(member.householdId, assigneeIds);
 
   const chore = await prisma.$transaction(async (tx) => {
     if (assigneeIds !== undefined) {
@@ -124,6 +130,7 @@ app.patch("/:id", async (c) => {
         ...(description !== undefined && { description: encrypted ? (description || null) : (description?.trim() || null) }),
         ...(encrypted !== undefined && { encrypted }),
         ...(nonce !== undefined && { nonce: nonce || null }),
+      ...(encryptionEpoch !== undefined && { encryptionEpoch }),
         ...(frequency !== undefined && { frequency }),
         ...(dayOfWeek !== undefined && { dayOfWeek }),
         ...(dayOfMonth !== undefined && { dayOfMonth }),

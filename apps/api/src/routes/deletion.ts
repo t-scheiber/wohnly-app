@@ -68,7 +68,7 @@ app.post("/vote", async (c) => {
   const userId = c.get("userId") as string;
   const { deletionRequestId, approve } = await c.req.json();
 
-  if (!deletionRequestId || approve === undefined) {
+  if (typeof deletionRequestId !== "string" || typeof approve !== "boolean") {
     return c.json({ error: "deletionRequestId and approve are required" }, 400);
   }
 
@@ -80,7 +80,7 @@ app.post("/vote", async (c) => {
     include: { approvals: true },
   });
 
-  if (!request) return c.json({ error: "Request not found" }, 404);
+  if (!request || request.householdId !== member.householdId) return c.json({ error: "Request not found" }, 404);
   if (request.completedAt || request.cancelledAt) {
     return c.json({ error: "Request is no longer active" }, 400);
   }
@@ -116,7 +116,7 @@ app.post("/vote", async (c) => {
     where: { householdId: request.householdId },
   });
   const approvalCount = await prisma.householdDeletionApproval.count({
-    where: { requestId: deletionRequestId, approved: true },
+    where: { requestId: deletionRequestId, approved: true, member: { householdId: request.householdId } },
   });
 
   if (approvalCount >= totalMembers) {

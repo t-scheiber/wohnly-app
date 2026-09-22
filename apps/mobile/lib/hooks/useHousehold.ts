@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { authClient } from "../auth/client";
 import { api } from "../api/client";
 
 interface HouseholdInfo {
@@ -13,10 +14,11 @@ interface HouseholdInfo {
  * Returns the household info (including inviteCode) or null.
  */
 export function useHousehold() {
+  const { data: session } = authClient.useSession();
   return useQuery({
+    enabled: !!session?.user?.id,
     queryKey: ["household"],
     queryFn: async () => {
-      try {
         const data = await api<{
           members: { householdId: string }[];
           currentUserId: string;
@@ -32,9 +34,6 @@ export function useHousehold() {
           };
         }
         return { hasHousehold: false, householdId: null, inviteCode: null, name: null, trackExpenses: false };
-      } catch {
-        return { hasHousehold: false, householdId: null, inviteCode: null, name: null, trackExpenses: false };
-      }
     },
     staleTime: 5 * 60 * 1000,
   });

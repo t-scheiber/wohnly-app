@@ -1,6 +1,6 @@
 {
   "name": "wohnly",
-  "version": "1.3.5",
+  "version": "1.4.0",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -30,7 +30,8 @@
     "lint": "npm run lint --workspaces --if-present",
     "db:migrate": "npm run db:migrate --workspace=apps/api",
     "db:generate": "npm run db:generate --workspace=apps/api",
-    "db:push": "npm run db:push --workspace=apps/api"
+    "db:push": "npm run db:push --workspace=apps/api",
+    "test": "tsx --test apps/api/scripts/*.test.ts"
   },
   "optionalDependencies": {
     "sharp": "^0.35.0"
@@ -42,10 +43,16 @@
       "@hono/node-server": "2.1.1"
     },
     "postcss": "8.5.23",
-    "uuid": "14.0.1",
-    "shell-quote": "1.9.0",
+    "uuid": "11.1.1",
+    "shell-quote": "1.10.0",
     "ws": "8.21.3",
-    "@babel/core": "7.29.7"
+    "@babel/core": "7.29.7",
+    "image-size": "2.0.4",
+    "mysql2": "3.24.4",
+    "@xmldom/xmldom": "0.8.15",
+    "react-native-screens": "4.26.2",
+    "decode-uri-component": "0.5.0",
+    "deepmerge-ts": "8.0.2"
   },
   "devDependencies": {
     "@emnapi/core": "1.10.0",

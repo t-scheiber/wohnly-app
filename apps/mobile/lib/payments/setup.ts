@@ -272,10 +272,11 @@ export async function initRevenueCat(userId: string) {
     return;
   }
 
-  Purchases.configure({
-    apiKey,
-    appUserID: userId,
-  });
+  if (await Purchases.isConfigured()) {
+    if (await Purchases.getAppUserID() !== userId) await Purchases.logIn(userId);
+  } else {
+    Purchases.configure({ apiKey, appUserID: userId });
+  }
 }
 
 /**

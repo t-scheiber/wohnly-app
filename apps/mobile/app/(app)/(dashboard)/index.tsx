@@ -32,7 +32,7 @@ export default function DashboardScreen() {
   } = useResponsiveLayout();
   const singleColumnActions = !isTabletOrWider;
   const { data: session } = authClient.useSession();
-  const { data: household, isLoading: householdLoading } = useHousehold();
+  const { data: household, isLoading: householdLoading, isError: householdError, refetch: refetchHousehold } = useHousehold();
   const { data: balances, refetch } = useMemberBalances();
   const { data: membersData, refetch: refetchMembers } = useHouseholdMembers();
   
@@ -65,6 +65,15 @@ export default function DashboardScreen() {
   // Loading state
   if (householdLoading) {
     return <Spinner fullScreen />;
+  }
+
+  if (householdError && !household) {
+    return <ScreenView style={{ backgroundColor: colors.background }} edges={["top"]}>
+      <View style={{ padding: 24, gap: 16 }}>
+        <Text style={{ color: colors.text }}>We could not load your household. Check your connection and try again.</Text>
+        <TouchableOpacity accessibilityRole="button" onPress={() => refetchHousehold()}><Text style={{ color: colors.primary }}>Try again</Text></TouchableOpacity>
+      </View>
+    </ScreenView>;
   }
 
   // No household — show onboarding

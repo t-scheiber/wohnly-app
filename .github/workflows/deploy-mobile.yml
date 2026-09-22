@@ -24,10 +24,14 @@ on:
         type: boolean
         default: false
       skip_build:
-        description: "Skip build and submit the latest existing EAS build"
+        description: "Skip build and submit the specified existing EAS build"
         required: false
         type: boolean
         default: false
+      existing_build_id:
+        description: "Exact EAS build ID (required when skipping build)"
+        required: false
+        type: string
       android_submit_profile:
         description: "Android destination"
         required: true
@@ -36,6 +40,10 @@ on:
         options:
           - closed
           - production
+
+concurrency:
+  group: mobile-release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release-check:
@@ -93,9 +101,12 @@ jobs:
         run: npm ci
 
       - name: Build iOS
+        id: build
         if: github.event_name == 'push' || !inputs.skip_build
         working-directory: apps/mobile
-        run: eas build --profile production --platform ios --non-interactive
+        run: |
+          eas build --profile production --platform ios --non-interactive --json > "$RUNNER_TEMP/build.json"
+          echo "build_id=$(jq -r '.[0].id' "$RUNNER_TEMP/build.json")" >> "$GITHUB_OUTPUT"
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
@@ -106,7 +117,7 @@ jobs:
       - name: Submit iOS to App Store
         if: github.event_name == 'push' || inputs.submit
         working-directory: apps/mobile
-        run: eas submit --profile production --platform ios --non-interactive --latest
+        run: eas submit --profile production --platform ios --non-interactive --id "${{ steps.build.outputs.build_id || inputs.existing_build_id }}" --wait
 
   android:
     name: Build & submit Android
@@ -135,9 +146,12 @@ jobs:
         run: npm ci
 
       - name: Build Android
+        id: build
         if: github.event_name == 'push' || !inputs.skip_build
         working-directory: apps/mobile
-        run: eas build --profile production --platform android --non-interactive
+        run: |
+          eas build --profile production --platform android --non-interactive --json > "$RUNNER_TEMP/build.json"
+          echo "build_id=$(jq -r '.[0].id' "$RUNNER_TEMP/build.json")" >> "$GITHUB_OUTPUT"
         env:
           EXPO_NO_CAPABILITY_SYNC: "1"
 
@@ -148,4 +162,4 @@ jobs:
       - name: Submit Android to Play Store
         if: github.event_name == 'push' || inputs.submit
         working-directory: apps/mobile
-        run: eas submit --profile "${{ inputs.android_submit_profile || 'closed' }}" --platform android --non-interactive --latest
+        run: eas submit --profile "${{ inputs.android_submit_profile || 'closed' }}" --platform android --non-interactive --id "${{ steps.build.outputs.build_id || inputs.existing_build_id }}" --wait

@@ -1,3 +1,4 @@
+import { readBody, schemas, requireHouseholdMembers, pagination } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -9,8 +10,7 @@ app.use("*", requireAuth);
 // GET /api/todos - List household todos
 app.get("/", async (c) => {
   const userId = c.get("userId") as string;
-  const page = Number(c.req.query("page") ?? 1);
-  const limit = Math.min(Number(c.req.query("limit") ?? 20), 50);
+  const { page, limit } = pagination(c.req.query());
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
@@ -37,13 +37,15 @@ app.get("/", async (c) => {
 // POST /api/todos - Create todo
 app.post("/", async (c) => {
   const userId = c.get("userId") as string;
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.todo);
 
-  const { title, description, dueDate, assigneeIds, encrypted, nonce } = body;
+  const { title, description, dueDate, assigneeIds, encrypted, nonce, encryptionEpoch } = body;
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
+
+  await requireHouseholdMembers(member.householdId, assigneeIds);
 
   const todo = await prisma.todo.create({
     data: {
@@ -54,6 +56,7 @@ app.post("/", async (c) => {
       dueDate: dueDate ? new Date(dueDate) : null,
       encrypted: !!encrypted,
       nonce: nonce || null,
+      encryptionEpoch: encryptionEpoch ?? 1,
       assignments: assigneeIds?.length
         ? { create: assigneeIds.map((id: string) => ({ memberId: id })) }
         : undefined,
@@ -68,7 +71,7 @@ app.post("/", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const todoId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.todoPatch);
 
   const member = await prisma.householdMember.findFirst({ where: { userId } });
   if (!member) return c.json({ error: "No household" }, 400);
@@ -78,7 +81,9 @@ app.patch("/:id", async (c) => {
   });
   if (!existing) return c.json({ error: "Todo not found" }, 404);
 
-  const { title, description, completed, dueDate, assigneeIds, encrypted, nonce } = body;
+  const { title, description, completed, dueDate, assigneeIds, encrypted, nonce, encryptionEpoch } = body;
+
+  await requireHouseholdMembers(member.householdId, assigneeIds);
 
   const todo = await prisma.$transaction(async (tx) => {
     if (assigneeIds !== undefined) {
@@ -99,6 +104,7 @@ app.patch("/:id", async (c) => {
         ...(dueDate !== undefined && { dueDate: dueDate ? new Date(dueDate) : null }),
         ...(encrypted !== undefined && { encrypted }),
         ...(nonce !== undefined && { nonce: nonce || null }),
+      ...(encryptionEpoch !== undefined && { encryptionEpoch }),
       },
       include: { assignments: { include: { member: true } } },
     });
