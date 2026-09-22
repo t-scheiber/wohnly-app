@@ -1,6 +1,7 @@
 /**
  * Regenerates the Apple Sign-In client secret JWT.
- * Run monthly via cron to ensure it never expires (6-month validity).
+ * Legacy manual renewal. Prefer APPLE_PRIVATE_KEY_PATH in production so
+ * the API renews its credential automatically without cron or restarts.
  *
  * Requires APPLE_PRIVATE_KEY env var (or a .p8 file at APPLE_PRIVATE_KEY_PATH).
  *
@@ -9,6 +10,9 @@
 import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const TEAM_ID = process.env.APPLE_TEAM_ID ?? "8RSPLFN63L";
 const KEY_ID = process.env.APPLE_KEY_ID ?? "J47C35X5BR";
@@ -55,7 +59,7 @@ function generateAppleClientSecret(): string {
 
   const sign = crypto.createSign("SHA256");
   sign.update(signingInput);
-  const signature = sign.sign(privateKey, "base64url");
+  const signature = sign.sign({ key: privateKey, dsaEncoding: "ieee-p1363" }, "base64url");
 
   return `${signingInput}.${signature}`;
 }

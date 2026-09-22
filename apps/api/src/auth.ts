@@ -3,6 +3,9 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { bearer } from "better-auth/plugins/bearer";
 import { expo } from "@better-auth/expo";
 import { prisma } from "./lib/prisma.js";
+import { createAppleClientSecretProvider } from "./lib/apple-client-secret.js";
+
+const getAppleClientSecret = createAppleClientSecretProvider();
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
@@ -13,6 +16,11 @@ export const auth = betterAuth({
     enabled: false,
   },
 
+  session: {
+    expiresIn: 60 * 60 * 24 * 90,
+    updateAge: 60 * 60 * 24,
+  },
+
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -20,7 +28,9 @@ export const auth = betterAuth({
     },
     apple: {
       clientId: process.env.APPLE_CLIENT_ID!,
-      clientSecret: process.env.APPLE_CLIENT_SECRET!,
+      get clientSecret() {
+        return getAppleClientSecret();
+      },
       appBundleIdentifier: "app.wohnly",
     },
   },

@@ -137,6 +137,7 @@ The API requires the following environment variables (see `apps/api/.env.example
 | `BETTER_AUTH_URL` | API base URL |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth credentials |
 | `APPLE_CLIENT_ID` / `APPLE_CLIENT_SECRET` | Apple Sign-In credentials |
+| `APPLE_TEAM_ID` / `APPLE_KEY_ID` / `APPLE_PRIVATE_KEY_PATH` | Apple signing key configuration for automatic client-secret renewal. Keep the `.p8` outside the checkout with owner-only permissions. This replaces the static `APPLE_CLIENT_SECRET`. |
 | `SMTP_HOST` / `SMTP_USER` / `SMTP_PASS` | Email sending (nodemailer) |
 | `ENCRYPTION_KEY` | Base64-encoded AES-256 key for server-side encryption |
 | `REVENUECAT_WEBHOOK_SECRET` | RevenueCat webhook verification |
