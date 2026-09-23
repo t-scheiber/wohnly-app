@@ -6,6 +6,7 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
+  Alert,
   Image,
   StyleSheet,
 } from "react-native";
@@ -115,9 +116,7 @@ export default function SignInScreen() {
     })();
 
     function processDeepLink(url: string) {
-      console.log("[processDeepLink] url:", url);
       const stored = handleTauriDeepLink(url);
-      console.log("[processDeepLink] stored:", stored);
       if (stored) {
         localStorage.setItem(HANDLED_KEY, "1");
         window.location.reload();
@@ -135,10 +134,11 @@ export default function SignInScreen() {
       if (isTauri()) {
         await tauriSignIn(provider);
       } else {
-        await authClient.signIn.social({
+        const result = await authClient.signIn.social({
           provider,
           callbackURL: CALLBACK_URL,
         });
+        if (result.error) throw new Error(result.error.message || "Sign-in failed. Please try again.");
       }
     } catch (err) {
       const message = getAuthErrorMessage(err);
@@ -147,6 +147,8 @@ export default function SignInScreen() {
       // Tauri runs on the web platform, so use the browser alert there.
       if (Platform.OS === "web" && typeof window !== "undefined") {
         window.alert(message);
+      } else {
+        Alert.alert("Sign-in failed", message);
       }
     } finally {
       setLoading(false);
@@ -173,7 +175,7 @@ export default function SignInScreen() {
         {/* Google Sign-In */}
         <Pressable
           onPress={() => handleSocialSignIn("google")}
-          disabled={loadingGoogle}
+          disabled={loadingGoogle || loadingApple}
           accessibilityRole="button"
           accessibilityLabel={t("auth.continueWithGoogle", "Continue with Google")}
           style={({ pressed }) => [styles.googleBtn, { opacity: pressed ? 0.8 : 1 }]}
@@ -193,7 +195,7 @@ export default function SignInScreen() {
         {/* Apple Sign-In */}
         <Pressable
           onPress={() => handleSocialSignIn("apple")}
-          disabled={loadingApple}
+          disabled={loadingGoogle || loadingApple}
           accessibilityRole="button"
           accessibilityLabel={t("auth.continueWithApple", "Continue with Apple")}
           style={({ pressed }) => [styles.appleBtn, { opacity: pressed ? 0.8 : 1 }]}

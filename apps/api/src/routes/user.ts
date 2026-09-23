@@ -1,3 +1,6 @@
+import { cleanMemberDeparture } from "../lib/member-departure.js";
+import { triggerRotation } from "./epochs.js";
+import { publishEvent } from "../lib/events/publisher.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -93,6 +96,9 @@ app.delete("/account", async (c) => {
         // Delete entire household and all related data (cascades via Prisma)
         await tx.household.delete({ where: { id: household.id } });
       } else {
+        await cleanMemberDeparture(tx, household.id, userId);
+        await triggerRotation(tx, household.id, userId, "MEMBER_REMOVED");
+        await publishEvent(tx, { type: "household.member.removed", householdId: household.id, removedUserId: userId });
         // Remove member's nicknames, assignments, splits, etc.
         await tx.memberNickname.deleteMany({
           where: { OR: [{ giverId: membership.id }, { targetId: membership.id }] },

@@ -168,6 +168,7 @@ jobs:
         run: |
           echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
           security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
@@ -175,6 +176,7 @@ jobs:
           rm certificate.p12
 
       - name: Build Tauri app (signed)
+        timeout-minutes: 30
         uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -188,6 +190,11 @@ jobs:
           projectPath: apps/desktop
           tauriScript: npx tauri
           args: --verbose
+
+      - name: Require signed macOS updater archive
+        run: |
+          test -s apps/desktop/tauri/target/release/bundle/macos/Wohnly.app.tar.gz
+          test -s apps/desktop/tauri/target/release/bundle/macos/Wohnly.app.tar.gz.sig
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v7
@@ -239,6 +246,10 @@ jobs:
           path: apps/desktop/tauri/target/release/bundle/macos/Wohnly-mas.zip
           retention-days: 30
 
+      - name: Remove temporary signing keychain
+        if: always()
+        run: security delete-keychain build.keychain || true
+
   package-macos-store:
     name: Package Mac App Store candidate
     needs: build-macos
@@ -267,6 +278,7 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           security create-keychain -p "$KEYCHAIN_PASSWORD" mas.keychain
+          security set-keychain-settings -lut 21600 mas.keychain
           security default-keychain -s mas.keychain
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" mas.keychain
 
@@ -410,6 +422,13 @@ jobs:
           name: macos-mas-pkg
           path: mas-release-artifact
           retention-days: 30
+
+      - name: Remove temporary Mac App Store signing material
+        if: always()
+        run: |
+          security delete-keychain mas.keychain || true
+          rm -f asc-api-key.json ~/.private_keys/AuthKey_${{ secrets.ASC_API_KEY_ID }}.p8
+
   # -- Windows: build an MSIX artifact for manual Microsoft Store submission --
 
   build-windows:
@@ -513,6 +532,12 @@ jobs:
           # macOS DMG
           DMG=$(find artifacts/macos -name '*.dmg' 2>/dev/null | head -1)
           if [ -n "$DMG" ]; then
+            case "$DMG" in
+              *_aarch64.dmg) MAC_UPDATER_TARGET=darwin-aarch64 ;;
+              *_x64.dmg) MAC_UPDATER_TARGET=darwin-x86_64 ;;
+              *) echo "Unknown macOS package architecture: $DMG"; exit 1 ;;
+            esac
+            echo "MAC_UPDATER_TARGET=$MAC_UPDATER_TARGET" >> "$GITHUB_ENV"
             cp "$DMG" "artifacts/release/Wohnly-macOS.dmg"
             cp "$DMG" "artifacts/release/Wohnly-${VERSION}-macOS.dmg"
           fi
@@ -535,17 +560,16 @@ jobs:
           PUB_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           BASE="https://github.com/t-scheiber/wohnly-app/releases/download/desktop-latest"
 
-          MAC_SIG=""
-          if [ -f "artifacts/release/Wohnly-macOS.app.tar.gz.sig" ]; then
-            MAC_SIG=$(cat "artifacts/release/Wohnly-macOS.app.tar.gz.sig")
-          fi
+          test -s artifacts/release/Wohnly-macOS.app.tar.gz
+          test -s artifacts/release/Wohnly-macOS.app.tar.gz.sig
+          MAC_SIG=$(cat artifacts/release/Wohnly-macOS.app.tar.gz.sig)
+          test -n "$MAC_SIG"
+          test -n "$MAC_UPDATER_TARGET"
 
           # macOS-only updater (Windows updates via Microsoft Store)
-          PLATFORMS="{}"
-          if [ -n "$MAC_SIG" ]; then
-            MAC_ENTRY="\"signature\":$(echo "$MAC_SIG" | jq -Rs .),\"url\":\"${BASE}/Wohnly-macOS.app.tar.gz\""
-            PLATFORMS="{\"darwin-x86_64\":{${MAC_ENTRY}},\"darwin-aarch64\":{${MAC_ENTRY}}}"
-          fi
+          PLATFORMS=$(jq -n --arg target "$MAC_UPDATER_TARGET" \
+            --arg signature "$MAC_SIG" --arg url "${BASE}/Wohnly-macOS.app.tar.gz" \
+            '{($target): {signature: $signature, url: $url}}')
 
           jq -n \
             --arg version "$VERSION" \

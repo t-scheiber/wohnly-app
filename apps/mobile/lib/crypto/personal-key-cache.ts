@@ -127,3 +127,6 @@ export function clearPersonalKeys(): void {
   touchedSlots.clear();
   for (const keySlot of slots) deletePersisted(keySlot).catch(() => {});
 }
+
+/** Preserve historical keys in device storage so signing back in can decrypt old records. */
+export function clearPersonalKeyMemory(): void { cache.clear(); }

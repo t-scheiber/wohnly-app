@@ -132,7 +132,6 @@ export function onDeepLink(
     // Register a JS callback via Tauri's transformCallback (returns a numeric ID).
     // Then subscribe to the Rust-side event through the event plugin.
     const handlerId = internals.transformCallback((event: any) => {
-      console.log("[onDeepLink] event received:", JSON.stringify(event));
       const urls: string[] = event?.payload?.urls ?? event?.payload ?? [];
       if (urls.length > 0) callback(urls[0]);
     });

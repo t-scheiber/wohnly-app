@@ -75,7 +75,7 @@ export function convertAmount(
   const fromRate = fromCurrency === base ? 1 : rates[fromCurrency];
   const toRate = toCurrency === base ? 1 : rates[toCurrency];
 
-  if (!fromRate || !toRate) return amount; // Fallback: no conversion
+  if (!fromRate || !toRate) throw new Error("Exchange rate unavailable for the requested currency");
 
   const inBase = amount / fromRate;
   return Math.round(inBase * toRate * 100) / 100;

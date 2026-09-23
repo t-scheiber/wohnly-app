@@ -1,3 +1,4 @@
+import { readBody, schemas } from "../lib/request-validation.js";
 import { Hono } from "hono";
 import { requireAuth } from "../middleware/auth.js";
 import { prisma } from "../lib/prisma.js";
@@ -31,7 +32,7 @@ app.post("/", async (c) => {
     encrypted,
     nonce,
     encryptionEpoch,
-  } = await c.req.json();
+  } = await readBody(c, schemas.todo);
 
   if (!title?.trim()) return c.json({ error: "Title is required" }, 400);
 
@@ -48,9 +49,7 @@ app.post("/", async (c) => {
       encrypted: !!encrypted,
       nonce: nonce || null,
       encryptionEpoch:
-        encrypted && Number.isInteger(encryptionEpoch) && encryptionEpoch >= 1
-          ? encryptionEpoch
-          : 1,
+        encryptionEpoch ?? 1,
       dueDate: dueDate ? new Date(dueDate) : null,
     },
   });
@@ -62,7 +61,7 @@ app.post("/", async (c) => {
 app.patch("/:id", async (c) => {
   const userId = c.get("userId") as string;
   const todoId = c.req.param("id");
-  const body = await c.req.json();
+  const body = await readBody(c, schemas.todoPatch);
 
   const existing = await prisma.todo.findFirst({
     where: { id: todoId, isPersonal: true, creatorId: userId },
