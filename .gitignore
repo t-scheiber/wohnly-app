@@ -77,3 +77,8 @@ banner.png
 packages/shared/**/*.js
 packages/shared/**/*.d.ts
 packages/shared/**/*.js.map
+
+# CI log dumps and built installers
+web_run*.log
+*.msix
+artifacts/windows-msix/
