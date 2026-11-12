@@ -4,12 +4,12 @@ Wohnly is a household app for people who share a flat or a family home. One hous
 
 The app runs on iOS, iPadOS, Android, macOS, Windows and the web from one TypeScript codebase. The site is [wohnly.app](https://wohnly.app).
 
-Store listings I can verify from this repository:
+Where to get it:
 
-- [App Store](https://apps.apple.com/app/wohnly/id6761035211), which the app also links for macOS
-- [Microsoft Store](https://apps.microsoft.com/detail/9P5JTRSRMJPB)
+- [App Store](https://apps.apple.com/app/wohnly/id6761035211) for iPhone, iPad and Mac
+- [Microsoft Store](https://apps.microsoft.com/detail/9P5JTRSRMJPB) for Windows
 
-Android builds go to a Google Play closed testing track named "First Test" (`eas.json`). The repo has no public Play Store link, and the Play Store page for the package `app.wohnly` returned 404 when I checked, so I do not claim a public Android listing.
+The Android app is in closed testing on Google Play and has no public listing yet.
 
 <p>
   <img src="iOSlistings/iPhone_screenshot_1.png" alt="Home screen with shortcuts to todos, shopping list, chores, finances, subscriptions and calendar" width="190">
@@ -52,7 +52,7 @@ The client code is in `apps/mobile/lib/crypto`. It uses libsodium, loaded throug
 
 **What is encrypted.** `encrypt-service.ts` encrypts the free text of todos, shopping items, chores, events, expenses, expense attachments and subscriptions. For a todo that is the title and description. For an event it also includes the location. The client puts the fields into one JSON string, encrypts it with XChaCha20-Poly1305 using a random nonce, and stores the result in the original `title` or `name` column. The row also gets `encrypted = true`, the `nonce` and the `encryptionEpoch` of the key it used. The server cannot read those fields.
 
-**What is not encrypted.** Amounts, currencies, dates, categories, frequencies, split types, member relations and the household structure stay readable. The API needs them to compute balances, send reminders and serve widgets. Meal plans have `nonce` columns in the schema, but `encrypt-service.ts` has no function for them, so I do not claim they are encrypted.
+**What is not encrypted.** Amounts, currencies, dates, categories, frequencies, split types, member relations and the household structure stay readable. The API needs them to compute balances, send reminders and serve widgets. Meal plans are not encrypted yet. The schema has `nonce` columns for them, but `encrypt-service.ts` has no function that uses them.
 
 **Keys.** Each device generates an X25519 key pair on first use. The private key stays on the device, in `expo-secure-store` on native and IndexedDB on web. The household has one random symmetric key. The server only stores copies of that key that are sealed to a device's public key with `crypto_box_seal` (table `HouseholdKeyEnvelope`, one row per device and key epoch). A separate random personal key, sealed per device in the same way, covers a user's personal data.
 
@@ -60,22 +60,22 @@ The client code is in `apps/mobile/lib/crypto`. It uses libsodium, loaded throug
 
 **Rotation.** When a member or a device is removed, or the owner asks for it (`/epochs/rotate`), the household moves to the next key epoch. A remaining device generates the new key, seals it to every approved device and commits it through `/epochs/commit`. The table `EpochRotation` tracks each attempt. Rows record the epoch they were encrypted with, so old content stays readable with the old key.
 
-**Server side.** `apps/api/src/lib/crypto.ts` has an AES-256-GCM helper keyed by `ENCRYPTION_KEY`. Nothing in `apps/api/src` calls it right now, and the Prisma schema comment on the calendar sync token says it is encrypted with it. Treat it as unused until that changes. The recovery steps for stuck key distribution are in `docs/ops`.
+**Server side.** `apps/api/src/lib/crypto.ts` has an AES-256-GCM helper keyed by `ENCRYPTION_KEY`, meant for secrets the server itself has to store. No route calls it yet. The recovery steps for stuck key distribution are in `docs/ops`.
 
 ## The story
 
 I wrote the first version of Wohnly as a progressive web app. I rebuilt it as a native app, partly because I wanted to find out what it takes to publish an app to the stores.
 
-The history in this repository starts on 2026-03-17 with a `create-expo-app` template. Four days later, on 2026-03-21, one commit moves the app over from the earlier Next.js PWA, which the commit message calls "haushoit". It replaces Clerk with Better Auth, MySQL with PostgreSQL and the Next.js frontend with Expo and Hono. That commit already contains the XChaCha20-Poly1305 and X25519 code, and the app had two languages, English and German. The Tauri desktop wrapper arrived on 2026-03-28. As of 2026-09-23 the history has 386 commits.
+The history in this repository starts on 2026-03-17 with a `create-expo-app` template. Four days later, on 2026-03-21, one commit moves the app over from the earlier Next.js PWA, which the commit message calls "haushoit". It replaces Clerk with Better Auth, MySQL with PostgreSQL and the Next.js frontend with Expo and Hono. That commit already contains the XChaCha20-Poly1305 and X25519 code, and the app had two languages, English and German. The Tauri desktop wrapper arrived on 2026-03-28.
 
 ### What publishing took
 
 This is what the repository shows, in order.
 
 - **One build setup per platform.** Expo and EAS build the iOS and Android apps. Tauri builds the macOS and Windows apps from the same Expo web export. The web app is that export served by Caddy. The repo has 11 GitHub Actions workflows, including four for macOS App Store Connect.
-- **First review, April 2026.** The first iOS submission, version 1.2.0 build 8, was rejected on 2026-04-14. A PDF of the App Store Connect message is in `iOSlistings/report files`. It cites four guidelines: an unreachable support URL, buttons that failed on an iPad Air, unclear camera and photo purpose strings, and an error in the in-app purchase screen. A commit the same day is titled "resolve App Store, MS Store, and Play Store submission issues".
+- **First review, April 2026.** The first iOS submission, version 1.2.0 build 8, was rejected on 2026-04-14. The review cited four guidelines: an unreachable support URL, buttons that failed on an iPad Air, unclear camera and photo purpose strings, and an error in the in-app purchase screen. A commit the same day is titled "resolve App Store, MS Store, and Play Store submission issues".
 - **Version numbers.** On 2026-04-18 I switched EAS to remote version numbers (`appVersionSource: remote`) because CI builds collided. The release commits then run through 1.3.2 and 1.3.3 (2026-05-19), 1.3.4 (2026-06-21), 1.3.5 (2026-07-18) and 1.4.0 (2026-09-22).
-- **Windows.** The first plan was an MSI installer. On 2026-04-07 I dropped MSI for NSIS and removed an Azure Trusted Signing step, because the Microsoft Store signs packages itself. On 2026-04-10 Windows distribution moved to an MSIX package for the Microsoft Store (`apps/desktop/build-msix.ps1`). The workflow uploads it as an artifact, and I upload it by hand in Partner Center, because the Store account has no Microsoft Entra tenant for automated publishing. A Store certification report with a screenshot is kept in `MSStorelistings`.
+- **Windows.** The first plan was an MSI installer. On 2026-04-07 I dropped MSI for NSIS and removed an Azure Trusted Signing step, because the Microsoft Store signs packages itself. On 2026-04-10 Windows distribution moved to an MSIX package for the Microsoft Store (`apps/desktop/build-msix.ps1`). The workflow uploads it as an artifact, and I upload it by hand in Partner Center, because the Store account has no Microsoft Entra tenant for automated publishing.
 - **Desktop updater.** Direct-download builds of the desktop app check `latest.json` on the `desktop-latest` GitHub release and verify a signature. The Mac App Store build sets `createUpdaterArtifacts` to false and has no updater, because the Store delivers updates.
 - **Code signing.** The macOS workflow signs and notarizes the app. The repository's `.gitignore` excludes signing material such as `.p8`, `.p12` and `.mobileprovision` files.
 - **Mac App Store review.** `docs/app-store/macos-review-notes.md` has seven entries between 2026-05-29 and 2026-08-10, with builds from 1.3.3 to 1.3.12. The first rejections were about Sign in with Apple opening a browser. The later ones were about the native sign-in failing. The fix was a native `AuthenticationServices` sheet, an in-app fallback and Better Auth's bearer token plugin. The last round also found a Sign Out button that did nothing, because WKWebView did not show a browser `confirm()` dialog. In August I added the four `asc-macos-*` workflows to resubmit, inspect TestFlight builds and upload a candidate gated on a checksum.
